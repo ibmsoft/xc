@@ -1,0 +1,30 @@
+{
+  queryBtn				: "Search",
+  clearBtn				: "Reset",
+  commitBtn				: "Sure",
+  closeBtn				: "Cancel",
+  
+  AP_CONTRACT_NAME		: "Contract Code/Name",
+  AP_PAY_REQ_H_CODE		: "Document Code/Name",
+  CREATED_BY_NAME		: "DocumentMaker",
+  
+  BIZ_DATE_COL			: "Business Date",
+  AP_PAY_REQ_H_CODE_COL	: "Request Note Code",
+  REQ_DESCRIPTION_COL	: "Request Note Description",
+  NO_PAY_AMT_COL		: "Payable Amount",
+  PAY_AMT_COL			: "Pay Amount",
+  AP_INV_GL_H_CODE_COL	: "Need Pay Document Code",
+  GL_DESCRIPTION_COL	: "Need Pay Document Description",
+  AP_CONTRACT_NAME_COL	: "Contract",
+  DEPT_NAME_COL			: "Cost Center",
+  PROJECT_NAME_COL		: "Project",
+  AP_ACC_NAME_DEBT_COL	: "Need Pay Subject",
+  
+  qzsxzytjl				: "Please select at least one record!",
+  zfjebnwk				: "Payment amount can not be empty!",
+  zfjebnwl				: "Payment amount can not be 0!",
+  qdyxzd				: "Are you sure you want to choose",
+  tjlm					: "records?",
+  zfjebkcgkzfje			: "Payment amount is not more than the amount paid!",
+  zfjeydyl				: "Payment amount should be greater than 0!"
+}

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            #map {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            #container, #showStatic {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+            }
+            #showStatic {
+                display: none;
+            }
+            #detail {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 45%;
+                background: #fff;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+
+                transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+                transform: translate(100%);
+                overflow-y: scroll;
+            }
+            #detail.active {
+                transform: translate(0);
+            }
+            #detail {
+                padding: 10px;
+                padding-top: 40px;
+            }
+            #back {
+                position: absolute;
+                left: 20px;
+                top: 20px;
+                border: none;
+                background: #fff;
+                box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+                border-radius: 10px 2px 2px 10px;
+
+                cursor: pointer;
+                font-size: 16px;
+
+                outline: none;
+
+                display: none;
+                z-index: 111;
+            }
+
+            #back:hover {
+                background: #ccc;
+            }
+            #bmap {
+                height: 250px;
+            }
+            #agemap {
+                height: 250px;
+            }
+            #contentmap {
+                height: 250px;
+            }
+            #detail .close {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                cursor: pointer;
+            }
+        </style>
+       <title>The Distribution Of Indonesia Police</title>
+   </head>
+   <body style="height: 100%; margin: 0">
+       
+       <div id="map">
+            <div id="container"></div>
+            <div id="showStatic"></div>
+        </div>
+        <div id="detail">
+            <div id="bmap"></div>
+            <div id="agemap"></div>
+            <div id="contentmap"></div>
+            <div class="close">X</div>
+        </div>
+        <button id="back" style="display:none">Back</button>
+        
+       <script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="js/echarts.js"></script>
+       <script type="text/javascript" src="thema/macarons.js"></script>
+       <script type="text/javascript" src="thema/dark.js"></script>
+       <script type="text/javascript" src="thema/vintage.js"></script>
+        <script type="text/javascript" src="thema/shine.js"></script>
+       <script type="text/javascript" src="js/bmap.min.js"></script>
+       <script type="text/javascript" src="js/indonesia.js"></script>
+       <script type="text/javascript" src="js/jquery.min.js"></script>
+       
+<script type="text/javascript">
+/*@title 印度尼西亚人口统计--echarts3.0 图表
+ *@source 数据来源 https://www.wikiwand.com/zh/印度尼西亚行政区划
+ *@echarts3.0自定义地图构造 http://geojson.io 
+ *@请将数据文件放在与当前页面平行的data文件夹中，并且命名为indonesia.josn
+ *@默认样式为 vintage，可选的样式为 dark、vintage、macarons和shine，若要设置样式，请修改indonesia.json中的thema属性的值
+ *@若不需要设置背景样式，请将indonesia.json中的thema属性值设成"-1"
+ */
+ var myChart;                       //主图表
+ var empJobAgeChart;                //工龄图表
+ var empAgeChart;                   //年龄图表
+ var empContentChart;               //职工层次图表
+ var populationData;
+ var minPopulation = 0;
+ var maxPopulation = 10000000;
+ var exProvince = [];
+ $.getJSON('data/indonesia.json', function(resp){
+ 	//初始化图表
+ 	var dom = document.getElementById('container');
+ 	var job = document.getElementById('bmap');
+ 	var age = document.getElementById('agemap');
+ 	var content = document.getElementById('contentmap');
+ 	if(resp.thema == '-1'){
+ 		myChart = echarts.init(dom);
+ 	}else{
+ 		myChart = echarts.init(dom,resp.thema);
+ 	}
+ 	//加载主图表数据
+	populationData  = resp.data;
+	minPopulation = resp.minValue;
+	maxPopulation = resp.maxValue;
+	exProvince = resp.exProvince;
+	//1、设置option
+	var myOption = {
+		title:{
+			text: 'The Distribution Of Indonesia Police',
+	        subtext: 'Data from www.wikiwand.com',
+	        sublink: 'https://en.wikipedia.org/wiki/Provinces_of_Indonesia',
+	        left: 'center',
+	        subtextStyle:{color: 'blue'}
+		},
+		tooltip: {
+	            trigger: 'item',
+	            showDelay: 0,
+	            transitionDuration: 0.2,
+	            formatter: function (params) {
+	                var value = (params.value + '').split('.');
+	                value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+	                return params.seriesName + '<br/>' + params.name + ': ' + value;
+	            }
+	        },
+	    visualMap: {
+	        left: 'right',
+	        min: minPopulation,
+	        max: maxPopulation,
+	        inRange: {
+	            //color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+	              color:['#FFF8DC','#9BCD9B','blue','#EE82EE','orangered','red']
+	        },
+	        text:['High','Low'],  
+	        calculable: true
+	    },
+	    toolbox: {
+	            show: true,
+	            //orient: 'vertical',
+	            left: 'left',
+	            top: 'top',
+			    feature: {
+	                restore: {},
+	                saveAsImage: {}
+	            }
+	        },
+	     series:[{
+	     	    name: 'Indonesia PopEstimates',
+	     	    type:'map',
+	     	    roam: true,
+	     	    label: {
+	                    normal: {
+	                        show: true
+	                    },
+	                    emphasis: {
+	                        show: true
+	                    }
+	           },
+	     	    map:'Indonesia',
+                data: populationData,
+                //自定义映射名称  key-value：key对应map中的地名，value对应数据中的名称，series的data中使用value名称
+                nameMap: {
+                    'Papua': 'Special Region of Papua',
+                    'West Papua': 'Special Region of West Papua',
+                }
+	     }]
+	};
+ 	myChart.setOption(myOption,true);
+ 	myChart.hideLoading();
+ 		//添加自定义函数
+	function showDetail(params) {
+	    if (params.name) {
+	    	alert(params.name);
+	    }
+	}
+	/*加载所选择省市数据
+	 *隐藏主图表，显示明细图表
+	 *工龄分析、年龄分析、职工成分分析 
+	 */ 
+	myChart.on('click', function (param) {
+		if($.inArray(param.name, exProvince) != -1){
+			//$('#back').show();
+			$.getJSON('data/empDetail.json',function(data){
+				var empDetialData = data[param.name];
+				var detailThemes = empDetialData.theme;
+				if(detailThemes[0] == "-1"){
+					empJobAgeChart = echarts.init(job);
+				}else{
+					empJobAgeChart = echarts.init(job,detailThemes[0]);
+				}
+				if(detailThemes[1] == "-1"){
+					empAgeChart = echarts.init(age);
+				}else{
+					empAgeChart = echarts.init(age,detailThemes[1]);
+				}
+				if(detailThemes[0] == "-1"){
+					empContentChart = echarts.init(content);
+				}else{
+					empContentChart = echarts.init(content,detailThemes[2]);
+				}				
+				//显示明细图表
+				$(empJobAgeChart.getDom()).fadeIn(800);
+				$(empAgeChart.getDom()).fadeIn(800);
+				$(empContentChart.getDom()).fadeIn(800);
+				empJobAgeChart.resize();
+				empAgeChart.resize();
+				empContentChart.resize();
+				var jobLegend = [];
+				var ageLegend = [];
+				var contentLegend = [];
+				$.each(empDetialData.job,function(n,value){
+					jobLegend.push(value.name);
+				});
+				$.each(empDetialData.age,function(n,value){
+					ageLegend.push(value.name);
+				});
+				$.each(empDetialData.content,function(n,value){
+					contentLegend.push(value.name);
+				});
+				//加载明细图表
+				var jobOption = {
+					    title : {
+					        text:'The Seniority Of '+param.name +' Police officers',
+					        subtext: 'Fake Data',
+					        x:'center'
+				        },
+					    tooltip : {
+					        trigger: 'item',
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"
+					    },
+					    legend: {
+					        orient: 'vertical',
+					        left: 'left',
+					        data: jobLegend
+					    },
+					    series : [
+					        {
+					            name: 'Seniority Analysis',
+					            type: 'pie',
+					            radius : '55%',
+					            center: ['50%', '60%'],
+					            data:empDetialData.job,
+					            itemStyle: {
+					                emphasis: {
+					                    shadowBlur: 10,
+					                    shadowOffsetX: 0,
+					                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+					                }
+					            }
+					        }
+					    ]
+				};
+				
+				var ageOption = {
+					    title : {
+					        text:'The Age Of '+param.name +' Police officers',
+					        subtext: 'Fake Data',
+					        x:'center'
+				        },
+					    tooltip : {
+					        trigger: 'item',
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"
+					    },
+					    legend: {
+					        orient: 'vertical',
+					        left: 'left',
+					        data: ageLegend
+					    },
+					    series : [
+					        {
+					            name: 'Seniority Analysis',
+					            type: 'pie',
+					            radius : '55%',
+					            center: ['50%', '60%'],
+					            data:empDetialData.age,
+					            itemStyle: {
+					                emphasis: {
+					                    shadowBlur: 10,
+					                    shadowOffsetX: 0,
+					                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+					                }
+					            }
+					        }
+					    ]
+				};				
+				var contentOption = {
+					    title : {
+					        text:'The Level Of '+param.name +' Police officers',
+					        subtext: 'Fake Data',
+					        x:'center'
+				        },
+					    tooltip : {
+					        trigger: 'item',
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"
+					    },
+					    legend: {
+					        orient: 'vertical',
+					        left: 'left',
+					        data: contentLegend
+					    },
+					    series : [
+					        {
+					            name: 'Seniority Analysis',
+					            type: 'pie',
+					            radius : '55%',
+					            center: ['50%', '60%'],
+					            data:empDetialData.content,
+					            itemStyle: {
+					                emphasis: {
+					                    shadowBlur: 10,
+					                    shadowOffsetX: 0,
+					                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+					                }
+					            }
+					        }
+					    ]
+				};
+				//-----------------------------显示div---------------
+				$('#detail').addClass('active');
+				$('#bmap').show();
+			 //设置图表
+			 	empJobAgeChart.setOption(jobOption,true);
+				empAgeChart.setOption(ageOption,true);
+				empContentChart.setOption(contentOption,true);
+			});
+		}else{
+			alert("There Is No Demo On The Selected Province!");
+		}
+   }); 
+ });
+ $(window).resize(function () {
+    myChart.resize();
+});
+$('#detail .close').click(function () {
+    $('#detail').removeClass('active');
+    $('#back').hide();
+    $(myChart.getDom()).fadeIn(800);
+    $(empJobAgeChart.getDom()).fadeOut(800);
+    $(empAgeChart.getDom()).fadeOut(800);
+    $(empContentChart.getDom()).fadeOut(800);
+});
+</script>
+   </body>
+</html>

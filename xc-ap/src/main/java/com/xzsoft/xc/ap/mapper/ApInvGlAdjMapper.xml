@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ap.mapper.ApInvGlAdjMapper">
+	<!-- 余额调整单中插入数据 -->
+	<insert id="addApAdjInfo" parameterType="com.xzsoft.xc.ap.modal.ApInvGlAdj">
+		insert into
+		xc_ap_inv_gl_adj (
+		GL_ADJ_ID,
+		GL_ADJ_CODE,
+		LEDGER_ID,
+		VENDOR_ID,
+		AP_INV_GL_H_ID,
+		GL_DATE,
+		TO_CCID,
+		DR_OR_CR,
+		ADJ_AMT,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+		) values (
+		#{GL_ADJ_ID,jdbcType=VARCHAR},
+		#{GL_ADJ_CODE,jdbcType=VARCHAR},
+		#{LEDGER_ID,jdbcType=VARCHAR},
+		#{VENDOR_ID,jdbcType=VARCHAR},
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR},
+		#{GL_DATE,jdbcType=TIMESTAMP},
+		#{TO_CCID,jdbcType=VARCHAR},
+		#{DR_OR_CR,jdbcType=VARCHAR},
+		#{ADJ_AMT,jdbcType=NUMERIC},
+		#{V_HEAD_ID,jdbcType=VARCHAR},
+		#{V_STATUS,jdbcType=VARCHAR},
+		#{DESCRIPTION,jdbcType=VARCHAR},
+		#{VERIFIER_ID,jdbcType=VARCHAR},
+		#{VERFY_DATE,jdbcType=TIMESTAMP},
+		#{CREATION_DATE,jdbcType=TIMESTAMP},
+		#{CREATED_BY,jdbcType=VARCHAR},
+		#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		)
+	</insert>	
+	<!-- 判断新增或修改调整单 -->
+	<select id="isAddOrEdit" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select 1 from xc_ap_inv_gl_adj where GL_ADJ_ID =
+		#{GL_ADJ_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 交易明细表插入数据 -->
+	<insert id="addInvTrans" parameterType="com.xzsoft.xc.apar.modal.ApInvTransBean">
+		INSERT INTO
+		xc_ap_inv_trans (
+		TRANS_ID,
+		SOURCE_ID,
+		SOURCE_DTL_ID,
+		AP_INV_GL_H_ID,
+		AP_PAY_H_ID,
+		GL_DATE,
+		SOURCE_TAB,
+		AP_DOC_CAT_CODE,
+		AP_CONTRACT_ID,
+		VENDOR_ID,
+		DR_AMT,
+		CR_AMT,
+		TRANS_STATUS,
+		CCID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		AP_DOC_CODE,
+		DESCRIPTION
+		) VALUES (
+		#{TRANS_ID,jdbcType=VARCHAR},
+		#{SOURCE_ID,jdbcType=VARCHAR},
+		#{SOURCE_DTL_ID,jdbcType=VARCHAR},
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR},
+		#{AP_PAY_H_ID,jdbcType=VARCHAR},
+		#{GL_DATE,jdbcType=VARCHAR},
+		'XC_AP_INV_GL_ADJ',
+		#{AP_DOC_CAT_CODE,jdbcType=VARCHAR},
+		(select AP_CONTRACT_ID from xc_ap_inv_gl_h b
+		where b.AP_INV_GL_H_ID =
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR}),
+		(select
+		VENDOR_ID from xc_ap_inv_gl_h b where b.AP_INV_GL_H_ID =
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR}),
+		#{DR_AMT,jdbcType=VARCHAR},
+		#{CR_AMT,jdbcType=VARCHAR},
+		'0',
+		(select AP_ACC_ID_DEBT from
+		xc_ap_inv_gl_h b where b.AP_INV_GL_H_ID =
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR}),
+		#{CREATION_DATE,jdbcType=TIMESTAMP},
+		#{CREATED_BY,jdbcType=VARCHAR},
+		#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		#{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		#{AP_DOC_CODE,jdbcType=VARCHAR},
+		#{DESCRIPTION,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!--更新应收单 -->
+	<update id="updateInvGlH" parameterType="java.util.HashMap">
+		update xc_ap_inv_gl_h
+		set
+		NO_PAY_AMT=NO_PAY_AMT+ #{ADJ_AMT,jdbcType=NUMERIC},
+		ADJ_AMT = ADJ_AMT + #{ADJ_AMT,jdbcType=NUMERIC}
+		WHERE AP_INV_GL_H_ID =
+		#{AP_INV_GL_H_ID,jdbcType=VARCHAR}
+	</update>
+
+
+	<!-- 修改调整单 -->
+	<update id="updateInvGlhadj" parameterType="com.xzsoft.xc.ap.modal.ApInvGlAdj">
+		update
+		xc_ap_inv_gl_adj set
+		GL_ADJ_CODE = #{GL_ADJ_CODE,jdbcType=VARCHAR},
+		LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+		VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+		AP_INV_GL_H_ID= #{AP_INV_GL_H_ID,jdbcType=VARCHAR},
+		GL_DATE = #{GL_DATE,jdbcType=TIMESTAMP},
+		TO_CCID = #{TO_CCID,jdbcType=VARCHAR},
+		DR_OR_CR = #{DR_OR_CR,jdbcType=VARCHAR},
+		ADJ_AMT = #{ADJ_AMT,jdbcType=NUMERIC},
+		DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where 
+		GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 修改往来明细 -->
+	<update id="updateInvtrans" parameterType="com.xzsoft.xc.apar.modal.ApInvTransBean">
+		update xc_ap_inv_trans
+		set
+		AP_INV_GL_H_ID = #{AP_INV_GL_H_ID,jdbcType=VARCHAR},
+		AP_CONTRACT_ID= (select AP_CONTRACT_ID from xc_ap_inv_gl_h b where b.AP_INV_GL_H_ID = #{AP_INV_GL_H_ID,jdbcType=VARCHAR}),
+		VENDOR_ID =(select VENDOR_ID from xc_ap_inv_gl_h b where b.AP_INV_GL_H_ID = #{AP_INV_GL_H_ID,jdbcType=VARCHAR}),
+		DR_AMT = #{DR_AMT,jdbcType=NUMERIC},
+		CR_AMT= #{CR_AMT,jdbcType=NUMERIC},
+		CCID = #{CCID,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where SOURCE_ID= #{SOURCE_ID,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 审核时 -->
+	<update id="updateInvGLAdjverfy" parameterType="com.xzsoft.xc.ap.modal.ApInvGlAdj">
+		update
+		xc_ap_inv_gl_adj set
+		VERIFIER_ID = #{VERIFIER_ID,jdbcType=VARCHAR},
+		VERFY_DATE = #{VERFY_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 删除调整单信息 -->
+	<delete id="delApInvAdj" parameterType="java.util.List">
+	delete from xc_ap_inv_gl_adj where GL_ADJ_ID in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+	#{item}
+	</foreach>
+	</delete>
+	<!-- 删除交易明细 -->
+	<delete id="delApInvTrans" parameterType="java.util.List">
+	delete from xc_ap_inv_trans where SOURCE_ID in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+	#{item}
+	</foreach>
+	</delete>
+	<!-- 更新应付单（删除时） -->
+	<delete id="updateInvByDel" parameterType="java.util.HashMap">
+	update xc_ap_inv_gl_h set
+	NO_PAY_AMT = NO_PAY_AMT - #{ADJ_AMT,jdbcType=NUMERIC},
+	ADJ_AMT = ADJ_AMT - #{ADJ_AMT,jdbcType=NUMERIC}
+	where
+	AP_INV_GL_H_ID  = #{AP_INV_GL_H_ID,jdbcType=VARCHAR}
+	</delete>
+	<!-- 查询调整单信息 -->
+	<select id="getInvAdjInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ap.modal.ApInvGlAdj">
+	select * from xc_ap_inv_gl_adj where GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}
+	</select>
+</mapper>

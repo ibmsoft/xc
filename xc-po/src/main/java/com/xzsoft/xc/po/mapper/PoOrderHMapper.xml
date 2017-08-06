@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoOrderHMapper">
+
+    <!-- 判断主表新增还是修改 -->
+    <select id="ifExistH" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderHBean">
+        select * from xc_po_order_h where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增采购订单主表信息 -->
+    <insert id="addOrderHInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderHBean">
+        insert into xc_po_order_h(ORDER_H_ID,
+                                  ORDER_H_CODE,
+                                  ORDER_H_NAME,
+                                  ORDER_H_TYPE,
+                                  CONTRACT_ID,
+                                  VENDOR_ID,
+                                  PO_DOC_CAT_CODE,
+                                  DEPT_ID,
+                                  PURCHASE_DEPT_ID,
+                                  PURCHASE_PERSON,
+                                  PROJECT_ID,
+                                  VERSION,
+                                  ORG_ID,
+                                  LEDGER_ID,
+                                  IS_CLOSE,
+                                  AMOUNT,
+                                  INV_AMOUNT,
+                                  INS_CODE,
+                                  AUDIT_STATUS,
+                                  AUDIT_STATUS_DESC,
+                                  AUDIT_DATE,
+                                  SYS_AUDIT_STATUS,
+                                  SYS_AUDIT_STATUS_DESC,
+                                  DOCUMENT_DATE,
+                                  CREATION_DATE,
+                                  CREATED_BY,
+                                  LAST_UPDATE_DATE,
+                                  LAST_UPDATED_BY)
+                           values(#{ORDER_H_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_CODE,jdbcType=VARCHAR},
+                                  #{ORDER_H_NAME,jdbcType=VARCHAR},
+                                  #{ORDER_H_TYPE,jdbcType=VARCHAR},
+                                  #{CONTRACT_ID,jdbcType=VARCHAR},
+                                  #{VENDOR_ID,jdbcType=VARCHAR},
+                                  #{PO_DOC_CAT_CODE,jdbcType=VARCHAR},
+                                  #{DEPT_ID,jdbcType=VARCHAR},
+                                  #{PURCHASE_DEPT_ID,jdbcType=VARCHAR},
+                                  #{PURCHASE_PERSON,jdbcType=VARCHAR},
+                                  #{PROJECT_ID,jdbcType=VARCHAR},
+                                  #{VERSION,jdbcType=NUMERIC},
+                                  #{ORG_ID,jdbcType=VARCHAR},
+                                  #{LEDGER_ID,jdbcType=VARCHAR},
+                                  #{IS_CLOSE,jdbcType=VARCHAR},
+                                  #{AMOUNT,jdbcType=NUMERIC},
+                                  #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  #{INS_CODE,jdbcType=VARCHAR},
+                                  #{AUDIT_STATUS,jdbcType=VARCHAR},
+                                  #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                                  #{AUDIT_DATE,jdbcType=TIMESTAMP},
+                                  #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+                                  #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                                  #{DOCUMENT_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATION_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATED_BY,jdbcType=VARCHAR},
+                                  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  #{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改采购订单主表信息 -->
+    <update id="editOrderHInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderHBean">
+        update xc_po_order_h set    
+                        ORDER_H_CODE =  #{ORDER_H_CODE,jdbcType=VARCHAR},
+                        ORDER_H_NAME = #{ORDER_H_NAME,jdbcType=VARCHAR},
+                        ORDER_H_TYPE = #{ORDER_H_TYPE,jdbcType=VARCHAR},
+                        CONTRACT_ID = #{CONTRACT_ID,jdbcType=VARCHAR},
+                        ORG_ID = #{ORG_ID,jdbcType=VARCHAR},
+                        LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+                        VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+                        DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                        PURCHASE_DEPT_ID =  #{PURCHASE_DEPT_ID,jdbcType=VARCHAR},
+                        PURCHASE_PERSON = #{PURCHASE_PERSON,jdbcType=VARCHAR},
+                        PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+                        VERSION = #{VERSION,jdbcType=NUMERIC},
+                        AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                        INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                        SYS_AUDIT_STATUS = #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+                        SYS_AUDIT_STATUS_DESC = #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                        DOCUMENT_DATE = #{DOCUMENT_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATE_DATE =  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATED_BY =  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                  where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 删除采购订单主表信息 -->
+    <delete id="deleteOrderHInfo" parameterType="java.util.List">
+        delete from xc_po_order_h
+            where ORDER_H_ID in
+            <foreach collection="list" index="index" item="item"
+                    open="(" close=")" separator=",">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+    </delete>
+    
+    <!-- 更新采购订单主信息业务状态 -->
+    <update id="updateSysStatus" parameterType="com.xzsoft.xc.po.modal.PoOrderHBean">
+        update xc_po_order_h set SYS_AUDIT_STATUS = #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+                                 SYS_AUDIT_STATUS_DESC = #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                                 LAST_UPDATE_DATE =  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                 LAST_UPDATED_BY =  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                            where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 更改采购订单主信息是否关闭的状态 -->
+    <update id="updateOrerHStatus" parameterType="java.util.HashMap">
+        <choose>
+            <!-- mysql数据库 -->
+            <when test=" dbType == 'mysql' ">
+                <foreach collection="list" index="index" item="item"
+                    open="" close="" separator=";">
+                    update xc_po_order_h set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_H_ID = #{item.ORDER_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+            <!-- oracle数据库 -->
+            <when test=" dbType == 'oracle' ">
+                <foreach collection="list" index="index" item="item"
+                    open="begin" close="end" separator=";">
+                    update xc_po_order_h set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_H_ID = #{item.ORDER_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+        </choose>   
+    </update>
+    
+    <!-- 更改采购订单行信息是否关闭的状态 (根据主信息ID)-->
+    <update id="updateOrerLStatus" parameterType="java.util.HashMap">
+        <choose>
+            <!-- mysql数据库 -->
+            <when test=" dbType == 'mysql' ">
+                <foreach collection="list" index="index" item="item"
+                    open="" close="" separator=";">
+                    update xc_po_order_l set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_H_ID = #{item.ORDER_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+            <!-- oracle数据库 -->
+            <when test=" dbType == 'oracle' ">
+                <foreach collection="list" index="index" item="item"
+                    open="begin" close="end" separator=";">
+                    update xc_po_order_l set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_H_ID = #{item.ORDER_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+        </choose>   
+    </update>
+    
+    <!-- 更改采购订单行信息是否关闭的状态 (根据行信息ID)-->
+    <update id="updateOrerLStatusByLId" parameterType="java.util.HashMap">
+        <choose>
+            <!-- mysql数据库 -->
+            <when test=" dbType == 'mysql' ">
+                <foreach collection="list" index="index" item="item"
+                    open="" close="" separator=";">
+                    update xc_po_order_l set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_L_ID = #{item.ORDER_L_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+            <!-- oracle数据库 -->
+            <when test=" dbType == 'oracle' ">
+                <foreach collection="list" index="index" item="item"
+                    open="begin" close="end" separator=";">
+                    update xc_po_order_l set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                            where ORDER_L_ID = #{item.ORDER_L_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+        </choose>   
+    </update>
+    
+    <!-- 判断行表新增或修改 -->
+    <select id="ifExistL" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderLBean">
+        select * from xc_po_order_l where ORDER_L_ID = #{ORDER_L_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增采购订单行表信息 -->
+    <insert id="addOrderLInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderLBean">
+        insert into xc_po_order_l(ORDER_L_ID,
+                                  ORDER_H_ID,
+                                  ORDER_L_NUM,
+                                  AP_PUR_TYPE_ID,
+                                  MATERIAL_ID,
+                                  PUR_AP_L_ID,
+                                  DEPT_ID,
+                                  PROJECT_ID,
+                                  IS_CLOSE,
+                                  DIM_ID,
+                                  QTY,
+                                  TAX,
+                                  PRICE,
+                                  INV_PRICE,
+                                  AMOUNT,
+                                  INV_AMOUNT,
+                                  ORG_ID,
+                                  LEDGER_ID,
+                                  DESCRIPTION,
+                                  VERSION,
+                                  CREATION_DATE,
+                                  CREATED_BY,
+                                  LAST_UPDATE_DATE,
+                                  LAST_UPDATED_BY)
+                           values(#{ORDER_L_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_ID,jdbcType=VARCHAR},
+                                  #{ORDER_L_NUM,jdbcType=NUMERIC},
+                                  #{AP_PUR_TYPE_ID,jdbcType=VARCHAR},
+                                  #{MATERIAL_ID,jdbcType=VARCHAR},
+                                  #{PUR_AP_L_ID,jdbcType=VARCHAR},
+                                  #{DEPT_ID,jdbcType=VARCHAR},
+                                  #{PROJECT_ID,jdbcType=VARCHAR},
+                                  #{IS_CLOSE,jdbcType=VARCHAR},
+                                  #{DIM_ID,jdbcType=VARCHAR},
+                                  #{QTY,jdbcType=NUMERIC},
+                                  #{TAX,jdbcType=NUMERIC},
+                                  #{PRICE,jdbcType=NUMERIC},
+                                  #{INV_PRICE,jdbcType=NUMERIC},
+                                  #{AMOUNT,jdbcType=NUMERIC},
+                                  #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  #{ORG_ID,jdbcType=VARCHAR},
+                                  #{LEDGER_ID,jdbcType=VARCHAR},
+                                  #{DESCRIPTION,jdbcType=VARCHAR},
+                                  #{VERSION,jdbcType=NUMERIC},
+                                  #{CREATION_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATED_BY,jdbcType=VARCHAR},
+                                  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  #{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改采购订单行表信息 -->
+    <update id="editOrderLInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderLBean">
+        update xc_po_order_l set
+                        ORDER_L_NUM  =  #{ORDER_L_NUM,jdbcType=NUMERIC},
+                        MATERIAL_ID = #{MATERIAL_ID,jdbcType=VARCHAR},
+                        AP_PUR_TYPE_ID = #{AP_PUR_TYPE_ID,jdbcType=VARCHAR},
+                        DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                        PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+                        QTY = #{QTY,jdbcType=NUMERIC},
+                        TAX = #{TAX,jdbcType=NUMERIC},
+                        PRICE = #{PRICE,jdbcType=NUMERIC},
+                        INV_PRICE = #{INV_PRICE,jdbcType=NUMERIC},
+                        AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                        INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                        ORG_ID = #{ORG_ID,jdbcType=VARCHAR},
+                        LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+                        DESCRIPTION =  #{DESCRIPTION,jdbcType=VARCHAR},
+                        VERSION = #{VERSION,jdbcType=NUMERIC},
+                        LAST_UPDATE_DATE =  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATED_BY =  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                 where ORDER_L_ID = #{ORDER_L_ID,jdbcType=VARCHAR}
+                        
+    </update>
+    
+    <!-- 删除采购订单行表信息-->
+    <delete id="deleteOrderLInfo" parameterType="java.util.List">
+        delete from xc_po_order_l where
+        ORDER_L_ID in   
+        <foreach collection="list" index="index" item="item" open="("
+            close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <!-- 获取采购订单主信息通过主ID查询 -->
+    <select id="getOrderHInfoByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderHBean">
+        select * from xc_po_order_h where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 获取采购订单行信息通过主ID查询 -->
+    <select id="getOrderLInfoByHId" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from xc_po_order_l where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 获取采购订单行信息通过主ID查询 -->
+    <select id="getOrderLInfoByHId2" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderLBean">
+        select * from xc_po_order_l where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </select>
+    
+     <!-- 获取采购订单历史行信息通过主ID查询 -->
+    <select id="getOrderLHisInfoByHId" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from xc_po_order_l_his where ORDER_H_HIS_ID = #{ORDER_H_HIS_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 判断采购订单是否为第一次变更 -->
+    <select id="ifChange" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderHHisBean">
+        select * from xc_po_order_h_his where ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 判断采购订单历史表主表新增还是修改 -->
+    <select id="ifExistHisH" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderHHisBean">
+        select * from xc_po_order_h_his where ORDER_H_HIS_ID = #{ORDER_H_HIS_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增采购订单历史表主表信息 -->
+    <insert id="addOrderHHisInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderHHisBean">
+        insert into xc_po_order_h_his(ORDER_H_HIS_ID,
+                                  ORDER_H_ID,
+                                  ORDER_H_CODE,
+                                  ORDER_H_NAME,
+                                  ORDER_H_TYPE,
+                                  PO_DOC_CAT_CODE,
+                                  CONTRACT_ID,
+                                  VENDOR_ID,
+                                  DEPT_ID,
+                                  PURCHASE_DEPT_ID,
+                                  PURCHASE_PERSON,
+                                  PROJECT_ID,
+                                  VERSION,
+                                  ORG_ID,
+                                  LEDGER_ID,
+                                  IS_CLOSE,
+                                  AMOUNT,
+                                  INV_AMOUNT,
+                                  INS_CODE,
+                                  AUDIT_STATUS,
+                                  AUDIT_STATUS_DESC,
+                                  AUDIT_DATE,
+                                  SYS_AUDIT_STATUS,
+                                  SYS_AUDIT_STATUS_DESC,
+                                  DOCUMENT_DATE,
+                                  CREATION_DATE,
+                                  CREATED_BY,
+                                  LAST_UPDATE_DATE,
+                                  LAST_UPDATED_BY)
+                           values(#{ORDER_H_HIS_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_CODE,jdbcType=VARCHAR},
+                                  #{ORDER_H_NAME,jdbcType=VARCHAR},
+                                  #{ORDER_H_TYPE,jdbcType=VARCHAR},
+                                  #{PO_DOC_CAT_CODE,jdbcType=VARCHAR},
+                                  #{CONTRACT_ID,jdbcType=VARCHAR},
+                                  #{VENDOR_ID,jdbcType=VARCHAR},
+                                  #{DEPT_ID,jdbcType=VARCHAR},
+                                  #{PURCHASE_DEPT_ID,jdbcType=VARCHAR},
+                                  #{PURCHASE_PERSON,jdbcType=VARCHAR},
+                                  #{PROJECT_ID,jdbcType=VARCHAR},
+                                  #{VERSION,jdbcType=NUMERIC},
+                                  #{ORG_ID,jdbcType=VARCHAR},
+                                  #{LEDGER_ID,jdbcType=VARCHAR},
+                                  #{IS_CLOSE,jdbcType=VARCHAR},
+                                  #{AMOUNT,jdbcType=NUMERIC},
+                                  #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  #{INS_CODE,jdbcType=VARCHAR},
+                                  #{AUDIT_STATUS,jdbcType=VARCHAR},
+                                  #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                                  #{AUDIT_DATE,jdbcType=TIMESTAMP},
+                                  #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+                                  #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                                  #{DOCUMENT_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATION_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATED_BY,jdbcType=VARCHAR},
+                                  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  #{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改采购订单历史表主表信息 -->
+    <update id="editOrderHHisInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderHHisBean">
+        update xc_po_order_h_his set    
+                        ORDER_H_CODE =  #{ORDER_H_CODE,jdbcType=VARCHAR},
+                        ORDER_H_NAME = #{ORDER_H_NAME,jdbcType=VARCHAR},
+                        CONTRACT_ID = #{CONTRACT_ID,jdbcType=VARCHAR},
+                        VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+                        DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                        PURCHASE_DEPT_ID =  #{PURCHASE_DEPT_ID,jdbcType=VARCHAR},
+                        PURCHASE_PERSON = #{PURCHASE_PERSON,jdbcType=VARCHAR},
+                        PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+                        AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                        INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                        DOCUMENT_DATE = #{DOCUMENT_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATE_DATE =  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATED_BY =  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                  where ORDER_H_HIS_ID = #{ORDER_H_HIS_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 判断采购订单历史表行表新增或修改 -->
+    <select id="ifExistLHis" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderLHisBean">
+        select * from xc_po_order_l_his where ORDER_L_HIS_ID = #{ORDER_L_HIS_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 判断采购订单历史表行表新增或修改(通过采购订单行ID) -->
+    <select id="ifExistLHisByLId" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderLHisBean">
+        select * from xc_po_order_l_his where ORDER_L_ID = #{ORDER_L_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增采购订单历史表行表信息 -->
+    <insert id="addOrderLHisInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderLHisBean">
+        insert into xc_po_order_l_his(ORDER_L_HIS_ID,
+                                  ORDER_H_HIS_ID,
+                                  ORDER_L_ID,
+                                  ORDER_H_ID,
+                                  ORDER_L_NUM,
+                                  MATERIAL_ID,
+                                  AP_PUR_TYPE_ID,
+                                  PUR_AP_L_ID,
+                                  DEPT_ID,
+                                  PROJECT_ID,
+                                  DIM_ID,
+                                  QTY,
+                                  TAX,
+                                  PRICE,
+                                  INV_PRICE,
+                                  IS_CLOSE,
+                                  AMOUNT,
+                                  INV_AMOUNT,
+                                  ORG_ID,
+                                  LEDGER_ID,
+                                  DESCRIPTION,
+                                  VERSION,
+                                  CREATION_DATE,
+                                  CREATED_BY,
+                                  LAST_UPDATE_DATE,
+                                  LAST_UPDATED_BY)
+                           values(#{ORDER_L_HIS_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_HIS_ID,jdbcType=VARCHAR},
+                                  #{ORDER_L_ID,jdbcType=VARCHAR},
+                                  #{ORDER_H_ID,jdbcType=VARCHAR},
+                                  #{ORDER_L_NUM,jdbcType=NUMERIC},
+                                  #{MATERIAL_ID,jdbcType=VARCHAR},
+                                  #{AP_PUR_TYPE_ID,jdbcType=VARCHAR},
+                                  #{PUR_AP_L_ID,jdbcType=VARCHAR},
+                                  #{DEPT_ID,jdbcType=VARCHAR},
+                                  #{PROJECT_ID,jdbcType=VARCHAR},
+                                  #{DIM_ID,jdbcType=VARCHAR},
+                                  #{QTY,jdbcType=NUMERIC},
+                                  #{TAX,jdbcType=NUMERIC},
+                                  #{PRICE,jdbcType=NUMERIC},
+                                  #{INV_PRICE,jdbcType=NUMERIC},
+                                  #{IS_CLOSE,jdbcType=VARCHAR},
+                                  #{AMOUNT,jdbcType=NUMERIC},
+                                  #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  #{ORG_ID,jdbcType=VARCHAR},
+                                  #{LEDGER_ID,jdbcType=VARCHAR},
+                                  #{DESCRIPTION,jdbcType=VARCHAR},
+                                  #{VERSION,jdbcType=NUMERIC},
+                                  #{CREATION_DATE,jdbcType=TIMESTAMP},
+                                  #{CREATED_BY,jdbcType=VARCHAR},
+                                  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  #{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改采购订单历史表行表信息 -->
+    <update id="editOrderLHisInfo" parameterType="com.xzsoft.xc.po.modal.PoOrderLHisBean">
+        update xc_po_order_l_his set
+                        ORDER_L_NUM  =  #{ORDER_L_NUM,jdbcType=NUMERIC},
+                        MATERIAL_ID = #{MATERIAL_ID,jdbcType=VARCHAR},
+                        AP_PUR_TYPE_ID = #{AP_PUR_TYPE_ID,jdbcType=VARCHAR},
+                        DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                        PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+                        QTY = #{QTY,jdbcType=NUMERIC},
+                        TAX = #{TAX,jdbcType=NUMERIC},
+                        PRICE = #{PRICE,jdbcType=NUMERIC},
+                        INV_PRICE = #{INV_PRICE,jdbcType=NUMERIC},
+                        AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                        INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                        DESCRIPTION =  #{DESCRIPTION,jdbcType=VARCHAR},
+                        LAST_UPDATE_DATE =  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                        LAST_UPDATED_BY =  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                 where ORDER_L_HIS_ID = #{ORDER_L_HIS_ID,jdbcType=VARCHAR}
+                        
+    </update>
+    
+     <!-- 删除采购申请行表信息 -->
+    <delete id="deleteOrderLHisInfo" parameterType="java.util.List">
+        delete from xc_po_order_l_his where
+        ORDER_L_HIS_ID in   
+        <foreach collection="list" index="index" item="item" open="("
+            close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <!-- 修改采购申请行表信息 -->
+    <update id="editPurInfo" parameterType="com.xzsoft.xc.po.modal.PoPurApLBean">
+        update xc_po_pur_ap_l set 
+                    PO_ORDER_L_ID = #{PO_ORDER_L_ID,jdbcType=VARCHAR},
+                    PO_ORDER_H_ID = #{PO_ORDER_H_ID,jdbcType=VARCHAR}
+                    where PUR_AP_L_ID = #{PUR_AP_L_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 修改采购申请行表信息(根据采购订单ID) -->
+    <update id="editPurInfoByOrder" parameterType="com.xzsoft.xc.po.modal.PoPurApLBean">
+        update xc_po_pur_ap_l set 
+                    PO_ORDER_L_ID = #{PO_ORDER_L_ID,jdbcType=VARCHAR},
+                    PO_ORDER_H_ID = #{PO_ORDER_L_ID,jdbcType=VARCHAR}
+                    where PO_ORDER_H_ID = #{PO_ORDER_H_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 获得采购订单（变更）通过id -->
+    <select id="getOrderHHisById" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderHHisBean">
+        select * from xc_po_order_h_his where ORDER_H_HIS_ID = #{ORDER_H_HIS_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 获得采购订单（变更）行数据，通过主id（ORDER_H_HIS_ID） -->
+    <select id="getOrderLHisByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoOrderLHisBean">
+        select * from xc_po_order_l_his where ORDER_H_HIS_ID = #{ORDER_H_HIS_ID,jdbcType=VARCHAR}
+    </select>
+</mapper>

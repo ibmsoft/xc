@@ -1,0 +1,13 @@
+{
+    order : "序号",
+    seekBtn : "查看",
+    DESCRIPTION : "摘要",
+    GL_DATE : "日期",
+    SOURCE_CODE : "单据编码",
+    AR_DOC_CAT_NAME : "单据类型",
+    JFJE : "借方金额",
+    DFJE : "贷方金额",
+    AMOUNT : "应收余额",
+    total : "合计",
+  	selectRec : "请选择一条需要查看的数据！"
+}

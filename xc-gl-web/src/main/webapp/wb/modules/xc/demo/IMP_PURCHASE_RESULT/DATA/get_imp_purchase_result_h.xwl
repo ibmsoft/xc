@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select h.* from demo_imp_purchase_result_h h where {#whereSql#}","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

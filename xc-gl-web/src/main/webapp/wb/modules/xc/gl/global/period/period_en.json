@@ -1,0 +1,16 @@
+{
+  yearName : "Year",
+  rownum : "NO",
+  accountPeriod:"Accounting Period",
+  quarterName:"Quarter",
+  startDate:"Start Date",
+  endDate:"End Date",
+  adjustPeriod:"Adjusting Period",
+  isEnabled:"isEnabled",
+  yearTip:"Write The Year You Want Add,ex:2016",
+  addYearBtn:"Add Year",
+  confirmBtn:"Confirm",
+  cancelBtn:"Cancel",
+  queryBtn:"Query",
+  editBtn:'Edit'
+}

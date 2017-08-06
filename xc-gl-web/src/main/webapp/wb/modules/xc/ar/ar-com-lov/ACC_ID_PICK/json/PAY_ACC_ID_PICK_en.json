@@ -1,0 +1,7 @@
+{
+	acc:'access account',
+  	accCode:'account code',
+  	accName:'account name',
+  	accCodeName:'account code or name',
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

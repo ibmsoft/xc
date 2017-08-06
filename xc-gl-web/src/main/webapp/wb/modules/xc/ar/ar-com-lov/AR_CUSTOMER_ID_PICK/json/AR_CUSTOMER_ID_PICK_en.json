@@ -1,0 +1,8 @@
+{
+    CUSTOMER_NAME : "Customer",
+    CUSTOMER_CODE_COL : "Customer Code",
+    CUSTOMER_NAME_COL : "Customer Name",
+    CREDIT_COL : "Credit",
+    CUSTOMER_CODE_NAME : "Customer Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

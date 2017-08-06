@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.XCDimMapper">
+	
+	<resultMap id="DcAccountResultMap" type="com.xzsoft.xsr.core.modal.DcAccount">
+		<result column="ACC_CODE" property="code"/>
+		<result column="ACC_NAME" property="name"/>
+		<result column="PARENT_CODE" property="upCode"/>
+		<result column="ATTR1" property="ledgerCode"/>
+	</resultMap>
+	
+	<resultMap id="DcCaItemResultMap" type="com.xzsoft.xsr.core.modal.DcCaItem">
+		<result column="ACC_CODE" property="caCode"/>
+		<result column="ACC_NAME" property="caName"/>
+		<result column="DESCRIPTION" property="caDesc"/>
+		<result column="PARENT_CODE" property="upCode"/>
+		<result column="ATTR1" property="ledgerCode"/>
+		<result column="ATTR2" property="caDirection"/>
+		<result column="ATTR3" property="isLeaf"/>
+		<result column="ATTR4" property="orderby"/>
+		<result column="ATTR5" property="caLevel"/>
+	</resultMap>
+	
+	<resultMap id="DcDimCusResultMap" type="com.xzsoft.xsr.core.modal.DcDimCus">
+		<result column="DIM_CUS_CODE" property="code"/>
+		<result column="DIM_CUS_NAME" property="name"/>
+		<result column="PARENT_CODE" property="upCode"/>
+		<result column="ATTR1" property="ledgerCode"/>
+	</resultMap>
+	
+	<select id="getDimSetByDcid" resultType="com.xzsoft.xsr.core.modal.DcDimSet">
+		select t.DIM_CODE, t.DIM_MEANING, t.DIM_TABLE, t.ATTR1 
+		  from xsr_dc_dim_set t 
+		 where t.DC_ID =  #{dcid}
+		   and t.DIM_MEANING is not null
+	</select>
+	
+	<select id="getDcAccountByCode" resultMap="DcAccountResultMap">
+		select t.ACC_ID, t.ACC_CODE, t.ACC_NAME, t.ACC_CLASS, t.PARENT_CODE, t.ATTR1 
+		  from xsr_dc_account t
+		 where t.DC_ID = #{dcid}
+		   and t.ACC_CODE = #{code}
+		   and t.ATTR1 = #{ledgerCode}
+	</select>
+	
+	<select id="getDcCaItemByCode" resultMap="DcCaItemResultMap">
+		select t.ACC_ID, t.ACC_CODE, t.ACC_NAME, t.ACC_CLASS, t.PARENT_CODE, t.ATTR1 
+		  from xsr_dc_account t
+		 where t.DC_ID = #{dcid}
+		   and t.ACC_CODE = #{code}
+		   and t.ATTR1 = '-1'
+	</select>
+
+	<select id="getDcDimCusByCode" resultMap="DcDimCusResultMap">
+		select t.DIM_CUS_ID, t.DIM_CUS_CODE, t.DIM_CUS_NAME, t.PARENT_CODE, t.ATTR1 
+		  from ${tableName} t
+		 where t.DC_ID = #{dcid}
+		   and t.DIM_CUS_CODE = #{code}
+		   and t.ATTR1 = #{ledgerCode}
+	</select>
+	
+	<select id="getDimDataValue" resultType="java.sql.Timestamp">
+		select t.DATE_VALUE
+		  from xsr_dc_etl_key_value t
+		 where t.DC_ID = #{dcid}
+		   and t.ENTITY_ID = #{entityId}
+		   and t.ETL_KEY_TYPE = #{keyType}
+		   and t.ETL_KEY_MOD = #{keyMod}
+	</select>
+	
+	<select id="getKMHrcy" resultType="String">
+		select DISTINCT t.HS_TX 
+		  from xsr_rep_org_property t 
+		 where t.SUIT_ID = #{suitId}
+		   and t.HS_TX is not null
+	</select>
+	
+	<select id="getDcEtlSrc" resultType="hashmap">
+		select t.ETL_SRC_NAME, t.ETL_SRC_TYPE, t.DB_TYPE, t.URL, t.ETL_SRC_USER, t.ETL_SRC_PW
+		  from xsr_dc_etl_src t
+		 where t.DC_ID = #{dcid}
+		   and t.ETL_SRC_TYPE = #{srcType}
+		   and t.ETL_SRC_NAME =  #{srcName}
+	</select>
+</mapper>

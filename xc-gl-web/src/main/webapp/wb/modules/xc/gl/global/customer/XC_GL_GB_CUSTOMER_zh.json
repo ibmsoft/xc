@@ -1,0 +1,28 @@
+{
+  moduleTitle:"客户管理",
+  codeName:"编码/名称",
+  enterTip:"回车查询",
+  rownum:"序号",
+  customerCode:"编码",
+  customerName:"名称",
+  startDate:"开始日期",
+  endDate:"结束日期",
+
+  confirmBtn:"确认",
+  cancelBtn :"取消",
+  addBtn  	: "增加",
+  editBtn   : "修改",
+  delBtn    : "删除",
+  saveBtn   : "保存",
+  batchEdit : "批量修改",
+  importBtn:"导入",
+  exprotBtn:"导出",
+  
+  importTitle:"客户数据导入",
+  fileTip:"请选择Excel文件",
+  fileName:"<font color='red'>*</font>选择文件",
+  importLogs:"导入日志信息",
+  incorrectColumn:"错误行",
+  errorInformation:"错误信息",
+  labelWidth:80
+}

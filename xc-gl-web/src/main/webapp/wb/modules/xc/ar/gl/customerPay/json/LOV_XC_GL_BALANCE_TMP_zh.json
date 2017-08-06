@@ -1,0 +1,16 @@
+{
+	ledger:'所属账簿',
+  	ccid:'科目组合名称',
+  	query:'查询',
+  	reset:'重置',
+  	ok:'确认',
+  	okMsg1:'请选择要同步的期初数据！',
+  	okMsg2:'确定要选择的',
+  	okMsg3:'条记录吗？',
+  	cancel:'取消',
+  	account:'科目',
+  	accountCombination:'科目组合',
+  	direction:'方向',
+  	balance:'余额',
+  	period:'会计期间'
+}

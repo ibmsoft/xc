@@ -1,0 +1,40 @@
+{
+
+  queryBtn				: "查询",
+  clearBtn				: "重置",
+  seekBtnBtn			: "查看",
+  signBtn				: "签字",
+  
+  LEDGER_NAME			: "账簿",
+  AP_PAY_H_CODE			: "单据编码",
+  VENDOR_NAME			: "供应商",
+  PROJECT_NAME			: "项目",
+  DESCRIPTION			: "摘要",
+  SIGN_STATUS			: "",
+  V_STATUS_YES			: "",
+  NoSign				: "未签字",
+  YesSign				: "已签字",
+    FKD_CGJS				: "采购结算",
+    FKD_CGJS-H				: "采购结算-红",
+    FKD_YUFK				: "预付款",
+    FKD_YUFK-H				: "预付款-红",
+    FKD_QTFK				: "其它付款",
+    FKD_QTFK-H				: "其它付款-红",
+  
+  LEDGER_NAME_COL		: "账簿",
+  AP_PAY_H_CODE_COL		: "单据编号",
+  AP_DOC_CAT_NAME_COL	: "付款类型",
+  GL_DATE_COL			: "入账日期",
+  DESCRIPTION_COL		: "摘要",
+  VENDOR_NAME_COL		: "供应商",
+  AP_CONTRACT_NAME_COL	: "合同名称",
+  AMOUNT_COL			: "金额",
+  DEPT_NAME_COL			: "成本中心",
+  PROJECT_NAME_COL		: "项目",
+  CREATED_BY_NAME_COL	: "制单人",
+  SIGN_USER_NAME_COL	: "签字人",
+  V_STATUS_NAME_COL		: "状态",
+  VERFY_STATUS_COL		: "是否审核"
+  
+  
+}

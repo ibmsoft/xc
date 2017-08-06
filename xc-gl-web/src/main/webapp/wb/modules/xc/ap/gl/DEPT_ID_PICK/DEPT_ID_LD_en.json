@@ -1,0 +1,6 @@
+{
+	dept:'department',
+  	deptCode:'department code',
+  	deptName:'department name',
+  	deptCodeName:'department code or name'
+}

@@ -1,0 +1,7 @@
+{
+	accName:'account name',
+  	accBankName:'account bank name',
+  	accountBank:'account bank',
+  	accNameBankName:'accNameBankName',
+    EMPTY_VENDOR_INFO : "Please select supplier information!"
+}

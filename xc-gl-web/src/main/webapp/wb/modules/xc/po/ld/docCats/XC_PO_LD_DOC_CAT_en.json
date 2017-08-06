@@ -1,0 +1,46 @@
+{
+  XH:'num',
+
+
+  saveBtn:'save',
+
+
+  VAL_NAME_COL:'document types',
+  VAL_CODE_COL:'value code',
+  AR_CAT_CODE_COL:'document coding',
+  AR_CAT_NAME_COL:'document name',
+  PROCESS_NAME_COL:'approval process',
+  QUERY_CODE_NAME:'code/name',
+
+
+  PROCESS_ID_COL:'process ID',
+  PROCESS_CODE_COL:'process code',
+  PROCESS_NAME_COL1:'process name',
+
+  CODE_COL:'code',
+  NAME_COL:'name',
+  IS_SIGN_COL:'is sign',
+    RULE_DESC_COL:'coding rule',
+
+  ATT_CAT_NAME_COL:'classification of the attachment',
+
+  PC_W_FORM_NAME_COL:'PC fill in the form',
+  PC_A_FORM_NAME_COL:'PC approval form',
+  PC_P_FORM_NAME_COL:'PC print form',
+  M_W_FORM_NAME_COL:'Mobile client fill in the form',
+
+
+  M_A_FORM_NAME_COL:'Mobile client approval form',
+  DESCRIPTION_COL:'description',
+
+  message:'saving...',
+
+  SAVETIP:'save success！'
+
+
+
+
+
+
+
+}

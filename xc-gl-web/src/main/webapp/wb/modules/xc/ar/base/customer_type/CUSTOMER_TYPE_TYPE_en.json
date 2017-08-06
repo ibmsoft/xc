@@ -1,0 +1,34 @@
+{
+  XH:'num',
+  CSTM_TYPE_CODE_COL:'customer sort',
+  CSTM_TYPE_NAME_COL:'alias',
+  IS_USE_COL:'enable ',
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+
+  importBtn:'import',
+  exportBtn:'export',
+  
+
+  CODEMSG:'coding repeat!',
+  message:'saving...',
+
+  SAVETIP:'save success!',
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete?',
+  DELTIP1:'Delete  success!',
+  EDITETIP:'Modify  success!',
+
+  OPTYPE_COL:'operation type',
+
+  CSTM_SORT_CODE_COL:'code',
+
+  CSTM_SORT_NAME_COL:'name',
+  CSTM_TYPE_NAME_COL1:'customer sort',
+
+  MSG1:'Please select a customer classification data!',
+   MSG2:'Customer classification has been association cannot be deleted',
+
+  TIP:'tip'
+}

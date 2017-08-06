@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.bg.mapper.BudgetDataHandlerMapper">
+	<!-- 查询预算余额汇总中的预算金额（或者是否有相同的数据） -->
+	<select id="budgetDataSelect" parameterType="com.xzsoft.xc.bg.modal.BgCostPrjBalBean" resultType="float">
+		<choose>
+			<when test="opType == 'BG01'.toString()">
+				SELECT
+					BG_AMT
+				FROM
+					xc_bg_cost_bal bca
+				WHERE
+					bca.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+				AND bca.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+				AND bca.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+				AND bca.BG_ITEM_ID = #{bgItemId,jdbcType=VARCHAR}
+			</when>
+			<when test="opType == 'BG02'.toString()">
+				SELECT
+					BG_AMT
+				FROM
+					xc_bg_prj_bal
+				WHERE
+					LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+				AND PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+				AND DEPT_ID = #{deptId,jdbcType=VARCHAR}
+				AND BG_ITEM_ID = #{bgItemId,jdbcType=VARCHAR}
+			</when>
+		</choose>
+		
+	</select>
+	<!-- 预算余额汇总插入 -->
+	<insert id="budgetDataInsert" parameterType="com.xzsoft.xc.bg.modal.BgCostPrjBalBean">
+		<choose>
+			<!-- 预算费用余额汇总  -->
+			<when test="opType == 'BG01'.toString() ">
+				INSERT INTO xc_bg_cost_bal (
+					LEDGER_ID,
+					PERIOD_CODE,
+					BG_YEAR,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{ledgerId,jdbcType=VARCHAR},
+					#{periodCode,jdbcType=VARCHAR},
+					#{bgYear,jdbcType=VARCHAR},
+					#{bgItemId,jdbcType=VARCHAR},
+					#{deptId,jdbcType=VARCHAR},
+					#{bgAmt,jdbcType=FLOAT},
+					#{creationDate,jdbcType=TIMESTAMP},
+					#{createdBy,jdbcType=VARCHAR},
+					#{lastUpdateDate,jdbcType=TIMESTAMP},
+					#{lastUpdatedBy,jdbcType=VARCHAR}
+				)
+			</when>
+			<!-- 预算项目余额汇总  -->
+			<when test="opType == 'BG02'.toString() ">
+				INSERT INTO xc_bg_prj_bal (
+					LEDGER_ID,
+					PROJECT_ID,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{ledgerId,jdbcType=VARCHAR},
+					#{projectId,jdbcType=VARCHAR},
+					#{bgItemId,jdbcType=VARCHAR},
+					#{deptId,jdbcType=VARCHAR},
+					#{bgAmt,jdbcType=FLOAT},
+					#{creationDate,jdbcType=TIMESTAMP},
+					#{createdBy,jdbcType=VARCHAR},
+					#{lastUpdateDate,jdbcType=TIMESTAMP},
+					#{lastUpdatedBy,jdbcType=VARCHAR}
+				)
+			</when>
+		</choose>
+	</insert>
+	<update id="budgetDataUpdate" parameterType="com.xzsoft.xc.bg.modal.BgCostPrjBalBean">
+		<choose>
+			<!-- 预算费用余额修改  -->
+			<when test="opType == 'BG01'.toString() ">
+				UPDATE xc_bg_cost_bal SET
+					BG_AMT = #{bgAmt,jdbcType=FLOAT},
+					LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP},
+					LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}
+				WHERE LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+					AND BG_ITEM_ID = #{bgItemId,jdbcType=VARCHAR}
+					AND DEPT_ID = #{deptId,jdbcType=VARCHAR}
+					AND PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+					AND BG_YEAR = #{bgYear,jdbcType=VARCHAR}
+			</when>
+			<!-- 预算项目余额修改  -->
+			<when test="opType == 'BG02'.toString() ">
+				UPDATE xc_bg_prj_bal SET
+					BG_AMT = #{bgAmt,jdbcType=FLOAT},
+					LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP},
+					LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}
+				WHERE LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+					AND BG_ITEM_ID = #{bgItemId,jdbcType=VARCHAR}
+					AND DEPT_ID = #{deptId,jdbcType=VARCHAR}
+					AND PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+			</when>
+		</choose>
+	</update>
+    <!-- 获取预算余额（费用预算，项目预算） -->
+	<select id="getBudgetBalance" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.bg.modal.BgBillBalance">
+	  <choose>
+		<when test="bgType == 'BG01'.toString()">
+	SELECT
+	  t.LEDGER_ID AS ledgerId,
+	  t.PERIOD_CODE AS periodCode,
+	  t.BG_YEAR AS bgYear,
+	  t.BG_ITEM_ID AS bgItemId,
+	  (select p.BG_ITEM_NAME from xc_bg_items p where p.BG_ITEM_ID = t.BG_ITEM_ID) AS bgItemName,
+	  t.DEPT_ID AS deptId,
+	  t.BG_AMT AS bgAmount,
+	  '' AS projectId,
+	  t.CREATION_DATE AS creationDate,
+	  t.CREATED_BY AS createdBy,
+	  t.LAST_UPDATE_DATE AS lastUpdateDate,
+	  t.LAST_UPDATED_BY AS lastUpdatedBy
+   FROM
+	xc_bg_cost_bal t
+	WHERE
+	  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	  t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+	AND
+	  t.BG_YEAR = #{bgYear,jdbcType=VARCHAR}
+		</when>
+		<when test="bgType == 'BG02'.toString()">
+	SELECT
+	  t.LEDGER_ID AS ledgerId,
+	  '' AS periodCode,
+	  '' AS bgYear,
+	  t.BG_ITEM_ID AS bgItemId,
+	  (select p.BG_ITEM_NAME from xc_bg_items p where p.BG_ITEM_ID = t.BG_ITEM_ID) AS bgItemName,
+	  t.DEPT_ID AS deptId,
+	  t.BG_AMT AS bgAmount,
+	  t.PROJECT_ID AS projectId,
+	  t.CREATION_DATE AS creationDate,
+	  t.CREATED_BY AS createdBy,
+	  t.LAST_UPDATE_DATE AS lastUpdateDate,
+	  t.LAST_UPDATED_BY AS lastUpdatedBy
+	FROM
+	  xc_bg_prj_bal t
+	WHERE
+	  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	  t.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+		 </when>
+	 </choose>
+  </select>
+<!-- 预算余额汇总插入   费用预算-->
+  <insert id="insertCostBgBalMysql" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				INSERT INTO xc_bg_cost_bal (
+					LEDGER_ID,
+					PERIOD_CODE,
+					BG_YEAR,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.periodCode,jdbcType=VARCHAR},
+					#{item.bgYear,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.bgAmount,jdbcType=DECIMAL},
+					NOW(),
+					#{item.createdBy,jdbcType=VARCHAR},
+					NOW(),
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )
+	</foreach>
+</insert>
+<insert id="insertCostBgBalOracle" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				INSERT INTO xc_bg_cost_bal (
+					LEDGER_ID,
+					PERIOD_CODE,
+					BG_YEAR,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.periodCode,jdbcType=VARCHAR},
+					#{item.bgYear,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.bgAmount,jdbcType=DECIMAL},
+					sysdate,
+					#{item.createdBy,jdbcType=VARCHAR},
+					sysdate,
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )
+	</foreach>
+</insert>
+<!-- 预算余额汇总插入   项目预算-->
+  <insert id="insertProjectBgBalMysql" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				INSERT INTO xc_bg_prj_bal (
+					LEDGER_ID,
+					PROJECT_ID,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.projectId,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.bgAmount,jdbcType=DECIMAL},
+					NOW(),
+					#{item.createdBy,jdbcType=VARCHAR},
+					NOW(),
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )
+	</foreach>
+</insert>
+  <insert id="insertProjectBgBalOracle" parameterType="java.util.List">
+   <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				INSERT INTO xc_bg_prj_bal (
+					LEDGER_ID,
+					PROJECT_ID,
+					BG_ITEM_ID,
+					DEPT_ID,
+					BG_AMT,
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.projectId,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.bgAmount,jdbcType=DECIMAL},
+					sysdate,
+					#{item.createdBy,jdbcType=VARCHAR},
+					sysdate,
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )
+	</foreach>
+</insert>
+<!-- 预算余额更新   费用预算-->
+<update id="updateCostBgBalMysql" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update xc_bg_cost_bal 
+				    set BG_AMT = #{item.bgAmount,jdbcType=DECIMAL},
+				        LAST_UPDATE_DATE = NOW(),
+				        LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+				    where LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}
+				     and  PERIOD_CODE = #{item.periodCode,jdbcType=VARCHAR}
+				     and  BG_YEAR = #{item.bgYear,jdbcType=VARCHAR}
+				     and  BG_ITEM_ID = #{item.bgItemId,jdbcType=VARCHAR}
+				     and  DEPT_ID = #{item.deptId,jdbcType=VARCHAR}
+	</foreach>
+</update>
+<update id="updateCostBgBalOracle" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				update xc_bg_cost_bal 
+				    set BG_AMT = #{item.bgAmount,jdbcType=DECIMAL},
+				        LAST_UPDATE_DATE = sysdate,
+				        LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+				    where LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}
+				     and  PERIOD_CODE = #{item.periodCode,jdbcType=VARCHAR}
+				     and  BG_YEAR = #{item.bgYear,jdbcType=VARCHAR}
+				     and  BG_ITEM_ID = #{item.bgItemId,jdbcType=VARCHAR}
+				     and  DEPT_ID = #{item.deptId,jdbcType=VARCHAR}
+	</foreach>
+</update>
+<!-- 预算余额更新   项目预算-->
+<update id="updateProjectBgBalMysql" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update xc_bg_prj_bal 
+				    set BG_AMT = #{item.bgAmount,jdbcType=DECIMAL},
+				        LAST_UPDATE_DATE = NOW(),
+				        LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+				    where LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}
+				     and  PROJECT_ID = #{item.projectId,jdbcType=VARCHAR}
+				     and  BG_ITEM_ID = #{item.bgItemId,jdbcType=VARCHAR}
+				     and  DEPT_ID = #{item.deptId,jdbcType=VARCHAR}
+	</foreach>
+</update>
+<update id="updateProjectBgBalOracle" parameterType="java.util.List">
+  <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				update xc_bg_prj_bal 
+				    set BG_AMT = #{item.bgAmount,jdbcType=DECIMAL},
+				        LAST_UPDATE_DATE = sysdate,
+				        LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+				    where LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}
+				     and  PROJECT_ID = #{item.projectId,jdbcType=VARCHAR}
+				     and  BG_ITEM_ID = #{item.bgItemId,jdbcType=VARCHAR}
+				     and  DEPT_ID = #{item.deptId,jdbcType=VARCHAR}
+	</foreach>
+</update>
+<!-- 新增预算发生数-->
+  <insert id="increaseBudgetMysql" parameterType="java.util.HashMap">
+  <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					insert into xc_bg_fact
+				  ( fact_id,         
+                    ledger_id,       
+                    project_id,      
+                    bg_item_id,      
+                    dept_id,         
+                    fact_date,       
+                    amount,          
+                    fact_type,       
+                    src_id, 
+                    src_tab,         
+                    creation_date,   
+                    created_by,      
+                    last_update_date,
+                    last_updated_by 
+				)values(
+					#{item.factId,jdbcType=VARCHAR},
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.projectId,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.factDate,jdbcType=TIMESTAMP},
+					#{item.amount,jdbcType=DOUBLE},
+					#{item.factType,jdbcType=VARCHAR},
+					#{item.srcId,jdbcType=VARCHAR},
+					#{item.srcTab,jdbcType=VARCHAR},
+					#{item.creationDate,jdbcType=DATE},
+					#{item.createdBy,jdbcType=VARCHAR},
+					#{item.lastUpdateDate,jdbcType=DATE},
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )   
+				</foreach>
+</insert>
+<!-- 新增预算发生数-->
+  <insert id="increaseBudgetOracle" parameterType="java.util.HashMap">
+    <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				insert into xc_bg_fact (
+					FACT_ID,         
+                    LEDGER_ID,       
+                    PROJECT_ID,      
+                    BG_ITEM_ID,      
+                    DEPT_ID,         
+                    FACT_DATE,       
+                    AMOUNT,          
+                    FACT_TYPE,       
+                    SRC_ID,  
+                    SRC_TAB,         
+                    CREATION_DATE,   
+                    CREATED_BY,      
+                    LAST_UPDATE_DATE,
+                    LAST_UPDATED_BY 
+				)values(
+					#{item.factId,jdbcType=VARCHAR},
+					#{item.ledgerId,jdbcType=VARCHAR},
+					#{item.projectId,jdbcType=VARCHAR},
+					#{item.bgItemId,jdbcType=VARCHAR},
+					#{item.deptId,jdbcType=VARCHAR},
+					#{item.factDate,jdbcType=TIMESTAMP},
+					#{item.amount,jdbcType=DOUBLE},
+					#{item.factType,jdbcType=VARCHAR},
+					#{item.srcId,jdbcType=VARCHAR},
+					#{item.srcTab,jdbcType=VARCHAR},
+					#{item.creationDate,jdbcType=DATE},
+					#{item.createdBy,jdbcType=VARCHAR},
+					#{item.lastUpdateDate,jdbcType=DATE},
+					#{item.lastUpdatedBy,jdbcType=VARCHAR}
+			   )
+	</foreach>
+</insert>
+<!-- 更新预算占用/发生数 -->
+<update id="updateFactBudget">
+    <choose>
+       <when test="dbType == 'mysql'.toString()">
+           update xc_bg_fact t 
+             set  t.FACT_TYPE = #{targetType,jdbcType=VARCHAR},
+                  t.LAST_UPDATE_DATE = NOW()
+           WHERE  t.SRC_ID = #{srcId,jdbcType=VARCHAR}
+             AND  t.FACT_TYPE= #{originalType,jdbcType=VARCHAR}
+       </when>
+       <otherwise>
+           update xc_bg_fact t 
+             set  t.FACT_TYPE = #{targetType,jdbcType=VARCHAR},
+                  t.LAST_UPDATE_DATE = sysdate
+           WHERE  t.SRC_ID = #{srcId,jdbcType=VARCHAR}
+             AND  t.FACT_TYPE= #{originalType,jdbcType=VARCHAR}
+       </otherwise>
+    </choose>
+</update>
+<delete id="deleteFactBudget">
+   delete from xc_bg_fact where SRC_ID = #{srcId,jdbcType=VARCHAR} and FACT_TYPE= #{factType,jdbcType=VARCHAR}
+</delete>
+<!-- 根据预算单信息获 预算实际发生 记录 -->
+<select id="getFactBalance"  parameterType="java.util.HashMap"  resultType="com.xzsoft.xc.bg.modal.BgFactBalance">
+   <choose>
+     <when test=" bgItemType == '1'.toString()">
+     SELECT
+	    t.LEDGER_ID AS "ledgerId",
+	    t.BG_ITEM_ID AS "bgItemId",
+	    ''  AS "projectId",
+	    t.DEPT_ID AS "deptId",
+	    SUM(t.AMOUNT) AS "bgAmount"
+     FROM
+	   xc_bg_fact t
+     WHERE
+       t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+     AND
+       t.PROJECT_ID IS NULL
+           <if test="dbType == 'mysql'.toString()">
+              AND t.FACT_DATE BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR}
+           </if> 
+           <if test="dbType == 'oracle'.toString()">
+             <![CDATA[ AND t.FACT_DATE BETWEEN to_date(#{startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') 
+                       AND to_date(#{endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')]]> 
+           </if>   
+      GROUP BY t.LEDGER_ID,t.BG_ITEM_ID,t.DEPT_ID  
+     </when>
+     <otherwise>
+     SELECT
+	    t.LEDGER_ID AS "ledgerId",
+	    t.BG_ITEM_ID AS "bgItemId",
+	    t.PROJECT_ID AS "projectId",
+	    t.DEPT_ID AS "deptId",
+	    SUM(t.AMOUNT) AS "bgAmount"
+     FROM
+	   xc_bg_fact t
+     WHERE
+       t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+     AND
+       t.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+        <if test="dbType == 'mysql'.toString()">
+              AND t.FACT_DATE BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR}
+         </if> 
+         <if test="dbType == 'oracle'.toString()">
+             <![CDATA[ AND t.FACT_DATE BETWEEN to_date(#{startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') 
+                       AND to_date(#{endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')]]> 
+          </if>  
+        GROUP BY t.LEDGER_ID,t.BG_ITEM_ID,t.PROJECT_ID,t.DEPT_ID          
+     </otherwise>
+   </choose>
+</select>
+<select id="getProjectById" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Project">
+select
+	  t.PROJECT_ID as "projectId",
+	  t.PROJECT_CODE as "projectCode",
+	  t.PROJECT_NAME as "projectName",
+	  t.LEDGER_ID as "ledgerId",
+	  t.UP_PROJECT_ID as "upPorjectId",
+	  t.START_DATE as "startDate",
+	  t.END_DATE as "endDate",
+	  (select p.LEDGER_CODE from xc_gl_ledgers p where p.LEDGER_ID = t.LEDGER_ID) as "ledgerCode",
+	  case t.UP_PROJECT_ID when '-1' then '-1' else (select a.PROJECT_CODE from xc_pm_projects a where a.PROJECT_ID = t.UP_PROJECT_ID) end as "upProjectCode",
+	  t.created_by as "createdBy",
+	  t.last_update_date as "lastUpdateDate",
+	  t.last_updated_by as "lastUpdatedBy",
+	  (select max(p.last_update_date) from xc_pm_projects p) as "synchronizeDate"
+	from xc_pm_projects t
+	where t.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+</select>
+</mapper>

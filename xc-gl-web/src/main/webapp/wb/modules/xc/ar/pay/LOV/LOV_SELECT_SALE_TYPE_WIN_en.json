@@ -1,0 +1,20 @@
+{
+  AR_SALE_TYPE_NAME 		: "Sale Type",
+  		
+  queryBtn					: "Query",
+  clearBtn					: "Reset",
+  okBtn						: "Sure",
+  cancelBtn					: "Cancel",
+  
+  ROWNUM_COL				: "No.",
+  AR_SALE_TYPE_NAME_COL		: "Sale Type",
+  BG_ITEM_NAME_COL			: "Budget Items",
+  ACC_NAME_COL				: "Sale Account",
+  PAY_AMT_COL				: "Amount",
+  
+  qzsxzytjl					: "Please select at least 1 records!",
+  jebnwk					: "Amount can not be empty!",
+  jebnwl					: "Amount can not be 0!",
+  jeydyl					: "Amount should be greater than 0!",
+  jeyxyl					: "Amount should be less than 0!"
+}

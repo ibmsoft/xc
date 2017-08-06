@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.MakeReportMapper">
+
+	<resultMap id="cellDataResultMap" type="com.xzsoft.xsr.core.modal.CellData">
+		<result column="MSFORMAT_ID" property="sheet" />
+		<result column="X" property="row" />
+		<result column="Y" property="col" />
+		<result column="CELLV" property="json" />
+		<result column="APPLYWAY" property="applyWay" />
+	</resultMap>
+
+	<!-- 根据MSFORMAT_ID加载数据单元格 -->
+	<select id="loadDataValue" parameterType="java.util.HashMap" resultMap="cellDataResultMap">
+		select f.MSFORMAT_ID,f.X,f.Y,
+		<choose>
+			<when test="dbType == 'mysql'">
+				concat("{data:'",
+				if(c.DATATYPE!=3,t.CELLTEXTV,t.CELLV)
+				,"'}") CELLV,
+			</when>
+			<when test="dbType == 'oracle'">
+				'{data:'''||
+				decode(c.DATATYPE,3,t.CELLV,t.CELLTEXTV)
+				||'''}' CELLV,
+			</when>
+		</choose>
+		'apply' APPLYWAY
+		from xsr_rep_cellvalue t,xsr_rep_modalsheet_format f,xsr_rep_colitem c
+		where f.MSFORMAT_ID=#{msformatId}
+		  and t.SUIT_ID= #{suitId}
+		  and t.LEDGER_ID = #{ledgerId}
+		  and t.ENTITY_ID= #{entityId}
+		  and t.PERIOD_ID= #{periodId}
+		  and t.CURRENCY_ID=#{cnyId}
+		  and t.COLITEM_ID=c.COLITEM_ID
+		  and f.CELL_COMMENT_TYPE='DATA'
+		  and f.CELL_COMMENT=
+		<choose>
+			<when test="dbType == 'mysql'">
+				concat(t.ROWITEM_ID,',',t.COLITEM_ID)
+			</when>
+			<when test="dbType == 'oracle'">
+				t.ROWITEM_ID||','||t.COLITEM_ID
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 根据MSFORMAT_ID加载数据单元格 (除去有表内公式的) -->
+	<select id="loadDataWithoutC" parameterType="java.util.HashMap" resultMap="cellDataResultMap">
+		select f.MSFORMAT_ID,f.X,f.Y,
+		<choose>
+			<when test="dbType == 'mysql'">
+				concat("{data:'",
+				if(c.DATATYPE!=3,t.CELLTEXTV,t.CELLV)
+				,"'}") CELLV,
+			</when>
+			<when test="dbType == 'oracle'">
+				'{data:'''||
+				decode(c.DATATYPE,3,t.CELLV,t.CELLTEXTV)
+				||'''}' CELLV,
+			</when>
+		</choose>
+		'apply' APPLYWAY
+		from xsr_rep_cellvalue t,xsr_rep_modalsheet_format f,xsr_rep_colitem c
+		where f.MSFORMAT_ID=#{msformatId}
+		  and t.SUIT_ID= #{suitId}
+		  and t.LEDGER_ID = #{ledgerId}
+		  and t.ENTITY_ID = #{entityId}
+		  and t.PERIOD_ID = #{periodId}
+		  and t.CURRENCY_ID = #{cnyId}
+		  and t.COLITEM_ID = c.COLITEM_ID
+		  and f.CELL_COMMENT_TYPE = 'DATA'
+		  and f.IS_CAL = 0
+		  and f.CELL_COMMENT=
+		<choose>
+			<when test="dbType == 'mysql'">
+				concat(t.ROWITEM_ID,',',t.COLITEM_ID)
+			</when>
+			<when test="dbType == 'oracle'">
+				t.ROWITEM_ID||','||t.COLITEM_ID
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 获取报表状态 -->
+	<select id="getReportStatus" parameterType="java.util.HashMap" resultType="String">
+		select
+			<choose>
+				<when test="dbType=='mysql'">
+					IFNULL(APP_STATUS,'A') APP_STATUS 
+				</when>
+				<when test="dbType=='oracle'">
+					NVL(APP_STATUS,'A') APP_STATUS 
+				</when>
+			</choose>
+		from xsr_rep_sheets
+		where suit_id=#{suitId}
+		and modalsheet_id=#{MODALSHEET_ID}
+		and entity_id=#{ENTITY_ID}
+		and period_id=#{PERIOD_ID}
+		and currency_id=#{CURRENCY_ID}
+	</select>
+	<!-- 清空选定报表指标－固定数据 -->
+	<delete id="clearData" parameterType="java.util.HashMap">
+		delete from xsr_rep_cellvalue
+		where suit_id=#{suitId}
+		  and entity_id=#{ENTITY_ID}
+		  and period_id=#{PERIOD_ID}
+		  and currency_id=#{CURRENCY_ID}
+		  AND ROWITEM_ID IN ( SELECT rf.rowitem_id FROM xsr_rep_rowmodalref rf 
+				WHERE suit_id=#{suitId} and rf.modalsheet_id =#{MODALSHEET_ID} )
+	</delete>
+	<!-- 清空选定报表指标－浮动数据 -->
+	<delete id="clearDataFj" parameterType="java.util.HashMap">
+		delete from
+		xsr_rep_fj_cellvalue
+		where suit_id=#{suitId}
+		and modalsheet_id=#{MODALSHEET_ID}
+		and entity_id=#{ENTITY_ID}
+		and period_id=#{PERIOD_ID}
+		and currency_id=#{CURRENCY_ID}
+	</delete>
+	<!-- 锁定/解锁 -->
+	<update id="lockReport" parameterType="java.util.HashMap">
+		update xsr_rep_sheets r set APP_STATUS=#{lockType}
+		where r.suit_id=#{suitId}
+		and modalsheet_id=#{modalsheetId}
+		and entity_id=#{entityId}
+		and period_id=#{periodId}
+		and currency_id=#{currencyId}
+	</update>
+	<!-- 插入报表 -->
+	<insert id="insertReport">
+		insert into xsr_Rep_sheets (SHEET_ID,
+		SUIT_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_CODE,
+		MODALSHEET_CODE,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		CURRENCY_CODE,
+		APP_STATUS,
+		DESCRIPTION,
+		COMMIT_STATUS,
+		VERIFY_STATUS,
+		IMPTYPE,
+		CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY)
+		VALUES (#{repSheet.SHEET_ID},
+		#{repSheet.SUIT_ID},
+		#{repSheet.MODALTYPE_ID},
+		#{repSheet.MODALSHEET_ID},
+		#{repSheet.ENTITY_ID},
+		#{repSheet.PERIOD_ID},
+		#{repSheet.CURRENCY_ID},
+		#{repSheet.MODALTYPE_CODE},
+		#{repSheet.MODALSHEET_CODE},
+		#{repSheet.ENTITY_CODE},
+		#{repSheet.PERIOD_CODE},
+		#{repSheet.CURRENCY_CODE},
+		#{repSheet.APP_STATUS},
+		#{repSheet.DESCRIPTION},
+		#{repSheet.COMMIT_STATUS},
+		#{repSheet.VERIFY_STATUS},
+		#{repSheet.IMPTYPE},
+		#{repSheet.CREATION_DATE},
+		#{repSheet.CREATED_BY},
+		#{repSheet.LAST_UPDATE_DATE},
+		#{repSheet.LAST_UPDATED_BY})
+	</insert>
+	<!-- 更新报表 -->
+	<update id="updateReport" parameterType="java.util.HashMap">
+		update xsr_Rep_sheets r
+		set LAST_UPDATE_DATE=#{LAST_UPDATE_DATE},
+		LAST_UPDATED_BY =#{LAST_UPDATED_BY}
+		where r.suit_id=#{suitId}
+		and modalsheet_id=#{MODALSHEET_ID}
+		and entity_id=#{ENTITY_ID}
+		and period_id=#{PERIOD_ID}
+		and currency_id=#{CURRENCY_ID}
+	</update>
+	<!-- 插入指标 -->
+	<insert id="insertCellValue">
+		insert into xsr_rep_cellvalue(CELLV_ID,
+		SUIT_ID,
+		LEDGER_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		CURRENCY_ID,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		ROWITEM_CODE,
+		COLITEM_CODE,
+		CURRENCY_CODE,
+		CELLV,
+		CELLTEXTV,
+		FORMULAV,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY)
+		VALUES
+		<foreach collection="cellList" item="cellvalue" index="index"
+			separator=",">
+			(#{cellvalue.CELLV_ID},
+			#{cellvalue.SUIT_ID},
+			#{cellvalue.LEDGER_ID},
+			#{cellvalue.ENTITY_ID},
+			#{cellvalue.PERIOD_ID},
+			#{cellvalue.ROWITEM_ID},
+			#{cellvalue.COLITEM_ID},
+			#{cellvalue.CURRENCY_ID},
+			#{cellvalue.ENTITY_CODE},
+			#{cellvalue.PERIOD_CODE},
+			#{cellvalue.ROWITEM_CODE},
+			#{cellvalue.COLITEM_CODE},
+			#{cellvalue.CURRENCY_CODE},
+			#{cellvalue.CELLV},
+			#{cellvalue.CELLTEXTV},
+			#{cellvalue.FORMULAV},
+			#{cellvalue.CREATION_DATE},
+			#{cellvalue.CREATED_BY},
+			#{cellvalue.LAST_UPDATE_DATE},
+			#{cellvalue.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	<!-- 更新指标 -->
+	<update id="updateCellValue">
+		<foreach collection="cellList" item="cellvalue" index="index"
+			separator=";">
+			UPDATE xsr_rep_cellvalue
+			SET LAST_UPDATE_DATE=#{cellvalue.LAST_UPDATE_DATE},
+			LAST_UPDATED_BY =#{cellvalue.LAST_UPDATED_BY},
+			CELLV=#{cellvalue.CELLV},
+			CELLTEXTV=#{cellvalue.CELLTEXTV}
+			WHERE SUIT_ID=#{cellvalue.SUIT_ID}
+			AND LEDGER_ID=#{cellvalue.LEDGER_ID}
+			AND ENTITY_ID=#{cellvalue.ENTITY_ID}
+			AND PERIOD_ID=#{cellvalue.PERIOD_ID}
+			AND CURRENCY_ID=#{cellvalue.CURRENCY_ID}
+			AND ROWITEM_ID=#{cellvalue.ROWITEM_ID}
+			AND COLITEM_ID=#{cellvalue.COLITEM_ID}
+		</foreach>
+	</update>
+	<!-- 删除指标 -->
+	<delete id="deleteCellValue">
+		delete xsr_rep_cellvalue
+		where r.suit_id=#{suitId}
+		and entity_id=#{entityId}
+		and period_id=#{periodId}
+		and currency_id=#{currencyId}
+		and rowitem_id=#{rowItemId}
+		and colitem_id=#{colItemId}
+	</delete>
+	<!-- 查询是否存在特定指标值 -->
+	<select id="countOfCellValue" resultType="int">
+		select count(1) from
+		xsr_rep_cellvalue
+		where SUIT_ID=#{suitId}
+		AND ENTITY_ID=#{entityId}
+		AND PERIOD_ID=#{periodId}
+		AND CURRENCY_ID=#{currencyId}
+		AND ROWITEM_ID=#{rowItemId}
+		AND COLITEM_ID=#{colItemId}
+	</select>
+
+	<select id="isHrchyEntity" parameterType="String" resultType="int">
+		select count(*) from xsr_rep_hrchy_dtl hr where hr.SUIT_ID=#{0} and
+		hr.PARENT_ID=#{1}
+	</select>
+	<!-- 得到列指标类型，3－数据；1或5：文本 -->
+	<select id="getColDataType" parameterType="String" resultType="int">
+		select datatype from xsr_rep_colitem hr where hr.SUIT_ID=#{0} and
+		hr.COLITEM_ID=#{1}
+	</select>
+
+
+	<select id="getHrchySon" parameterType="String" resultType="String">
+		SELECT t.entity_id FROM xsr_rep_hrchy_dtl t
+		WHERE t.SUIT_ID = #{0}
+		AND
+		t.PARENT_ID = #{1}
+		AND t.hrchy_id =#{2}
+	</select>
+
+	<!-- 获取报表各维度的CODE值 -->
+	<select id="getRepCodes" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		(select modaltype_id from xsr_rep_modalsheet where
+		modalsheet_Id=#{MODALSHEET_ID}) MODALTYPE_ID,
+		(select modaltype_code from xsr_rep_modalsheet where
+		modalsheet_Id=#{MODALSHEET_ID}) MODALTYPE_CODE,
+		(select modalsheet_code from xsr_rep_modalsheet where
+		modalsheet_Id=#{MODALSHEET_ID}) MODALSHEET_CODE,
+		(select org_code from xip_pub_orgs where org_Id=#{ENTITY_ID}) ENTITY_CODE,
+		(select period_code from xsr_rep_period where period_Id=#{PERIOD_ID})
+		PERIOD_CODE,
+		(select CURRENCY_CODE from xsr_rep_currency where
+		currency_Id=#{CURRENCY_ID}) CURRENCY_CODE
+		from wb_dual
+	</select>
+	<!-- 获取模板浮动行标志 -->
+	<select id="getModalFjFlag" parameterType="String" resultType="String">
+		select
+		<choose>
+			<when test="dbType=='mysql'">
+				IFNULL(FJ_FLAG,'N')
+			</when>
+			<when test="dbType=='oracle'">
+				NVL(FJ_FLAG,'N')
+			</when>
+		</choose>
+		FJ_FLAG from xsr_rep_modalsheet r
+		where r.suit_id=#{suitId}
+		and modalsheet_id=#{modalsheetId}
+	</select>
+	<!-- 获取浮动行行指标 -->
+	<select id="getFjRowItem" parameterType="String" resultType="java.util.HashMap">
+		SELECT XR.ROWITEM_ID, XR.ROWITEM_CODE,XRR.ROWNO
+		FROM XSR_REP_ROWITEM XR, XSR_REP_ROWMODALREF XRR
+		WHERE XR.ISFJITEM = 1
+		AND XR.ROWITEM_ID = XRR.ROWITEM_ID
+		AND XRR.SUIT_ID =#{0}
+		AND XRR.MODALSHEET_ID = #{1}
+		order by XRR.ROWNO
+	</select>
+	<!-- 获取选定模板浮动行的取数视图注册信息 -->
+	<select id="getFjRowView" parameterType="String" resultType="java.util.HashMap">
+		select r.DATASRC,r.PRE_PKG,r.AFT_PKG,r.WHERECASE,r.SRCTYPE
+		from xsr_rep_fj_data_src r
+		where r.SUIT_ID =#{0}
+		AND r.MODALSHEET_ID = #{1}
+		and r.rowitem_id=#{2}
+	</select>
+
+	<!-- 获取选定模板列指标对应的浮动行表数据列，如DATA1\DATA2 -->
+	<select id="getFjDataCol" parameterType="String" resultType="String">
+		select r.DATA_COL from xsr_rep_fj_colitem_set r
+		where r.SUIT_ID =#{0}
+		AND r.MODALSHEET_ID = #{1}
+		and r.colitem_id=#{2}
+	</select>
+	<!-- 获取选定模板列浮动行设置的视图字段 -->
+	<select id="getFjViewCol" parameterType="String" resultType="java.util.HashMap">
+		select r.COLITEM_ID,r.FIELD from xsr_rep_fj_data_src_cell r
+		where r.SUIT_ID=#{0}
+		and r.modalsheet_Id=#{1}
+		and r.rowitem_id=#{2}
+	</select>
+
+	<!-- 判断报表是否存在 -->
+	<select id="isSheet" parameterType="java.util.HashMap"
+		resultType="int">
+		SELECT COUNT(1) FROM XSR_REP_SHEETS T
+		WHERE T.SUIT_ID = #{suitId}
+		AND T.MODALSHEET_ID = #{mdlshtId}
+		AND T.MODALTYPE_ID = #{mdltypeId}
+		AND T.ENTITY_ID = #{entityId}
+		AND T.PERIOD_ID = #{periodId}
+		AND T.CURRENCY_ID = #{cnyId}
+	</select>
+
+	<!-- 在节点检查前先删除相应检查结果数据 -->
+	<delete id="deleteChectResult" parameterType="java.util.HashMap">
+		DELETE FROM xsr_rep_hrchy_chk_result
+		WHERE Created_By = #{userId}
+		AND SUIT_ID = #{suitId}
+		AND MODALSHEET_ID = #{mdlshtId}
+	</delete>
+
+	<!-- 节点检查 -->
+	<select id="hrchyCheck" parameterType="java.util.HashMap"
+		resultType="int">
+		select count(1) from
+		(select
+		rf.modaltype_code,rf.modalsheet_code,rf.rowitem_code,rf.rowno,cf.colitem_code,cf.colno,
+		(select
+		<if test="dbType=='mysql'">
+			ifnull(sum(c.cellv), 0) cellv
+		</if>
+		<if test="dbType=='oracle'">
+			nvl(sum(c.cellv), 0) cellv
+		</if>
+		from xsr_rep_cellvalue c
+		where c.suit_id = #{suitId}
+		and c.entity_id = #{entityId}
+		and c.period_id = #{periodId}
+		and c.currency_id = #{cnyId}
+		and exists
+		(select 1 from xsr_rep_rowmodalref rr
+		where rr.rowitem_id = c.rowitem_id
+		and rr.modalsheet_id = rf.modalsheet_id)
+		and c.rowitem_id = rf.rowitem_id
+		and c.colitem_id = cf.colitem_id)
+		-(select
+		<if test="dbType=='mysql'">
+			ifnull(sum(c.cellv), 0) cellv
+		</if>
+		<if test="dbType=='oracle'">
+			nvl(sum(c.cellv), 0) cellv
+		</if>
+		from xsr_rep_cellvalue c
+		where c.suit_id = #{suitId}
+		and c.period_id = #{periodId}
+		and c.currency_id = '1'
+		and exists
+		(select 1 from xsr_rep_rowmodalref rr
+		where rr.rowitem_id = c.rowitem_id
+		and rr.modalsheet_id = rf.modalsheet_id)
+		and c.entity_id in
+		(select t.entity_id from xsr_rep_hrchy_dtl t
+		where t.hrchy_id = #{hrchyId}
+		and t.parent_id = #{entityId})
+		and c.rowitem_id = rf.rowitem_id
+		and c.colitem_id = cf.colitem_id) cellv_diff
+		from xsr_rep_rowmodalref rf, xsr_Rep_colmodalref cf
+		LEFT JOIN xsr_rep_colitem cc on cf.COLITEM_ID=cc.COLITEM_ID
+		where rf.modalsheet_id = #{mdlshtId}
+		and cf.modalsheet_id = #{mdlshtId}
+		and rf.lanno = cf.lanno
+		and cc.DATATYPE = 3
+		and not exists
+		(select 1 from xsr_rep_item_property ip
+		where ip.rowitem_id = rf.rowitem_id
+		and ip.colitem_id = cf.colitem_id
+		and ip.PRO_TYPE='SUMFLAG' and ip.PRO_VALUE='Y')) aa
+		where
+		<if test="dbType=='mysql'">
+			ifnull(cellv_diff, 0) != 0
+		</if>
+		<if test="dbType=='oracle'">
+			nvl(cellv_diff, 0) != 0
+		</if>
+	</select>
+
+	<!-- 插入节点检查结果-报表 -->
+	<insert id="insertCheckResultMS">
+		INSERT INTO xsr_rep_hrchy_chk_result (
+		HRCHY_CR_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		BELONG_MODAL,
+		CHECK_FLAG,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		)
+		VALUES
+		(
+		UUID(),
+		#{suitId},
+		#{entityId},
+		#{periodId},
+		#{cnyId},
+		#{mdltypeId},
+		#{mdlshtId},
+		'ROOT',
+		'1',
+		sysdate(),
+		#{userId},
+		sysdate(),
+		#{userId},
+		#{userId}
+		)
+	</insert>
+
+	<!-- 插入节点检查结果-明细 -->
+	<insert id="insertCheckResultItem">
+		INSERT INTO xsr_rep_hrchy_chk_result (
+		HRCHY_CR_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		ROWITME_ID,
+		COLITME_ID,
+		BELONG_MODAL,
+		CHECK_FLAG,
+		CHECK_RESULT,
+		SINGLE_DATA,
+		COLLECT_DATA,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		) SELECT
+		UUID(),
+		#{suitId},
+		#{entityId},
+		#{periodId},
+		#{cnyId},
+		#{mdltypeId},
+		#{mdlshtId},
+		rf.rowitem_id,
+		cf.colitem_id,
+		#{mdlshtId},
+		'1',
+		'',
+		(
+		SELECT
+		<if test="dbType=='mysql'">
+			ifnull(sum(c.cellv), 0) cellv
+		</if>
+		<if test="dbType=='oracle'">
+			nvl(sum(c.cellv), 0) cellv
+		</if>
+		FROM
+		xsr_rep_cellvalue c
+		WHERE
+		c.suit_id = #{suitId}
+		AND c.entity_id = #{entityId}
+		AND c.period_id = #{periodId}
+		AND c.currency_id = #{cnyId}
+		AND EXISTS (
+		SELECT
+		1
+		FROM
+		xsr_rep_rowmodalref rr
+		WHERE
+		rr.rowitem_id = c.rowitem_id
+		AND rr.modalsheet_id = rf.modalsheet_id
+		)
+		AND c.rowitem_id = rf.rowitem_id
+		AND c.colitem_id = cf.colitem_id
+		) single_data,
+		(
+		SELECT
+		<if test="dbType=='mysql'">
+			ifnull(sum(c.cellv), 0) cellv
+		</if>
+		<if test="dbType=='oracle'">
+			nvl(sum(c.cellv), 0) cellv
+		</if>
+		FROM
+		xsr_rep_cellvalue c
+		WHERE
+		c.suit_id = #{suitId}
+		AND c.period_id = #{periodId}
+		AND c.currency_id = #{cnyId}
+		AND EXISTS (
+		SELECT
+		1
+		FROM
+		xsr_rep_rowmodalref rr
+		WHERE
+		rr.rowitem_id = c.rowitem_id
+		AND rr.modalsheet_id = rf.modalsheet_id
+		)
+		AND c.entity_id IN (
+		SELECT
+		t.entity_id
+		FROM
+		xsr_rep_hrchy_dtl t
+		WHERE
+		t.hrchy_id = #{hrchyId}
+		AND t.parent_id = #{entityId}
+		)
+		AND c.rowitem_id = rf.rowitem_id
+		AND c.colitem_id = cf.colitem_id
+		) collect_data,
+		sysdate(),
+		#{userId},
+		sysdate(),
+		#{userId},
+		#{userId}
+		FROM
+		Xsr_Rep_Rowmodalref rf,
+		xsr_Rep_colmodalref cf
+		LEFT JOIN xsr_rep_colitem cc ON cf.COLITEM_ID = cc.COLITEM_ID
+		WHERE
+		rf.modalsheet_id = #{mdlshtId}
+		AND cf.modalsheet_id = #{mdlshtId}
+		AND
+		rf.lanno = cf.lanno
+		AND cc.DATATYPE = 3
+		AND NOT EXISTS (
+		SELECT
+		1
+		FROM
+		xsr_rep_item_property ip
+		WHERE
+		ip.rowitem_id = rf.rowitem_id
+		AND ip.colitem_id = cf.colitem_id
+		AND ip.PRO_TYPE = 'SUMFLAG'
+		AND ip.PRO_VALUE = 'Y'
+		)
+
+	</insert>
+
+	<!-- 获取选定模板、选定行指标下的全部数据列的列指标引用 -->
+	<select id="getColRefOnly3" parameterType="String" resultType="java.util.HashMap">
+		SELECT
+		r.COLITEM_ID,
+		r.COLITEM_CODE
+		FROM
+		xsr_rep_colmodalref rf,
+		xsr_rep_colitem r
+		WHERE
+		r.COLITEM_ID = rf.COLITEM_ID
+		AND r.SUIT_ID = #{0}
+		AND rf.MODALSHEET_ID = #{1}
+		AND r.DATATYPE = 3
+		ORDER BY rf.lanno,rf.COLNO
+	</select>
+
+	<!-- 根据列指标获取附加行对应列字段名称 -->
+	<select id="getDataColBycolId" parameterType="java.util.HashMap"
+		resultType="String">
+		select cs.DATA_COL from xsr_rep_fj_colitem_set cs
+		where cs.COLITEM_ID=#{colitemId}
+		and cs.SUIT_ID=#{suitId}
+		and
+		cs.MODALSHEET_ID=#{mdlshtId}
+	</select>
+
+	<!-- 在数据校验前先删除相应检查结果数据 -->
+	<delete id="delVerifyFjResult" parameterType="String">
+		DELETE FROM xsr_rep_data_verify_result WHERE USER_ID =#{0} AND TYPE ='B'
+	</delete>
+
+
+	<!-- 判读当前报表是否存在浮动行，并返回浮动行信息 -->
+	<select id="getFjRow" parameterType="String" resultType="java.util.HashMap">
+		SELECT a.ROWITEM_ID, a.ROWITEM_NAME, b.ROWNO
+		FROM
+		xsr_rep_rowitem a,
+		xsr_rep_rowmodalref b
+		WHERE a.suit_id = b.suit_id
+		AND a.ROWITEM_ID = b.rowitem_id
+		AND b.SUIT_ID = #{0}
+		AND b.modalsheet_id =#{1}
+		AND a.isfjitem = 1
+	</select>
+
+	<!-- 根据ID获取模板名称 -->
+	<select id="getSheetNameById" parameterType="String" resultType="String">
+		select t.MODALSHEET_NAME from xsr_rep_modalsheet t where
+		t.MODALSHEET_ID = #{0}
+	</select>
+
+	<!-- 根据ID获取公司名称 -->
+	<select id="getEntityNameById" parameterType="String"
+		resultType="String">
+		select t.ORG_NAME name from xip_pub_orgs t where t.ORG_ID = #{0}
+	</select>
+
+	<!-- 查询模板下列指标信息 -->
+	<select id="getColitemList" parameterType="String" resultType="java.util.HashMap">
+		SELECT
+		a.COLITEM_ID,
+		a.COLITEM_NAME,
+		b.COLNO
+		FROM
+		xsr_rep_colitem a,
+		xsr_rep_colmodalref b
+		WHERE
+		a.suit_id = b.suit_id
+		AND a.COLITEM_ID = b.colitem_id
+		AND a.SUIT_ID =#{0}
+		AND b.MODALSHEET_ID =#{1}
+		AND a.datatype = '3'
+	</select>
+
+	<!-- 查询浮动行汇总合计 -->
+	<select id="getSumFj" parameterType="java.util.HashMap"
+		resultType="String">
+		select sum(${dataCol}) from xsr_rep_fj_cellvalue r
+		where r.SUIT_ID=#{suitId}
+		and r.ENTITY_ID=#{entityId}
+		and r.PERIOD_ID=#{periodId}
+		and r.MODALSHEET_ID=#{mdlshtId}
+		and r.CURRENCY_ID=#{cnyId}
+		and r.ROWITEM_ID=#{rowitemId}
+	</select>
+
+	<select id="getCellV" parameterType="java.util.HashMap"
+		resultType="String">
+		select c.CELLV from xsr_rep_cellvalue c
+		WHERE c.SUIT_ID=#{suitId}
+		and
+		c.ENTITY_ID=#{entityId}
+		and c.PERIOD_ID=#{periodId}
+		and
+		c.CURRENCY_ID=#{cnyId}
+		and c.ROWITEM_ID=#{rowitemId}
+		and
+		c.COLITEM_ID=#{colitemId}
+	</select>
+
+	<!-- 插入数据校验结果 -->
+	<insert id="insertverifyFjResult">
+		INSERT INTO XSR_REP_DATA_VERIFY_RESULT
+		(DATA_VR_ID,USER_ID,TYPE,REPORT_NAME,ENTITY_NAME,ERROR_NUM,
+		ROWITEM_NAME,COLITEM_NAME,RESULT,MAIN_LINE_VAL,DETAIL_SUM_VAL)
+		VALUES (UUID(),
+		#{userId},
+		'B',
+		#{sheetName},
+		#{entityName},
+		#{flag},
+		#{rowitemName},
+		#{colitemName},
+		#{result},
+		#{cellv},
+		#{sumFj}
+		)
+	</insert>
+
+	<select id="getRowitemInfo" parameterType="String" resultType="java.util.Map">
+		SELECT r.ROWITEM_ID,r.ROWITEM_CODE FROM xsr_rep_rowmodalref
+		rr,xsr_rep_rowitem r
+		WHERE rr.SUIT_ID=#{0} AND rr.MODALTYPE_ID=#{1} AND rr.MODALSHEET_ID=#{2}
+		AND rr.REF_FLAG='Y' AND rr.ROWITEM_ID=r.ROWITEM_ID
+	</select>
+
+	<select id="getFjRowitemInfo" parameterType="String" resultType="java.util.Map">
+		SELECT r.ROWITEM_ID,r.ROWITEM_CODE FROM xsr_rep_rowmodalref
+		rr,xsr_rep_rowitem r
+		WHERE rr.SUIT_ID=#{0} AND rr.MODALTYPE_ID=#{1} AND rr.MODALSHEET_ID=#{2}
+		AND r.ISFJITEM=1 AND rr.REF_FLAG='Y' AND rr.ROWITEM_ID=r.ROWITEM_ID
+		ORDER BY ROWNO
+	</select>
+
+	<select id="getColitemInfo" parameterType="String" resultType="java.util.Map">
+		SELECT c.COLITEM_ID,c.COLITEM_CODE,c.DATATYPE FROM xsr_rep_colmodalref
+		cr,xsr_rep_colitem c
+		WHERE cr.SUIT_ID=#{0} AND cr.MODALTYPE_ID=#{1} AND cr.MODALSHEET_ID=#{2}
+		AND cr.REF_FLAG='Y' AND cr.COLITEM_ID=c.COLITEM_ID
+	</select>
+
+	<select id="isExitData" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select CELLV_ID,CELLV,CELLTEXTV from xsr_rep_cellvalue
+		where SUIT_ID=#{suitId}
+		AND ENTITY_ID=#{ENTITY_ID}
+		AND PERIOD_ID=#{PERIOD_ID}
+		AND CURRENCY_ID=#{CURRENCY_ID}
+		AND ROWITEM_ID=#{rowItemId}
+		AND COLITEM_ID=#{colItemId}
+	</select>
+
+	<delete id="delRepCellValue" parameterType="java.util.List">
+		DELETE FROM xsr_rep_cellvalue
+		WHERE CELLV_ID IN
+		<foreach collection="list" index="index" item="item"
+			separator="," open="(" close=")">
+			#{item.CELLV_ID}
+		</foreach>
+	</delete>
+	<select id="selItemPro" parameterType="String" resultType="String">
+		SELECT PRO_VALUE FROM xsr_rep_item_property WHERE SUIT_ID=#{0} AND
+		MODALTYPE_ID=#{1}
+		AND MODALSHEET_ID=#{2} AND ROWITEM_ID=#{3} AND COLITEM_ID=#{4} AND
+		PRO_TYPE='PRECISION'
+	</select>
+
+	<select id="dataUpload" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select c.DATATYPE,r.ROWNO,cf.COLNO,
+		<choose>
+			<when test="dbType == 'mysql'">
+				if(c.DATATYPE!=3,t.CELLTEXTV,t.CELLV)
+				CELLV
+			</when>
+			<when test="dbType == 'oracle'">
+				decode(c.DATATYPE,3,t.CELLV,t.CELLTEXTV)
+				CELLV
+			</when>
+		</choose>
+		from
+		xsr_rep_cellvalue t,xsr_rep_colitem c,xsr_rep_rowmodalref r,xsr_rep_colmodalref cf
+		where
+		t.SUIT_ID= #{suitId}
+		and t.ENTITY_ID= #{entityId}
+		and t.PERIOD_ID=
+		#{periodId}
+		and t.CURRENCY_ID=#{cnyId}
+		and t.COLITEM_ID=c.COLITEM_ID
+		and
+		r.SUIT_ID=#{suitId}
+		and r.MODALTYPE_ID=#{modaltypeId}
+		and
+		r.MODALSHEET_ID=#{modalsheetId}
+		and r.ROWITEM_ID=t.ROWITEM_ID
+		and
+		cf.SUIT_ID=#{suitId}
+		and cf.MODALTYPE_ID=#{modaltypeId}
+		and
+		cf.MODALSHEET_ID=#{modalsheetId}
+		and cf.COLITEM_ID=t.COLITEM_ID
+		and
+		r.LANNO=cf.LANNO
+	</select>
+	<update id="upRepInfo" parameterType="java.util.Map">
+		UPDATE xsr_rep_sheets SET
+		<choose>
+			<when test="dbType == 'mysql'">
+				INER_IMPTIMES=IFNULL(INER_IMPTIMES,0)+1,
+			</when>
+			<when test="dbType == 'oracle'">
+				INER_IMPTIMES=NVL(INER_IMPTIMES,0)+1,
+			</when>
+		</choose>
+		INER_IMPLASTDATE=#{date},INER_IMPER=#{user}
+		WHERE SUIT_ID=#{suitId}
+		AND MODALTYPE_ID=#{modaltypeId}
+		AND ENTITY_ID=#{entityId}
+		AND PERIOD_ID=#{periodId}
+		AND CURRENCY_ID=#{cnyId}
+		AND MODALSHEET_ID IN
+		<foreach item="item" collection="mstIds" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</update>
+</mapper>

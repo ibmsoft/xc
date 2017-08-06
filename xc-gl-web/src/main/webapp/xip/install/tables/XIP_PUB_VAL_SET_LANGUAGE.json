@@ -1,0 +1,86 @@
+{"VAL_LANG":"en","VAL_SET_DESC":"Chart Attribute Grouping","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_SET_NAME":"Chart Attribute Grouping"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Chart Attribute Value Type","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_SET_NAME":"Chart Attribute Value Type"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Languages List","VAL_SET_CODE":"XIP_LANG","VAL_SET_NAME":"Languages List"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"图表属性分组","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_SET_NAME":"图表属性分组"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"工作流实体内置属性值集","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_SET_NAME":"实体内置属性值集"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"是否","VAL_SET_CODE":"YN","VAL_SET_NAME":"是否"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"语言列表","VAL_SET_CODE":"XIP_LANG","VAL_SET_NAME":"语言列表"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Problem Stage","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_SET_NAME":"Problem Stage"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"问题阶段","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_SET_NAME":"问题阶段"}
+{"VAL_LANG":"en","VAL_SET_DESC":null,"VAL_SET_CODE":"XTM_XZ_ERP_MODULE","VAL_SET_NAME":"Cloud ERP Purchase Module"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"XTM_XZ_ERP_MODULE","VAL_SET_NAME":"云ERP购买模块"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Attachment server type and corresponding implementation class","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_SET_NAME":"Attachment Server Type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"附件服务器类型以及对应的实现类","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_SET_NAME":"附件服务器类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Authorization mode","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_SET_NAME":"Authorization Mode"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"授权模式值集","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_SET_NAME":"授权模式值集"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Database column type","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_SET_NAME":"Database Column Type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"数据库列类型","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_SET_NAME":"数据库列类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Database constraint type","VAL_SET_CODE":"DB_CONS_TYPE","VAL_SET_NAME":"Database Constraint Type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"数据库约束类型","VAL_SET_CODE":"DB_CONS_TYPE","VAL_SET_NAME":"数据库约束类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Database type","VAL_SET_CODE":"DB_TYPE","VAL_SET_NAME":"Database Type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"数据库类型","VAL_SET_CODE":"DB_TYPE","VAL_SET_NAME":"数据库类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"System navigation Type","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_SET_NAME":"System Navigation Type"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Reminder  Mode","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_SET_NAME":"Reminder  Mode"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"待办提醒模式值集","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_SET_NAME":"待办提醒模式值集"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Page For Platform Use Only","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_SET_NAME":"Page For Platform Use Only"}
+{"VAL_LANG":"en","VAL_SET_DESC":null,"VAL_SET_CODE":"SKIN","VAL_SET_NAME":"Skin Setting"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"SKIN","VAL_SET_NAME":"皮肤设置"}
+{"VAL_LANG":"en","VAL_SET_DESC":"the directory is for WB7 outside service, username and password must be provided when the module is visitied by outside project","VAL_SET_CODE":"XIP_API_FOLDER","VAL_SET_NAME":"WB7 Service Directory"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"WB7对外提供服务目录，此目录内的Module被非本工程访问的时候，需要传入用户名和口令","VAL_SET_CODE":"XIP_API_FOLDER","VAL_SET_NAME":"WB7对外提供服务目录"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Platform Chart Type","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_SET_NAME":"Platform Chart Type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"平台图表类别","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_SET_NAME":"平台图表类别"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Problem Classification","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_SET_NAME":"Problem Classification"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"问题分类","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_SET_NAME":"问题分类"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Problem Level","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_SET_NAME":"Problem Level"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"问题程度","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_SET_NAME":"问题程度"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Problem State","VAL_SET_CODE":"XIP_REC_STATUS","VAL_SET_NAME":"Problem State"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"问题状态","VAL_SET_CODE":"XIP_REC_STATUS","VAL_SET_NAME":"问题状态"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"友情链接","VAL_SET_CODE":"FRIEND_LINK","VAL_SET_NAME":"友情链接"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Friendship Link","VAL_SET_CODE":"FRIEND_LINK","VAL_SET_NAME":"Friendship Link"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"图表属性值类型","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_SET_NAME":"图表属性值类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Whether","VAL_SET_CODE":"YN","VAL_SET_NAME":"Whether"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Entity Built-in  Attributes for Workfow","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_SET_NAME":"Entity Built-in Attributes"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Login authentication filter, do not filter the list of pages","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_SET_NAME":" Landing Filter Excluded Pages"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"系统导航值集","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_SET_NAME":"系统导航值集"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"仅供平台使用的页面","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_SET_NAME":"仅供平台使用的页面"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AP采购类型表采购对象","VAL_SET_CODE":"XC_AP_PUR_OBJECT","VAL_SET_NAME":"AP采购类型表采购对象"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"流程回调函数类型值集","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_SET_NAME":"流程回调函数类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"登陆验证过滤器，不进行过滤的页面列表","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_SET_NAME":"登陆过滤器排除的页面"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_FA_PROPERTY","VAL_SET_NAME":"资产属性"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"销售类型表销售对象","VAL_SET_CODE":"XC_AR_SALE_OBJECT","VAL_SET_NAME":"销售类型表销售对象"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"应收单据业务状态","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_SET_NAME":"应收单据业务状态"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"交易明细表来源","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_SET_NAME":"交易明细表来源"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR合同类型","VAL_SET_CODE":"XC_AR_CT_TYPE","VAL_SET_NAME":"AR合同类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR核销单类型","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_SET_NAME":"AR核销单类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":"Workflow CallBack Function Types","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_SET_NAME":"Workflow CallBack Function Types"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"总账基础数据模板值集","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_SET_NAME":"基础数据模板值集"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AP应付单据业务状态","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_SET_NAME":"AP应付单据业务状态"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"资产摊销规则","VAL_SET_CODE":"XC_FA_AMORTIZATION_RULE","VAL_SET_NAME":"资产摊销规则"}
+{"VAL_LANG":"en","VAL_SET_DESC":"报表公式采集级别","VAL_SET_CODE":"XC_REP_FORMULA_LEVEL","VAL_SET_NAME":"采集公式级别"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"变量期间枚举值","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_SET_NAME":"期间列表"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"云ERP报表取数类型","VAL_SET_CODE":"XC_REP_FECTH_DATA_TYPE","VAL_SET_NAME":"报表取数类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"单据签收状态","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_SET_NAME":"单据签收状态"}
+{"VAL_LANG":"en","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_SET_NAME":"Contract type"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_SET_NAME":"合同类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR票据小类（所有的单据类型组合一起）","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_SET_NAME":"AR票据小类"}
+{"VAL_LANG":"en","VAL_SET_DESC":"AR销售发票---票据小类","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_SET_NAME":"AR销售发票单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"应收收款单单据类型","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_SET_NAME":"应收收款单单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR应收单单据类型","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_SET_NAME":"AR应收单单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR销售发票---票据小类","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_SET_NAME":"AR销售发票单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"应付采购发票单据类型","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_SET_NAME":"应付采购发票单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"应付单单据类型","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_SET_NAME":"应付单单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"应付付款单单据类型","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_SET_NAME":"应付付款单单据类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_SET_NAME":"付款申请单类型"}
+{"VAL_LANG":"en","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_SET_NAME":"付款申请单类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"PO票据大类","VAL_SET_CODE":"XC_PO_DOC_CLASS","VAL_SET_NAME":"PO票据大类"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"采购合同分类","VAL_SET_CODE":"XC_PO_CONTRACT_TYPE","VAL_SET_NAME":"采购合同分类"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"采购合同业务状态","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_SET_NAME":"采购合同业务状态"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"仓库计价方式","VAL_SET_CODE":"XC_ST_PRICE_METHOD","VAL_SET_NAME":"仓库计价方式"}
+{"VAL_LANG":"zh","VAL_SET_DESC":null,"VAL_SET_CODE":"XC_REP_CA_TYPE","VAL_SET_NAME":"现金流量项目汇总类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"云ERP工作流模块","VAL_SET_CODE":"XC_WF_MODULE","VAL_SET_NAME":"云ERP工作流模块"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AP票据大类","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_SET_NAME":"AP票据大类"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"成本核算方法","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_SET_NAME":"成本核算方法"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"采购订单类型","VAL_SET_CODE":"XC_PO_ORDER_TYPE","VAL_SET_NAME":"采购订单类型"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"AR票据大类","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_SET_NAME":"AR票据大类"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"库存单据大类","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_SET_NAME":"库存单据大类"}
+{"VAL_LANG":"zh","VAL_SET_DESC":"库存物资属性","VAL_SET_CODE":"XC_ST_MATERIAL_PROPERTY","VAL_SET_NAME":"库存物资属性"}

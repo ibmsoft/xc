@@ -1,0 +1,12 @@
+{
+  LEDGER		    : "Account Book",
+  CUSTOMER_NAME		: "Customer",
+  PERIOD 			: "Accounting Period",
+  TO 			    : "to",
+  AR_CONTRACT_NAME  : "Contract name",
+  OBJECT_ANALYSIS	: "Object Analysis",
+  PROPORTION_IS_SHOW: "Proportion is show",
+  ACC_NAME		    : "Account name",
+  queryBtn			: "Search",
+  clearBtn			: "Reset",
+}

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select * from demo_asset_deployment d where {#whereSql#} order by d.ASSET_CODE asc","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

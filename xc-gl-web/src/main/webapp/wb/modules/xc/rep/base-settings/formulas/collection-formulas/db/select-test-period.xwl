@@ -1,0 +1,1 @@
+{"inframe":false,"title":"测试期间选择","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select a.PERIOD_CODE from xc_gl_period a where a.IS_ADJ_PERIOD = 'N'\norder by a.PERIOD_CODE ASC","itemId":"period"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

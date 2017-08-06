@@ -1,0 +1,83 @@
+{
+  /* wrzPanel */
+  wrzPanel:'未处理',
+  
+  /* queryWrzPanel */
+  queryWrzLedger:'账簿',
+  queryWrzTransType:'事务类型',
+  queryWrzSummary:'摘要',
+  queryWrzBtn:'查询',
+  resetWrzBtn:'重置',
+  
+  /* wrzGrid */
+    /* columns */
+    ledgerNameCol:'账簿',
+    periodCodeCol:'期间',
+    transNamecCol:'事务类型',
+    deptCode:'成本中心编码',
+    deptNameCol:'成本中心',
+    projectCode:'项目编码',
+    projectNameCol:'项目',
+    drAcctNameCol:'借方科目',
+    drCcidNameCol:'借方科目组合',
+    crAcctNameCol:'贷方科目',
+    crCcidNameCol:'贷方科目组合',
+    amtCol:'金额',
+    summaryCol:'摘要',
+    busNoCol:'业务编码',
+    selectLedgerFirst:'请选择账簿',
+    selectPeriodFirst:'请选择期间',
+  
+    saveBtn:'保存',
+    saveCheck:'填写信息不完整，请确认',
+    generateBtn:'生成凭证',
+    generateSaveCheck:'存在未保存的记录,请先保存',
+    generateSelCheck:'请选择生成凭证的记录',
+  
+    account:'科目',
+    accountCode:'科目编码',
+    accountName:'科目名称',
+    accountCodeName:'科目编码/名称',
+    
+  /* faAdditionWin */
+  generateWin:'生成凭证',
+  combDr:'合并借方',
+  combCr:'合并贷方',
+  combSummary:'凭证头摘要',
+  ensureBtn:'确定',
+  cancelBtn:'取消',
+  saveWaitMsg:'正在生成凭证，请稍后...',
+  saveSuccessMsg:'生成成功',
+  saveFailureMsg:'生成失败',
+  
+  /* rzGrid */
+    /* columns */
+    drAmtCol:'借方金额',
+    crAmtCol:'贷方金额',
+    vSerialNumCol:'凭证号',
+    vStatusCol:'凭证状态',
+    vStatusCol4qc:'起草',
+    vStatusCol4ysh:'已审核',
+    vStatusCol4yjz:'已记账',
+  
+    viewSubBtn:'查看明细',
+    submitBtn:'提交',
+    draftBtn:'撤回',
+    deleteBtn:'删除',
+    viewSubSelCheck:'请选择操作的记录',
+    opWaitMsg:'正在操作，请稍后...',
+    opSuccessMsg:'操作成功',
+    opFailureMsg:'操作失败',
+  
+  rzPanel:'已处理',
+  successMsg:'保存成功',
+  notSameGl:'相同事务类型的才能合并生成凭证',
+  notNull:'不能为空',
+  
+  onQcCanBeSubmitted:'起草状态才可以提交',
+  onQcCanBeDeleted:'起草状态才可以删除',
+  onYshCanBeRevoke:'已审核状态才可以撤回',
+  requestFailure:'请求失败',
+  notInCurrentPeriod:'所选记录没有在当前会计期内',
+  drccidAndCrccidNotNull:'借方科目组合和贷方科目组合不能为空'
+}

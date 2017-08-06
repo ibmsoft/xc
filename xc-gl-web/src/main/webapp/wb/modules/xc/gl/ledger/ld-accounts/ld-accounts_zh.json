@@ -1,0 +1,69 @@
+{
+  Ledger:'账簿',
+  Account Group:'科目组',
+  searchsText:'编码/名称',
+  searchsButton:'查询',
+  resetsButton:'重置',
+  
+  allRadio:'全部',
+  zcRadio:'资产',
+  fzRadio:'负债',
+  gtRadio:'共同',
+  qyRadio:'所有者权益',
+  cbRadio:'成本',
+  ryRadio:'损益',
+  bwRadio:'表外',
+  
+  syncButton:'同步',
+  deleteButton:'删除',
+  batchEditButton:'批量删除',
+  
+  rownum:'序号',
+  acc_code:'编码',
+  acc_name:'名称',
+  acc_category:'分类',
+  acc_group:'分组',
+  bal_direction:'余额方向',
+  foreign_cny:'外币核算',
+  currency:'币种',
+  Amount:'数量',
+  Amt_Dim:'计量单位',
+  Budget_Item:'预算项',
+  ACC_SEG_UNION:'辅助核算',
+  START_DATE:'开始日期',
+  END_DATE:'结束日期',
+  
+  upd_item:'是否修改项',
+  upd_content:'修改内容',
+  is_amt:'数量核算',
+  amt_dim:'数量单位',
+  UPDATE_ASS:'辅助核算段',
+  Enabled:'启用'
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

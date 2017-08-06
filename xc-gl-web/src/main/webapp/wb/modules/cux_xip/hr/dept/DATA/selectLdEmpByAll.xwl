@@ -1,0 +1,1 @@
+{"inframe":false,"title":"获取所有的个人往来信息","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"SELECT LEDGER_ID,EMP_ID \n  FROM xc_gl_ld_emps","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

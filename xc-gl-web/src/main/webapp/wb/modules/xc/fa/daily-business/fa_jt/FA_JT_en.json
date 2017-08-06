@@ -1,0 +1,10 @@
+{
+  ledger:'Ledger',
+  period:'Period',
+  selectLedgerMsg:'Please select ledger',
+  selectPeriodMsg:'Please select period',
+  ensureBtn:'Provision',
+  
+  waitMsg:'Please waiting',
+  failureMsg:'failure'
+}

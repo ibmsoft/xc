@@ -1,0 +1,53 @@
+{
+  XH:'serial num',
+
+
+  saveBtn:'save',
+  
+  addBtn:'new',
+
+  delBtn:'delete',
+
+  VAL_CODE_COL:'value encoding',
+  VAL_NAME_COL:'aging type',
+
+  DESCRIPTION_COL:'dascription',
+
+  AR_INTERVAL_ID_COL:'aging ID',
+  AGING_TYPE_CODE_COL:'aging code',
+  AGING_TYPE_NAME_COL:'aging name',
+  INTERVAL_NAME_COL:'interval name',
+
+
+  INTERVAL_DAYS_COL:'interval days',
+
+  INTERVAL_START_COL:'start days',
+
+  INTERVAL_END_COL:'end days',
+
+  TIP:'tip',
+  
+
+  DELTIP:'Please choose to delete records!',
+
+  DELOKTIP:'Are you sure you want to delete and remove aging under interval?',
+  DELOKTIP2:'Are you sure you want to delete?',
+  DELTIP1:'Delete  success!',
+  EDITETIP:'Modify  success！',
+  MSG1:'Value coding not repeatable!',
+  MSG2:'Aging type cannot repeat!',
+  MSG3:'Value code or aging type repeat!',
+
+
+  MSG4:'Please select aging type!',
+  MSG5:'Please save the aging type to add!',
+
+  message:'saving...',
+
+  SAVETIP:'save success!'
+
+ 
+
+
+
+}

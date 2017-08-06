@@ -1,0 +1,33 @@
+{
+  XH:'num',
+
+  ledgerCombox:'accounting book',
+  modelCombox:'module',
+  saveBtn:'save',
+
+  BILL_TYPE_CODE:'bill code',
+  BILL_TYPE_NAME:'bill  type',
+
+  ACT_CODE:'node code',
+
+  ACT_NAME:'approval node',
+  IS_ENABLED:'is enabled',
+  YES:'YES',
+  NO:'NO',
+
+
+  LIMITED_VAL:'limit value',
+  message:'saving...',
+  SAVETIP:'save success!',
+  SAVEERROR:'save failed!',
+
+  MSG1:'Please select books and modules!',
+  MSG2:'No changes in data!',
+
+ TIP:'tip'
+
+
+
+
+ 
+}

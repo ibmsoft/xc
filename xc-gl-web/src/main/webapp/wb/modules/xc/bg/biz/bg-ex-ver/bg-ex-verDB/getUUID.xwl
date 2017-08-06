@@ -1,0 +1,1 @@
+{"title":"获取UUID","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","serverScript":"var _uuid = java.util.UUID.randomUUID();\napp.send({'uuid':_uuid}) ;","itemId":"module"},"children":[],"type":"module","expanded":false}],"iconCls":"seek_icon"}

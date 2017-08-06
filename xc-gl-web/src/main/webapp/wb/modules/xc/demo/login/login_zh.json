@@ -1,0 +1,17 @@
+{
+  user     : "用户名",
+  pwd      : "密码",
+  rem      : "记住密码",
+  loginBtn : "登&nbsp;&nbsp;录",
+  register : "用户注册",
+  forgetPwd: "忘记密码",
+  appNa    : "development platform",
+  userInfo : "请输入用户名",
+  pwdInfo  : "请输入密码",
+  error    : "登录时发生错误",
+  userInvalid : "用户已失效",
+  userNotExist :"用户不存在",
+  pwdError : "密码错误",
+  userNotEff : "用户未生效",
+  title     : "登录"
+}

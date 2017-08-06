@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.BatOpMapper">
+	<resultMap id="ColitemResultMap" type="com.xzsoft.xsr.core.modal.Colitem">
+		<result column="DATA_COL" property="DATA_COL"/>
+		<result column="COLITEM_ID" property="COLITEM_ID"/>
+		<result column="COLNO" property="COLNO"/>
+		<result column="COL" property="COL"/>
+	</resultMap>
+	<select id="expYgRepData" resultType="com.xzsoft.xsr.core.modal.CellValue">
+		   SELECT rf.ROWNO,cf.COLNO,
+			CASE co.DATATYPE WHEN 1 THEN c.CELLTEXTV 
+							WHEN 3 THEN c.CELLV 
+							WHEN 5 THEN c.CELLTEXTV
+							END AS CELLV,
+			co.DATATYPE 
+			FROM xsr_rep_cellvalue c,xsr_rep_sheets s,xsr_rep_rowmodalref rf,xsr_rep_colmodalref cf,xsr_rep_colitem co
+			WHERE c.SUIT_ID=s.SUIT_ID AND c.SUIT_ID=rf.SUIT_ID AND c.SUIT_ID=cf.SUIT_ID AND c.SUIT_ID=co.SUIT_ID 
+			AND c.ENTITY_ID=s.ENTITY_ID AND c.PERIOD_ID=s.PERIOD_ID AND c.CURRENCY_ID=s.CURRENCY_ID 
+			AND s.MODALTYPE_ID=rf.MODALTYPE_ID AND s.MODALSHEET_ID=rf.MODALSHEET_ID
+			AND s.MODALTYPE_ID=cf.MODALTYPE_ID AND s.MODALSHEET_ID=rf.MODALSHEET_ID 
+			AND c.ROWITEM_ID=rf.ROWITEM_ID AND c.COLITEM_ID=cf.COLITEM_ID 
+			AND co.COLITEM_ID=cf.COLITEM_ID AND (IFNULL(c.CELLV,0)<![CDATA[<>]]>0 OR IFNULL(c.CELLTEXTV,'-^')<![CDATA[<>]]>'-^' OR IFNULL(c.FORMULAV,'-^')<![CDATA[<>]]>'-^')
+			AND c.SUIT_ID=#{0} AND c.ENTITY_CODE=#{1}  AND c.PERIOD_CODE=#{2}  AND c.CURRENCY_CODE=#{3}
+			AND s.MODALTYPE_CODE=#{4}
+			AND s.MODALSHEET_CODE=#{5}
+		    ORDER BY rf.ROWNO
+	</select>
+	<select id="getFjColitemList"  resultType="com.xzsoft.xsr.core.modal.Colitem">
+				SELECT s.DATA_COL,cf.COLNO,s.COLITEM_ID,s.COLITEM_CODE,c.DATATYPE
+					FROM xsr_rep_fj_colitem_set s,xsr_rep_colmodalref cf,xsr_rep_modalsheet r,xsr_rep_colitem c
+					WHERE s.COLITEM_ID=cf.COLITEM_ID
+					AND c.COLITEM_ID=cf.COLITEM_ID 
+					AND r.MODALSHEET_ID=s.MODALSHEET_ID 
+					AND r.MODALSHEET_ID=cf.MODALSHEET_ID 
+					AND r.MODALTYPE_ID=cf.MODALTYPE_ID 
+					AND r.SUIT_ID=cf.SUIT_ID 
+					AND r.SUIT_ID=s.SUIT_ID
+					AND r.SUIT_ID=c.SUIT_ID
+					AND r.SUIT_ID=#{0}
+					AND r.MODALSHEET_CODE=#{1}
+					AND r.MODALTYPE_CODE=#{2}
+	</select>
+	<select id="getFJDatacol" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		SELECT DISTINCT s.DATA_COL
+		FROM xsr_rep_fj_colitem_set s 
+	</select>
+	<select id="getCellValues" resultType="com.xzsoft.xsr.core.modal.CellValue">
+				SELECT cv.ROWITEM_ID,cv.COLITEM_ID,cv.CELLV,cv.CELLTEXTV    
+					FROM xsr_rep_cellvalue cv
+					WHERE cv.SUIT_ID=#{0} 
+					AND cv.ENTITY_CODE=#{1}  
+					AND cv.PERIOD_CODE=#{2}
+					AND cv.CURRENCY_CODE=#{3}
+	</select>
+	<select id="getUserName" resultType="String">
+				SELECT u.USER_NAME 
+				FROM xip_pub_users u 
+				WHERE u.USER_ID=#{0}
+	</select>
+	<delete id="delTempMsg">
+		delete from xsr_rep_imp_data_temp where USER_ID=#{0} and SESSIONID=#{1}
+	</delete>
+	<select id="selMdlTypeById" resultType="String">
+			SELECT t.SUIT_ID,t.MODALTYPE_ID,t.MODALTYPE_NAME
+			FROM xsr_rep_modaltype t 
+			WHERE t.MODALTYPE_ID=#{0}
+	</select>
+	<insert id="batchInsertImpData">
+			INSERT INTO xsr_rep_imp_data_temp(
+					SUIT_ID,
+					MODALTYPE_ID,
+					MODALTYPE_CODE,
+					USER_ID,
+					SESSIONID,
+					FLAG,
+					LINENO,
+					RPT_PRIOD,
+					PUBLISH_TIME,
+					PUBLISHER,
+					RPT_CODE,
+					RPT_NAME,
+					RPT_TYPE,
+					ENTITY_NAME,
+					ROW_NO,
+					COL_NO,
+					DATA_TYPE,
+					NO,
+					CELLVALUE)
+				VALUES
+			<foreach collection="dataList" item="cellvalue" index="index" separator=",">
+					(#{cellvalue.SUIT_ID},
+					#{cellvalue.MODALTYPE_ID},
+					#{cellvalue.MODALTYPE_CODE},
+					#{cellvalue.USER_ID},
+					#{cellvalue.SESSIONID},
+					#{cellvalue.FLAG},
+					#{cellvalue.LINENO},
+					#{cellvalue.RPT_PRIOD},
+					#{cellvalue.PUBLISH_TIME},
+					#{cellvalue.PUBLISHER},
+					#{cellvalue.RPT_CODE},
+					#{cellvalue.RPT_NAME},
+					#{cellvalue.RPT_TYPE},
+					#{cellvalue.ENTITY_NAME},
+					#{cellvalue.ROW_NO},
+					#{cellvalue.COL_NO},
+					#{cellvalue.DATA_TYPE},
+					#{cellvalue.NO},
+					#{cellvalue.CELLVALUE})
+			</foreach>
+	</insert>
+	<update id="IsOneTempEntity" parameterType="string">
+			UPDATE XSR_REP_IMP_DATA_TEMP A 
+			 	SET A.ERROR_FLAG = '2', 
+				    A.ERROR_MESSAGE = CONCAT(A.ENTITY_NAME,"与本系统中的单位映射不惟一,请确认！")
+			WHERE EXISTS (SELECT 1 FROM 
+				(SELECT T.ORG_NAME FROM xip_pub_orgs T 
+				WHERE T.ORG_NAME IS NOT NULL 
+				GROUP BY T.ORG_NAME HAVING COUNT(*) > 1) B 
+				WHERE A.ENTITY_NAME = B.ORG_NAME) 
+			and A.SESSIONID = #{0}
+			and A.ERROR_FLAG= '0' 
+	</update>
+	<update id="IsExistTempEntity" parameterType="string">
+			UPDATE XSR_REP_IMP_DATA_TEMP T 
+			SET T.ERROR_FLAG = '2',
+			T.ERROR_MESSAGE = '单位映射不存在,请确认！' 
+			WHERE NOT EXISTS 
+					 (SELECT 1 FROM XIP_PUB_ORGS A WHERE A.ORG_NAME = T.ENTITY_NAME)
+			AND T.SESSIONID =#{0}
+			AND T.ERROR_FLAG ='0' 
+	</update>
+	<update id="updateTempEntityMsg" parameterType="string">
+			UPDATE XSR_REP_IMP_DATA_TEMP T 
+			SET T.ENTITY_ID = (SELECT A.ORG_ID FROM XIP_PUB_ORGS A 
+			 WHERE TRIM(T.ENTITY_NAME) = TRIM(A.ORG_NAME) AND T.SESSIONID = #{0}),
+			T.ENTITY_CODE=(SELECT A.ORG_CODE FROM XIP_PUB_ORGS A 
+			 WHERE TRIM(T.ENTITY_NAME) = TRIM(A.ORG_NAME) AND T.SESSIONID = #{0})
+			WHERE T.SESSIONID =#{0}
+			AND T.ERROR_FLAG = '0' 
+	</update>
+	<select id="selTempPeriodMsg" parameterType="string" resultType="com.xzsoft.xsr.core.modal.ReceiveBean">
+			SELECT DISTINCT T.RPT_TYPE PERIOD_TYPE,T.RPT_PRIOD PERIOD_CODE 
+			FROM XSR_REP_IMP_DATA_TEMP T 
+			WHERE T.SESSIONID =#{0}
+	</select>
+	<select id="getFraq" resultType="com.xzsoft.xsr.core.modal.Fraq">
+			SELECT d.ITEM_CODE AS FRAQ_CODE,d.ITEM_NAME AS FRAQ_NAME 
+			FROM xsr_rep_dict d 
+			WHERE d.DICT_NAME='MDL_FRAQ'
+	</select>
+	<update id="isExistTempPeriod">
+			UPDATE XSR_REP_IMP_DATA_TEMP T 
+			SET T.ERROR_FLAG = '3',
+			 T.ERROR_MESSAGE = CONCAT("系统中未初始化【",#{1},"】")
+			 WHERE T.SESSIONID =#{0}
+			 AND T.ERROR_FLAG = '0' 
+			 AND T.PERIOD_ID IS NULL
+	</update>
+	<update id="updateTempPeriodMsg">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.PERIOD_ID= (SELECT A.PERIOD_ID FROM XSR_REP_PERIOD A 
+		 WHERE A.SUIT_ID =#{0} AND A.PERIOD_CODE =#{2}),
+		T.RPT_PRIOD=(SELECT A.PERIOD_CODE FROM XSR_REP_PERIOD A 
+		 WHERE A.SUIT_ID =#{0} AND A.PERIOD_CODE =#{2})
+		WHERE T.SESSIONID =#{1}
+		AND T.ERROR_FLAG = '0'
+	</update>
+	<update id="updateTempCurrencyMsg">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.CURRENCY_ID= (SELECT A.CURRENCY_ID FROM XSR_REP_CURRENCY A 
+		 WHERE A.CURRENCY_CODE = 'CNY' AND A.SUIT_ID =#{0}),
+		T.CURRENCY_CODE= (SELECT A.CURRENCY_CODE FROM XSR_REP_CURRENCY A 
+		 WHERE A.CURRENCY_CODE = 'CNY' AND A.SUIT_ID =#{0})
+		WHERE T.SESSIONID =#{1}
+	</update>
+	<update id="IsExistTempModal">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '1', 
+		T.ERROR_MESSAGE = '模板映射不存在 , 请确认！' 
+		 WHERE NOT EXISTS 
+		 (SELECT 1 FROM XSR_REP_MODALSHEET A
+		 	WHERE (A.MODALSHEET_CODE = T.RPT_CODE OR A.MODALSHEET_NAME = T.RPT_NAME) 
+		 	AND A.MODALTYPE_ID =#{1})
+		 AND T.SESSIONID =#{0} 
+		 AND T.ERROR_FLAG = '0' 
+	</update>
+	<update id="IsOneTempModal">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		 SET T.ERROR_FLAG    = '1', 
+			T.ERROR_MESSAGE = '模板映射不唯一,存在多个模板与之对应,请确认！' 
+		 WHERE (T.RPT_CODE, T.RPT_NAME )IN 
+		 (SELECT TD.RPT_CODE, TD.RPT_NAME 
+		 FROM (SELECT DISTINCT T.RPT_CODE, T.RPT_NAME 
+		 FROM XSR_REP_IMP_DATA_TEMP T 
+		 WHERE T.SESSIONID =#{0}
+		 AND T.ERROR_FLAG = '0') TD, XSR_REP_MODALSHEET B 
+		 WHERE (B.MODALSHEET_CODE = TD.RPT_CODE OR B.MODALSHEET_NAME = TD.RPT_NAME) 
+		 AND B.MODALTYPE_ID =#{1}
+		 GROUP BY TD.RPT_CODE, TD.RPT_NAME
+		 HAVING COUNT(1) > 1) 
+	</update>
+	<update id="updateTempModalMsg">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.MODALSHEET_ID= (SELECT B.MODALSHEET_ID FROM XSR_REP_MODALSHEET B 
+		 WHERE B.SUIT_ID =#{0} AND B.MODALTYPE_ID = #{2}
+		 AND (T.RPT_CODE = B.MODALSHEET_CODE OR T.RPT_NAME = B.MODALSHEET_NAME)),
+		 T.MODALSHEET_CODE= (SELECT B.MODALSHEET_CODE FROM XSR_REP_MODALSHEET B 
+		 WHERE B.SUIT_ID =#{0} AND B.MODALTYPE_ID = #{2}
+		 AND (T.RPT_CODE = B.MODALSHEET_CODE OR T.RPT_NAME = B.MODALSHEET_NAME))
+		 WHERE T.SESSIONID = #{1}
+		 AND T.ERROR_FLAG = '0' 
+	</update>
+	<select id="selRowno" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		SELECT t.ROW_NO AS ROWNO
+		FROM xsr_rep_imp_data_temp t
+		WHERE t.SESSIONID=#{0}
+		AND t.ERROR_FLAG='0'
+	</select>
+	<update id="isRowNumber"> 
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '5',
+		T.ERROR_MESSAGE = '行次号不是数字！' 
+		WHERE T.SESSIONID =#{0}
+		AND T.ERROR_FLAG = '0'
+		AND T.ROW_NO IN 
+		<foreach collection="errList" item="rowno" index="index" open="(" separator="," close=")">
+			#{rowno}
+		</foreach>
+	</update>
+	<update id="isExistTempRowitem">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '5',
+		T.ERROR_MESSAGE = '行次不存在！'
+		WHERE NOT EXISTS 
+			 (SELECT 1 FROM XSR_REP_ROWMODALREF A 
+			 WHERE T.SUIT_ID = A.SUIT_ID 
+			 AND T.MODALTYPE_ID = A.MODALTYPE_ID 
+			 AND T.MODALSHEET_ID = A.MODALSHEET_ID 
+			 AND T.ROW_NO = A.ROWNO 
+			 AND A.SUIT_ID =#{0} 
+			 AND A.MODALTYPE_ID =#{2} )
+		AND T.SESSIONID =#{1} 
+		AND T.ERROR_FLAG = '0'
+	</update>
+	<update id="IsOneTempRowitem">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '5', 
+		T.ERROR_MESSAGE = CONCAT("【行次：",T.ROW_NO,"】重复引用,请检查行指标引用关系！")
+		WHERE EXISTS (SELECT 1 FROM XSR_REP_ROWMODALREF R 
+			WHERE T.SUIT_ID = R.SUIT_ID 
+			AND T.MODALTYPE_ID = R.MODALTYPE_ID 
+			AND T.MODALSHEET_ID = R.MODALSHEET_ID 
+			AND T.ROW_NO = R.ROWNO 
+		 	AND R.SUIT_ID =#{0}
+		 	AND R.MODALTYPE_ID =#{2}
+			GROUP BY R.SUIT_ID,R.MODALTYPE_ID,R.MODALSHEET_ID,R.ROWNO 
+			HAVING COUNT(1) > 1)
+			AND T.ERROR_FLAG = '0'
+			AND T.SESSIONID =#{1}
+	</update>
+	<update id="updateTempRowitemMsg">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ROWITEM_ID= (SELECT C.ROWITEM_ID FROM (SELECT A.SUIT_ID,A.MODALSHEET_ID,A.ROWITEM_ID,B.ROWITEM_CODE,A.ROWNO 
+		 FROM XSR_REP_ROWMODALREF A,XSR_REP_ROWITEM B 
+		 WHERE A.ROWITEM_ID = B.ROWITEM_ID AND A.SUIT_ID =#{0} AND A.MODALTYPE_ID =#{2})C 
+		 WHERE T.MODALSHEET_ID = C.MODALSHEET_ID AND T.SUIT_ID = C.SUIT_ID AND T.ROW_NO = C.ROWNO),
+		 T.ROWITEM_CODE= (SELECT C.ROWITEM_CODE FROM (SELECT A.SUIT_ID,A.MODALSHEET_ID,A.ROWITEM_ID,B.ROWITEM_CODE,A.ROWNO 
+		 FROM XSR_REP_ROWMODALREF A,XSR_REP_ROWITEM B 
+		 WHERE A.ROWITEM_ID = B.ROWITEM_ID AND A.SUIT_ID =#{0} AND A.MODALTYPE_ID =#{2})C 
+		 WHERE T.MODALSHEET_ID = C.MODALSHEET_ID AND T.SUIT_ID = C.SUIT_ID AND T.ROW_NO = C.ROWNO)
+		WHERE T.SESSIONID =#{1}
+		AND T.ERROR_FLAG = '0' 
+	</update>
+	<select id="selColno" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		SELECT t.COL_NO AS COLNO
+		FROM xsr_rep_imp_data_temp t
+		WHERE t.SESSIONID=#{0}
+		AND t.ERROR_FLAG='0'
+	</select>
+	<update id="isColitemNumber">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '6',
+		T.ERROR_MESSAGE = '列次号不是数字！' 
+		WHERE T.SESSIONID =#{0}
+		AND T.ERROR_FLAG = '0'
+		AND T.COL_NO IN 
+		<foreach collection="colnoList" item="colno" index="index" separator="," open="(" close=")">
+			#{colno}
+		</foreach>
+	</update>
+	<update id="isExistTempColitem">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '6',
+		T.ERROR_MESSAGE = '列次不存在！' 
+		WHERE NOT EXISTS 
+		 (SELECT 1 FROM XSR_REP_COLMODALREF A 
+		 WHERE T.SUIT_ID = A.SUIT_ID 
+		 AND T.MODALTYPE_ID = A.MODALTYPE_ID 
+		 AND T.MODALSHEET_ID = A.MODALSHEET_ID 
+		 AND T.COL_NO = A.COLNO 
+		 AND A.SUIT_ID =#{0} 
+		 AND A.MODALTYPE_ID =#{2})
+		AND T.SESSIONID =#{1} 
+		AND T.ERROR_FLAG = '0' 
+	</update>
+	<update id="IsOneTempColitem">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.ERROR_FLAG = '6', 
+		 	T.ERROR_MESSAGE = CONCAT("【列次：",t.col_no,"】重复引用,请检查列指标引用关系！") 
+		WHERE EXISTS (SELECT 1 FROM XSR_REP_COLMODALREF R 
+			WHERE T.SUIT_ID = R.SUIT_ID 
+			AND T.MODALTYPE_ID = R.MODALTYPE_ID 
+			AND T.MODALSHEET_ID = R.MODALSHEET_ID 
+			AND T.COL_NO = R.COLNO 
+		 	AND R.SUIT_ID = #{0}
+		 	AND R.MODALTYPE_ID =#{2}
+			GROUP BY R.SUIT_ID,R.MODALTYPE_ID,R.MODALSHEET_ID,R.COLNO 
+			HAVING COUNT(1) > 1)
+		AND T.ERROR_FLAG = '0'
+		AND T.SESSIONID =#{1}
+	</update>
+	<update id="updateTempColitemMsg">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET T.COLITEM_ID= (SELECT C.COLITEM_ID FROM (SELECT A.SUIT_ID,A.MODALSHEET_ID,A.COLITEM_ID,B.COLITEM_CODE COLITEM_CODE,A.COLNO 
+		 FROM XSR_REP_COLMODALREF A,XSR_REP_COLITEM B WHERE A.COLITEM_ID = B.COLITEM_ID AND A.SUIT_ID =#{0} AND A.MODALTYPE_ID =#{2})C 
+		 WHERE T.MODALSHEET_ID = C.MODALSHEET_ID AND T.SUIT_ID = C.SUIT_ID AND T.COL_NO = C.COLNO),
+		T.COLITEM_CODE= (SELECT C.COLITEM_CODE FROM (SELECT A.SUIT_ID,A.MODALSHEET_ID,A.COLITEM_ID,B.COLITEM_CODE COLITEM_CODE,A.COLNO 
+		 FROM XSR_REP_COLMODALREF A,XSR_REP_COLITEM B WHERE A.COLITEM_ID = B.COLITEM_ID AND A.SUIT_ID =#{0} AND A.MODALTYPE_ID =#{2})C 
+		 WHERE T.MODALSHEET_ID = C.MODALSHEET_ID AND T.SUIT_ID = C.SUIT_ID AND T.COL_NO = C.COLNO)
+		WHERE T.SESSIONID =#{1} 
+		AND T.ERROR_FLAG = '0' 
+	</update>
+	<update id="checkTempRowAndCol">
+		UPDATE XSR_REP_IMP_DATA_TEMP T 
+		SET  T.ERROR_FLAG    = '7', 
+		 T.ERROR_MESSAGE = CONCAT("【",T.RPT_NAME,"】的【行次_",T.ROW_NO,",列次_",T.COL_NO,"】组合在本系统中不存在！")
+		WHERE NOT EXISTS (SELECT 1 FROM (
+		 		SELECT XR.SUIT_ID, 
+				 		XR.MODALTYPE_ID, 
+		 				XR.MODALSHEET_ID, 
+		 				XR.ROWITEM_ID, 
+		 				XR.ROWNO, 
+		 				XC.COLITEM_ID, 
+		 				XC.COLNO,
+						CONCAT(XR.ROWNO,"-",XC.COLNO) RC
+		 		FROM XSR_REP_ROWMODALREF XR, XSR_REP_COLMODALREF XC 
+		 		WHERE XR.SUIT_ID = XC.SUIT_ID 
+		 			AND XR.MODALTYPE_ID = XC.MODALTYPE_ID 
+		 			AND XR.MODALSHEET_ID = XC.MODALSHEET_ID 
+		 			AND XR.LANNO = XC.LANNO 
+					AND XR.SUIT_ID =#{0} 
+					AND XR.MODALTYPE_ID = #{2}) A
+			WHERE CONCAT(T.ROW_NO,"-",T.COL_NO)=A.RC 
+			  AND T.SUIT_ID = A.SUIT_ID 
+			  AND T.MODALTYPE_ID = A.MODALTYPE_ID 
+			  AND T.MODALSHEET_ID = A.MODALSHEET_ID 
+			  AND T.SUIT_ID = #{0}
+			  AND T.MODALTYPE_ID =#{2})
+		 AND T.SESSIONID =#{1}
+		 AND T.ERROR_FLAG = '0'
+	</update>
+	<update id="checkTempFixRowAndCol">
+			UPDATE XSR_REP_IMP_DATA_TEMP A 
+			SET A.ERROR_FLAG = '7', 
+			A.ERROR_MESSAGE =CONCAT("导出文件中【行次_",A.ROW_NO,", 列次_",A.COL_NO,"】, 指标数据重复！")
+			WHERE EXISTS (SELECT 1 FROM (
+			SELECT T.ENTITY_NAME, 
+						T.RPT_PRIOD, 
+						T.RPT_CODE, 
+						T.RPT_NAME, 
+						T.ROW_NO, 
+						T.COL_NO 
+				FROM XSR_REP_IMP_DATA_TEMP T 
+				WHERE T.SESSIONID =#{0} 
+					AND T.FLAG = '1' 
+					AND T.ERROR_FLAG = '0' 
+				GROUP BY T.ENTITY_NAME, 
+								T.RPT_PRIOD, 
+								T.RPT_CODE, 
+								T.RPT_NAME, 
+								T.ROW_NO, 
+								T.COL_NO 
+				HAVING COUNT(*) > 1) B 
+			 WHERE A.ENTITY_NAME = B.ENTITY_NAME 
+			AND A.RPT_PRIOD = B.RPT_PRIOD 
+			AND A.RPT_CODE = B.RPT_CODE 
+			AND A.RPT_NAME = B.RPT_NAME 
+			AND A.ROW_NO = B.ROW_NO 
+			AND A.COL_NO = B.COL_NO) 
+			AND A.SESSIONID =#{0} 
+			AND A.ERROR_FLAG = '0' 
+	</update>
+	<update id="checkTempFJRowAndCol">
+			UPDATE XSR_REP_IMP_DATA_TEMP A  
+			SET A.ERROR_FLAG = '7', 
+			A.ERROR_MESSAGE =CONCAT("导出文件中【行次_",A.ROW_NO,"A.ROW_NO",A.COL_NO,", 序号_", A.NO,"】指标数据重复！")
+			 WHERE EXISTS (SELECT 1 FROM (
+		 		SELECT T.ENTITY_NAME, 
+		        	T.RPT_PRIOD, 
+		        	T.RPT_CODE, 
+		        	T.RPT_NAME, 
+		        	T.ROW_NO, 
+		        	T.COL_NO, 
+		        	T.NO 
+		    FROM XSR_REP_IMP_DATA_TEMP T 
+		   	WHERE   T.SESSIONID =#{0}
+		     	AND T.FLAG = '2' 
+		     	AND T.ERROR_FLAG = '0' 
+		   	GROUP BY T.ENTITY_NAME, 
+		            T.RPT_PRIOD, 
+		            T.RPT_CODE, 
+		            T.RPT_NAME, 
+		            T.ROW_NO, 
+		            T.COL_NO, 
+		            T.NO 
+		   	HAVING COUNT(*) > 1) B 
+		 	WHERE A.ENTITY_NAME = B.ENTITY_NAME 
+		 	AND A.RPT_PRIOD = B.RPT_PRIOD 
+		 	AND A.RPT_CODE = B.RPT_CODE 
+		 	AND A.RPT_NAME = B.RPT_NAME 
+		 	AND A.ROW_NO = B.ROW_NO 
+		 	AND A.COL_NO = B.COL_NO 
+		 	AND A.NO = B.NO) 
+			 AND A.SESSIONID =#{0}
+			 AND A.ERROR_FLAG ='0' 
+	</update>
+	<select id="getTempData" resultType="com.xzsoft.xsr.core.modal.IMPDataBean">
+		SELECT t.MODALTYPE_ID,t.MODALSHEET_ID,t.RPT_NAME,t.ENTITY_ID,t.ENTITY_NAME,t.PERIOD_ID,t.CURRENCY_ID
+		FROM xsr_rep_imp_data_temp t WHERE t.SUIT_ID=#{0} AND t.SESSIONID=#{1}
+		AND t.MODALSHEET_ID IN 
+		<foreach collection="modalsheetList" item="modalsheetId" index="index" open="(" separator="," close=")">
+			#{modalsheetId}
+		</foreach>
+		AND t.ENTITY_ID IN 
+		<foreach collection="entityIdList" item="entityId" index="index" open="(" separator="," close=")">
+			#{entityId}
+		</foreach>
+	</select>
+	<select id="getAppStatus" resultType="String">
+		SELECT s.APP_STATUS 
+		FROM xsr_rep_sheets s
+		WHERE s.SUIT_ID=#{0}
+		AND s.ENTITY_ID=#{1}
+		AND s.PERIOD_ID=#{2}
+		AND s.CURRENCY_ID=#{3}
+		AND s.MODALTYPE_ID=#{4}
+		AND s.MODALSHEET_ID=#{5}
+	</select>
+	<delete id="delRepData">
+		 DELETE T FROM XSR_REP_CELLVALUE T 
+	     WHERE T.SUIT_ID =#{0} 
+	       AND T.ENTITY_ID =#{1} 
+	       AND T.PERIOD_ID = #{2} 
+	       AND T.CURRENCY_ID = #{3} 
+	       AND EXISTS (SELECT 1 
+	              FROM XSR_REP_ROWMODALREF R 
+	             WHERE R.SUIT_ID = T.SUIT_ID 
+	               AND R.ROWITEM_ID = T.ROWITEM_ID 
+	               AND R.SUIT_ID =#{0} 
+	               AND R.MODALTYPE_ID =#{4} 
+	               AND R.MODALSHEET_ID =#{5})
+	       AND EXISTS (SELECT 1 
+	              FROM XSR_REP_COLMODALREF C 
+	             WHERE C.SUIT_ID = T.SUIT_ID 
+	               AND C.COLITEM_ID = T.COLITEM_ID 
+	               AND C.SUIT_ID =#{0} 
+	               AND C.MODALTYPE_ID =#{4} 
+	               AND C.MODALSHEET_ID =#{5})
+	</delete>
+	<delete id="delFJData">
+		DELETE T FROM xsr_rep_fj_cellvalue T
+	     WHERE T.SUIT_ID =#{0}
+	       AND T.ENTITY_ID = #{1}
+	       AND T.PERIOD_ID = #{2}
+	       AND T.CURRENCY_ID = #{3}
+	       AND T.MODALSHEET_ID =#{5}
+	</delete>
+	<select id="getImpMsg" resultType="com.xzsoft.xsr.core.modal.IMPDataBean">
+	SELECT i.SUIT_ID,i.MODALTYPE_ID,i.MODALTYPE_CODE,i.MODALSHEET_ID,i.MODALSHEET_CODE,i.ENTITY_ID,i.ENTITY_CODE,i.DATA_TYPE,
+        i.PERIOD_ID,i.CURRENCY_ID,i.CURRENCY_CODE,i.ROWITEM_ID,i.ROWITEM_CODE,i.COLITEM_ID,i.COLITEM_CODE,i.CELLVALUE,i.RPT_PRIOD 
+		FROM xsr_rep_imp_data_temp i
+		WHERE i.SUIT_ID=#{0}
+		AND i.SESSIONID=#{1}
+		AND i.ENTITY_ID=#{2}
+		AND i.PERIOD_ID=#{3}
+		AND i.CURRENCY_ID=#{4}
+		AND i.MODALTYPE_ID=#{5}
+		AND i.MODALSHEET_ID=#{6} 
+		AND i.`NO` IS NULL
+	</select>
+	<select id="getTempDataAll" resultType="com.xzsoft.xsr.core.modal.IMPDataBean">
+		SELECT 
+		T.SUIT_ID,
+		T.ENTITY_ID,
+		T.PERIOD_ID,
+		T.ROWITEM_ID,
+		T.COLITEM_ID,
+		T.MODALSHEET_ID,
+		T.CURRENCY_ID,
+		T.ENTITY_CODE,
+		T.RPT_PRIOD,
+		T.ROWITEM_CODE,
+		T.COLITEM_CODE,
+		T.CURRENCY_CODE,
+		T.DATA_TYPE,
+		T.NO 
+		FROM xsr_rep_imp_data_temp T 
+		WHERE T.FLAG = #{7} 
+		AND T.ERROR_FLAG = '0'
+		AND T.SUIT_ID = #{0}
+		AND T.SESSIONID = #{1}
+		AND T.ENTITY_ID = #{2}
+		AND T.PERIOD_ID = #{3}
+		AND T.CURRENCY_ID = #{4}
+		AND T.MODALTYPE_ID = #{5}
+		AND T.MODALSHEET_ID =#{6}
+	</select>
+	<insert id="insertCellvalue">
+	INSERT INTO xsr_rep_cellvalue(
+		CELLV_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		CURRENCY_ID,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		ROWITEM_CODE,
+		COLITEM_CODE,
+		CURRENCY_CODE,
+		CELLV,
+		CELLTEXTV,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY)
+	VALUES
+	<foreach collection="impDataBeanList" item="impDataBean" index="index" separator=",">
+		(#{impDataBean.CELLV_ID},
+		#{impDataBean.SUIT_ID},
+		#{impDataBean.ENTITY_ID},
+		#{impDataBean.PERIOD_ID},
+		#{impDataBean.ROWITEM_ID},
+		#{impDataBean.COLITEM_ID},
+		#{impDataBean.CURRENCY_ID},
+		#{impDataBean.ENTITY_CODE},
+		#{impDataBean.RPT_PRIOD},
+		#{impDataBean.ROWITEM_CODE},
+		#{impDataBean.COLITEM_CODE},
+		#{impDataBean.CURRENCY_CODE},
+		#{impDataBean.CELLVALUE},
+		#{impDataBean.CELLTEXTV},
+		#{impDataBean.LAST_UPDATE_DATE},
+		#{impDataBean.LAST_UPDATED_BY},
+		#{impDataBean.CREATION_DATE},
+		#{impDataBean.CREATED_BY})
+		</foreach>
+	</insert>
+	<select id="getFJMsg" resultType="com.xzsoft.xsr.core.modal.IMPDataBean">
+	SELECT i.ROWITEM_ID,i.NO,i.CELLVALUE,i.COLITEM_ID,i.ENTITY_ID,i.PERIOD_ID,i.CURRENCY_ID,
+		i.ENTITY_CODE,i.RPT_PRIOD,i.CURRENCY_CODE,i.ROWITEM_CODE,i.COLITEM_CODE    
+		FROM xsr_rep_imp_data_temp i
+		WHERE i.SUIT_ID=#{0}
+		AND i.SESSIONID=#{1}
+		AND i.ENTITY_ID=#{2}
+		AND i.PERIOD_ID=#{3}
+		AND i.CURRENCY_ID=#{4}
+		AND i.MODALTYPE_ID=#{5}
+		AND i.MODALSHEET_ID=#{6} 
+		AND i.`NO` IS NOT NULL
+	</select>
+	<select id="getFjColitemListById" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		SELECT DATA_COL,COLITEM_ID,COLITEM_CODE,COLNO FROM xsr_rep_fj_colitem_set 
+		WHERE SUIT_ID=#{0} AND MODALSHEET_ID=#{2} 
+		AND COLITEM_ID IN(SELECT COLITEM_ID FROM xsr_rep_colmodalref WHERE SUIT_ID=#{0} AND MODALTYPE_ID=#{1} AND MODALSHEET_ID=#{2})
+	</select>
+	<delete id="deleteTempImpData">
+		DELETE i FROM xsr_rep_imp_data_temp i 
+		WHERE i.SUIT_ID=#{0}
+		AND i.SESSIONID=#{1}
+		AND i.ENTITY_ID=#{2}
+		AND i.PERIOD_ID=#{3}
+		AND i.CURRENCY_ID=#{4}
+		AND i.MODALTYPE_ID=#{5}
+		AND i.MODALSHEET_ID=#{6}
+	</delete>
+</mapper>

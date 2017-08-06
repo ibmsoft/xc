@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.ArCheckUtilMapper">
+
+	<!-- 通过发票ID获取应收单的金额信息 由发票复核生成的应收单-->
+	<select id="selectGlNoPayAmtByInvId" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+		SELECT
+			AMOUNT,
+			INV_AMOUNT,
+			CANCEL_AMT,
+			PAID_AMT,
+			NO_PAY_AMT,
+			ADJ_AMT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_H_ID = #{AR_INV_H_ID}
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 应收单对应的发票是否做过红冲 -->
+	<select id="checkInvGlCreateInvHcByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_invoice_h
+		WHERE
+			L_AR_INV_H_ID = #{AR_INV_H_ID}
+		AND L_AR_INV_H_ID != ''
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 是否做了应收单红冲 -->
+	<select id="checkInvGlCreateGlHcByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			L_AR_INV_GL_H_ID = (SELECT AR_INV_GL_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_H_ID = #{AP_INV_H_ID})
+		AND L_AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 是否做过收款 -->
+	<select id="checkInvGlCreatePayByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_pay_l
+		WHERE
+			AR_INV_GL_H_ID = (SELECT AR_INV_GL_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_H_ID = #{AR_INV_H_ID})
+		AND AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 是否做过核销 -->
+	<select id="checkInvGlCreateCancelHByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_cancel_h
+		WHERE
+			SRC_ID = (SELECT AR_INV_GL_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_H_ID = #{AR_INV_H_ID})
+		AND SRC_ID != ''
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 是否做过核销 -->
+	<select id="checkInvGlCreateCancelLByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_cancel_l
+		WHERE
+			TARGET_ID = (SELECT AR_INV_GL_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_H_ID = #{AR_INV_H_ID})
+		AND TARGET_ID != ''
+	</select>
+
+	<!-- 通过发票ID查询对应应收单是否发生下游业务 是否做过余额调整 -->
+	<select id="checkInvGlCreateAdjByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_adj
+		WHERE
+			AR_INV_GL_H_ID = (SELECT AR_INV_GL_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_H_ID = #{AR_INV_H_ID})
+		AND AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过应收单ID获取应收单的金额信息 -->
+	<select id="selectGlNoPayAmtByGlId" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+		SELECT
+			AMOUNT,
+			INV_AMOUNT,
+			CANCEL_AMT,
+			PAID_AMT,
+			NO_PAY_AMT,
+			ADJ_AMT,
+			REQ_AMT,
+			NO_REQ_AMT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+
+	<!-- 通过应收单ID查询应收单凭证是否已经审核通过 -->
+	<select id="checkGlVStatus" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID} AND V_STATUS >= 3
+	</select>
+
+	<!-- 通过应收单ID查询应收单是否由发票复核生成 -->
+	<select id="checkGlCreateByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+		AND AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 应收单对应的发票是否做过红冲 -->
+	<select id="checkGlCreateInvHcByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_invoice_h
+		WHERE
+			L_AR_INV_H_ID = (SELECT AR_INV_H_ID FROM xc_ar_inv_gl_h WHERE AR_INV_GL_H_ID = #{AR_INV_GL_H_ID})
+		AND L_AR_INV_H_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 是否做了应收单红冲 -->
+	<select id="checkGlCreateGlHcByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			L_AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+		AND L_AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 是否做过收款 -->
+	<select id="checkGlCreatePayByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_pay_l
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+		AND AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 是否做过核销 -->
+	<select id="checkGlCreateCancelHByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_cancel_h
+		WHERE
+			SRC_ID = #{AR_INV_GL_H_ID}
+		AND SRC_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 是否做过核销 -->
+	<select id="checkGlCreateCancelLByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_cancel_l
+		WHERE
+			TARGET_ID = #{AR_INV_GL_H_ID}
+		AND TARGET_ID != ''
+	</select>
+
+	<!-- 通过应收单ID查询对应应收单是否发生下游业务 是否做过余额调整 -->
+	<select id="checkGlCreateAdjByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_inv_gl_adj
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+		AND AR_INV_GL_H_ID != ''
+	</select>
+
+	<!-- 通过收款单ID查询收款单凭证是否已经审核通过 -->
+	<select id="checkPayVStatus" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_pay_h
+		WHERE
+			AR_PAY_H_ID = #{AR_PAY_H_ID} AND V_STATUS >= 3
+		AND AR_PAY_H_ID != ''
+	</select>
+	
+	<!-- 通过收款单ID查询收款单是否做过红冲 -->
+	<select id="checkPayCreateHcByPayId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) NEXT_COUNT
+		FROM
+			xc_ar_pay_l
+		WHERE
+			L_AR_PAY_H_ID = #{AR_PAY_H_ID}
+		AND L_AR_PAY_H_ID != ''
+	</select>
+	
+	<!-- 通过收款单ID查询收款单是否做过核销 -->
+	<select id="checkPayCreateCancelByPayId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) NEXT_COUNT
+		FROM
+			xc_ar_cancel_h ach,
+			xc_ar_cancel_l acl
+		WHERE
+			ach.AR_CANCEL_H_ID = acl.AR_CANCEL_H_ID
+		AND (ach.SRC_ID = #{AR_PAY_H_ID} OR acl.TARGET_ID = #{AR_PAY_H_ID})
+	</select>
+
+	<!-- 通过发票ID查询发票的业务状态和工作流状态 -->
+	<select id="selectInvStatus" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvoiceHBean">
+		SELECT
+			AUDIT_STATUS,
+			AUDIT_STATUS_DESC,
+			SYS_AUDIT_STATUS,
+			SYS_AUDIT_STATUS_DESC
+		FROM
+			xc_ar_invoice_h
+		WHERE
+			AR_INV_H_ID = #{AR_INV_H_ID}
+	</select>
+	
+	<!-- 根据应收单ID，判断当前应付单是做过应付核应收 -->
+	<select id="checkApArCancelByInvId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) NEXT_COUNT
+		FROM
+			xc_ap_cancel_l
+		WHERE
+			TARGET_ID = #{AR_INV_GL_H_ID}
+	</select>
+</mapper>

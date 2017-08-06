@@ -1,0 +1,56 @@
+{
+  cbx_hrcy:'Account System',
+  txt_tpl:'Sheet Name',
+  btnQuery:'Query',
+  
+  btnNew:'New',
+  btnDel:'Delete',
+  btnEdit:'Edit',
+  btnEditFormat:'Edit Format',
+  btnSave:'Save',
+  btnCopy:'Copy',
+  btnExp:'Export',
+  btnUpload:'Import',
+  btnRecOrg:'Record Organization',
+  btnRecPeriod:'Record Period',
+  btnRecRowNo:'Record Rownumber',
+  btnRecItem:'Record Items',
+  btnRowItem:'Row Items',
+  btnColItem:'Column Items',
+  btnRecDataArea:'Record Data Area',
+  btnClearComment:'Clear Comment',
+  
+  btnOK:'OK',
+  btnCancel:'Cancel',
+  
+  newTabWin:'Create Sheet',
+  tabCode:'Sheet Code',
+  tabName:'Sheet Name',
+  
+  createRowItemWin:'Create Row Items',
+  createColItemWin:'Create Column Items',
+  
+  selAccHrcy:'Please Select the Account System',
+  
+  rownum : 'Order',
+  TAB_ID : 'Sheet ID',
+  ACC_HRCY_ID : 'Acounting System ID',
+  TAB_CODE : 'Sheet Code',
+  TAB_NAME : 'Sheet Name',
+  TAB_ORDER : 'Sheet Order',
+  IS_ACTIVE : 'Default Actived Sheet',
+  CELL_NUM : 'The Number Of Cells' ,
+  
+  Actived : 'Actived',
+  Not_Actived : 'Not Actived',
+  
+  editRepFormatWin : 'Edit Report Format',
+  
+  
+  copTabWin : 'Copy Sheet',
+  cp_hrcy : 'the reproduced accounting system'
+  
+}
+
+
+

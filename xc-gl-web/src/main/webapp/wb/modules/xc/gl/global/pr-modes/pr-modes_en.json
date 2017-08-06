@@ -1,0 +1,18 @@
+{
+  moduleTitle:"Payment Management",
+  cancelBtn:"Cancel",
+  editBtn:"Edit",
+  delBtn:"Delete",
+  saveBtn:"Save",
+  stopBtn:"Disable",
+  addBtn:"Add",
+  
+  rownum:"NO",
+  la_paymentType:"Payment Category",
+  la_paymentName:"Payment Name",
+  la_isEnable:"Enable",
+  la_necessaryType:"<font color='red'>*</font>Payment Category",
+  la_paymentWay:"<font color='red'>*</font>Payment Way",
+  la_description:"Description",
+  la_labelWidth:120
+}

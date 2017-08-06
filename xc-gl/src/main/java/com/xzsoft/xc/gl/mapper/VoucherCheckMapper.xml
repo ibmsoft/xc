@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.VoucherCheckMapper">
+	
+	<!-- 判断是否为同一凭证  -->
+	<select id="isSameV" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(1)
+		  from (select distinct t.PERIOD_CODE, t.V_CATEGORY_CODE, t.CREATION_DATE
+		          from xc_gl_voucher_tmp t
+		         where t.SESSION_ID =  #{sessionId} 
+		           and t.flag = 'Y' ) tmp	
+	</select>
+	
+	<!-- 删除临时表中的凭证信息  -->
+	<delete id="delTmpVoucher" parameterType="java.lang.String">
+		delete from xc_gl_voucher_tmp where session_id = #{sessionId} 
+	</delete>
+	
+	<!--  判断科目编码是否在系统中存在  -->
+	<update id="checkAccIsExists" parameterType="java.util.HashMap">
+		update xc_gl_voucher_tmp t
+		   set t.flag      = 'N',
+		       t.error_msg = CONCAT('第', t.row_num, '行会计科目【', t.acc_code, '】在系统中不存在')
+		 where not exists (select 1
+		          from xc_gl_accounts a, xc_gl_ledgers b
+		         where a.acc_hrcy_id = b.acc_hrcy_id
+		           and t.ledger_id = b.ledger_id
+		           and t.acc_code = a.acc_code
+		           and b.ledger_id = #{ledgerId})
+		   and t.flag = 'Y'
+		   and t.session_id = #{sessionId}
+	</update>
+	
+	<!-- 补全科目ID  -->
+	<update id="addAccId" parameterType="java.util.HashMap">
+		update xc_gl_voucher_tmp t
+		   set t.ACC_ID =
+		       (select acc.acc_id
+		          from xc_gl_accounts acc, xc_gl_ledgers xl
+		         where acc.acc_hrcy_id = xl.acc_hrcy_id
+		           and t.ledger_id = xl.ledger_id
+		           and xl.ledger_id = #{ledgerId}
+		           and acc.acc_code = t.acc_code)
+		 where t.flag = 'Y'
+		   and t.session_id = #{sessionId}	
+	</update>
+	
+	<!-- 会计科目在账簿下未启用或已失效  -->
+	<update id="isExistsAndEnabledAcc" parameterType="java.util.HashMap">
+		update xc_gl_voucher_tmp t
+		   set t.flag = 'N', t.error_msg = CONCAT('第',t.ROW_NUM,'行会计科目【', t.acc_code ,'】在账簿下未启用或不在有效日期范围内')
+		 where not exists (select 1
+		          from xc_gl_ld_accounts xla
+		         where t.ledger_id = xla.ledger_id
+		           and xla.acc_id = t.acc_id
+		           <choose>
+		           		<when test="dbType == 'mysql' ">
+		           			<![CDATA[
+					           	and xla.start_date <= CURRENT_TIMESTAMP()
+					           	and xla.end_date >= CURRENT_TIMESTAMP()				           			
+		           			]]>
+		           		</when>
+		           		<when test="dbType == 'oracle' ">
+		           			<![CDATA[
+			          		   	and xla.start_date <= sysdate
+			           			and xla.end_date >= sysdate 			           			
+		           			]]>
+		           		</when>
+		           </choose>
+		           and xla.ledger_id = #{ledgerId})
+		   and t.flag = 'Y'
+		   and t.session_id = #{sessionId}	
+	</update>
+	
+	<!-- 查询凭证科目信息  -->
+	<select id="getVoucherAccInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select xla.IS_FOREGIN_CNY,xla.IS_AMOUNT,xla.ACC_ID,xvt.ACC_CODE,xvt.ACC_NAME,xvt.ROW_NUM
+		  from xc_gl_ld_accounts xla, xc_gl_voucher_tmp xvt
+		 where xla.ledger_id = xvt.ledger_id
+		   and xla.acc_id = xvt.acc_id
+		   and (xla.is_foregin_cny = 1 or xla.is_amount = 1)
+		   and xvt.session_id = #{sessionId}	
+		   and xvt.flag = 'Y'
+		   and xvt.ledger_id = #{ledgerId}
+	</select>
+	
+	<!-- 补全凭证格式 -->
+	<update id="updTemplateType" parameterType="java.util.HashMap">
+		update xc_gl_voucher_tmp t set t.V_TEMPLATE_TYPE = #{templateType}
+		 where t.flag = 'Y'
+		   and t.session_id = #{sessionId}
+	</update>
+	
+	<!-- 判断是否存在不合法记录 -->
+	<select id="getInvalidRecord" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  		select count(1) from xc_gl_voucher_tmp t where t.flag = 'N' and t.session_id = #{sessionId}
+	</select>
+	
+	<!-- 查询凭证头信息 -->
+	<select id="getVHead" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select distinct t.LEDGER_CODE     ledgerCode,
+		                t.PERIOD_CODE     periodCode,
+		                t.V_CATEGORY_CODE categoryCode,
+		                t.V_TEMPLATE_TYPE templateType,
+		                t.V_STATUS        vStatus,
+		                t.CREATION_DATE   creationDate,
+		                t.CREATED_BY      createdBy
+		  from xc_gl_voucher_tmp t
+		 where t.flag = 'Y'
+		   and t.session_id = #{sessionId}
+	</select>
+	
+	<!-- 查询凭证分录行信息 -->
+	<select id="getVLines" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VLine">
+		select summary,
+		       ccid,
+		       acc_code      accCode,
+		       vendor_code   vendorCode,
+		       customer_code customerCode,
+		       org_code      orgCode,
+		       dept_code     deptCode,
+		       emp_code      empCode,
+		       product_code  prodCode,
+		       project_code  prjCode,
+		       custom1_code  cust1Code,
+		       custom2_code  cust2Code,
+		       custom3_code  cust3Code,
+		       custom4_code  cust4Code,
+		       account_dr    accountDR,
+		       account_cr    accountCR,
+		       exchange_rate exchangeRate,
+		       enter_dr      enterDR,
+		       enter_cr      enterCR,
+		       amount,
+		       ca_code       caCode,
+		       ORDERBY 		 orderBy
+		  from xc_gl_voucher_tmp
+		where flag = 'Y'
+		  and session_id = #{sessionId}
+	</select>
+	
+	<!-- 查询凭证信息  -->
+	<select id="getExpVoucher" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select GH.CREATION_DATE ,
+		       GH.PERIOD_CODE,
+		       CAT.V_CATEGORY_CODE,
+		       GC.ACC_CODE,
+		       GC.ACC_NAME,
+		       GC.VENDOR_CODE,
+		       GC.VENDOR_NAME,
+		       GC.CUSTOMER_CODE,
+		       GC.CUSTOMER_NAME,
+		       GC.ORG_CODE,
+		       GC.ORG_NAME,
+		       GC.DEPT_CODE,
+		       GC.DEPT_NAME,
+		       GC.EMP_CODE,
+		       GC.EMP_NAME,
+		       GC.PRODUCT_CODE,
+		       GC.PRODUCT_NAME,
+		       GC.PROJECT_CODE,
+		       GC.PROJECT_NAME,
+		       GC.CUSTOM1_CODE,
+		       GC.CUSTOM1_NAME,
+		       GC.CUSTOM2_CODE,
+		       GC.CUSTOM2_NAME,
+		       GC.CUSTOM3_CODE,
+		       GC.CUSTOM3_NAME,
+		       GC.CUSTOM4_CODE,
+		       GC.CUSTOM4_NAME,
+		       XI.CA_CODE,
+		       XI.CA_NAME,
+		       GL.SUMMARY,
+		       GL.AMOUNT,
+		       XD.DIM_CODE,
+		       XD.DIM_NAME,
+		       GL.EXCHANGE_RATE,
+		       GL.CURRENCY_CODE,
+		       GL.ENTER_DR,
+		       GL.ENTER_CR,
+		       GL.ACCOUNT_DR,
+		       GL.ACCOUNT_CR
+		  from xc_gl_ccid gc,xc_gl_v_heads gh,xc_gl_v_category cat, xc_gl_v_lines gl
+		  left join xc_gl_cash_items xi on gl.ca_id = xi.ca_id
+		  left join xc_gl_dimensions xd on gl.dim_id = xd.dim_id
+		 where gc.ccid = gl.ccid
+		   and gh.v_head_id = gl.v_head_id
+		   and gh.v_category_id = cat.v_category_id
+		   and gl.v_head_id = #{headId}
+		  order by gl.orderby
+	</select>
+	
+	<!-- 查询凭证预算校验信息  -->
+	<select id="getBgCHKVoucher" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.ledgerId,
+		       t.projectId,
+		       t.deptId,
+		       t.bgItemId,
+		       t.factDate,
+		       sum(t.amount) amount
+		  from (select xh.LEDGER_ID ledgerId,
+		               xl.PROJECT_ID projectId,
+                   xl.DEPT_ID deptId,
+		               xl.BG_ITEM_ID bgItemId,
+		               xh.CREATION_DATE factDate,
+		               (case ga.BALANCE_DIRECTION when '1' THEN
+		                  xl.ACCOUNT_DR - xl.ACCOUNT_CR
+		                 else
+		                  xl.ACCOUNT_CR - xl.ACCOUNT_DR
+                   end) amount
+              from xc_gl_v_lines  xl,
+                   xc_gl_v_heads  xh,
+                   xc_gl_ccid     gc,
+                   xc_gl_accounts ga 
+             where xl.V_HEAD_ID = xh.V_HEAD_ID
+               and xl.CCID = gc.CCID 
+               and gc.ACC_ID = ga.ACC_ID
+               <choose>
+               		<when test="dbType == 'mysql' ">
+               			<![CDATA[
+               				and IFNULL(xl.BG_ITEM_ID,'') <> ''
+               			]]>
+               		</when>
+               		<when test="dbType == 'oracle' ">
+               			<![CDATA[
+               				and xl.BG_ITEM_ID IS NOT NULL
+               			]]>
+               		</when>
+               </choose>
+               and xh.V_HEAD_ID = #{headId}) t
+     	group by t.ledgerId, t.projectId, t.deptId, t.bgItemId, t.factDate
+	</select>
+	
+</mapper>

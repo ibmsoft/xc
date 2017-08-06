@@ -1,0 +1,16 @@
+{
+  yearName : "年度",
+  rownum : "序号",
+  accountPeriod:"会计期",
+  quarterName:"季度",
+  startDate:"开始日期",
+  endDate:"结束日期",
+  adjustPeriod:"调整期",
+  isEnabled:"是否启用",
+  yearTip:"要增加的年度：如2016",
+  addYearBtn:"增加年度",
+  confirmBtn:"确定",
+  cancelBtn:"取消",
+  queryBtn:"查询",
+  editBtn:'编辑'
+}

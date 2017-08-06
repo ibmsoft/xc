@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.ArInvGlBaseMapper">
+<!-- 客户期初(应收) -->
+	<select id="getQcDatas" resultType="java.util.HashMap">
+	select 
+	(select tp.AR_SALE_TYPE_ID from xc_ar_ld_sale_type tp where tp.ledger_id = #{LEDGER_ID} and tp.AR_ACC_ID_DEBT = xc.ACC_ID) AR_SALE_TYPE_ID,
+	xb.LEDGER_ID,
+	xc.CUSTOMER_ID,
+	xc.PROJECT_ID,
+	xc.DEPT_ID,
+	(CASE xa.balance_direction WHEN '1' THEN SUM(xb.b_dr - xb.b_cr) ELSE SUM(xb.b_cr - xb.b_dr) END) AMOUNT,
+	(CASE xa.balance_direction WHEN '1' THEN SUM(xb.b_dr - xb.b_cr) ELSE SUM(xb.b_cr - xb.b_dr) END) INV_AMOUNT,
+	0 CANCEL_AMT,
+	0 PAID_AMT,
+	(CASE xa.balance_direction WHEN '1' THEN SUM(xb.b_dr - xb.b_cr) ELSE SUM(xb.b_cr - xb.b_dr) END) NO_PAY_AMT,
+	0 ADJ_AMT,
+	(CASE xa.balance_direction WHEN '1' THEN SUM(xb.b_dr - xb.b_cr) ELSE SUM(xb.b_cr - xb.b_dr) END) NO_REQ_AMT,
+	xc.ACC_ID AR_ACC_ID_DEBT,
+	xc.CCID AR_CCID_DEBT,
+	0 INIT,
+	'TEMP' SOURCE,
+	'期初原始数据' DESCRIPTION
+	FROM xc_gl_balance xb,
+		 xc_gl_ccid xc,
+		 xc_gl_accounts xa 
+		 WHERE xb.ccid = xc.ccid  AND xc.acc_id = xa.acc_id
+		 AND xc.ledger_id = #{LEDGER_ID,jdbcType=VARCHAR}
+          	AND xb.period_code = #{PERIOD_CODE,jdbcType=VARCHAR}
+               	AND xc.acc_id =  #{ACC_ID,jdbcType=VARCHAR}
+               		AND xb.ccid =  #{CCID,jdbcType=VARCHAR}
+               			AND xb.CURRENCY_CODE =  #{CURRENCY_CODE,jdbcType=VARCHAR}
+</select>
+
+<!-- 通过ID查询应收单主表信息 -->
+<select id="getInvGlHInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+select * from xc_ar_inv_gl_h where AR_INV_GL_H_ID= #{AR_INV_GL_H_ID,jdbcType=VARCHAR}
+</select>
+<!-- 查询科目是否已期初(条件：科目组合ID) -->
+<select id="ifGlCount" parameterType="java.util.HashMap" resultType="java.lang.String">
+select AR_INV_GL_H_ID from xc_ar_inv_gl_h where AR_CCID_DEBT = #{AR_CCID_DEBT,jdbcType=VARCHAR}
+and(AR_INV_GL_H_CODE is null or AR_INV_GL_H_CODE='')
+and SOURCE = 'TEMP'
+</select>
+<!-- 更新期初的数据(行表) -->
+<update id="updateGlCountInvL" parameterType="com.xzsoft.xc.ar.modal.ArInvGlLBean">
+update xc_ar_inv_gl_l set 
+AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+where
+AR_INV_GL_H_ID = #{AR_INV_GL_H_ID,jdbcType=VARCHAR}
+</update>
+<!-- 客户期初中，插入应收单主表信息-->
+<insert id="addInvGlHInfo" parameterType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+insert into xc_ar_inv_gl_h (
+  AR_INV_GL_H_ID,
+  AR_INV_GL_H_CODE,
+  AR_INV_H_ID,
+  AR_DOC_CAT_CODE,
+  LEDGER_ID,
+  GL_DATE,
+  CUSTOMER_ID,
+  PROJECT_ID,
+  DEPT_ID,
+  AR_CONTRACT_ID,
+  AMOUNT,
+  TAX_AMT,
+  TAX_RATE,
+  INV_AMOUNT,
+  CANCEL_AMT,
+  PAID_AMT,
+  NO_PAY_AMT,
+  ADJ_AMT,
+  AR_ACC_ID_DEBT,
+  AR_ACC_ID_TAX,
+  AR_CCID_DEBT,
+  AR_CCID_TAX,
+  INIT,
+  SOURCE,
+  V_HEAD_ID,
+  V_STATUS,
+  DESCRIPTION,
+  VERIFIER_ID,
+  VERFY_DATE,
+  CREATION_DATE,
+  CREATED_BY,
+  LAST_UPDATE_DATE,
+  LAST_UPDATED_BY
+) values (
+  #{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+  #{AR_INV_GL_H_CODE,jdbcType=VARCHAR},
+  #{AR_INV_H_ID,jdbcType=VARCHAR},
+  #{AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+  #{LEDGER_ID,jdbcType=VARCHAR},
+  #{GL_DATE,jdbcType=TIMESTAMP},
+  #{CUSTOMER_ID,jdbcType=VARCHAR},
+  #{PROJECT_ID,jdbcType=VARCHAR},
+  #{DEPT_ID,jdbcType=VARCHAR},
+  #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+  #{AMOUNT,jdbcType=NUMERIC},
+  #{TAX_AMT,jdbcType=NUMERIC},
+  #{TAX_RATE,jdbcType=NUMERIC},
+  #{INV_AMOUNT,jdbcType=NUMERIC},
+  #{CANCEL_AMT,jdbcType=NUMERIC},
+  #{PAID_AMT,jdbcType=NUMERIC},
+  #{NO_PAY_AMT,jdbcType=NUMERIC},
+  #{ADJ_AMT,jdbcType=NUMERIC},
+  #{AR_ACC_ID_DEBT,jdbcType=VARCHAR},
+  #{AR_ACC_ID_TAX,jdbcType=VARCHAR},
+  #{AR_CCID_DEBT,jdbcType=VARCHAR},
+  #{AR_CCID_TAX,jdbcType=VARCHAR},
+  #{INIT,jdbcType=VARCHAR},
+  #{SOURCE,jdbcType=VARCHAR},
+  #{V_HEAD_ID,jdbcType=VARCHAR},
+  #{V_STATUS,jdbcType=VARCHAR},
+  #{DESCRIPTION,jdbcType=VARCHAR},
+  #{VERIFIER_ID,jdbcType=VARCHAR},
+  #{VERFY_DATE,jdbcType=TIMESTAMP},
+  #{CREATION_DATE,jdbcType=TIMESTAMP},
+  #{CREATED_BY,jdbcType=VARCHAR},
+  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+)
+</insert>
+
+<!-- 更新应收单主表信息 -->
+<update id="editInvGlHInfo" parameterType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+update xc_ar_inv_gl_h set 
+PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+AR_CONTRACT_ID = #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+NO_PAY_AMT = #{NO_PAY_AMT,jdbcType=NUMERIC},
+INV_AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+PAID_AMT = #{PAID_AMT,jdbcType=NUMERIC},
+CANCEL_AMT = #{CANCEL_AMT,jdbcType=NUMERIC},
+DESCRIPTION= #{DESCRIPTION,jdbcType=VARCHAR},
+LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+where
+AR_INV_GL_H_ID= #{AR_INV_GL_H_ID,jdbcType=VARCHAR}
+</update>
+<!-- 得到应收单主表ID -->
+<select id="getInvHId" parameterType="java.lang.String" resultType="java.util.HashMap">
+select AR_INV_GL_H_ID from  xc_ar_inv_gl_h where AR_INV_H_ID = #{AR_INV_H_ID,jdbcType=VARCHAR}
+</select>
+<!-- 通过主键ID删除应收单主表信息 -->
+<delete id="delInvGlHInfo" parameterType="java.util.List">
+delete from xc_ar_inv_gl_h where AR_INV_GL_H_ID in 
+<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 通过发票ID删除应收单主表信息 -->
+<delete id="delInvGlHInfoByInvHId" parameterType="java.util.List">
+delete from xc_ar_inv_gl_h where AR_INV_H_ID in 
+<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 删除应收单行表信息 -->
+<delete id="delInvGlLInfo" parameterType="java.util.List">
+delete from xc_ar_inv_gl_l where AR_INV_GL_H_ID in 
+<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 客户期初中，插入应收单行表信息 -->
+<insert id="addInvGlLInfo" parameterType="com.xzsoft.xc.ar.modal.ArInvGlLBean">
+insert into xc_ar_inv_gl_l (
+  AR_INV_GL_L_ID,
+  AR_INV_GL_H_ID,
+  AR_SALE_TYPE_ID,
+  ACC_ID,
+  CCID,
+  AMOUNT,
+  QTY,
+  DIM_CODE,
+  DESCRIPTION,
+  CREATION_DATE,
+  CREATED_BY,
+  LAST_UPDATE_DATE,
+  LAST_UPDATED_BY
+) values (
+  #{AR_INV_GL_L_ID,jdbcType=VARCHAR},
+  #{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+  #{AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+  #{ACC_ID,jdbcType=VARCHAR},
+  #{CCID,jdbcType=VARCHAR},
+  #{AMOUNT,jdbcType=NUMERIC},
+  #{QTY,jdbcType=NUMERIC},
+  #{DIM_CODE,jdbcType=VARCHAR},
+  #{DESCRIPTION,jdbcType=VARCHAR},
+  #{CREATION_DATE,jdbcType=TIMESTAMP},
+  #{CREATED_BY,jdbcType=VARCHAR},
+  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+)
+</insert>
+
+<!-- 客户期初(预收) -->
+	<select id="getQcDatasYus" resultType="java.util.HashMap">
+	select 
+	(select tp.AR_SALE_TYPE_ID from xc_ar_ld_sale_type tp where tp.ledger_id = #{LEDGER_ID} and tp.AR_ACC_ID_DEBT = xc.ACC_ID) AR_SALE_TYPE_ID,
+	xb.LEDGER_ID,
+	xc.CUSTOMER_ID,
+	xc.PROJECT_ID,
+	xc.DEPT_ID,
+	(CASE xa.balance_direction WHEN '1' THEN SUM(xb.b_dr - xb.b_cr) ELSE SUM(xb.b_cr - xb.b_dr) END) AMOUNT,
+	xc.ACC_ID SALE_ACC_ID,
+	xc.CCID SALE_CCID,
+	0 INIT,
+	'TEMP' SOURCE,
+	'期初原始数据' DESCRIPTION
+	FROM xc_gl_balance xb,
+		 xc_gl_ccid xc,
+		 xc_gl_accounts xa 
+		 WHERE xb.ccid = xc.ccid  AND xc.acc_id = xa.acc_id
+		 AND xc.ledger_id = #{LEDGER_ID,jdbcType=VARCHAR}
+          	AND xb.period_code = #{PERIOD_CODE,jdbcType=VARCHAR}
+               	AND xc.acc_id =  #{ACC_ID,jdbcType=VARCHAR}
+               		AND xb.ccid =  #{CCID,jdbcType=VARCHAR}
+               			AND xb.CURRENCY_CODE =  #{CURRENCY_CODE,jdbcType=VARCHAR}
+</select>
+
+<!-- 通过ID查询预收单主表信息 -->
+<select id="getPayHInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArPayHBean">
+select * from xc_ar_pay_h where AR_PAY_H_ID= #{AR_PAY_H_ID,jdbcType=VARCHAR}
+</select>
+<!-- 查询科目是否已期初(预收)(条件：科目组合ID) -->
+<select id="ifGlCountYuS" parameterType="java.util.HashMap" resultType="java.lang.String">
+select AR_PAY_H_ID from xc_ar_pay_h where SALE_CCID = #{SALE_CCID,jdbcType=VARCHAR}
+and (AR_PAY_H_CODE is null or AR_PAY_H_CODE ='')
+and SOURCE = 'TEMP'
+</select>
+<!-- 更新期初的数据(行表-预收) -->
+<update id="updateGlCountPayL" parameterType="com.xzsoft.xc.ar.modal.ArPayLBean">
+update xc_ar_pay_l set 
+AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+CANCEL_AMT = #{CANCEL_AMT,jdbcType=NUMERIC},
+NO_CANCEL_AMT = #{NO_CANCEL_AMT,jdbcType=NUMERIC},
+LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+where
+AR_PAY_H_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+</update>
+<!-- 客户期初中，插入预收单主表信息-->
+<insert id="addPayHInfo" parameterType="com.xzsoft.xc.ar.modal.ArPayHBean">
+insert into xc_ar_pay_h (
+  AR_PAY_H_ID,
+  AR_PAY_H_CODE,
+  AR_PAY_CUSTOMER_H_ID,
+  AR_DOC_CAT_CODE,
+  LEDGER_ID,
+  GL_DATE,
+  CUSTOMER_ID,
+  PROJECT_ID,
+  DEPT_ID,
+  AR_CONTRACT_ID,
+  AMOUNT,
+  SALE_ACC_ID,
+  SALE_CCID,
+  INIT,
+  SOURCE,
+  V_HEAD_ID,
+  V_STATUS,
+  DESCRIPTION,
+  VERIFIER_ID,
+  VERFY_DATE,
+  CREATION_DATE,
+  CREATED_BY,
+  LAST_UPDATE_DATE,
+  LAST_UPDATED_BY
+) values (
+  #{AR_PAY_H_ID,jdbcType=VARCHAR},
+  #{AR_PAY_H_CODE,jdbcType=VARCHAR},
+  #{AR_PAY_CUSTOMER_H_ID,jdbcType=VARCHAR},
+  #{AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+  #{LEDGER_ID,jdbcType=VARCHAR},
+  #{GL_DATE,jdbcType=TIMESTAMP},
+  #{CUSTOMER_ID,jdbcType=VARCHAR},
+  #{PROJECT_ID,jdbcType=VARCHAR},
+  #{DEPT_ID,jdbcType=VARCHAR},
+  #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+  #{AMOUNT,jdbcType=NUMERIC},
+  #{SALE_ACC_ID,jdbcType=VARCHAR},
+  #{SALE_CCID,jdbcType=VARCHAR},
+  #{INIT,jdbcType=VARCHAR},
+  #{SOURCE,jdbcType=VARCHAR},
+  #{V_HEAD_ID,jdbcType=VARCHAR},
+  #{V_STATUS,jdbcType=VARCHAR},
+  #{DESCRIPTION,jdbcType=VARCHAR},
+  #{VERIFIER_ID,jdbcType=VARCHAR},
+  #{VERFY_DATE,jdbcType=TIMESTAMP},
+  #{CREATION_DATE,jdbcType=TIMESTAMP},
+  #{CREATED_BY,jdbcType=VARCHAR},
+  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+)
+</insert>
+
+<!-- 更新预收单主表信息 -->
+<update id="editPayHInfo" parameterType="com.xzsoft.xc.ar.modal.ArPayHBean">
+update xc_ar_pay_h set 
+PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+AR_CONTRACT_ID = #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+DESCRIPTION= #{DESCRIPTION,jdbcType=VARCHAR},
+LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+where
+AR_PAY_H_ID= #{AR_PAY_H_ID,jdbcType=VARCHAR}
+</update>
+<!-- 得到预收单主表ID -->
+<select id="getPayHId" parameterType="java.lang.String" resultType="java.util.HashMap">
+select AR_PAY_H_ID from  xc_ar_pay_h where AR_PAY_CUSTOMER_H_ID = #{AR_PAY_CUSTOMER_H_ID,jdbcType=VARCHAR}
+</select>
+<!-- 通过主键ID删除预收单主表信息 -->
+<delete id="delPayHInfo" parameterType="java.util.List">
+delete from xc_ar_pay_h where AR_PAY_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 通过发票ID删除预收单主表信息 -->
+<delete id="delPayHInfoByPayHId" parameterType="java.util.List">
+delete from xc_ar_pay_h where AR_PAY_CUSTOMER_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 删除预收单行表信息 -->
+<delete id="delPayLInfo" parameterType="java.util.List">
+delete from xc_ar_pay_l where AR_PAY_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+</delete>
+<!-- 客户期初中，插入预收单行表信息 -->
+<insert id="addPayLInfo" parameterType="com.xzsoft.xc.ar.modal.ArPayLBean">
+insert into xc_ar_pay_l (
+  AR_PAY_L_ID,
+  AR_PAY_H_ID,
+  AR_SALE_TYPE_ID,
+  ACC_ID,
+  CCID,
+  AMOUNT,
+  DESCRIPTION,
+  CANCEL_AMT,
+  NO_CANCEL_AMT,
+  CREATION_DATE,
+  CREATED_BY,
+  LAST_UPDATE_DATE,
+  LAST_UPDATED_BY
+) values (
+  #{AR_PAY_L_ID,jdbcType=VARCHAR},
+  #{AR_PAY_H_ID,jdbcType=VARCHAR},
+  #{AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+  #{ACC_ID,jdbcType=VARCHAR},
+  #{CCID,jdbcType=VARCHAR},
+  #{AMOUNT,jdbcType=NUMERIC},
+  #{DESCRIPTION,jdbcType=VARCHAR},
+  #{CANCEL_AMT,jdbcType=NUMERIC},
+  #{NO_CANCEL_AMT,jdbcType=NUMERIC},
+  #{CREATION_DATE,jdbcType=TIMESTAMP},
+  #{CREATED_BY,jdbcType=VARCHAR},
+  #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+  #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+)
+</insert>
+<!-- 修改应收单金额 -->
+	<update id="updateInvGlHsPaidAmt" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					UPDATE 
+						xc_ar_inv_gl_h 
+					SET
+						PAID_AMT 	= PAID_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_PAY_AMT 	= NO_PAY_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE
+					 	AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" index="index" item="item" open="begin" close="end;" separator=";">
+					UPDATE 
+						xc_ar_inv_gl_h 
+					SET
+						PAID_AMT 	= PAID_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_PAY_AMT 	= NO_PAY_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE
+					 	AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 根据应收单id集合查找应收单 -->
+	<select id="selectArInvGlHsByIds" parameterType="java.util.List" resultType="com.xzsoft.xc.ar.modal.ArInvGlHBean">
+		SELECT 
+			AR_INV_GL_H_ID,
+			AR_INV_GL_H_CODE,
+			AR_INV_H_ID,
+			L_AR_INV_GL_H_ID,
+			AR_DOC_CAT_CODE,
+			LEDGER_ID,
+			GL_DATE,
+			CUSTOMER_ID,
+			PROJECT_ID,
+			DEPT_ID,
+			AR_CONTRACT_ID,
+			AMOUNT,
+			TAX_AMT,
+			TAX_RATE,
+			INV_AMOUNT,
+			CANCEL_AMT,
+			PAID_AMT,
+			NO_PAY_AMT,
+			ADJ_AMT,
+			AR_ACC_ID_DEBT,
+			AR_ACC_ID_TAX,
+			AR_CCID_DEBT,
+			AR_CCID_TAX,
+			INIT,
+			SOURCE,
+			V_HEAD_ID,
+			V_STATUS,
+			VERIFIER_ID,
+			VERFY_DATE,
+			DESCRIPTION,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM
+			xc_ar_inv_gl_h
+		WHERE 
+			AR_INV_GL_H_ID IN
+			<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</select>
+<!-- 查看拆分出來的应收单是否被使用 -->
+<select id="checkInvIfUse" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT * FROM
+(
+select distinct 1 from xc_ar_pay_l where ar_inv_gl_h_id in(select ar_inv_gl_h_id from xc_ar_inv_gl_h where AR_INV_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+UNION
+select distinct 1 from xc_ar_cancel_l where TARGET_ID in (select ar_inv_gl_h_id from xc_ar_inv_gl_h where AR_INV_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+UNION
+select distinct 1 from xc_ar_cancel_h where SRC_ID in(select ar_inv_gl_h_id from xc_ar_inv_gl_h where AR_INV_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+UNION
+select distinct 1 from xc_ar_inv_gl_adj where AR_INV_GL_H_ID in(select ar_inv_gl_h_id from xc_ar_inv_gl_h where AR_INV_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+) t
+</select>
+<!-- 应收记账 -->
+<update id="balanceInv" parameterType="java.util.List">
+update xc_ar_inv_gl_h set V_STATUS = '3' where AR_INV_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+or
+AR_INV_GL_H_ID
+in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+</update>
+<!-- 应收取消记账 -->
+<update id="cancelBalanceInv" parameterType="java.util.List">
+update xc_ar_inv_gl_h set V_STATUS = '' where AR_INV_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+or
+AR_INV_GL_H_ID
+in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+</update>
+<!-- 查看拆分出來的预收单是否被使用  -->
+<select id="checkPayIfUse" parameterType="java.util.List" resultType="java.lang.String">
+select * from(
+select distinct 1 from xc_ar_pay_l where L_AR_PAY_H_ID in(select ar_pay_h_id from xc_ar_pay_h where AR_PAY_CUSTOMER_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+union
+select distinct 1 from xc_ar_cancel_h where SRC_ID in (select ar_pay_h_id from xc_ar_pay_h where AR_PAY_CUSTOMER_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)
+union
+select distinct 1 from xc_ar_cancel_l where TARGET_ID in (select ar_pay_h_id from xc_ar_pay_h where AR_PAY_CUSTOMER_H_ID in 
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+#{item}
+</foreach>
+)  
+) t
+</select>
+<!-- 预收记账 -->
+<update id="balancePay" parameterType="java.util.List">
+update xc_ar_pay_h set V_STATUS = '3' where AR_PAY_CUSTOMER_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+or
+AR_PAY_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+</update>
+<!-- 预收取消记账 -->
+<update id="cancelBalancePay" parameterType="java.util.List">
+update xc_ar_pay_h set V_STATUS = '' where AR_PAY_CUSTOMER_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+or
+AR_PAY_H_ID in
+<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+#{item}
+</foreach>
+</update>
+</mapper>

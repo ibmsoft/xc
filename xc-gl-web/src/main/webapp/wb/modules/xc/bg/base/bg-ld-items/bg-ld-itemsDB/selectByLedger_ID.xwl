@@ -1,0 +1,1 @@
+{"hidden":false,"children":[{"configs":{"itemId":"module","loginRequired":"false"},"expanded":true,"children":[{"configs":{"itemId":"dataprovider1","sql":"select\ncount(*) c_no\nfrom XC_BG_LD_ITEMS\nwhere LEDGER_ID={?LEDGER_ID?}"},"expanded":false,"children":[],"type":"dataprovider"}],"type":"module"}],"roles":{"default":1},"title":"","iconCls":"","inframe":false,"pageLink":""}

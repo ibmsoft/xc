@@ -1,0 +1,11 @@
+{
+  maintainBtn:"段值维护",
+  rownum:"序号",
+  segmentName:"辅助核算维度",
+  segmentType:"类型",
+  isEnabled:"启用",
+  segmentDesc:"说明",
+  segmentCode:"段编码",
+  orderNumber:"排序号",
+  moduleTitle:"辅助核算段管理"
+}

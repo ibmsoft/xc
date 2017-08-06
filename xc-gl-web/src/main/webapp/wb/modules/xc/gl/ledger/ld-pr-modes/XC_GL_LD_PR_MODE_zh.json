@@ -1,0 +1,17 @@
+{
+  ledger : '账簿名称',
+  addBtn : '同步',
+  deleteBtn : '删除',
+  saveBtn : '保存',
+  rownum : '序号',
+  LD_MODE_ID : '账簿级收付款方式ID',
+  LEDGER_ID : '账簿ID',
+  MODE_ID : '收付款方式ID',
+  MODE_TYPE : '收付款方式分类',
+  MODE_NAME : '收付款方式名称',
+  MODE_DESC : '收付款方式描述',
+  PAY_ACC_ID : '付款科目ID',
+  PAY_ACC_NAME : '付款科目',
+  REC_ACC_ID : '收款科目ID',
+  REC_ACC_NAME : '收款科目'
+}

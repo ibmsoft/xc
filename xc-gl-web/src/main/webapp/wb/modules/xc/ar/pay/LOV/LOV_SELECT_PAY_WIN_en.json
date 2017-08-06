@@ -1,0 +1,33 @@
+{
+  CUSTOM				: "Customer",
+  DESCRIPTION			: "Description",
+  GL_DATE				: "Business Date",
+  
+  queryBtn				: "Query",
+  resetBtn				: "Reset",
+  okBtn					: "OK",
+  cancelBtn				: "Cancel",
+  
+  rownum				: "No.",
+  AR_PAY_H_CODE_COL		: "Receivables Doc Code",
+  GL_DATE_COL			: "Business Date",
+  CUSTOMER_NAME_COL		: "Customer",	
+  DESCRIPTION_COL		: "Description",
+  AMOUNT_COL			: "Amount Received",
+  NO_CANCEL_AMT_COL 	: "Refundable Amount",
+  TK_AMT_COL			: "Return Amount",
+  AR_CONTRACT_NAME_COL	: "Contract",
+  DEPT_NAME_COL			: "Department",
+  PROJECT_NAME_COL		: "Project",
+  SALE_ACC_NAME_COL		: "Subject",
+  SALE_CCID_NAME_COL	: "Subject Composition",
+  FIELDSET1_TITLE		: "Query Conditions",
+  
+  qzsxzytjl				: "Please select at least 1 records!",
+  tkjebyxwk				: "Refund amount is not allowed to be empty!",
+  tkjebyxwl				: "Refund amount is not allowed to 0!",
+  qdyxzd				: "Are you sure you want to choose",
+  tjlm					: "records?",
+  tkjebkxyl				: "Refund amount can not be less than 0!",
+  tkjebkcgktkje			: "Refund amount is not more than the balance of the money can be refunded!"
+}

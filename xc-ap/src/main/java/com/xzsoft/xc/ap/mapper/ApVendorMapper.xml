@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ap.mapper.ApVendorMapper">
+    <!-- 新增组织下的供应商 -->
+    <insert id="addLedgerVendor" parameterType="java.util.HashMap">
+	   <choose>
+		  <when test=" dbType == 'mysql' ">
+			 <foreach collection="list" item="item" index="index" open=""
+				close="" separator=";">
+				insert into xc_gl_ld_vendors
+				(LD_VENDOR_ID,
+				LEDGER_ID,
+				VENDOR_ID,
+				IS_ENABLED,
+				CREATION_DATE,
+				CREATED_BY,
+				LAST_UPDATE_DATE,
+				LAST_UPDATED_BY,
+				ORG_ID)
+				VALUES(
+				#{item.LD_VENDOR_ID,jdbcType=VARCHAR},
+				#{item.LEDGER_ID,jdbcType=VARCHAR},
+				#{item.VENDOR_ID,jdbcType=VARCHAR},
+				#{item.IS_ENABLED,jdbcType=NUMERIC},
+				#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+				#{item.CREATED_BY,jdbcType=VARCHAR},
+				#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+				#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+				#{item.ORG_ID,jdbcType=VARCHAR}
+				)
+			 </foreach>
+		  </when>
+		  <when test=" dbType == 'oracle' ">
+			 <foreach collection="list" item="item" index="index" open="begin"
+				close="end;" separator=";">
+				insert into xc_gl_ld_vendors
+				(LD_VENDOR_ID,
+				LEDGER_ID,
+				VENDOR_ID,
+				IS_ENABLED,
+				CREATION_DATE,
+				CREATED_BY,
+				LAST_UPDATE_DATE,
+				LAST_UPDATED_BY,
+				ORG_ID)
+				VALUES(
+				#{item.LD_VENDOR_ID,jdbcType=VARCHAR},
+				#{item.LEDGER_ID,jdbcType=VARCHAR},
+				#{item.VENDOR_ID,jdbcType=VARCHAR},
+				#{item.IS_ENABLED,jdbcType=NUMERIC},
+				#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+				#{item.CREATED_BY,jdbcType=VARCHAR},
+				#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+				#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+				#{item.ORG_ID,jdbcType=VARCHAR}
+				)
+			 </foreach>
+		  </when>
+	   </choose>
+    </insert>
+    
+    <!-- 删除组织下的供应商 -->
+    <delete id="deleteLedgerVendor" parameterType="java.util.List">
+    delete from xc_gl_ld_vendors
+    where
+    LD_VENDOR_ID
+    IN
+        <foreach collection="list" item="item" index="index" open="("
+            close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <select id="validateLdVendorIsUsed" parameterType="java.util.HashMap" resultType="boolean">
+    	SELECT 
+		(
+			EXISTS(SELECT * FROM xc_ap_contract     WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_contract_his WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_inv_gl_adj   WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_inv_gl_h     WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_invoice_h    WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_pay_h        WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_ap_pay_req_h    WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_po_arrival_h    WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_po_order_h      WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_po_order_h_his  WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_po_return_h     WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) ||
+			EXISTS(SELECT * FROM xc_st_wh_entry_h   WHERE LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR} AND VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR}) 
+		) AS 'IS_USED'
+    </select>
+    
+    <!-- 删除账簿下的供应商（根据账簿id、供应商id） -->
+    <delete id="deleteLedgerVendor2" parameterType="java.util.List">
+    	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+    		DELETE FROM 
+    			xc_gl_ld_vendors 
+    		WHERE 
+    			LEDGER_ID = #{item.LEDGER_ID,jdbcType=VARCHAR} 
+    		AND VENDOR_ID = #{item.VENDOR_ID,jdbcType=VARCHAR}
+    	</foreach>
+    </delete>
+</mapper>

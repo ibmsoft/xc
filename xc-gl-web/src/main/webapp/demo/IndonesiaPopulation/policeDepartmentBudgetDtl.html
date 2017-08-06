@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+       <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+            #close {
+                position: absolute;
+                right: 20px;
+                top: 40px;
+                cursor: pointer;
+            }
+       </style>
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="js/echarts.js"></script>
+       <script type="text/javascript" src="js/jquery.min.js"></script>
+       <script type="text/javascript">
+           var itemStyleActual = {
+                 normal: {
+                     color: function(params) {
+                         if(params.data == 546470 || params.data == 225560 || params.data == 34092 || params.data == 43172 || params.data == 69007 || params.data == 5673)
+                             return '#CC3333';//超过预算
+                         else if(params.data == 26790 || params.data == 95587 || params.data == 170929 || params.data == 95587 || params.data == 24768 || params.data == 3783)
+                             return '#FF8B30';//即将超过预算
+                         else
+                             return '#999999';//正常
+                     }
+                 }
+             };
+            var dom = document.getElementById("container");
+            var myChart = echarts.init(dom);
+            var app = {};
+            option = null;
+            option = {
+                color:['#009966','#999999','#CC3333'],
+                title: {
+                    text: 'Police Department Budget Details'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['Budget','Actual'],
+                    x: 'right'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    axisLabel:{
+                      rotate:20,
+                      interval:0
+                    },
+                    data: ['REGULAR SALARIES','SALARIES UNIFORM PERSONNE','OVERTIME','O/T-EDUCATION','O/T BACKGROUND INVESTIGAT','LONGEVITY',
+                           'HOLIDAY PREMIUM PAY','EDUCATION STIPEND','SPECIAL DETAIL','SOCIAL SECURITY','MEDICARE','RETIREMENT',
+                           'RET-POLICE OFFICER','COMPUTER/SOFTWARE MAINT','PROFESSIONAL SERVICES','PROF/SERV-HIRING','ADVERTISING','TRAINING-EDUCATION',
+                           'DUES PROFESSIONAL ORGANIZ','TRAVEL AND CONFERENCE','MISCELLANEOUS SUPPLIES','MEETING SUPPLIES','OFFICE SUPPLIES','COMPUTER/PRINTER SUPPLIES',
+                           'BOOKS & PERIODICALS','CLOTHING ALLOWANCE','CLOTHING','EQUIPMENT']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name:'Budget',
+                        type:'bar',
+                        barGap:0,
+                        data:[10638, 42010, 68500, 61112, 10076, 1059, 
+                              5659, 0, 1982, 3289, 3776, 3795, 
+                              43741, 656, 3745, 7459, 547, 10404, 
+                              265, 1561, 6792, 2200, 318, 0,
+                              2081, 1521, 3279, 24970]
+                    },
+                    {
+                        name:'Actual',
+                        type:'bar',
+                        barGap:0,
+                        stack: 'Actual',
+                        itemStyle: itemStyleActual,
+                        data:[5954, 43172, 69007, 51659, 2133, 1187, 
+                              5673, 0, 2006, 2551, 3290, 3783, 
+                              39777, 0, 2550, 3155, 1500, 9119, 
+                              330, 2897, 1457, 329, 333, 290,
+                              525, 1522, 36, 24768]
+                    }
+                ]
+            };
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+       </script>
+   </body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.FaAdditionMapper">
+	<!-- 新增资产 -->
+	<insert id="insertFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAddition">
+	INSERT INTO xc_fa_additions (
+		ASSET_ID,
+		LEDGER_ID,
+		PERIOD_CODE,
+		ZCBM,
+		ZCMC,
+		GGXH,
+		XLH,
+		ZZS,
+		FA_PROPERTY,
+		CAT_CODE,
+		QYRQ,
+		SYNX,
+		CBZX,
+		BGR,
+		ZCYT,
+		CGFP,
+		ZJFS,
+		LRFS,
+		CFDD,
+		ZCSM,
+		YZ,
+		LJZJ_LJTX,
+		SL,
+		DW,
+		JZZB,
+		CZL,
+		SFZJ,
+		ZJFF,
+		TXGZ,
+		ZCKM,
+		LJZJTXKM,
+		JZZBKM,
+		FYKM,
+		VENDOR_ID,
+		PROJECT_ID,
+		CREATED_BY,
+		CREATION_DATE,
+		TYQJ,
+		JTQJ,
+		KSJTQJ,
+		YJTJE,
+		JZ
+		) VALUES (
+		#{assetId, jdbcType=VARCHAR},
+		#{ledgerId, jdbcType=VARCHAR},
+		#{periodCode, jdbcType=VARCHAR},
+		#{zcbm, jdbcType=VARCHAR},
+		#{zcmc, jdbcType=VARCHAR},
+		#{ggxh, jdbcType=VARCHAR},
+		#{xlh, jdbcType=VARCHAR},
+		#{zzs, jdbcType=VARCHAR},
+		#{faProperty, jdbcType=VARCHAR},
+		#{catCode, jdbcType=VARCHAR},
+		#{qyrq, jdbcType=TIMESTAMP},
+		#{synx, jdbcType=DECIMAL},
+		#{cbzx, jdbcType=VARCHAR},
+		#{bgr, jdbcType=VARCHAR},
+		#{zcyt, jdbcType=VARCHAR},
+		#{cgfp, jdbcType=VARCHAR},
+		#{zjfs, jdbcType=VARCHAR},
+		#{lrfs, jdbcType=VARCHAR},
+		#{cfdd, jdbcType=VARCHAR},
+		#{zcsm, jdbcType=VARCHAR},
+		#{yz, jdbcType=DECIMAL},
+		#{ljzjLjtx, jdbcType=DECIMAL},
+		#{sl, jdbcType=DECIMAL},
+		#{dw, jdbcType=VARCHAR},
+		#{jzzb, jdbcType=DECIMAL},
+		#{czl, jdbcType=DECIMAL},
+		#{sfzj, jdbcType=VARCHAR},
+		#{zjff, jdbcType=VARCHAR},
+		#{txgz, jdbcType=VARCHAR},
+		#{zckm, jdbcType=VARCHAR},
+		#{ljzjtxkm, jdbcType=VARCHAR},
+		#{jzzbkm, jdbcType=VARCHAR},
+		#{fykm, jdbcType=VARCHAR},
+		#{vendorId, jdbcType=VARCHAR},
+		#{projectId, jdbcType=VARCHAR},
+		#{createdBy, jdbcType=VARCHAR},
+		#{creationDate, jdbcType=TIMESTAMP},
+		#{tyqj, jdbcType=VARCHAR},
+		#{jtqj, jdbcType=VARCHAR},
+		#{ksjtqj, jdbcType=VARCHAR},
+		#{yjtje, jdbcType=DECIMAL},
+		#{jz, jdbcType=DECIMAL}
+		)
+	</insert>
+	<!--新增资产事务，记录资产的所有操作-->
+	<insert id="insertFaTrans" parameterType="com.xzsoft.xc.fa.modal.XcFaTrans">
+		insert into xc_fa_trans(
+			ASSET_ID,
+			LEDGER_ID,
+			PERIOD_CODE,
+			TRANS_DATE,
+			TRANS_CODE,
+			SRC_ID,
+			SRC_DTL_ID,
+			BZSM,
+			POST_FLAG,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY,
+			SRC_TAB,
+			QUANTITY,
+			YZDR,
+			YZCR,
+			LJZJDR,
+			LJZJCR,
+			JZZBDR,
+			JZZBCR,
+			CBZX,
+			CAT_CODE
+		)VALUES(
+		    #{assetId,jdbcType=VARCHAR},
+		    #{ledgerId,jdbcType=VARCHAR},
+		    #{periodCode,jdbcType=VARCHAR},
+		    #{transDate,jdbcType=TIMESTAMP},
+		    #{transCode,jdbcType=VARCHAR},
+		    #{srcId,jdbcType=VARCHAR},
+		    #{srcDtlId,jdbcType=VARCHAR},
+		    #{bzsm,jdbcType=VARCHAR},
+		    #{postFlag,jdbcType=VARCHAR},
+		    #{creationDate,jdbcType=TIMESTAMP},
+		    #{createdBy,jdbcType=VARCHAR},
+		    #{lastUpdateDate,jdbcType=TIMESTAMP},
+		    #{lastUpdateBy,jdbcType=VARCHAR},
+		    #{srcTab,jdbcType=VARCHAR},
+		    #{quantity,jdbcType=DECIMAL},
+			#{yzdr,jdbcType=DECIMAL},
+			#{yzcr,jdbcType=DECIMAL},
+			#{ljzjdr,jdbcType=DECIMAL},
+			#{ljzjcr,jdbcType=DECIMAL},
+			#{jzzbdr,jdbcType=DECIMAL},
+			#{jzzbcr,jdbcType=DECIMAL},
+			#{cbzx,jdbcType=VARCHAR},
+			#{catCode,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateFaTrans" parameterType="com.xzsoft.xc.fa.modal.XcFaTrans">
+		update xc_fa_trans set 
+			<!--LEDGER_ID = #{ledgerId,jdbcType=VARCHAR},
+			PERIOD_CODE = #{periodCode,jdbcType=VARCHAR},
+			TRANS_DATE = #{transDate,jdbcType=TIMESTAMP},-->
+			SRC_ID = #{srcId,jdbcType=VARCHAR},
+			SRC_DTL_ID = #{srcDtlId,jdbcType=VARCHAR},
+			BZSM = #{bzsm,jdbcType=VARCHAR},
+			POST_FLAG = #{postFlag,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY = #{lastUpdateBy,jdbcType=VARCHAR},
+			SRC_TAB = #{srcTab,jdbcType=VARCHAR},
+			QUANTITY = #{quantity,jdbcType=DECIMAL},
+			YZDR = #{yzdr,jdbcType=DECIMAL},
+			YZCR = #{yzcr,jdbcType=DECIMAL},
+			LJZJDR = #{ljzjdr,jdbcType=DECIMAL},
+			LJZJCR = #{ljzjcr,jdbcType=DECIMAL},
+			JZZBDR = #{jzzbdr,jdbcType=DECIMAL},
+			JZZBCR = #{jzzbcr,jdbcType=DECIMAL},
+			CBZX = #{cbzx,jdbcType=VARCHAR},
+			CAT_CODE = #{catCode,jdbcType=VARCHAR}
+		where ASSET_ID = #{assetId,jdbcType=VARCHAR}
+		  and TRANS_CODE = #{transCode,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 新增计提折旧 -->
+	<insert id="insertFaDepr" parameterType="com.xzsoft.xc.fa.modal.XcFaDepr">
+		insert into xc_fa_depr(
+			DEPR_ID,
+			LEDGER_ID,
+			PERIOD_CODE,
+			ASSET_ID,
+			ZJFF,
+			YZ,
+			JZZB,
+			CZL,
+			LJZJ_LJTX,
+			BQZJ,
+			ZJL,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY,
+			CREATION_DATE
+		)values(
+			#{deprId,jdbcType=VARCHAR},
+			#{ledgerId,jdbcType=VARCHAR},
+			#{periodCode,jdbcType=VARCHAR},
+			#{assetId,jdbcType=VARCHAR},
+			#{zjff,jdbcType=VARCHAR},
+			#{yz,jdbcType=DECIMAL},
+			#{jzzb,jdbcType=DECIMAL},
+			#{czl,jdbcType=DECIMAL},
+			#{ljzjljtx,jdbcType=DECIMAL},
+			#{bqzj,jdbcType=DECIMAL},
+			#{zjl,jdbcType=DECIMAL},
+			#{createdBy,jdbcType=VARCHAR},
+			#{creationDate,jdbcType=TIMESTAMP},
+			#{lastUpdateBy,jdbcType=VARCHAR},
+			#{lastUpdateDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<select id="getDepr" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.XcFaDepr">
+		select
+			DEPR_ID as deprId,
+			LEDGER_ID as ledgerId,
+			PERIOD_CODE as periodCode,
+			ASSET_ID as assetId,
+			ZJFF as zjff,
+			YZ as yz,
+			JZZB as jzzb,
+			CZL as czl,
+			LJZJ_LJTX as ljzjljtx,
+			BQZJ as bqzj,
+			ZJL as zjl,
+			CREATED_BY as createdBy,
+			LAST_UPDATE_DATE as creationDate,
+			LAST_UPDATED_BY as lastUpdateBy,
+			CREATION_DATE as lastUpdateDate
+	    from xc_fa_depr
+	   where ASSET_ID = #{assetId,jdbcType=VARCHAR}
+	     and PERIOD_CODE=#{periodCode,jdbcType=VARCHAR}
+	</select>
+	<update id="updateFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAddition">
+	update xc_fa_additions set
+		LEDGER_ID = #{ledgerId, jdbcType=VARCHAR},
+		PERIOD_CODE = #{periodCode, jdbcType=VARCHAR},
+		ZCBM = #{zcbm, jdbcType=VARCHAR},
+		ZCMC = #{zcmc, jdbcType=VARCHAR},
+		GGXH = #{ggxh, jdbcType=VARCHAR},
+		XLH = #{xlh, jdbcType=VARCHAR},
+		ZZS = #{zzs, jdbcType=VARCHAR},
+		FA_PROPERTY = #{faProperty, jdbcType=VARCHAR},
+		CAT_CODE = #{catCode, jdbcType=VARCHAR},
+		QYRQ = #{qyrq, jdbcType=TIMESTAMP},
+		SYNX = #{synx, jdbcType=DECIMAL},
+		CBZX = #{cbzx, jdbcType=VARCHAR},
+		BGR = #{bgr, jdbcType=VARCHAR},
+		ZCYT = #{zcyt, jdbcType=VARCHAR},
+		CGFP = #{cgfp, jdbcType=VARCHAR},
+		ZJFS = #{zjfs, jdbcType=VARCHAR},
+		LRFS = #{lrfs, jdbcType=VARCHAR},
+		CFDD = #{cfdd, jdbcType=VARCHAR},
+		ZCSM = #{zcsm, jdbcType=VARCHAR},
+		YZ = #{yz, jdbcType=DECIMAL},
+		LJZJ_LJTX = #{ljzjLjtx, jdbcType=DECIMAL},
+		SL = #{sl, jdbcType=DECIMAL},
+		DW = #{dw, jdbcType=VARCHAR},
+		JZZB = #{jzzb, jdbcType=DECIMAL},
+		CZL = #{czl, jdbcType=DECIMAL},
+		SFZJ = #{sfzj, jdbcType=VARCHAR},
+		ZJFF = #{zjff, jdbcType=VARCHAR},
+		TXGZ = #{txgz, jdbcType=VARCHAR},
+		ZCKM = #{zckm, jdbcType=VARCHAR},
+		LJZJTXKM = #{ljzjtxkm, jdbcType=VARCHAR},
+		JZZBKM = #{jzzbkm, jdbcType=VARCHAR},
+		FYKM = #{fykm, jdbcType=VARCHAR},
+		VENDOR_ID = #{vendorId, jdbcType=VARCHAR},
+		PROJECT_ID = #{projectId, jdbcType=VARCHAR},
+		CREATED_BY = #{createdBy, jdbcType=VARCHAR},
+		CREATION_DATE = #{creationDate, jdbcType=TIMESTAMP},
+		<!--
+		JTQJ = #{jtqj, jdbcType=VARCHAR},
+		-->
+		KSJTQJ = #{ksjtqj, jdbcType=VARCHAR},
+		YJTJE = #{yjtje, jdbcType=DECIMAL},
+		TYQJ = #{tyqj, jdbcType=VARCHAR},
+		JZ = #{jz, jdbcType=DECIMAL},
+		LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP}
+		where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</update>
+	<!-- 删除资产卡片 -->
+	<delete id="deleteFaAddition" parameterType="java.lang.String">
+		delete from xc_fa_additions where ASSET_ID=#{assetId, jdbcType=VARCHAR}
+	</delete>
+	<!-- 删除给定期间给定资产的计提折旧 -->
+	<delete id="delFaDepr" parameterType="java.lang.String">
+	    DELETE FROM XC_FA_DEPR where ASSET_ID=#{assetId, jdbcType=VARCHAR} and PERIOD_CODE=#{periodCode, jdbcType=VARCHAR}
+	</delete>
+	<!-- 删除给定资产的所有折旧 -->
+	<delete id="delFaDeprWithId" parameterType="java.lang.String">
+	    DELETE FROM XC_FA_DEPR where ASSET_ID=#{assetId, jdbcType=VARCHAR}
+	</delete>
+	<select id="getFaAdditionWithId" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.FaAddition">
+		SELECT
+		    ASSET_ID  AS  assetId,
+			LEDGER_ID AS ledgerId,
+			PERIOD_CODE AS periodCode,
+			ZCBM AS zcbm,
+			ZCMC AS zcmc,
+			GGXH AS ggxh,
+			XLH AS xlh,
+			ZZS AS zzs,
+			FA_PROPERTY AS faProperty,
+			CAT_CODE AS catCode,
+			QYRQ AS qyrq,
+			SYNX AS synx,
+			CBZX AS cbzx,
+			BGR AS bgr,
+			ZCYT AS zcyt,
+			CGFP AS cgfp,
+			ZJFS AS zjfs,
+			LRFS AS lrfs,
+			CFDD AS cfdd,
+			ZCSM AS zcsm,
+			YZ AS yz,
+			LJZJ_LJTX AS ljzjLjtx,
+			SL AS sl,
+			DW AS dw,
+			JZZB AS jzzb,
+			CZL AS czl,
+			SFZJ AS sfzj,
+			ZJFF AS zjff,
+			TXGZ AS txgz,
+			ZCKM AS zckm,
+			LJZJTXKM AS ljzjtxkm,
+			FYKM AS fykm,
+			JZZBKM AS jzzbkm,
+			QLKM as qlkm,
+			QLRQ as qlrq,
+			QLQJ as qlqj,
+			QLYY as qlyy,
+			CREATION_DATE AS creationDate,
+			CREATED_BY AS createdBy,
+			LAST_UPDATE_DATE AS lastUpdateDate,
+			LAST_UPDATED_BY AS lastUpdatedBy,
+			TYQJ AS tyqj,
+			JTQJ AS jtqj,
+			JZ AS jz,
+			ZJL AS zjl,
+			YJTJE AS yjtje,
+			ZJNX as zjnx,
+			KSJTQJ as ksjtqj,
+			ZJJE as zjje
+		FROM xc_fa_additions
+		WHERE ASSET_ID =#{assetId, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getKmIdByCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT a.ACC_ID 
+	     FROM xc_gl_accounts a 
+	    WHERE a.ACC_CODE = #{0} 
+	      AND a.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+	                             FROM xc_gl_ledgers l 
+	                            WHERE l.ACC_HRCY_ID = a.ACC_HRCY_ID 
+	                              AND l.LEDGER_ID = #{1})	
+	</select>
+	
+	<select id="getFaParams" parameterType="java.lang.String" resultType="java.lang.String">
+	    select PARAMS
+         from xc_fa_ld_parms
+        where LEDGER_ID = #{ledgerId, jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteFaTrans" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_trans where SRC_ID=#{srcId, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteFaTransByAssetTranCode" parameterType="java.lang.String">
+	    DELETE 
+	      FROM xc_fa_trans 
+	     WHERE ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	       AND TRANS_CODE = #{transCode, jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="getZjfsKmByAsset" parameterType="java.lang.String" resultType="java.lang.String">
+		select a.DFKM
+	      from xc_fa_ld_adding a, xc_fa_additions f
+	     where a.ADDING_CODE = f.ZJFS
+	       and a.LEDGER_ID = f.LEDGER_ID
+	       and f.ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteFaTransByAssetId" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_trans where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteFaHistoryByAssetId" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_history where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteGlInterfaceByAsset" parameterType="java.lang.String">
+	    DELETE FROM xc_gl_v_interface where SRC_H_ID = #{assetId, jdbcType=VARCHAR} or SRC_H_ID in (select d.DEPR_ID from xc_fa_depr d where d.ASSET_ID = #{assetId, jdbcType=VARCHAR})
+	</delete>
+	
+	<select id="checkFaAdj" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*)
+	      from xc_fa_adj_l
+	     where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

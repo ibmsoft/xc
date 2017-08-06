@@ -1,0 +1,14 @@
+{
+ {
+  po_ld_ledger_y:'Y',
+  po_ld_ledger_n:'N',
+  po_ld_ledger_is_cgsq:'Whether the purchase requisition must be',
+  po_ld_ledger_is_dhd:'Order to have',
+  po_ld_ledger_is_wdh:'Whether or not to allow the settlement of the goods',
+  po_ld_ledger_save:'save',
+  po_ld_ledger_dif_acc:'Invoice price variance account',
+  po_ld_ledger_est_acc:'Subject of arrival',
+  po_ld_ledger_mat_acc:'Goods in transit',
+  po_ld_ledger_save_success:'Save success'
+}
+}

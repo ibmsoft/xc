@@ -1,0 +1,21 @@
+{
+	LEDGER : "Ledger",
+	VENDOR : "Vendor Code/Name",
+	
+	ptfp : "Ordinary Invoice",
+	zzszyfp : "VAT Invoice",
+	
+	AP_DOC_CAT_NAME : "Doc Name",
+	AP_INV_H_CODE : "Doc Num",
+	VENDOR_NAME : "Vendor",
+	INV_AMOUNT : "Total Tax",
+	DESCRIPTION : "Summary",
+	SYS_AUDIT_STATUS_DESC : "Status",
+	AP_INV_H_ID : "ID",
+  
+    confirm : "Prompt",
+    confirm1 : "Be sure to delete the choice",
+    confirm2 : "?",
+  
+    successDelete : "Purchase invoice deleted successfully!"
+}

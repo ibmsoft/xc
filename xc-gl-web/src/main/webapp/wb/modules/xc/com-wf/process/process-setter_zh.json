@@ -1,0 +1,31 @@
+{
+  XH:'序号',
+  ledgerCombox:'账薄',
+  modelCombox:'模块',
+  saveBtn:'保存',
+
+  BILL_TYPE_CODE:'单据编号',
+  BILL_TYPE_NAME:'单据类型',
+
+  ACT_CODE:'节点编码',
+
+  ACT_NAME:'审批节点',
+  IS_ENABLED:'是否启用',
+  YES:'是',
+  NO:'否',
+
+
+  LIMITED_VAL:'限额',
+  message:'保存中...',
+  SAVETIP:'保存成功!',
+  SAVEERROR:'保存失败!',
+
+  MSG1:'请选择账簿和模块!',
+  MSG2:'无变动数据!',
+
+  TIP:'提示'
+
+
+
+
+}

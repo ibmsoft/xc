@@ -1,0 +1,8 @@
+{
+  symbol : "Currency Symbol",
+  rownum : "NO",
+  currencyName:"Currency Name",
+  nation:"Nation",
+  precision:"Decimal Places",
+  isEnabled:"Enable"
+}

@@ -1,0 +1,9 @@
+{
+  query    : "query condition",
+  dl       : "Ledger",
+  save     : "Save",
+  dlparam  : "Ledger Param",
+  open     : "Initial Period",
+  anrule   : "Asset Code Rule",
+  adrule   : "Adjust Code Rule"
+}

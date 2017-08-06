@@ -1,0 +1,5 @@
+{
+  DEPOSIT_BANK_NAME : "账户",
+  ACCOUNT_NAME_COL	: "户名",
+  BANK_ACCOUNT_COL	: "银行账号"
+}

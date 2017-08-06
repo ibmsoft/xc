@@ -1,0 +1,8 @@
+{
+  LEDGER			: "账簿",
+  CUSTOMER_NAME		: "客户",
+  PERIOD 			: "会计期",
+  TO 			    : "至",
+  queryBtn			: "查询",
+  clearBtn			: "重置"
+}

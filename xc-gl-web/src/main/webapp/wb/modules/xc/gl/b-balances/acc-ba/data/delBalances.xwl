@@ -1,0 +1,1 @@
+{"inframe":false,"title":"删除账簿余额","hidden":true,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"delete from xc_gl_balance_tmp where id in ({#IDS#})","itemId":"delBalances"},"children":[],"expanded":false,"type":"query"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

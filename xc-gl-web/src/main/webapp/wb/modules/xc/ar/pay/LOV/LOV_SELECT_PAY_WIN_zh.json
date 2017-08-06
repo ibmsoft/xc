@@ -1,0 +1,33 @@
+{
+  CUSTOM				: "客户",
+  DESCRIPTION			: "摘要",
+  GL_DATE				: "业务日期",
+  
+  queryBtn				: "查询",
+  resetBtn				: "重置",
+  okBtn					: "确认",
+  cancelBtn				: "取消",
+  
+  rownum				: "序号",
+  AR_PAY_H_CODE_COL		: "收款单编码",
+  GL_DATE_COL			: "业务日期",
+  CUSTOMER_NAME_COL		: "客户",	
+  DESCRIPTION_COL		: "摘要",
+  AMOUNT_COL			: "收款金额",
+  NO_CANCEL_AMT_COL 	: "可退款金额",
+  TK_AMT_COL			: "退款金额",
+  AR_CONTRACT_NAME_COL	: "合同",
+  DEPT_NAME_COL			: "部门",
+  PROJECT_NAME_COL		: "项目",
+  SALE_ACC_NAME_COL		: "科目",
+  SALE_CCID_NAME_COL	: "科目组合",
+  FIELDSET1_TITLE		: "查询条件",
+  
+  qzsxzytjl				: "请至少选择 1 条记录！",
+  tkjebyxwk				: "退款金额不允许为空！",
+  tkjebyxwl				: "退款金额不允许为 0 ！",
+  qdyxzd				: "确定要选择的",
+  tjlm					: "条记录吗？",
+  tkjebkxyl				: "退款金额不可小于0！",
+  tkjebkcgktkje			: "退款金额不可超过可退款余额！"
+}

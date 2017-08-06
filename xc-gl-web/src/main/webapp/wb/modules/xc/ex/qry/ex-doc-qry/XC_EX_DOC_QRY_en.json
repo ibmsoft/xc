@@ -1,0 +1,36 @@
+{
+  empty_text_ledger		: "Please select the account book",
+  query_ledger			: "Ledger",
+  query_code			: "Document Code/Description",
+  query_create_by		: "Reimbursement Person",
+  query_dept			: "Department",
+  query_project			: "Project",
+  
+  queryBtn				: "Query",
+  resetBtn				: "Reset",
+  seekBtn				: "View",
+  seekHeadBtn			: "View Voucher",
+  enclosureBtn			: "Enclosure",
+  cancelDoc				: "Return",
+  monitorBtn			: "Monitor",
+  cancelDoc_tooltip		: "To cancel the examination and approval, but not to review the documents",
+  printBtn				: "Print",
+  
+  row_num_col			: "no",
+  ex_doc_code_col		: "Document Code",
+  ex_reason_col			: "Document Description",
+  amount_col			: "Reimbursement Amount",
+  no_account_col		: "Amount Not Paid",
+  ex_cat_name_col		: "Reimbursement Type",
+  created_by_col		: "Reimbursement Person",
+  dept_name_col			: "Department",
+  project_name_col		: "Project",
+  creation_date_col		: "Create Date",
+  v_status_name_col		: "Voucher Status",
+  fin_user_name_col		: "Review Person",
+  audit_date_col		: "Approval Date",
+  audit_status_desc_col	: "Approval Status",
+  verifier_name_col		: "Current Approver",
+  
+  ex_doc_print_win		: 'Print Document'
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.DictMapper">
+
+	<select id="selectDictByDictName" parameterType="String"
+		resultType="com.xzsoft.xsr.core.modal.Dict">
+		SELECT DICT_NAME,DICT_DESC,DICT_TYPE,DICT_TABLE,ITEM_CODE,ITEM_NAME,ITEM_VAL,ITEM_DESC
+		from
+		xsr_rep_dict
+		where DICT_NAME=#{dictName}
+	</select>
+	<!-- 判断字典是否存在 -->
+	<select id="isDictExist" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		xsr_rep_dict
+		WHERE DICT_NAME=#{DICT_NAME}
+	</select>
+	<!-- 导入字典 -->
+	<insert id="insertDict" parameterType="hashmap">
+		insert into
+		xsr_rep_dict(
+		DICT_NAME,
+		DICT_DESC,
+		DICT_TYPE,
+		DICT_TABLE,
+		ITEM_CODE,
+		ITEM_NAME,
+		ITEM_VAL,
+		ITEM_DESC,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY
+		)
+		VALUES
+		(
+		#{DICT_NAME},
+		#{DICT_DESC},
+		#{DICT_TYPE},
+		#{DICT_TABLE},
+		#{ITEM_CODE},
+		#{ITEM_NAME},
+		#{ITEM_VAL},
+		#{ITEM_DESC},
+		#{LAST_UPDATE_DATE},
+		#{LAST_UPDATED_BY},
+		#{CREATION_DATE},
+		#{CREATED_BY}
+		)
+	</insert>
+</mapper>

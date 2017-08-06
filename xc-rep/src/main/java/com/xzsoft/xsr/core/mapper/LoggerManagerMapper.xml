@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.LoggerManagerMapper">
+	<insert id="recordLog" >
+		insert into xsr_rep_inner_syndata_log(JKLOG_ID, 
+									  ENTITY_ID, 
+									  PERIOD_ID,
+									  CURRENCY_ID, 
+									  LOG_TYPE,
+									  SUIT_ID,
+									  MODALTYPE_ID, 
+		                     		  MODALSHEET_ID,
+		                     		  MESSAGE,
+		                     		  SESSIONID,
+		                     		  RESULT_FLAG,
+		                     		  UI_SERVER_ID,
+		                     		  CREATION_DATE,
+		                     	      CREATED_BY,
+		                     	      LAST_UPDATE_DATE,
+		                     	      LAST_UPDATED_BY) 
+						     VALUES 
+			<foreach collection="list" item="item" index="index" separator=",">				     
+						        (#{item.JKLOG_ID}, 
+					     		 #{item.ENTITY_ID}, 
+					     		 #{item.PERIOD_ID}, 
+					     		 #{item.CURRENCY_ID},
+					     		 #{item.LOG_TYPE},
+					     		 #{item.SUIT_ID},
+					     		 #{item.MODALTYPE_ID},
+					     		 #{item.MODALSHEET_ID},
+					     		 #{item.MESSAGE},
+					     		 #{item.SESSIONID},
+					     		 #{item.RESULT_FLAG},
+					     		 #{item.UI_SERVER_ID},
+					     		 #{item.CREATION_DATE},
+					     		 #{item.CREATED_BY},
+					     		 #{item.LAST_UPDATE_DATE},
+					     		 #{item.LAST_UPDATED_BY})
+			</foreach>		     		 
+	</insert>
+	<select id="queryMst" parameterType="String" resultType="java.util.Map">
+		SELECT MODALSHEET_ID FROM xsr_rep_sheets WHERE SUIT_ID=#{0} AND MODALTYPE_ID=#{1} AND ENTITY_ID=#{2}
+			AND PERIOD_ID=#{3} AND CURRENCY_ID=#{4}
+	</select>
+
+
+
+</mapper>

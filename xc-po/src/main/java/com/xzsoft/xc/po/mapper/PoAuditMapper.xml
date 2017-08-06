@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoAuditMapper">
+	
+	<!-- 更新审批流程实例编码 -->
+	<update id="updatePoInsCode" parameterType="java.util.HashMap">
+		UPDATE ${tableName}
+			SET INS_CODE = #{insCode,jdbcType=VARCHAR}
+		WHERE
+			${priKey} = #{bizId}
+	</update>
+	
+	<!-- 更新审批流程审批状态  -->
+	<update id="updatePoAuditStatus" parameterType="java.util.HashMap">
+        UPDATE ${tableName}
+			SET AUDIT_STATUS = #{bizStatusCat,jdbcType=VARCHAR},
+			AUDIT_STATUS_DESC = #{bizStatusCatDesc,jdbcType=VARCHAR},
+			<if test="bizStatusCat == 'A'.toString() or bizStatusCat == 'R'.toString() or bizStatusCat == 'D'.toString()  ">
+				SYS_AUDIT_STATUS = 'A',
+				SYS_AUDIT_STATUS_DESC = '草稿'
+			</if>
+			<if test="bizStatusCat == 'C'.toString() ">
+				SYS_AUDIT_STATUS = 'C',
+				SYS_AUDIT_STATUS_DESC = '审批中'
+			</if>
+			<if test="bizStatusCat == 'E'.toString() ">
+				SYS_AUDIT_STATUS = 'E',
+				SYS_AUDIT_STATUS_DESC = '审批通过'
+			</if>
+		WHERE
+			${priKey} = #{bizId}
+	</update>
+	
+	<!-- 更新流程审批通过日期 -->
+	<update id="updatePoAuditDate" parameterType="java.util.HashMap">
+        UPDATE ${tableName}
+          <if test="dbType == 'mysql' " >
+            	SET AUDIT_DATE = CURRENT_TIMESTAMP() 
+          </if>
+          <if test="dbType == 'oracle' " >
+				SET AUDIT_DATE = sysdate 
+		  </if>
+		WHERE
+			${priKey} = #{bizId} 
+	</update>
+	
+	<!-- 审批通过之后执行撤回，更新单据信息 -->
+	<update id="revokeCompleteProcess" parameterType="java.util.HashMap">
+		UPDATE ${tableName}
+			SET AUDIT_STATUS = 'D',
+			AUDIT_STATUS_DESC = '驳回',
+			AUDIT_DATE = NULL,
+			SYS_AUDIT_STATUS = 'A',
+			SYS_AUDIT_STATUS_DESC = '草稿'
+		WHERE
+			${priKey} = #{bizId}
+	</update>
+</mapper>

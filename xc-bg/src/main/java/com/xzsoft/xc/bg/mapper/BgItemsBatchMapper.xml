@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.bg.mapper.BgItemsBatchMapper">
+  <select id="getBgItemsByLedger" resultType="com.xzsoft.xc.bg.modal.BgItemDTO">
+	 SELECT
+	  t.BG_ITEM_ID AS bgItemId,
+	  a.BG_ITEM_CODE AS bgItemCode,
+	  a.BG_ITEM_NAME AS bgItemName,
+	  t.BG_CTRL_DIM AS bgCtrlDim,
+	  t.BG_CTRL_MODE AS bgCtrlMode,
+	  t.IS_ENABLED AS isEnabled,
+	  t.LEDGER_ID AS ledgerId
+	FROM
+	  xc_bg_ld_items t,
+	  xc_bg_items a
+	WHERE
+	  a.BG_ITEM_ID = t.BG_ITEM_ID
+	AND 
+	  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	AND(
+	  a.BG_ITEM_NAME LIKE #{bgItemName,jdbcType=VARCHAR}
+	OR
+	  a.BG_ITEM_CODE LIKE #{bgItemName,jdbcType=VARCHAR})
+	ORDER BY a.BG_ITEM_CODE ASC
+  </select>
+  <select id="getExItemsByLedger" resultType="com.xzsoft.xc.bg.modal.BgItemDTO">
+	 SELECT
+	  c.ACC_NAME AS bgItemDesc,
+	  b.BG_ITEM_NAME AS bgItemCode,
+	  a.EX_ITEM_NAME AS bgItemName,
+	  t.IS_ENABLED AS isEnabled,
+	  t.LEDGER_ID AS ledgerId
+	FROM
+	  xc_ex_ld_items t  LEFT JOIN  xc_gl_accounts c ON t.ACC_ID = c.ACC_ID
+      LEFT JOIN xc_bg_items b ON t.BG_ITEM_ID = b.BG_ITEM_ID,
+	  xc_ex_items a
+	WHERE
+	  a.EX_ITEM_ID = t.EX_ITEM_ID
+  AND
+	  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	 ( a.EX_ITEM_NAME LIKE #{bgItemName,jdbcType=VARCHAR}
+	OR
+	  a.EX_ITEM_CODE LIKE #{bgItemName,jdbcType=VARCHAR})
+  ORDER BY a.EX_ITEM_CODE ASC
+  </select>
+  <!-- 预算项目批量导入修改 -->
+  <insert id="insertBgImportItems" parameterType="java.util.HashMap">
+    <choose>
+      <when test="dbType == 'mysql'.toString()">
+           <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				INSERT INTO xc_bg_items_tmp (
+				    TMP_ID,
+				    BG_HRCY_ID,
+				    BG_ITEM_CODE,
+				    BG_ITEM_TYPE,
+				    START_DATE,
+				    END_DATE,
+					BG_ITEM_NAME,     
+					BG_ITEM_DESC,     
+					BG_ITEM_UP_ID,    
+					BG_ITEM_PROP,  
+					UP_CODE,        
+					FLAG,             
+					SESSION_ID,
+					ROW_NUM,       
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    'TMP',
+				    'T',
+				    NOW(),
+				    NOW(),
+					#{item.BG_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.BG_CTRL_DIM,jdbcType=VARCHAR},
+					#{item.BG_CTRL_MODE,jdbcType=VARCHAR},
+					#{item.IS_ENABLED,jdbcType=VARCHAR},
+					#{item.LEDGER_ID,jdbcType=VARCHAR},
+					'N',
+					#{item.SESSION_ID,jdbcType=DECIMAL},
+					#{item.ROW_NUM,jdbcType=DECIMAL},
+					NOW(),
+					#{item.CREATED_BY,jdbcType=VARCHAR},
+					NOW(),
+					#{item.CREATED_BY,jdbcType=VARCHAR}
+			   )
+	</foreach>
+      </when>
+      <otherwise>
+          <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				INSERT INTO xc_bg_items_tmp (
+				    TMP_ID,
+				    BG_HRCY_ID,
+				    BG_ITEM_CODE,
+				    BG_ITEM_TYPE,
+				    START_DATE,
+				    END_DATE,
+					BG_ITEM_NAME,     
+					BG_ITEM_DESC,     
+					BG_ITEM_UP_ID,    
+					BG_ITEM_PROP,  
+					UP_CODE,        
+					FLAG,             
+					SESSION_ID,
+					ROW_NUM,       
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    'TMP',
+				    'T',
+				    sysdate,
+				    sysdate,
+					#{item.BG_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.BG_CTRL_DIM,jdbcType=VARCHAR},
+					#{item.BG_CTRL_MODE,jdbcType=VARCHAR},
+					#{item.IS_ENABLED,jdbcType=VARCHAR},
+					#{item.LEDGER_ID,jdbcType=VARCHAR},
+					'N',
+					#{item.SESSION_ID,jdbcType=DECIMAL},
+					#{item.ROW_NUM,jdbcType=DECIMAL},
+					sysdate,
+					#{item.CREATED_BY,jdbcType=VARCHAR},
+					sysdate,
+					#{item.CREATED_BY,jdbcType=VARCHAR}
+			   )
+	</foreach>
+      </otherwise>
+    </choose>
+  </insert>
+  <update id="checkBgItemExist">
+	UPDATE   xc_bg_items_tmp t,
+	       xc_gl_ledgers l
+   SET   t.FLAG = CASE (SELECT COUNT(*) FROM xc_bg_items p,xc_bg_ld_items d 
+                                       WHERE p.BG_ITEM_ID = d.BG_ITEM_ID 
+                                         AND d.LEDGER_ID = l.LEDGER_ID 
+                                         AND p.BG_ITEM_NAME = t.BG_ITEM_NAME 
+                                         AND p.BG_HRCY_ID = l.BG_HRCY_ID) WHEN 0 THEN 'N' ELSE 'Y' END,
+         t.ERROR_MSG = CASE (SELECT COUNT(*) FROM xc_bg_items p,xc_bg_ld_items d 
+                                            WHERE p.BG_ITEM_ID = d.BG_ITEM_ID 
+                                              AND d.LEDGER_ID = l.LEDGER_ID 
+                                              AND p.BG_ITEM_NAME = t.BG_ITEM_NAME 
+                                              AND p.BG_HRCY_ID = l.BG_HRCY_ID) WHEN 0 THEN '预算项目信息在当前账簿中不存在' ELSE '' END
+		WHERE
+		  t.UP_CODE = l.LEDGER_ID
+		AND
+		  t.FLAG = 'N'
+		AND
+		  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+		AND
+		  t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <update id="modifyBudgetItems">
+	UPDATE xc_bg_items_tmp t,
+	       xc_bg_ld_items l,
+	       xc_bg_items b,
+	       xc_gl_ledgers c
+	SET    l.BG_CTRL_DIM = t.BG_ITEM_DESC,
+	       l.BG_CTRL_MODE = t.BG_ITEM_UP_ID,
+	       l.IS_ENABLED = t.BG_ITEM_PROP
+	WHERE
+		   t.UP_CODE = l.LEDGER_ID
+	AND 
+	       l.BG_ITEM_ID = b.BG_ITEM_ID
+	AND 
+	       l.LEDGER_ID = c.LEDGER_ID
+	AND 
+	       c.BG_HRCY_ID = b.BG_HRCY_ID
+	AND 
+	       t.BG_ITEM_NAME = b.BG_ITEM_NAME
+	AND
+	       t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	       t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+  </update>
+  <select id="getInValidBgItem" resultType="java.lang.Integer">
+   <choose>
+      <when test="billType == 'BG01'.toString()">
+    SELECT
+	   COUNT(*)
+    FROM
+	   xc_ex_items_tmp 
+    WHERE
+	   SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+    AND
+      UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+    AND
+      FLAG = 'N'
+      </when>
+      <otherwise>
+      SELECT
+	      COUNT(*)
+      FROM
+	    xc_bg_items_tmp 
+      WHERE
+	    SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+      AND
+        UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+      AND
+        FLAG = 'N'
+      </otherwise>
+   </choose>
+    
+  </select>
+  <!-- 费用项目批量导入修改 -->
+  <insert id="insertExImportItems" parameterType="java.util.HashMap">
+    <choose>
+      <when test="dbType == 'mysql'.toString()">
+           <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				INSERT INTO xc_ex_items_tmp (
+				    TMP_ID,
+				    EX_HRCY_ID,
+				    START_DATE,
+				    END_DATE,
+					EX_ITEM_NAME,     
+					EX_ITEM_DESC,     
+					EX_ITEM_UP_ID,    
+					EX_ITEM_CODE,
+					UP_CODE,     
+					FLAG,             
+					SESSION_ID,
+					ROW_NUM,       
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    NOW(),
+				    NOW(),
+					#{item.EX_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.ACC_NAME,jdbcType=VARCHAR},
+					#{item.BG_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.IS_ENABLED,jdbcType=VARCHAR},
+					#{item.LEDGER_ID,jdbcType=VARCHAR},
+					'N',
+					#{item.SESSION_ID,jdbcType=DECIMAL},
+					#{item.ROW_NUM,jdbcType=DECIMAL},
+					NOW(),
+					#{item.CREATED_BY,jdbcType=VARCHAR},
+					NOW(),
+					#{item.CREATED_BY,jdbcType=VARCHAR}
+			   )
+	</foreach>
+      </when>
+      <otherwise>
+          <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+				INSERT INTO xc_ex_items_tmp (
+				    TMP_ID,
+				    EX_HRCY_ID,
+				    START_DATE,
+				    END_DATE,
+					EX_ITEM_NAME,     
+					EX_ITEM_DESC,     
+					EX_ITEM_UP_ID,    
+					EX_ITEM_CODE,
+					UP_CODE,     
+					FLAG,             
+					SESSION_ID,
+					ROW_NUM,       
+					CREATION_DATE,
+					CREATED_BY,
+				    LAST_UPDATE_DATE,
+				    LAST_UPDATED_BY
+				)
+				VALUES(
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    #{item.TMP_ID,jdbcType=VARCHAR},
+				    sysdate,
+				    sysdate,
+					#{item.EX_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.ACC_NAME,jdbcType=VARCHAR},
+					#{item.BG_ITEM_NAME,jdbcType=VARCHAR},
+					#{item.IS_ENABLED,jdbcType=VARCHAR},
+					#{item.LEDGER_ID,jdbcType=VARCHAR},
+					'N',
+					#{item.SESSION_ID,jdbcType=DECIMAL},
+					#{item.ROW_NUM,jdbcType=DECIMAL},
+					sysdate,
+					#{item.CREATED_BY,jdbcType=VARCHAR},
+					sysdate,
+					#{item.CREATED_BY,jdbcType=VARCHAR}
+			   )
+	</foreach>
+      </otherwise>
+    </choose>
+  </insert>
+  <!-- 校验费用项目关联的【费用项目】是否存在 -->
+  <update id="checkExImportValid">
+    UPDATE xc_ex_items_tmp t,
+		   xc_gl_ledgers l
+	SET  t.FLAG = CASE (
+		SELECT
+			COUNT(*)
+		FROM
+			xc_ex_items a,
+			xc_ex_ld_items d
+		WHERE
+			a.EX_ITEM_ID = d.EX_ITEM_ID
+		AND a.EX_HRCY_ID = l.EX_HRCY_ID
+		AND a.EX_ITEM_NAME = t.EX_ITEM_NAME
+		AND d.LEDGER_ID =  l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'N'
+	ELSE
+		'Y'
+	END,
+	t.ERROR_MSG = CASE (
+		SELECT
+			COUNT(*)
+		FROM
+			xc_ex_items a,
+			xc_ex_ld_items d
+		WHERE
+			a.EX_ITEM_ID = d.EX_ITEM_ID
+		AND a.EX_HRCY_ID = l.EX_HRCY_ID
+		AND a.EX_ITEM_NAME = t.EX_ITEM_NAME
+		AND d.LEDGER_ID =  l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'费用项目在当前账簿中不存在！'
+	ELSE
+		''
+	END
+	WHERE
+		t.UP_CODE = l.LEDGER_ID
+	AND
+		t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+	AND
+		t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  
+   <!-- 校验费用项目关联的【科目】是否存在 -->
+  <update id="checkAccImportValid">
+   UPDATE xc_ex_items_tmp t,
+	      xc_gl_ledgers l
+	SET   t.FLAG = CASE (
+		      SELECT
+			    COUNT(*)
+		      FROM
+			    xc_gl_accounts a,
+			    xc_gl_ld_accounts d
+		      WHERE
+			    a.ACC_ID = d.ACC_ID
+		      AND 
+		        a.ACC_HRCY_ID = l.ACC_HRCY_ID
+		      AND 
+		        a.ACC_NAME = t.EX_ITEM_DESC
+	          AND 
+	            d.LEDGER_ID =  l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'N'
+	ELSE
+		'Y'
+	END,
+	 t.ERROR_MSG = CASE (
+		SELECT
+			COUNT(*)
+		FROM
+			xc_gl_accounts a,
+			xc_gl_ld_accounts d
+		WHERE
+			a.ACC_ID = d.ACC_ID
+		AND a.ACC_HRCY_ID = l.ACC_HRCY_ID
+		AND a.ACC_NAME = t.EX_ITEM_DESC
+	    AND d.LEDGER_ID =  l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'会计科目在当前账簿中不存在！'
+	ELSE
+		''
+	END
+	WHERE
+		t.UP_CODE = l.LEDGER_ID
+	AND
+	    t.FLAG = 'Y'
+	AND
+	   <![CDATA[t.EX_ITEM_DESC <> '']]>
+	AND
+	    t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+	AND 
+	    t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+    <!-- 校验费用项目关联的【预算项目】是否存在 -->
+  <update id="checkBgImportValid">
+	UPDATE xc_ex_items_tmp t,
+	       xc_gl_ledgers l
+	SET t.FLAG = CASE (
+	  SELECT
+		 COUNT(*)
+	FROM
+		xc_bg_items a,
+		xc_bg_ld_items d
+	WHERE
+		a.BG_ITEM_ID = d.BG_ITEM_ID
+	AND 
+	  a.BG_HRCY_ID = l.BG_HRCY_ID
+	AND 
+	  a.BG_ITEM_NAME = t.EX_ITEM_UP_ID
+	AND
+	  d.LEDGER_ID = l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'N'
+	ELSE
+		'Y'
+	END,
+	 t.ERROR_MSG = CASE (
+		SELECT
+		COUNT(*)
+	FROM
+		xc_bg_items a,
+		xc_bg_ld_items d
+	WHERE
+		a.BG_ITEM_ID = d.BG_ITEM_ID
+	AND 
+	  a.BG_HRCY_ID = l.BG_HRCY_ID
+	AND 
+	  a.BG_ITEM_NAME = t.EX_ITEM_UP_ID
+	AND
+	  d.LEDGER_ID = l.LEDGER_ID
+	)
+	WHEN 0 THEN
+		'预算项目在当前账簿中不存在！'
+	ELSE
+		''
+	END
+	WHERE
+		t.UP_CODE = l.LEDGER_ID
+	AND
+	  t.FLAG = 'Y'
+	AND
+	   <![CDATA[t.EX_ITEM_UP_ID <> '']]>
+	AND
+	  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+	AND 
+	  t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <!-- 科目和预算项目都不设置的记录无需校验 -->
+  <update id="updateNoValidData">
+      update xc_ex_items_tmp t set t.FLAG = 'Y',t.ERROR_MSG = ''
+       where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+         and t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+         and t.EX_ITEM_UP_ID = ''
+         and t.EX_ITEM_DESC = ''
+  </update>
+  <!-- 更新导入的费用项目 -->
+  <update id="modifyFeeItems">
+   UPDATE 
+	 xc_ex_items_tmp t,
+	 xc_ex_items a,
+	 xc_ex_ld_items b,
+	 xc_gl_ledgers l
+	SET 
+	 b.ACC_ID = CASE t.EX_ITEM_DESC WHEN '' THEN '' ELSE  (
+		SELECT
+			p.ACC_ID
+		FROM
+			xc_gl_accounts p,
+			xc_gl_ld_accounts q
+		WHERE
+			p.ACC_ID = q.ACC_ID
+		AND 
+	    p.ACC_HRCY_ID = l.ACC_HRCY_ID
+		AND 
+	    q.LEDGER_ID = l.LEDGER_ID
+		AND 
+	    p.ACC_NAME = t.EX_ITEM_DESC
+	) END,
+	 b.BG_ITEM_ID = CASE t.EX_ITEM_UP_ID WHEN '' THEN '' ELSE (
+	   SELECT
+		   p.BG_ITEM_ID
+		FROM
+			xc_bg_items p,
+			xc_bg_ld_items q
+		WHERE
+			p.BG_ITEM_ID = q.BG_ITEM_ID
+		AND 
+			p.BG_HRCY_ID = l.BG_HRCY_ID
+		AND 
+			q.LEDGER_ID = l.LEDGER_ID
+		AND
+			p.BG_ITEM_NAME = t.EX_ITEM_UP_ID
+	) END,
+	 b.IS_ENABLED = t.EX_ITEM_CODE
+	WHERE
+	  t.UP_CODE = l.LEDGER_ID
+	AND
+	  l.LEDGER_ID = b.LEDGER_ID
+	AND
+	  b.EX_ITEM_ID = a.EX_ITEM_ID
+	AND
+	  t.EX_ITEM_NAME = a.EX_ITEM_NAME
+	AND
+	  a.EX_HRCY_ID = l.EX_HRCY_ID
+	AND
+	  t.UP_CODE = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+	AND
+	  t.FLAG = 'Y'
+  </update>
+  <delete id="deleteTmpData" parameterType="java.lang.String">
+    ${delSql}
+  </delete>
+</mapper>

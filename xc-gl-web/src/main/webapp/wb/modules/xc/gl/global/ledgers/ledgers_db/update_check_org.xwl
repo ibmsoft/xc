@@ -1,0 +1,1 @@
+{"inframe":false,"title":"阻止账薄所属组织的修改","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","serverScript":"//查看组织信息是否可以修改\napp.run('SELECT 1 FROM XC_GL_LEDGERS WHERE LEDGER_ID = {?ledger_id?} ',{\n\terrorText:'账薄所属组织不能被修改'\n});\n\n","itemId":"module"},"children":[],"expanded":false,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,97 @@
+{
+  /* queryPanel */
+     queryLedger:'账簿',
+     queryDocNum:'调整单编码',
+     queryBtn:'查询',
+     resetBtn:'重置',
+     selectLedgerMsgTips:'请选择账簿',
+  
+  /* grid */
+    /* tbar */
+      addBtn:'新增',
+      editBtn:'编辑',
+        editCheckMsg:'请选择编辑的记录',
+      submitBtn:'提交',
+        submitCheckMsg:'请选择提交的记录',
+        hasSubmitMsg:'所选记录已提交',
+        submitWaitingMsg:'正在提交，请稍后',
+        submitSuccessMsg:'提交成功',
+        submitFailureMsg:'提交失败',
+      delBtn:'撤回',
+        delCheckMsg:'请选择撤回的记录',
+        canDelCheckMsg:'所选记录处于起草状态',
+        delWaitingMsg:'正在撤回，请稍后',
+        delSuccessMsg:'撤回成功',
+        delFailureMsg:'撤回失败',
+      deleteBtn:'删除',
+        deleteCheckMsg:'请选择删除的记录',
+        canDeleteMsg:'已经提交，无法删除',
+        deleteConfirmMsg:'是否要删除所选的记录',
+        deleteWaitMsg:'正在删除，请稍后',
+        deleteSuccessMsg:'删除成功',
+        deleteFailureMsg:'删除失败',
+    /* columns */
+      adjDateCol:'调整日期',
+      docNumCol:'调整单编码',
+      bzsmCol:'调整原因',
+      auditStatusCol:'状态',
+      statusC:'起草',
+      statucS:'提交',
+  
+  /* faAdjWin */
+    /* mainForm */
+      LEDGER:'账簿',
+      ADJ_DATE:'调整日期',
+      BZSM:'调整原因',
+      CREATED_BY:'录入人',
+      DOC_NUM:'调整单编号',
+    /* subGrid */
+      /* tbar */
+        addSubBtn:'新增行',
+        delSubBtn:'删除行',
+      /* columns */
+        zcbmCol:'资产编码',
+        zcmcCol:'资产名称',
+        adjTypeCol:'调整类型',
+        oldValueCol:'调整前',
+          loadWaitMsg:'正在加载数据,请稍后',
+        newValueCol:'调整后',
+          kmSeekCondition:'科目编码名称',
+          selectAdjTypeFirst:'请选择调整类型',
+        dfkmCol:'对方科目',
+    /* buttons */
+      saveBtn:'保存',
+        selectAdjTypeFirst:'请选择调整类型',
+        selectNewValueFirst:'请选择调整后值',
+        checkRequired:'调整信息不完整',
+        dfkmIsNotNull:'调整类型为【减值准备、原值、累计科目】的对方科目不能为空',
+        checkSameRecord:'不能存在相同资产,相同调整类型的记录',
+        checkPeriodCode:'正在校验期间,请稍后...',
+        periodNotOpened:'期间未打开',
+        periodIsClosed:'期间已关闭',
+        checkPeriodFailureMsg:'校验期间失败',
+        checkCanSave:'计提期间必须和当前打开期间相同才可以修改',
+  		saveWaitMsg:'正在保存,请稍后...',
+        saveSuccessMsg:'保存成功',
+        saveFailureMsg:'保存失败',
+      cancelBtn:'关闭',
+  
+  /* faAdditionWin */
+    /* queryPanel */
+      queryFaCodeName:'资产编码/名称',
+      ADJ_TYPE:'调整类型',
+      AFTER_ADJ:'调整后',
+      DFKM:'对方科目',
+    /* grid */
+       /* columns */
+         ledgerNameCol:'账簿',
+         periodsCodeCol:'期间',
+         catCodeCol:'资产分类',
+         faPropertyCol:'资产属性',
+    /* buttons */
+      ensureBtn:'确定',
+        ensureCheckMsg:'请选择操作的记录'
+   
+         
+  
+}

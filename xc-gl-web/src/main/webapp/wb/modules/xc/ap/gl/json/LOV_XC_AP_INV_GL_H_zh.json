@@ -1,0 +1,20 @@
+{
+    order : "序号",
+	AP_CONTRACT_NAME : "合同编号/名称",
+	AP_PAY_H_CODE : "单据编号",
+	CREATED_BY_NAME : "制单人",
+	queryBtn : "查询",
+	clearBtn : "重置",
+	commitBtn : "确认",
+	closeBtn : "取消",
+	GL_DATE : "入账日期",
+    AP_DOC_CAT_NAME : "单据类型",
+    AP_INV_GL_H_CODE : "单据编码",
+    DESCRIPTION : "摘要",
+    NO_REQ_AMT : "可支付金额",
+	PAY_AMT : "支付金额",
+    AP_CONTRACT_NAME_COL : "合同",
+	DEPT_NAME : "部门",
+	PROJECT_NAME : "项目",
+    AP_ACC_NAME_DEBT : "科目辅助项"
+}

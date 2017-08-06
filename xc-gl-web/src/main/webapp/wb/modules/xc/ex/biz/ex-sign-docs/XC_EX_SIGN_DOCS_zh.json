@@ -1,0 +1,32 @@
+{
+  ledger_empty_text			: "请选择账薄信息",
+  query_is_pay_ledger		: "账薄",
+  query_is_pay_no			: "单据编号/摘要",
+  query_is_pay_create_by	: "创建人",
+  
+  queryIsPayBtn				: "查询",
+  resetIsPayBtn				: "重置",
+  seekBtn					: "查看详情",
+  confimBtn					: "确认签字",
+  
+  row_num_col				: "序号",
+  ex_pay_code_col			: "支付单号",
+  ex_pay_desc_col			: "单据摘要",
+  created_by_col			: "创建人",
+  bank_account_col			: "支付账号",
+  ex_pay_date_col			: "支付时间",
+  ex_pay_t_mat_col			: "付款金额",
+  pay_status_col			: "付款状态",
+  signatory_col				: "出纳签字",
+  v_head_id					: "凭证头ID",
+  
+  query_no_pay_ledger		: "账薄",
+  query_no_pay_no			: "单据编号/摘要",
+  query_no_pay_create_by	: "创建人",
+  
+  queryNoPayBtn				: "查询",
+  resetNoPayBtn				: "重置",
+  seekNoPayBtn				: "查看详情",
+  noPayBtn					: "取消签字"
+  
+}

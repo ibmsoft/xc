@@ -1,0 +1,7 @@
+{
+    VENDOR_NAME : "Vendor",
+    VENDOR_CODE_COL : "Vendor Code",
+    VENDOR_NAME_COL : "Vendor Name",
+    VENDOR_CODE_NAME : "Vendor Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

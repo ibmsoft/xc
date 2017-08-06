@@ -1,0 +1,21 @@
+{
+	LEDGER : "账簿",
+	CUSTOMER : "客户编码/名称",
+	
+	ptfp : "增值税普通发票",
+	zzszyfp : "增值税专用发票",
+	
+	AR_DOC_CAT_NAME : "单据类型",
+	AR_INV_H_CODE : "编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号",
+	CUSTOMER_NAME : "客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户",
+	INV_AMOUNT : "价税合计",
+	DESCRIPTION : "摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要",
+	SYS_AUDIT_STATUS_DESC : "状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态",
+	AR_INV_H_ID : "ID",
+  
+    confirm : "提示",
+    confirm1 : "确定要删除选择的",
+    confirm2 : "吗？",
+  
+    successDelete : "采购发票删除成功！"
+}

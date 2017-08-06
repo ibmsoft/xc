@@ -1,0 +1,17 @@
+{
+  user     : "Username",
+  pwd      : "Password",
+  rem      : "Remember Info",
+  loginBtn : "Login",
+  register : "User Register",
+  forgetPwd: "Forget Password",
+  appNa    : "Xintegral Development Platform",
+  userInfo : "Username cannot be empty",
+  pwdInfo  : "Password cannot be empty",
+  error    : "Error in login",
+  userInvalid : "User is invalid",
+  userNotExist :"User does not exist",
+  pwdError : "Password error",
+  userNotEff : "User not effective",
+  title     : "Login"
+}

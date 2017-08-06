@@ -1,0 +1,6 @@
+{
+  CA_NAME			: "现金流名称",
+  CA_CODE_COL		: "现金流量项编码",
+  CA_NAME_COL		: "现金流量项名称",
+  CA_CODE_NAME		: "现金流编码/名称"
+}

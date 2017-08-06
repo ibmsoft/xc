@@ -1,0 +1,47 @@
+{
+  EX_DOC_ID					: "Documnet ID",
+  EX_DOC_CODE				: "Document Code",
+  details_enclosure_btn		: "Enclosure",
+  details_sign_btn			: "Sign",
+  details_refuse_btn		: "Cancel Sign",
+  
+  empty_text_ledger			: "Please select the account book to query",
+  query_no_sign_ledger		: "Ledger",
+  query_no_sign_code		: "Document Code/Description",
+  query_no_sign_emp			: "Reimbursement Person",
+  query_no_sign_dept		: "Department",
+  query_no_sign_project		: "Project",
+  
+  noSignQueryBtn			: "Query",
+  noSignResetBtn			: "Reset",
+  
+  no_sign_row_num			: "No",
+  ex_doc_code_col			: "Document Code",
+  ex_reason_col				: "Document Description",
+  amount_col				: "Reimbursement Amount",
+  ex_cat_code_col			: "Document Type Code",
+  ex_cat_name_col			: "Document Type",
+  emp_name_col				: "Reimbursement Person",
+  dept_name_col				: "Department",
+  project_name_col			: "Project",
+  sign_status_col			: "Sign Status",
+  creation_date_col			: "Create Date",
+  	
+  seeBtn					: "View",
+  signBtn					: "Sign",
+  refuseBtn					: "Refuse",
+  enclosureBtn				: "Enclosure",
+  monitorBtn			    : "Monitor",
+  
+  query_alread_sign_ledger	: "Ledger",
+  query_alread_sign_code	: "Document Code/Description",
+  query_alread_sign_emp		: "Reimbursement Person",
+  query_alread_sign_dept	: "Department",
+  query_alread_sign_project	: "Project",
+  alreadSignQueryBtn		: "Query",
+  alreadSignResetBtn		: "Reset",
+  
+  
+  reviewBtn					: "Check"
+  
+}

@@ -1,0 +1,17 @@
+{
+  moduleTitle:"Voucher Source Management",
+  addBtn:"Add",
+  editBtn:"Edit",
+  delBtn:"Delete",
+  saveBtn:"save",
+  rownum:'NO',
+  la_sourceCode:"Source Code",
+  la_sourceName:"Source Name",
+  la_sourceUrl:"Source URL",
+  la_VoucherCategory:"Voucher Category",
+  la_necessaryCode:"<font color='red'>*</font>Source Code",
+  la_necessaryUrl:"<font color='red'>*</font>Source URL",
+  la_description:"Description",
+  confirmBtn:"Confrim",
+  cancelBtn:"Cancel"
+}

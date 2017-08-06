@@ -1,0 +1,31 @@
+{
+  LEDGER_NAMES : '账簿名称',
+  LedgerNameLW : 80,
+  controlTree:'目录',
+  importBtn:'导入',
+  exportBtn:'导出',
+  propertyBtn:'预算设置',
+  seekBudgetBtn:'查看预算',
+  rownum:'序号',
+  PROJECT_CODE_COL:'项目编码',
+  PROJECT_NAME_COL:'项目名称',
+  START_DATE_COL:'开始日期',
+  END_DATE_COL:'结束日期',
+  addBtn:'增行',
+  delBtn:'删行',
+  saveBtn:'保存',
+  DEPT_NAME_COL:'所属成本中心',
+  Project Manager:'项目经理',
+  
+  BG_ITEM_NAME_COL:'预算项目',
+  BG_AMT_COL:'金额',
+  BG_ITEM_DESC_COL:'说明',
+  
+  importDataWin:'项目信息导入',
+  selectFile:'选择文件',
+  importFile:'导入',
+  IS_BG_CTRL:'是否预算控制',
+  E_MSG:'错误信息',
+  importLogGrid:'导入日志信息',
+  project:'项目'
+}

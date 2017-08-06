@@ -1,0 +1,58 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xzsoft.xc.rep.mapper.XCSheetTabElementMapper">
+	<resultMap id="sheetTabElementMap"
+		type="com.cubedrive.sheet.domain.sheet.SheetTabElement">
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="ETYPE" property="etype" jdbcType="VARCHAR" />
+		<result column="CONTENT" property="content" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="insert">
+		insert into xc_rep_tab_element(ELEMENT_ID, TAB_ID, NAME, ETYPE, CONTENT, CREATION_DATE, CREATED_BY)
+		values(#{element.ELEMENT_ID},
+			#{element.tab.id,jdbcType=INTEGER},
+			#{element.name,jdbcType=VARCHAR},
+			#{element.etype,jdbcType=VARCHAR},	
+			#{element.content,jdbcType=VARCHAR},
+			#{element.CREATION_DATE},		
+			#{element.CREATED_BY})
+	</insert>
+	
+	<insert id="batchInsert">
+		insert into xc_rep_tab_element(ELEMENT_ID, TAB_ID, NAME, ETYPE, CONTENT, CREATION_DATE, CREATED_BY) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.ELEMENT_ID},
+			#{item.tab.id,jdbcType=INTEGER},
+			#{item.name,jdbcType=VARCHAR},	
+			#{item.etype,jdbcType=VARCHAR},	
+			#{item.content,jdbcType=VARCHAR}, 
+			#{item.CREATION_DATE},
+			#{item.CREATED_BY})
+		</foreach>
+	</insert>
+
+	<select id="findElementsByTabAndType" resultMap="sheetTabElementMap">
+		select NAME, ETYPE, CONTENT
+		from xc_rep_tab_element where TAB_ID = #{tabId} and etype=#{type}
+	</select>
+	
+	<select id="getElementsByName" resultMap="sheetTabElementMap">
+		select NAME, ETYPE, CONTENT
+		from xc_rep_tab_element where TAB_ID = #{tabId} and etype=#{type} and name=#{name}
+	</select>
+	
+	<!-- 云ERP根据tabId获取报表要合并的单元格BEGIN -->
+	<select id="findElementsByTab" parameterType="java.lang.String" resultMap="sheetTabElementMap">
+		select NAME, ETYPE, CONTENT
+		from xc_rep_tab_element where TAB_ID = #{tabId}
+	</select>
+	<!-- 云ERP根据tabId获取报表要合并的单元格END -->
+	
+	<!-- 云ERP根据tabId和eType查询报表单元格格式 -->
+	<select id="findTabElementById" parameterType="java.util.HashMap" resultType="com.cubedrive.sheet.domain.sheet.SheetTabElement">
+			select NAME, ETYPE, CONTENT
+		from xc_rep_tab_element where TAB_ID = #{tabId} and etype =#{eType}
+	</select>
+</mapper>

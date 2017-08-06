@@ -1,0 +1,307 @@
+/*
+  * @project: www.speiyou.com
+  * @function: Login Style
+  * @author: Guoxf
+  * @date: 2013-08-01
+*/
+
+/**
+ * @subsection login-header
+ */
+#login-header{
+	height:45px;
+	background:#F7F6F5;
+}
+.sk-wrapper03{
+   padding:30px 5px;
+   background:#FFFFFF;
+}
+
+.login-topbg{ 
+    background:#6EB9A5;
+	height:45px;
+}
+.login-logo{
+    float:left;
+	height:30px;
+	margin-top:8px;
+	margin-left:25px;	
+}
+.login-logo span{
+    display:inline-block;
+}
+.login-logo span.login-logo-font{
+	margin-left:20px;
+	margin-top:2px;
+	font-size:20px;
+	color:#FFF; 
+	font-weight:normal; 
+	text-shadow:0px 1px 1px #3f80aa;
+}
+
+/**
+ * @subsection login-step
+ */
+.login-step-bar ul li{
+    float:left;
+	background:url(images/pay-sprite.png) no-repeat;
+	height:47px;
+}
+.login-step-bar ul li.step-greenbg,.login-step-bar ul li.step-graybg{
+    width:170px;
+	height:27px;
+	padding:10px 0;
+}
+.login-step-bar ul li.step-greenbg{
+    background-position: 0 0;
+}
+.login-step-bar ul li.step-graybg{
+    background-position: 0 -50px;
+}
+.login-step-bar ul li b{
+    font-size:20px;
+	padding-right:30px;
+	padding-left:16px;
+	color:#c8c8c8;
+}
+.login-step-bar ul li b.ftgreen{ color:#51b600;}
+.login-step-bar ul li span{
+    font-size:18px;
+	color:#FFF;
+}
+.login-step-bar ul li.step-arw01,.login-step-bar ul li.step-arw02{
+    width:68px;
+	height:47px;
+}
+.login-step-bar ul li.step-arw01{
+    background-position: -10px -100px;
+}
+.login-step-bar ul li.step-arw02{
+    background-position: -100px -100px;
+}
+
+
+/*
+@ subsection login
+*/
+.login-box02{
+	 border:1px solid #e0e0e0;	
+	 padding:35px 30px;
+	 border-radius:5px;
+	 min-height:400px;
+	 _height:400px;
+	 zoom:1;
+}
+.minH550{ min-height:550px; _height:550px;}
+
+/*
+.l-b-left{
+    float:left;
+	width:640px;	
+}
+*/
+.l-b-right,
+.l-b-left h2,
+.ico-sina a,
+.ico-qq a,
+.ico-eduu a,
+.ico-suc02,
+.form-tip02,
+.form-tip03{
+    background:url(images/login-sprite02.png) no-repeat;
+}
+.l-b-left h2{
+    padding-left:30px;
+	font-size:18px;
+	font-weight:normal;
+	margin-bottom:40px;	
+	background-position:-285px 2px;
+}
+.l-b-form dl dt,.l-b-form02 dl dt{
+	float:left;
+	width:110px;
+	padding-top:5px;
+	padding-right:10px;
+	text-align:right;
+	font-size:14px;
+}
+.l-b-form02 dl dt{
+	width:150px;
+}
+.l-b-form dl dd,.l-b-form02 dl dd{
+	float:left;
+	width:500px;
+    padding-bottom:30px;	
+}
+.l-b-form02 dl dd{ font-size:14px;}
+.ipText05{
+    width:220px;
+	height:15px;
+	border:1px solid #d2d2d2;
+	padding:8px 5px;
+	line-height:14px;
+}
+.ipSelect03{
+    min-width:100px;
+	border:1px solid #d2d2d2;
+	padding:5px 5px;
+}
+
+.ico-sina,.ico-qq,.ico-eduu{
+    display:inline-block;
+	width:43px;	
+	height:43px;
+	margin-right:10px;
+}
+.ico-sina a,
+.ico-qq a,
+.ico-eduu a{
+    display:block;
+	width:43px;	
+	height:43px;
+	text-indent:-999px;
+	overflow:hidden;
+}
+.ico-sina a{
+    background-position:0 0;	
+}
+.ico-sina a:hover{
+    background-position:-43px 0;	
+}
+.ico-qq a{
+    background-position:-86px 0;	
+}
+.ico-qq a:hover{
+    background-position:-129px 0;	
+}
+.ico-eduu a{
+    background-position:-172px 0;	
+}
+.ico-eduu a:hover{
+    background-position:-215px 0;	
+}
+.l-b-right{
+	float:right;
+	width:225px;
+	height:380px;
+	background-position:-292px -40px;
+	padding-left:60px;
+}
+.l-b-right p{ text-align:left;}
+
+/*
+@ subsection lostUsername/lostPassword
+*/
+.lost-title{
+    padding-left:20px;
+	padding-bottom:10px;
+	font-size:18px;
+	font-weight:normal;
+	border-bottom:1px solid #e0e0e0;
+}
+.set-tip,.reg-tip{
+	display:inline-block;
+	position:relative;
+	width:220px;
+	padding-left:80px;
+	margin-right:20px;
+	height:50px;
+	line-height:50px;
+	font-size:28px;
+}
+.ico-suc02{
+	position:absolute;
+	display:inline-block;
+	top:0;
+	left:0;
+	width:61px;
+	height:50px;
+	background-position: 0 -60px;
+}
+.reg-tip{
+    width:auto;	
+}
+
+/*
+@ subsection register style
+*/
+
+.reg-tab{
+    width:100%;
+	height:38px;
+    border-bottom:2px solid #4d7ec1;
+}
+.reg-tab li{
+    float:left;
+	width:115px;
+	height:26px;
+	margin-right:3px;
+	cursor:pointer;
+}
+.reg-tab li,.reg-tab li.hover{
+	display:block;
+	width:115px;
+	height:38px;
+	background: url(images/sk-sprite01.png) no-repeat;
+	background-position:0 -220px;
+	text-align:center;
+	line-height:35px;
+	color:#333333;
+	font-size:14px;
+	font-weight:700;
+}
+.reg-tab li.hover{
+    background-position:0 -260px;
+	color:#FFFFFF; 
+}
+.form-tip01,.form-tip02,.form-tip03{
+	margin-top:5px;	
+}
+.form-tip01{
+	color:#999;
+}
+.form-tip02,.form-tip03{
+	position:relative;
+	padding-left:25px;
+	height:18px;
+}
+.form-tip02{
+	background-position:0 -121px;
+	color:#F00;
+}
+.form-tip03{
+	background-position:0 -141px;
+}
+.loginTip04{padding-left:120px; color:#FF0000; margin-bottom:10px; height:25px;}
+
+.login-valign *{vertical-align: middle;}
+
+/*
+ tianna Add loginright Date:2014-05-07
+*/
+.c:after{content:"";display:table;clear:both;}
+.c{*zoom:1;}
+.login-p { line-height:30px; color:#333;}
+.login-p em{background:url(images/login-p.jpg) no-repeat left center; width:6px; height:5px; display:block; margin:13px 6px 0px 0px; float:left;}
+.login-p span{display:block; float:left; width:250px;}
+.l-b-right-two{
+    background:url(images/login-sprite02.png) no-repeat;
+}
+.pl15{ padding-left:15px;}
+.l-b-right-two{
+ float:right;
+ width:270px;
+ height:380px;
+ background-position:-292px -40px;
+ padding-left:30px;
+}
+.l-b-right-two p{ text-align:left;}
+/*淇敼涔嬪墠鐨�*/
+.l-b-left{
+    float:left;
+ width:600px; 
+}
+.login-p{
+	color: #FF6600;
+	line-height: 30px;
+}

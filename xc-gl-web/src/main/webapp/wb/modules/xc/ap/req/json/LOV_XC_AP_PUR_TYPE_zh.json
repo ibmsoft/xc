@@ -1,0 +1,17 @@
+{
+	purchaseType:'采购类型',
+  	query:'查询',
+  	reset:'重置',
+  	ok:'确认',
+  	okMsg1:'请选择至少一条记录！',
+  	okMsg2:'支付金额不能为空！',
+  	okMsg3:'确定要选择的 ',
+  	okMsg4:'条记录吗？',
+  	cancel:'取消',
+  	purchaseObject:'采购对象',
+  	budgetProject:'预算项目',
+  	costProject:'存货/费用科目',
+  	invAccount:'应付科目',
+  	prePayAccount:'预付科目',
+  	payAmt:'支付金额'
+}

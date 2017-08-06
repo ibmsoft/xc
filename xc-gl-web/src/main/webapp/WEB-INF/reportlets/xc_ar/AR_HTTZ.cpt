@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20110221">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="deptIdStart"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="projectIdEnd"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="projectIdStart"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="deptIdEnd"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bizDateStart"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="V_CUSTOMER_ID_START"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bizDateEnd"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="ledgerId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="V_CUSTOMER_ID_END"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT 
+  t.`AR_CONTRACT_ID`,
+  t.LEDGER_ID,
+  t.`AR_CONTRACT_CODE`,
+  t.`CUSTOMER_ID`,
+  (SELECT 
+    v.CUSTOMER_NAME 
+  FROM
+    xc_ar_customers v 
+  WHERE v.CUSTOMER_ID = t.`CUSTOMER_ID`) CUSTOMER_NAME,
+  (SELECT 
+    PROJECT_NAME 
+  FROM
+    xc_pm_projects p 
+  WHERE p.project_id = t.`PROJECT_ID`) PROJECT_NAME,
+  (SELECT 
+    DEPT_NAME 
+  FROM
+    `xip_pub_depts` D 
+  WHERE D.DEPT_ID = T.`DEPT_ID`) DEPT_NAME,
+  t.`AMOUNT`,
+  (SELECT 
+    SUM(INV_AMOUNT) 
+  FROM
+    xc_ar_inv_gl_h h 
+  WHERE h.AR_CONTRACT_ID = t.AR_CONTRACT_ID) INV_GL_AMOUNT,
+  ifnull((SELECT 
+    SUM(INV_AMOUNT) / t.`AMOUNT` * 100 
+  FROM
+    xc_ar_inv_gl_h h 
+  WHERE h.AR_CONTRACT_ID = t.AR_CONTRACT_ID),0) INV_GL_AMOUNT_BL,
+   IFNULL((SELECT 
+    SUM(h.AMOUNT) 
+  FROM
+    xc_ar_pay_h h,
+    xc_ar_pay_l l 
+  WHERE h.AR_PAY_H_ID = l.AR_PAY_H_ID 
+    AND h.AR_DOC_CAT_CODE = 'SKD_JSK' 
+    AND l.AR_CONTRACT_ID = t.AR_CONTRACT_ID),0) SKD_CGJS_JE,
+   IFNULL((SELECT 
+    SUM(h.AMOUNT) 
+  FROM
+    xc_ar_pay_h h,
+    xc_ar_pay_l l 
+  WHERE h.AR_PAY_H_ID = l.AR_PAY_H_ID 
+    AND h.AR_DOC_CAT_CODE = 'SKD_YUSK' 
+    AND l.AR_CONTRACT_ID = t.AR_CONTRACT_ID),0) SKD_YUFK_JE 
+FROM
+  xc_ar_contract t 
+ ${IF(len(ledgerId) == 0, " where 1=2 ", " where  t.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(V_CUSTOMER_ID_START) == 0, " AND 1=2 ", " AND    (SELECT 
+    v.CUSTOMER_CODE 
+  FROM
+    xc_ar_customers v 
+  WHERE v.CUSTOMER_ID = t.`CUSTOMER_ID`) >= '"+V_CUSTOMER_ID_START+"'")}
+  ${IF(len(V_CUSTOMER_ID_END) == 0, " AND 1=2 ", " AND  (SELECT 
+    v.CUSTOMER_CODE 
+  FROM
+    xc_ar_customers v 
+  WHERE v.CUSTOMER_ID = t.`CUSTOMER_ID`) <= '"+V_CUSTOMER_ID_END+"'")}
+  ${IF(len(bizDateStart) == 0, " AND 1=2 ", " AND  t.`START_DATE` >= '"+bizDateStart+"'")}
+  ${IF(len(bizDateEnd) == 0, " AND 1=2 ", " AND  t.`END_DATE` <= '"+bizDateEnd+"'")}
+  ${IF(len(projectIdStart) == 0||projectIdStart=='null', "  ", " AND  (SELECT 
+    PROJECT_CODE 
+  FROM
+    xc_pm_projects p 
+  WHERE p.project_id = t.`PROJECT_ID`) >= '"+projectIdStart+"'")}
+  ${IF(len(projectIdEnd) == 0||projectIdEnd=='null', "  ", " AND  (SELECT 
+    PROJECT_CODE 
+  FROM
+    xc_pm_projects p 
+  WHERE p.project_id = t.`PROJECT_ID`) <= '"+projectIdEnd+"'")}
+  ${IF(len(deptIdStart) == 0||deptIdStart=='null', "  ", " AND    (SELECT 
+    DEPT_CODE 
+  FROM
+    `xip_pub_depts` D 
+  WHERE D.DEPT_ID = T.`DEPT_ID`) >= '"+deptIdStart+"'")}
+  ${IF(len(deptIdEnd) == 0||deptIdEnd=='null', "  ", " AND    (SELECT 
+    DEPT_CODE
+  FROM
+    `xip_pub_depts` D 
+  WHERE D.DEPT_ID = T.`DEPT_ID`) <= '"+deptIdEnd+"'")}]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<ElementCase class="com.fr.report.SingleBlock">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1028700,1219200,800100,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[0,0,4000500,5334000,3048000,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2819400,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="2" r="0" rs="2" s="0">
+<O>
+<![CDATA[合同号]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Contract name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="3" r="0" rs="2" s="0">
+<O>
+<![CDATA[客户]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Customer name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="4" r="0" rs="2" s="0">
+<O>
+<![CDATA[项目]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Project name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="5" r="0" rs="2" s="0">
+<O>
+<![CDATA[成本中心]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[department]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="6" r="0" rs="2" s="0">
+<O>
+<![CDATA[币种]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[currency]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="7" r="0" rs="2" s="0">
+<O>
+<![CDATA[合同金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Contract amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="8" r="0" rs="2" s="0">
+<O>
+<![CDATA[结算金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Settlement amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="9" r="0" rs="2" s="0">
+<O>
+<![CDATA[结算比例]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Settlement ratio]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="10" r="0" cs="2" s="0">
+<O>
+<![CDATA[付款金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Payment amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="12" r="0" rs="2" s="0">
+<O>
+<![CDATA[未结算金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Amount not settled]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="13" r="0" rs="2" s="0">
+<O>
+<![CDATA[未结算比例]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Non settlement ratio]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="10" r="1" s="0">
+<O>
+<![CDATA[付款金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Payment amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="11" r="1" s="0">
+<O>
+<![CDATA[预付金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Prepaid amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="0" r="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="LEDGER_ID"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AP_CONTRACT_ID"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AR_CONTRACT_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网络报表1">
+<JavaScript class="com.fr.report.js.ReportletHyperlink">
+<JavaScript class="com.fr.report.js.ReportletHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="ledgerId"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=A3]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="arContractId"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=B3]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features status="true" toolbar="true" location="true" menubar="true" resizable="true" directories="true" scrollbars="true"/>
+<ReportletName>
+<![CDATA[/AR_HTTZMX.cpt]]></ReportletName>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="CUSTOMER_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PROJECT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="DEPT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="2">
+<O>
+<![CDATA[人民币]]></O>
+<Expand/>
+</C>
+<C c="7" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AMOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="INV_GL_AMOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="INV_GL_AMOUNT_BL"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="SKD_CGJS_JE"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[SKD_CGJS_JE+SKD_YUFK_JE]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="SKD_YUFK_JE"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AMOUNT"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[AMOUNT-SKD_CGJS_JE-SKD_YUFK_JE]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="13" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AMOUNT"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[(AMOUNT-SKD_CGJS_JE-SKD_YUFK_JE)/AMOUNT*100]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+</ElementCase>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="ColorBackground" color="-4144960"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="72" foreground="-16776961" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

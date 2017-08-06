@@ -1,0 +1,28 @@
+{
+
+
+  saveBtn:'保存',
+  fieldset1label:'查询条件',
+
+  ar_period_code:'启用会计期',
+  ar_interval_id:'账龄区间',
+
+  ar_acc_id_dept:'应收科目',
+  ar_acc_id_tax:'销项税科目',
+
+  MSG1:'启用会计期不能为空！',
+  MSG2:'启用会计期超过了当前最大会计期',
+  MSG3:'请将必输项输入完整!',
+
+  fieldset2name:'账薄参数',
+
+  message:'正在保存中...',
+
+  SAVETIP:'保存成功！'
+
+
+
+
+
+
+}

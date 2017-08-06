@@ -1,0 +1,9 @@
+{
+    ST_ACC_ID_DIFF_NAME : "发票价格差异科目",
+    ST_ACC_ID_ZG_NAME : "采购入库暂估科目",
+    ST_ACC_ID_CBJZ_NAME : '成本结转科目',
+    ACC_CODE_COL : "科目编码",
+    ACC_NAME_COL : "科目名称",
+    ACC_CODE_NAME : "科目编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择组织信息！"
+}

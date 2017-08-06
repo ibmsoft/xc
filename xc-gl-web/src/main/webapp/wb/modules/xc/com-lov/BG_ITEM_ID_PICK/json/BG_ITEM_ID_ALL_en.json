@@ -1,0 +1,7 @@
+{
+    BG_ITEM_NAME : "Budget Items",
+    BG_ITEM_CODE_COL : "Budget Code",
+    BG_ITEM_NAME_COL : "Budget Name",
+    BG_ITEM_CODE_NAME : "Budget Items Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

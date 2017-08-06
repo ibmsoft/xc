@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"tableName":"XC_AP_INV_GL_H","itemId":"updater1"},"children":[],"expanded":false,"type":"updater"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

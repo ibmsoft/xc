@@ -1,0 +1,8 @@
+{
+    ORG_NAME : "Organization",
+    ORG_CODE : "Organization Code",
+    ORG_NAME_COL : "Organization Name",
+    ORG_SHORT_NAME : "Organization Short Name",
+    LEDGER_NAME : "Ledger Name",
+    QUERY_CODE_NAME : "Org Code Or Name"
+}

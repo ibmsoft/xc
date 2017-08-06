@@ -1,0 +1,305 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.ESTabMapper">
+
+	<!-- sql片段 -->
+	<sql id="ESTabColumn">
+		TAB_ID, TAB_CODE, TAB_NAME, TAB_ORDER, ACC_HRCY_ID, IS_ACTIVE, COLOR
+	</sql>
+	
+	<!-- 模板基础信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabBean" id="TabResultMap">
+		<id property="tabId" column="TAB_ID"/>
+		<result property="tabCode" column="TAB_CODE" />
+		<result property="tabName" column="TAB_NAME" />
+		<result property="tabOrder" column="TAB_ORDER" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="isActive" column="IS_ACTIVE" />
+		<result property="color" column="COLOR" />
+	</resultMap>
+	
+	<!-- 模板基础及格式信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabBean" id="TabAndFormatResultMap" extends="TabResultMap">
+		<collection property="cells" ofType="com.xzsoft.xc.rep.modal.ESTabCellBean">
+			<id property="cellId" column="CELL_ID" />
+			<result property="x" column="X" />
+			<result property="y" column="Y" />
+			<result property="content" column="CELL_CONTENT" />
+			<result property="isCal" column="IS_CAL" />
+			<result property="rawData" column="RAW_DATA" />
+			<result property="cellType" column="CELL_TYPE" />
+			<result property="comment" column="COMMENT" />
+		</collection>
+		<collection property="elements" ofType="com.xzsoft.xc.rep.modal.ESTabElementBean">
+			<id property="elementId" column="ELEMENT_ID" />
+			<result property="name" column="NAME" />
+			<result property="etype" column="ETYPE" />
+			<result property="content" column="ELEMENT_CONTENT" />			
+		</collection>
+	</resultMap>	
+	
+	
+	
+	<!-- 根据科目体系ID查询所有模板信息 -->
+	<select id="getAllESTabs" parameterType="java.util.HashMap" resultMap="TabAndFormatResultMap">
+		select t.TAB_ID,
+		       t.TAB_CODE,
+		       t.TAB_NAME,
+		       t.TAB_ORDER,
+		       t.ACC_HRCY_ID,
+		       t.IS_ACTIVE,
+		       t.COLOR,
+		       c.CELL_ID,
+		       c.X,
+		       c.Y,
+		       c.CONTENT     CELL_CONTENT,
+		       c.IS_CAL,
+		       c.RAW_DATA,
+		       c.CELL_TYPE,
+		       c.COMMENT,
+		       e.ELEMENT_ID,
+		       e.NAME,
+		       e.ETYPE,
+		       e.CONTENT     ELEMENT_CONTENT
+		  from xc_rep_tab t
+				LEFT JOIN xc_rep_tab_cell c on t.TAB_ID = c.TAB_ID
+				LEFT JOIN xc_rep_tab_element e on t.TAB_ID = e.TAB_ID
+		 where t.ACC_HRCY_ID = #{hrcyId}
+		 <if test="tabOrder != -1">
+		 	and t.TAB_ORDER = #{tabOrder}
+		 </if>
+		 order by t.TAB_ORDER
+	</select>
+	
+	<!-- 按照模板ID查询模板格式信息 -->
+	<select id="getESTabIncFormat" parameterType="java.lang.String" resultMap="TabAndFormatResultMap">
+		select t.TAB_ID,
+		       t.TAB_CODE,
+		       t.TAB_NAME,
+		       t.TAB_ORDER,
+		       t.ACC_HRCY_ID,
+		       t.IS_ACTIVE,
+		       t.COLOR,
+		       c.CELL_ID,
+		       c.X,
+		       c.Y,
+		       c.CONTENT     CELL_CONTENT,
+		       c.IS_CAL,
+		       c.RAW_DATA,
+		       c.CELL_TYPE,
+		       c.COMMENT,
+		       e.ELEMENT_ID,
+		       e.NAME,
+		       e.ETYPE,
+		       e.CONTENT     ELEMENT_CONTENT
+		  from xc_rep_tab t
+				LEFT JOIN xc_rep_tab_cell c on t.TAB_ID = c.TAB_ID
+				LEFT JOIN xc_rep_tab_element e on t.TAB_ID = e.TAB_ID
+		 where t.TAB_ID = #{tabId}
+		 order by c.x,c.y
+	</select>
+	
+	<!-- 按照模板ID查询模板格式和指标信息 -->
+	<select id="getESTabIncFormatByTabs" parameterType="java.util.List" resultMap="TabAndFormatResultMap">
+		select t.TAB_ID,
+		       t.TAB_CODE,
+		       t.TAB_NAME,
+		       t.TAB_ORDER,
+		       t.ACC_HRCY_ID,
+		       t.IS_ACTIVE,
+		       t.COLOR,
+		       
+		       c.CELL_ID,
+		       c.X,
+		       c.Y,
+		       c.CONTENT     CELL_CONTENT,
+		       c.IS_CAL,
+	           c.RAW_DATA,
+	           c.CELL_TYPE,
+	           c.COMMENT,
+	           
+	           e.ELEMENT_ID,
+	           e.NAME,
+	           e.ETYPE,
+	           e.CONTENT     ELEMENT_CONTENT
+	          
+	      from xc_rep_tab t
+	           LEFT JOIN xc_rep_tab_cell c on t.TAB_ID = c.TAB_ID
+	           LEFT JOIN xc_rep_tab_element e on t.TAB_ID = e.TAB_ID
+	     where t.tab_id in 
+	       <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+	       		#{item}
+	       </foreach>	
+	       order by t.TAB_ORDER,c.x,c.y
+	</select>
+	
+	<!-- 查询所有的模板基础信息 -->
+	<select id="getAllESTabBeans" parameterType="java.lang.String" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab 
+		 where ACC_HRCY_ID = #{accHrcyId}	
+	</select>
+	
+	<!-- 查询最小序号或活动的报表页签信息 -->
+	<select id="getESTab4ActivedOrMinOrder" parameterType="java.lang.String" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab t
+		 where t.ACC_HRCY_ID = #{accHrcyId}	
+		   and (t.TAB_ORDER = (select MIN(a.TAB_ORDER) from xc_rep_tab a where a.ACC_HRCY_ID = #{accHrcyId}	) or t.IS_ACTIVE = 1)	
+	</select>
+
+	<!-- 查询报表模板最大顺序号 -->
+	<select id="getMaxTabOrder" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT MAX(T.TAB_ORDER) NUM FROM XC_REP_TAB T WHERE T.ACC_HRCY_ID = #{hrcyId}
+	</select>
+	
+	<!-- 查询报表模板最小顺序号 -->
+	<select id="getMinTabOrder" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT MIN(T.TAB_ORDER) NUM FROM XC_REP_TAB T WHERE T.ACC_HRCY_ID = #{hrcyId}
+	</select>
+	
+	<!-- 查询模板所关联的报表数量 -->
+	<select id="getSheetCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(1) from xc_rep_sheets t where t.TAB_ID = #{tabId}
+	</select>
+	
+	<!-- 查询模板所有关联的公式数量 -->
+	<select id="getFormulaCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		select count(1)
+		  from xc_rep_formulas t
+		 where t.ACC_HRCY_ID = #{accHrcyId}
+		   and exists (select 1
+		          from xc_rep_rm_ref rr
+		         where t.ROWITEM_ID = rr.ROWITEM_ID
+		           and rr.TAB_ID = #{tabId})
+		   and exists (select 1
+		          from xc_rep_cm_ref cr
+		         where t.COLITEM_ID = cr.COLITEM_ID
+		           and cr.TAB_ID = #{tabId})
+	</select>
+	
+	<!-- 按TabId查询ESTabBean -->
+    <select id="getTabById" parameterType="java.lang.String" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab 
+		 where TAB_ID = #{tabId}
+	</select>
+	
+	<!-- 按TabOrder查询ESTabBean -->
+	<select id="getTabByOrder" parameterType="java.util.HashMap" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab 
+		 where ACC_HRCY_ID = #{accHrcyId}
+		   and TAB_ORDER = ${tabOrder}
+	</select>
+		
+	<!-- 按TabCode查询ESTabBean -->
+	<select id="getTabByCode" parameterType="java.util.HashMap" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab 
+		 where ACC_HRCY_ID = #{accHrcyId}
+		   and TAB_CODE = #{tabCode}
+	</select>
+	
+	<!-- 按TabName查询ESTabBean -->
+	<select id="getTabByName" parameterType="java.util.HashMap" resultMap="TabResultMap">
+		select <include refid="ESTabColumn" />
+		  from xc_rep_tab 
+		 where ACC_HRCY_ID = #{accHrcyId}
+		   and TAB_NAME = #{tabName}	
+	</select>
+	
+	<!-- 保存页签基础信息 -->
+	<insert id="insertTab" parameterType="com.xzsoft.xc.rep.modal.ESTabBean">
+		insert into xc_rep_tab(
+		   tab_id,
+		   acc_hrcy_id,
+		   tab_code,
+		   tab_name,
+		   tab_order,
+		   is_active,
+		   color,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+		)values(
+		   #{tabId,jdbcType=VARCHAR},
+		   #{accHrcyId,jdbcType=VARCHAR},
+		   #{tabCode,jdbcType=VARCHAR},
+		   #{tabName,jdbcType=VARCHAR},
+		   #{tabOrder,jdbcType=INTEGER},
+		   #{isActive,jdbcType=VARCHAR},
+		   #{color,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 删除页签基础信息 -->
+	<delete id="delTabSheet" parameterType="java.lang.String">
+		delete from xc_rep_tab where tab_id = #{tabId}
+	</delete>
+	
+	<!-- 更新页签基础信息 -->
+	<update id="updateTabSheet" parameterType="com.xzsoft.xc.rep.modal.ESTabBean">
+		UPDATE XC_REP_TAB T
+			<set>
+				<if test="tabCode != null ">
+					T.TAB_CODE = #{tabCode,jdbcType=VARCHAR},
+				</if>
+				<if test="tabName != null ">
+					T.TAB_NAME = #{tabName,jdbcType=VARCHAR},
+				</if>
+				
+				T.TAB_ORDER = #{tabOrder,jdbcType=INTEGER},
+				T.IS_ACTIVE = #{isActive,jdbcType=INTEGER},
+				
+				<if test="color != null ">
+					T.COLOR = #{color,jdbcType=VARCHAR},
+				</if>
+				<if test="lastUpdatedBy != null ">
+					T.LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR},
+				</if>
+				<if test="lastUpdateDate != null ">
+					T.LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP}
+				</if>
+			</set>
+		 WHERE T.TAB_ID = #{tabId}
+	</update>
+	
+	<!-- 按编码或名称判断是否存在 -->
+	<select id="getSheetCountByCodeOrName" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		select count(1) from xc_rep_tab t where t.ACC_HRCY_ID = #{hrcyId} and (t.TAB_CODE = #{tabCode} or t.TAB_NAME = #{tabName})
+	</select>
+	
+	<!-- 复制模板基础信息 -->
+	<insert id="copyTab" parameterType="com.xzsoft.xc.rep.modal.ESTabBean">
+		insert into xc_rep_tab
+		  (tab_id,
+		   acc_hrcy_id,
+		   tab_code,
+		   tab_name,
+		   tab_order,
+		   is_active,
+		   color,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by)
+		values
+		  (#{tabId,jdbcType=VARCHAR},
+		   #{accHrcyId,jdbcType=VARCHAR},
+		   #{tabCode,jdbcType=VARCHAR},
+		   #{tabName,jdbcType=VARCHAR},
+		   #{tabOrder,jdbcType=INTEGER},
+		   #{isActive,jdbcType=INTEGER},
+		   #{color,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR})
+	</insert>
+	
+</mapper>

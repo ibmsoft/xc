@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.ArContractBaseMapper">
+	<!-- 合同信息列 -->
+	<sql id="ArContractCol">
+		AR_CONTRACT_ID,
+		AR_CONTRACT_CODE,
+		AR_CONTRACT_NAME,
+		AR_CONTRACT_TYPE,
+		LEDGER_ID,
+		CUSTOMER_ID,
+		AMOUNT,
+		START_DATE,
+		END_DATE,
+		DEPT_ID,
+		PROJECT_ID,
+		CONTRACT_USER,
+		IS_CLOSE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		AR_CONTRACT_TYPE_ID,
+		ORG_ID,
+		TAX_AMT,
+		INV_AMOUNT,
+		VERSION,
+		INS_CODE,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		AUDIT_DATE,
+		SYS_AUDIT_STATUS,
+		SYS_AUDIT_STATUS_DESC
+	</sql>
+	<!-- 查询是否合同是否存在明细（删除） -->
+	<select id="checExistDel" parameterType="java.util.List" resultType="java.lang.String">
+		SELECT distinct 1  FROM  (
+		SELECT 
+		  a.AMOUNT AS YS_AMOUNT,
+		  a.AR_CONTRACT_ID,
+		  a.GL_DATE AS T_DATE
+		FROM
+		  XC_AR_PAY_H a 
+		WHERE a.AR_CONTRACT_ID  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+		AND a.AR_DOC_CAT_CODE = "SKD_YUSK" 
+		
+		UNION  
+		SELECT 
+		  a.AMOUNT AS JS_AMOUNT,
+		  a.AR_CONTRACT_ID,
+		  a.GL_DATE AS T_DATE
+		FROM
+		  XC_AR_PAY_H a 
+		WHERE a.AR_CONTRACT_ID in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+		AND a.AR_DOC_CAT_CODE = "SKD_JSK" 
+		
+		UNION 
+		SELECT 
+		  a.AMOUNT AS KP_AMOUNT ,
+		  a.AR_CONTRACT_ID,
+		  a.BIZ_DATE AS T_DATE
+		FROM
+		  xc_ar_invoice_h a 
+		WHERE a.AR_CONTRACT_ID  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+		AND a.AR_DOC_CAT_CODE = "ZZSPT" 
+		
+		UNION 
+		SELECT 
+		  a.AMOUNT AS KP_AMOUNT ,
+		  a.AR_CONTRACT_ID,
+		  a.BIZ_DATE AS T_DATE
+		FROM
+		  xc_ar_invoice_h a 
+		WHERE a.AR_CONTRACT_ID  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+		 AND a.AR_DOC_CAT_CODE = "ZZS" 
+		 
+		UNION 
+		SELECT 
+		  a.AMOUNT AS KP_AMOUNT ,
+		  a.AR_CONTRACT_ID,
+		  a.GL_DATE AS T_DATE
+		
+		FROM
+		  xc_ar_inv_gl_h a 
+		WHERE a.AR_CONTRACT_ID  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+		 AND a.AR_DOC_CAT_CODE = "YSD" 
+		  ) AS t
+	</select>
+	<!-- 新增合同 -->
+	<insert id="addContractInfo" parameterType="com.xzsoft.xc.ar.modal.ArContractBean">
+		INSERT INTO xc_ar_contract (
+		  AR_CONTRACT_ID,
+		  AR_CONTRACT_CODE,
+		  AR_CONTRACT_NAME,
+		  AR_CONTRACT_TYPE,
+		  LEDGER_ID,
+		  START_DATE,
+		  END_DATE,
+		  AMOUNT,
+		  CUSTOMER_ID,
+		  DEPT_ID,
+		  PROJECT_ID,
+		  CONTRACT_USER,
+		  IS_CLOSE,
+		  DESCRIPTION,
+		  CREATION_DATE,
+		  CREATED_BY,
+		  LAST_UPDATE_DATE,
+		  LAST_UPDATED_BY,
+		  TAX_AMT,
+		  INV_AMOUNT,
+		  AR_CONTRACT_TYPE_ID,
+		  ORG_ID,
+		  AUDIT_STATUS,
+		  AUDIT_STATUS_DESC,
+		  SYS_AUDIT_STATUS,
+		  SYS_AUDIT_STATUS_DESC
+		)
+		VALUES
+		  (
+		    #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_CODE,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_NAME,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_TYPE,jdbcType=VARCHAR},
+		    #{LEDGER_ID,jdbcType=VARCHAR},
+		    #{START_DATE,jdbcType=TIMESTAMP},
+		    #{END_DATE,jdbcType=TIMESTAMP},
+		    #{AMOUNT,jdbcType=NUMERIC},
+		    #{CUSTOMER_ID,jdbcType=VARCHAR},
+		    #{DEPT_ID,jdbcType=VARCHAR},
+		    #{PROJECT_ID,jdbcType=VARCHAR},
+		    #{CONTRACT_USER,jdbcType=VARCHAR},
+		     "N",
+		    #{DESCRIPTION,jdbcType=VARCHAR},
+		    #{CREATION_DATE,jdbcType=TIMESTAMP},
+		    #{CREATED_BY,jdbcType=VARCHAR},
+		    #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		    #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		    #{TAX_AMT,jdbcType=NUMERIC},
+		    #{INV_AMOUNT,jdbcType=NUMERIC},
+		    #{AR_CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+		    #{ORG_ID,jdbcType=VARCHAR},
+		    #{AUDIT_STATUS,jdbcType=VARCHAR},
+		    #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+		    #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+		    #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+		  )
+	</insert>
+	<!-- 修改合同 -->
+	<update id="editContractInfo" parameterType="com.xzsoft.xc.ar.modal.ArContractBean">
+		UPDATE 
+			xc_ar_contract 
+		SET
+			AR_CONTRACT_CODE =  #{AR_CONTRACT_CODE,jdbcType=VARCHAR},
+			AR_CONTRACT_NAME = #{AR_CONTRACT_NAME,jdbcType=VARCHAR},
+			AR_CONTRACT_TYPE =  #{AR_CONTRACT_TYPE,jdbcType=VARCHAR},
+			AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+			TAX_AMT = #{TAX_AMT,jdbcType=NUMERIC},
+			INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+			CUSTOMER_ID = #{CUSTOMER_ID,jdbcType=VARCHAR},
+			AR_CONTRACT_TYPE_ID = #{AR_CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+			DEPT_ID =  #{DEPT_ID,jdbcType=VARCHAR},
+			PROJECT_ID =   #{PROJECT_ID,jdbcType=VARCHAR},
+			CONTRACT_USER =   #{CONTRACT_USER,jdbcType=VARCHAR},
+			DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+			VERSION = #{VERSION,jdbcType=NUMERIC},
+			START_DATE =  #{START_DATE,jdbcType=TIMESTAMP},
+			END_DATE =  #{END_DATE,jdbcType=TIMESTAMP},
+			SYS_AUDIT_STATUS = #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+			SYS_AUDIT_STATUS_DESC = #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+		WHERE AR_CONTRACT_ID = #{AR_CONTRACT_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 删除合同 -->
+	<delete id="delContractInfo" parameterType="java.util.List">
+		delete from xc_ar_contract  where AR_CONTRACT_ID in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	<!-- 合同变更处理 -->
+	<insert id="insertArContractHis" parameterType="com.xzsoft.xc.ar.modal.ArContractBean">
+		INSERT INTO xc_ar_contract_his (
+			AR_CONTRACT_HIS_ID,
+			AR_CONTRACT_ID,
+			AR_CONTRACT_CODE,
+			AR_CONTRACT_NAME,
+			AR_CONTRACT_TYPE,
+			LEDGER_ID,
+			START_DATE,
+			END_DATE,
+			AMOUNT,
+			CUSTOMER_ID,
+			DEPT_ID,
+			PROJECT_ID,
+			CONTRACT_USER,
+			IS_CLOSE,
+			DESCRIPTION,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY,
+			TAX_AMT,
+			INV_AMOUNT,
+			AR_CONTRACT_TYPE_ID,
+			ORG_ID,
+			VERSION,
+			INS_CODE,
+			AUDIT_DATE,
+			AUDIT_STATUS,
+			AUDIT_STATUS_DESC,
+			SYS_AUDIT_STATUS,
+			SYS_AUDIT_STATUS_DESC
+		)
+		VALUES
+		  (
+		    #{AR_CONTRACT_HIS_ID,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_CODE,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_NAME,jdbcType=VARCHAR},
+		    #{AR_CONTRACT_TYPE,jdbcType=VARCHAR},
+		    #{LEDGER_ID,jdbcType=VARCHAR},
+		    #{START_DATE,jdbcType=TIMESTAMP},
+		    #{END_DATE,jdbcType=TIMESTAMP},
+		    #{AMOUNT,jdbcType=NUMERIC},
+		    #{CUSTOMER_ID,jdbcType=VARCHAR},
+		    #{DEPT_ID,jdbcType=VARCHAR},
+		    #{PROJECT_ID,jdbcType=VARCHAR},
+		    #{CONTRACT_USER,jdbcType=VARCHAR},
+		     "N",
+		    #{DESCRIPTION,jdbcType=VARCHAR},
+		    #{CREATION_DATE,jdbcType=TIMESTAMP},
+		    #{CREATED_BY,jdbcType=VARCHAR},
+		    #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		    #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		    #{TAX_AMT,jdbcType=NUMERIC},
+		    #{INV_AMOUNT,jdbcType=NUMERIC},
+		    #{AR_CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+		    #{ORG_ID,jdbcType=VARCHAR},
+		    #{VERSION,jdbcType=NUMERIC},
+		    #{INS_CODE,jdbcType=VARCHAR},
+		    #{AUDIT_DATE,jdbcType=VARCHAR},
+		    #{AUDIT_STATUS,jdbcType=VARCHAR},
+		    #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+		    #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+		    #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+		  )
+	</insert>
+	<!-- 查询已经变更的合同对应的历史信息 -->
+	<select id="getArContractHis" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArContractBean">
+		SELECT
+			AR_CONTRACT_HIS_ID,
+			<include refid="ArContractCol"/>
+		FROM
+			xc_ar_contract_his
+		WHERE AR_CONTRACT_ID = #{AR_CONTRACT_ID}
+		ORDER BY CREATION_DATE DESC
+	</select>
+	<!-- 根据合同历史表ID得到当前合同历史信息 -->
+	<select id="getArContractHisByHisId" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArContractBean">
+		SELECT
+			AR_CONTRACT_HIS_ID,
+			<include refid="ArContractCol"/>
+		FROM
+			xc_ar_contract_his
+		WHERE AR_CONTRACT_HIS_ID = #{AR_CONTRACT_HIS_ID}
+	</select>
+	<!-- 根据合同ID得到当前合同信息 -->
+	<select id="getArContractById" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArContractBean">
+		SELECT
+			<include refid="ArContractCol"/>
+		FROM
+			xc_ar_contract
+		WHERE AR_CONTRACT_ID = #{AR_CONTRACT_ID}
+	</select>
+	<!-- 更新已经变更的合同历史表 -->
+	<update id="updateArContractHis" parameterType="com.xzsoft.xc.ar.modal.ArContractBean">
+		UPDATE 
+			xc_ar_contract_his 
+		SET
+			AR_CONTRACT_CODE =  #{AR_CONTRACT_CODE,jdbcType=VARCHAR},
+			AR_CONTRACT_NAME = #{AR_CONTRACT_NAME,jdbcType=VARCHAR},
+			AR_CONTRACT_TYPE =  #{AR_CONTRACT_TYPE,jdbcType=VARCHAR},
+			AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+			TAX_AMT = #{TAX_AMT,jdbcType=NUMERIC},
+			INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+			CUSTOMER_ID = #{CUSTOMER_ID,jdbcType=VARCHAR},
+			AR_CONTRACT_TYPE_ID = #{AR_CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+			DEPT_ID =  #{DEPT_ID,jdbcType=VARCHAR},
+			PROJECT_ID =   #{PROJECT_ID,jdbcType=VARCHAR},
+			CONTRACT_USER =   #{CONTRACT_USER,jdbcType=VARCHAR},
+			DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+			VERSION = #{VERSION,jdbcType=NUMERIC},
+			START_DATE =  #{START_DATE,jdbcType=TIMESTAMP},
+			END_DATE =  #{END_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+		WHERE AR_CONTRACT_HIS_ID = #{AR_CONTRACT_HIS_ID,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 更新合同状态为变更中 -->
+	<update id="updateArContractStatus" parameterType="com.xzsoft.xc.ar.modal.ArContractBean">
+		UPDATE 
+			xc_ar_contract 
+		SET
+			SYS_AUDIT_STATUS		= #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+			SYS_AUDIT_STATUS_DESC	= #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+		WHERE AR_CONTRACT_ID		= #{AR_CONTRACT_ID,jdbcType=VARCHAR}
+	</update>
+</mapper>

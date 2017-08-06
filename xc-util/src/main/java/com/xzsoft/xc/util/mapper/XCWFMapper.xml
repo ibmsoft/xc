@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.util.mapper.XCWFMapper">
+	<!-- 复制归档实例信息 -->
+	<insert id="insertInstance" parameterType="java.lang.String">
+		insert into xip_wf_process_instance
+		  select * from xip_wf_arch_instance t where t.instance_id = #{instanceId}  	
+	</insert>
+	<insert id="insertInsProperties" parameterType="java.lang.String">
+		insert into xip_wf_ins_properties
+		  select * from xip_wf_arch_ins_properties t where t.instance_id = #{instanceid}	
+	</insert>
+	<insert id="insertInsAttrValue" parameterType="java.lang.String">
+		insert into xip_wf_ins_attr_value
+			select * from xip_wf_arch_attr_value t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsActs" parameterType="java.lang.String">
+		insert into xip_wf_ins_acts
+		  select * from xip_wf_arch_acts t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsActProps" parameterType="java.lang.String">
+		insert into xip_wf_ins_act_properties
+		  select * from xip_wf_arch_act_properties t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsActState" parameterType="java.lang.String">
+		insert into xip_wf_ins_act_state
+	 		select * from xip_wf_arch_act_state t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsActPVEnum" parameterType="java.lang.String">
+		insert into xip_wf_ins_act_pv_enum
+		  select * from xip_wf_arch_act_pv_enum t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsConditionGroup" parameterType="java.lang.String">
+		insert into xip_wf_ins_condition_group
+		  select * from xip_wf_arch_condition_group t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsConditions" parameterType="java.lang.String">
+		insert into xip_wf_ins_conditions 
+		  select * from xip_wf_arch_conditions t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsTransitions" parameterType="java.lang.String">
+		insert into xip_wf_ins_transitions
+	  		select * from xip_wf_arch_transitions t where t.instance_id = #{instanceId}	
+	</insert>
+	<insert id="insertInsTask" parameterType="java.lang.String">
+		insert into xip_wf_ins_task
+		  select * from xip_wf_arch_task t where t.instance_id = #{instanceId}	
+	</insert>
+	
+	<!-- 删除归档实例信息 -->
+	<delete id="deleteArchInsTask" parameterType="java.lang.String">
+		delete from xip_wf_arch_task where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsConditions" parameterType="java.lang.String">
+		delete from xip_wf_arch_conditions where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsConditionGroup" parameterType="java.lang.String">
+		delete from xip_wf_arch_condition_group where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsActPVEnum" parameterType="java.lang.String">
+		delete from xip_wf_arch_act_pv_enum where instance_id = #{instanceId}
+	</delete>	
+	<delete id="deleteArchInsActState" parameterType="java.lang.String">
+		delete from xip_wf_arch_act_state where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsActProperties" parameterType="java.lang.String">
+		delete from xip_wf_arch_act_properties where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsActs" parameterType="java.lang.String">
+		delete from xip_wf_arch_acts where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsTransState" parameterType="java.lang.String">
+		delete from xip_wf_arch_trans_state where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsTransitions" parameterType="java.lang.String">
+		delete from xip_wf_arch_transitions where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsAttrValues" parameterType="java.lang.String">
+		delete from xip_wf_arch_attr_value where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchInsProperties" parameterType="java.lang.String">
+		delete from xip_wf_arch_ins_properties where instance_id = #{instanceId}
+	</delete>
+	<delete id="deleteArchProcessInstance" parameterType="java.lang.String">
+		delete from xip_wf_arch_instance where instance_id = #{instanceId}
+	</delete>
+	
+	<!-- 将流程实例转化为驳回状态 -->
+	<insert id="insertCancelTask" parameterType="java.util.HashMap">
+		insert into xip_wf_ins_task
+		select #{newTaskId,jdbcType=VARCHAR},
+		       xt.process_id,
+		       xt.process_code,
+		       xt.process_version,
+		       xt.instance_id,
+		       xt.instance_code,
+			(select xa.act_id from xip_wf_ins_acts xa where xa.ACT_CATEGORY = 'End' and xa.INSTANCE_ID = #{instanceId}) ACT_ID,
+			(select xa.act_code from xip_wf_ins_acts xa where xa.ACT_CATEGORY = 'End' and xa.INSTANCE_ID = #{instanceId}) ACT_CODE,
+			(select xa.act_name from xip_wf_ins_acts xa where xa.ACT_CATEGORY = 'End' and xa.INSTANCE_ID = #{instanceId}) ACT_NAME,
+		       '费用报销:单据复核及入账取消单据待办信息',
+		       #{userId,jdbcType=VARCHAR},
+		       #{userId,jdbcType=VARCHAR},
+		       #{userId,jdbcType=VARCHAR},
+		       xt.task_state,
+		       xt.from_task_id,
+		       #{cdate,jdbcType=TIMESTAMP},
+		       #{cdate,jdbcType=TIMESTAMP},
+		       #{result,jdbcType=VARCHAR},
+		       '单据复核及入账取消单据待办信息',
+		       'reject',
+		       xt.create_type,
+		       xt.attribute1,
+		       xt.attribute2,
+		       xt.attribute3,
+		       xt.attribute4,
+		       xt.attribute5,
+		       xt.attribute6,
+		       xt.attribute7,
+		       xt.attribute8,
+		       xt.attribute9,
+		       xt.attribute10,
+		       #{cdate,jdbcType=TIMESTAMP},
+		       #{userId,jdbcType=VARCHAR},
+		       #{cdate,jdbcType=TIMESTAMP},
+		       #{userId,jdbcType=VARCHAR},
+		       #{userId,jdbcType=VARCHAR},
+		       '财务复核驳回',
+		       'N',
+		       ''
+		  from xip_wf_ins_task xt
+		    where xt.instance_id = #{instanceId}	
+		      and xt.END_DATE = (select max(END_DATE) from xip_wf_ins_task a where a.instance_id = #{instanceId})
+		      <choose>
+		      	<when test="dbType=='mysql'">
+		      		limit 1
+		      	</when>
+		      	<when test="dbType=='oracle'">
+		      		<![CDATA[
+		      			and rownum <= 1
+		      		]]>
+		      	</when>
+		      </choose>
+	</insert>
+	<update id="disabledAllTasks" parameterType="java.util.HashMap">
+		update xip_wf_ins_task t
+		   set last_update_date  = #{cdate,jdbcType=TIMESTAMP},
+		       last_updated_by   = #{userId,jdbcType=VARCHAR},
+		       last_update_login = #{userId,jdbcType=VARCHAR},
+		       task_effective    = 'N'
+		 where t.instance_id = #{instanceId}	
+	</update>
+	<update id="updateInsActState2Started" parameterType="java.util.HashMap">
+		update xip_wf_ins_act_state t
+		   set t.ACT_STATE         = 'started',
+		       t.BEGIN_DATE        = #{cdate,jdbcType=TIMESTAMP},
+		       t.END_DATE          = null,
+		       t.CREATED_BY        = #{userId,jdbcType=VARCHAR},
+		       t.CREATION_DATE     = #{cdate,jdbcType=TIMESTAMP},
+		       t.LAST_UPDATED_BY   = null,
+		       t.LAST_UPDATE_DATE  = null,
+		       t.LAST_UPDATE_LOGIN = null
+		 where t.INSTANCE_ID = #{instanceId}
+	</update>
+	<update id="updateInsAttrValues" parameterType="java.util.HashMap">
+		update xip_wf_ins_attr_value t
+		   set t.ATTR_RESULT = null
+		 where t.INSTANCE_ID = #{instanceId}
+		   and t.ATTR_CODE != 'e_submit_date'
+		   and t.ATTR_CODE != 'e_submitter'
+		   and t.ATTR_CODE != 'e_submitter_name'
+	</update>	
+	<update id="updateProcessInstanceStatus" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql'">
+				update xip_wf_process_instance t
+				   set t.INSTANCE_STATE    = 'started',
+				       t.BEGIN_DATE        = #{cdate,jdbcType=TIMESTAMP},
+				       t.END_DATE          = null,
+				       t.ATTRIBUTE1       =  (select xs.enum_id from xip_wf_biz_status_enum xs
+				                               where xs.entity_id = t.entity_id and xs.status_category = 'D' limit 1),
+				       t.LAST_UPDATED_BY   = #{userId,jdbcType=VARCHAR},
+				       t.LAST_UPDATE_DATE  = #{cdate,jdbcType=TIMESTAMP},
+				       t.LAST_UPDATE_LOGIN = #{userId,jdbcType=VARCHAR}
+				 where t.INSTANCE_ID = #{instanceId}
+			</when>
+			<when test="dbType=='oracle'">
+			 <![CDATA[
+				update xip_wf_process_instance t
+				   set t.INSTANCE_STATE    = 'started',
+				       t.BEGIN_DATE        = #{cdate,jdbcType=TIMESTAMP},
+				       t.END_DATE          = null,
+				       t.ATTRIBUTE1       =  (select xs.enum_id from xip_wf_biz_status_enum xs
+				                               where xs.entity_id = t.entity_id and xs.status_category = 'D' and rownum <=1),
+				       t.LAST_UPDATED_BY   = #{userId,jdbcType=VARCHAR},
+				       t.LAST_UPDATE_DATE  = #{cdate,jdbcType=TIMESTAMP},
+				       t.LAST_UPDATE_LOGIN = #{userId,jdbcType=VARCHAR}
+				 where t.INSTANCE_ID = #{instanceId}
+			 ]]>
+			</when>
+		</choose>
+	</update>		
+
+</mapper>

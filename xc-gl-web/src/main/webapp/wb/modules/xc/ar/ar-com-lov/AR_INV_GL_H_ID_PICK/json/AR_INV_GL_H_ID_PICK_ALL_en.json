@@ -1,0 +1,11 @@
+{
+    inv:'receivableDoc',
+    AR_INV_GL_H_CODE : "Account receivable code",
+    DESCRIPTION : "description",
+    AR_DOC_CAT_NAME : "document type",
+    NO_PAY_AMT : "balance",
+    AR_INV_GL_H_CODE_NAME : "Accounts receivable code / summary",
+    EMPTY_LEDGER_INFO : "Please choose the books information",
+  	acc:'account',
+  	please_choose_customer_first:'please select the customer first'
+}

@@ -1,0 +1,75 @@
+{
+
+
+
+  XH:'num',
+
+  CODE_COL:'code',
+
+  NAME_COL:'name',
+  CODE_NAME:'code/name',
+  EMP_CODE_COL:'employee code',
+  EMP_NAME_COL:'employee name',
+  queryBtn:'query',
+  resetBtn:'reset',
+
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+
+  sysBtn:'synchronous',
+  VENDOR_TYPE_COL:'classification',
+
+  LEDGER_NAME_ZH:'account book',
+  LEDGER_ID_ZH:'account bookID',
+  SEG_CODE_COL:'section  code',
+
+  SEG_NAME_COL:'section name',
+  LD_SEG_ALIAS_COL:'section alias',
+  VAL_ID_COL:'value ID',
+
+  CREDIT_COL:'Line of credit',
+  CREDIT_DAY_COL:'credit number',
+  SAVETIP:'save success!',
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete?',
+  DELTIP1:'Delete  success!',
+
+
+  SAVEERROR:'save failed',
+
+
+  ADDRESS1:'address',
+
+  CONTACT1:'contact',
+
+  TEL1:'TEL',
+
+  MOBILE1:'MOBILE',
+
+  QQ1:'QQ number',
+  EMAIL1:'email',
+
+
+
+  SALE_USER_ID_COL:'salesman',
+
+  START_DATE1:'start Date',
+  END_DATE1:'end Date',
+
+
+  IS_ENABLED_COL:'is enabled',
+
+
+  MSG1:'Please select the books!',
+  MSG2:'IT has enabled the record cannot be deleted!',
+  MSG3:'has bean used the record cannot be deleted!',
+
+  TIP:'tip'
+
+
+
+
+
+}
+}

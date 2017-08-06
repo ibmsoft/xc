@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.GlTreelDataTransManageMapper">
+<!-- 项目导入数据校验，这里仅校验名称和编码的重复和非空性 -->
+<update id="checkProjectDataValid" parameterType="java.lang.String">
+UPDATE xc_pm_projects_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_pm_projects a
+			WHERE
+				 a.PROJECT_CODE = t.PROJECT_CODE
+			OR   a.PROJECT_NAME = t.PROJECT_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.PROJECT_CODE IS NULL
+			 OR t.PROJECT_CODE = ''
+			 OR t.PROJECT_NAME IS NULL
+			 OR t.PROJECT_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_pm_projects a
+			WHERE
+				 a.PROJECT_CODE = t.PROJECT_CODE
+			OR a.PROJECT_NAME = t.PROJECT_NAME
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.PROJECT_CODE IS NULL
+			  OR t.PROJECT_CODE = ''
+			  OR t.PROJECT_NAME IS NULL
+			  OR t.PROJECT_NAME = '' THEN
+				'项目编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'项目编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 校验科目数据导入的合法性 -->
+<update id="checkAccountDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_accounts_tmp t
+SET t.FLAG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_accounts a
+			WHERE
+			a.ACC_HRCY_ID = t.ACC_HRCY_ID
+			AND	(a.ACC_CODE = t.ACC_CODE 
+			OR a.ACC_NAME = t.ACC_NAME)
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.ACC_CODE IS NULL
+			 OR t.ACC_CODE = ''
+			 OR t.ACC_NAME IS NULL
+			 OR t.ACC_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_accounts a
+			WHERE
+				 (a.ACC_CODE = t.ACC_CODE
+			OR a.ACC_NAME = t.ACC_NAME)
+      AND a.ACC_HRCY_ID = t.ACC_HRCY_ID
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.ACC_CODE IS NULL
+			  OR t.ACC_CODE = ''
+			  OR t.ACC_NAME IS NULL
+			  OR t.ACC_NAME = '' THEN
+				'科目编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'科目编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+
+<!-- 校验现金流项目数据导入的合法性 -->
+<update id="checkCashDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_cash_items_tmp t
+SET t.FLAG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_cash_items a
+			WHERE
+				 a.CA_CODE = t.CA_CODE 
+			OR a.CA_NAME = t.CA_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.CA_CODE IS NULL
+			 OR t.CA_CODE = ''
+			 OR t.CA_NAME IS NULL
+			 OR t.CA_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_cash_items a
+			WHERE
+				 a.CA_CODE = t.CA_CODE
+			OR a.CA_NAME = t.CA_NAME
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.CA_CODE IS NULL
+			  OR t.CA_CODE = ''
+			  OR t.CA_NAME IS NULL
+			  OR t.CA_NAME = '' THEN
+				'现金流项目编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'现金流项目编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 校验自定义段数据导入的合法性 -->
+<update id="checkSegValDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_ld_cust_segvals_tmp t
+SET t.FLAG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_ld_cust_ass_segvals a
+			WHERE
+				 a.SEG_CODE = t.SEG_CODE
+		    AND	 (a.LD_CUST_SEGVAL_CODE = t.LD_CUST_SEGVAL_CODE OR a.LD_CUST_SEGVAL_NAME = t.LD_CUST_SEGVAL_NAME)
+    
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.LD_CUST_SEGVAL_CODE IS NULL
+			 OR t.LD_CUST_SEGVAL_CODE = ''
+			 OR t.LD_CUST_SEGVAL_NAME IS NULL
+			 OR t.LD_CUST_SEGVAL_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_ld_cust_ass_segvals a
+			WHERE
+			      a.SEG_CODE = t.SEG_CODE
+			 AND  (a.LD_CUST_SEGVAL_CODE = t.LD_CUST_SEGVAL_CODE OR a.LD_CUST_SEGVAL_NAME = t.LD_CUST_SEGVAL_NAME)
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.LD_CUST_SEGVAL_CODE IS NULL
+			  OR t.LD_CUST_SEGVAL_CODE = ''
+			  OR t.LD_CUST_SEGVAL_NAME IS NULL
+			  OR t.LD_CUST_SEGVAL_NAME = '' THEN
+				'自定义段的编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'自定义段的编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 项目上级编码是否已做账 -->
+<update id="checkUpProjectValid" parameterType="java.lang.String">
+UPDATE xc_pm_projects_tmp t
+SET t.FLAG = (
+		CASE (
+			select count(1) 
+			  from xc_gl_ccid a
+			  WHERE
+				 a.PROJECT_CODE = t.PROJECT_CODE
+		)
+	WHEN 0 THEN 'Y' ELSE 'N' END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_ccid a
+			WHERE
+				 a.PROJECT_CODE = t.PROJECT_CODE
+		)
+	WHEN 0 THEN ''
+	ELSE
+		'上级项目已发生业务数据！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 科目上级编码是否已做账 -->
+<update id="checkUpAccountValid" parameterType="java.lang.String">
+UPDATE xc_gl_accounts_tmp t
+SET t.FLAG = (
+		CASE (
+		   SELECT
+				count(1)
+			FROM
+				xc_gl_ccid a,
+        xc_gl_ledgers k
+			WHERE
+        a.LEDGER_ID = k.LEDGER_ID
+      AND
+		a.ACC_CODE = t.UP_ACC_CODE
+      AND
+        k.ACC_HRCY_ID = t.ACC_HRCY_ID
+		)
+	WHEN 0 THEN
+		'Y'
+	ELSE
+		'N'
+	END
+),
+ t.ERROR_MSG = (
+		CASE (
+			SELECT
+				count(1)
+			FROM
+				xc_gl_ccid a,
+        xc_gl_ledgers k
+			WHERE
+        a.LEDGER_ID = k.LEDGER_ID
+      AND
+		a.ACC_CODE = t.UP_ACC_CODE
+      AND
+        k.ACC_HRCY_ID = t.ACC_HRCY_ID
+		)
+	WHEN 0 THEN
+		''
+	ELSE
+		'上级科目已发生业务数据！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 现金流上级编码是否已做账 -->
+<update id="checkUpCashValid" parameterType="java.lang.String">
+UPDATE xc_gl_cash_items_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				count(1)
+			FROM
+				xc_gl_v_lines a
+			WHERE
+				a.CA_ID IS NOT NULL
+			AND a.CA_ID IN (
+				SELECT
+					p.CA_ID
+				FROM
+					xc_gl_cash_items p
+				WHERE
+					p.CA_CODE = t.UP_CODE
+			)
+		)
+	WHEN 0 THEN
+		'Y'
+	ELSE
+		'N'
+	END
+),
+ t.ERROR_MSG = (
+		CASE (
+			SELECT
+				count(1)
+			FROM
+				xc_gl_v_lines a
+			WHERE
+				a.CA_ID IS NOT NULL
+			AND a.CA_ID IN (
+				SELECT
+					p.CA_ID
+				FROM
+					xc_gl_cash_items p
+				WHERE
+					p.CA_CODE = t.UP_CODE
+			)
+		)
+	WHEN 0 THEN
+		''
+	ELSE
+		'上级现金流项目已发生业务数据！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 上级辅助段是否已做账 -->
+<update id="checkUpSegmentValid">
+UPDATE xc_gl_ld_cust_segvals_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				count(1)
+			FROM
+				xc_gl_ccid a
+			WHERE
+				<choose>
+				    <when test="segCode == 'XC_GL_CUSTOM1'.toString()">
+				       a.CUSTOM1_CODE = t.UP_CODE
+				    </when>
+				    <when test="segCode == 'XC_GL_CUSTOM2'.toString()">
+				       a.CUSTOM2_CODE = t.UP_CODE
+				    </when>
+				    <when test="segCode == 'XC_GL_CUSTOM3'.toString()">
+				       a.CUSTOM3_CODE = t.UP_CODE
+				    </when>
+				    <otherwise>
+				       a.CUSTOM4_CODE = t.UP_CODE
+				    </otherwise>
+				</choose> 
+			and a.LEDGER_ID = t.LEDGER_ID
+		)
+	WHEN 0 THEN
+		'Y'
+	ELSE
+		'N'
+	END
+),
+ t.ERROR_MSG = (
+	SELECT
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_ccid a
+			WHERE
+			  <choose>
+				    <when test="segCode == 'XC_GL_CUSTOM1'.toString()">
+				       a.CUSTOM1_CODE = t.UP_CODE
+				    </when>
+				    <when test="segCode == 'XC_GL_CUSTOM2'.toString()">
+				       a.CUSTOM2_CODE = t.UP_CODE
+				    </when>
+				    <when test="segCode == 'XC_GL_CUSTOM3'.toString()">
+				       a.CUSTOM3_CODE = t.UP_CODE
+				    </when>
+				    <otherwise>
+				       a.CUSTOM4_CODE = t.UP_CODE
+				    </otherwise>
+			 </choose> 
+			and a.LEDGER_ID = t.LEDGER_ID
+		)
+	WHEN 0 THEN
+		''
+	ELSE
+		'上级自定义段已发生业务数据！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 获取导入项目的层级、是否为末级节点的信息 -->
+<select id="getProjectImportData" parameterType="java.lang.String" resultType="java.util.HashMap">
+SELECT
+	t.TMP_ID,
+	t.UP_PROJECT_ID,
+	t.PROJECT_CODE,
+	t.UP_CODE,
+	t.FLAG,
+	t.ERROR_MSG,
+    p.PROJECT_ID
+FROM
+	xc_pm_projects_tmp t
+LEFT JOIN xc_pm_projects p ON t.UP_CODE = p.PROJECT_CODE
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</select>
+<!-- 获取科目导入数据的上级层次及是否为子节点信息 -->
+<select id="getAccountImportData" parameterType="java.lang.String" resultType="java.util.HashMap">
+SELECT
+  t.TMP_ID,
+  t.ACC_CODE,
+  t.UP_ACC_CODE,
+  t.ACC_LEVEL,
+  t.IS_LEAF,
+  t.FLAG,
+  t.ERROR_MSG,
+  a.ACC_ID,
+  a.ACC_LEVEL as "UP_LEVEL",
+  a.IS_LEAF AS "UP_IS_LEAF"
+FROM
+	xc_gl_accounts_tmp t
+LEFT JOIN xc_gl_accounts a ON t.UP_ACC_CODE = a.ACC_CODE
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</select>
+<!-- 获取现金流项目导入数据的上级层次及是否为子节点信息 -->
+<select id="getCashImportData" parameterType="java.lang.String" resultType="java.util.HashMap">
+SELECT
+  t.TMP_ID,
+  t.UP_ID,
+  t.CA_CODE,
+  t.UP_CODE,
+  t.CA_LEVEL,
+  t.IS_LEAF,
+  t.FLAG,
+  t.ERROR_MSG,
+  a.CA_ID,
+  a.CA_LEVEL as "UP_LEVEL",
+  a.IS_LEAF  as "UP_IS_LEAF"
+FROM
+	xc_gl_cash_items_tmp t
+LEFT JOIN xc_gl_cash_items a ON t.UP_CODE = a.CA_CODE
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</select>
+<!-- 获取自定义段导入数据的上级层次及是否为子节点信息 -->
+<select id="getSegmentImportData" parameterType="java.lang.String" resultType="java.util.HashMap">
+SELECT
+	t.TMP_ID,
+  t.UP_CUST_SEGVAL_ID,
+  t.LD_CUST_SEGVAL_CODE,
+  t.UP_CODE,
+  t.SEGVAL_LEVEL,
+  t.IS_LEAF,
+  t.FLAG,
+  t.ERROR_MSG,
+  a.LD_CUST_SEGVAL_ID,
+  a.SEGVAL_LEVEL as "UP_LEVEL",
+  a.IS_LEAF as "UP_IS_LEAF"
+FROM
+	xc_gl_ld_cust_segvals_tmp t
+LEFT JOIN xc_gl_ld_cust_ass_segvals a ON t.UP_CODE = a.LD_CUST_SEGVAL_CODE
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</select>
+<!-- 预算项目编码名称校验 -->
+<update id="checkBgItemDataValid" parameterType="java.lang.String">
+UPDATE xc_bg_items_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_bg_items a
+			WHERE
+        a.BG_HRCY_ID = t.BG_HRCY_ID
+      AND
+        (a.BG_ITEM_CODE = t.BG_ITEM_CODE OR a.BG_ITEM_NAME = t.BG_ITEM_NAME)
+
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.BG_ITEM_CODE IS NULL
+			 OR t.BG_ITEM_CODE = ''
+			 OR t.BG_ITEM_NAME IS NULL
+			 OR t.BG_ITEM_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_bg_items a
+			WHERE
+				  a.BG_HRCY_ID = t.BG_HRCY_ID
+      AND
+        (a.BG_ITEM_CODE = t.BG_ITEM_CODE OR a.BG_ITEM_NAME = t.BG_ITEM_NAME)
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.BG_ITEM_CODE IS NULL
+			  OR t.BG_ITEM_CODE = ''
+			  OR t.BG_ITEM_NAME IS NULL
+			  OR t.BG_ITEM_NAME = '' THEN
+				'预算项目编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'预算项目编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 费用项目编码名称校验 -->
+<update id="checkExItemDataValid" parameterType="java.lang.String">
+UPDATE xc_ex_items_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ex_items a
+			WHERE
+        a.EX_HRCY_ID = t.EX_HRCY_ID
+      AND
+        (a.EX_ITEM_CODE = t.EX_ITEM_CODE OR a.EX_ITEM_NAME = t.EX_ITEM_NAME)
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.EX_ITEM_CODE IS NULL
+			 OR t.EX_ITEM_CODE = ''
+			 OR t.EX_ITEM_NAME IS NULL
+			 OR t.EX_ITEM_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ex_items a
+			WHERE
+				  a.EX_HRCY_ID = t.EX_HRCY_ID
+      AND
+        (a.EX_ITEM_CODE = t.EX_ITEM_CODE OR a.EX_ITEM_NAME = t.EX_ITEM_NAME)
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.EX_ITEM_CODE IS NULL
+			  OR t.EX_ITEM_CODE = ''
+			  OR t.EX_ITEM_NAME IS NULL
+			  OR t.EX_ITEM_NAME = '' THEN
+				'费用项目编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'费用项目编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+</mapper>

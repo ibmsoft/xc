@@ -1,0 +1,6 @@
+{
+    LEDGER_NAME : "账簿",
+    LEDGER_CODE_COL : "账簿编码",
+    LEDGER_NAME_COL : "账簿名称",
+    LEDGER_CODE_NAME : "账簿编码/名称"
+}

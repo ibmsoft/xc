@@ -1,0 +1,9 @@
+{
+  LEDGER		    : "Account Book",
+  CUSTOMER_NAME		: "Customer",
+  PERIOD 			: "Accounting Period",
+  TO 			    : "to",
+  AP_CONTRACT_NAME  : "Contract name",
+  queryBtn			: "Search",
+  clearBtn			: "Reset",
+}

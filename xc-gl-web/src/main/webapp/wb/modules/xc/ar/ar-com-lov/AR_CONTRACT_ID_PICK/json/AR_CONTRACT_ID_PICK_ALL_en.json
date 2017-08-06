@@ -1,0 +1,7 @@
+{
+    AR_CONTRACT_NAME : "Contract",
+    AR_CONTRACT_CODE_COL : "Contract Code",
+    AR_CONTRACT_NAME_COL : "Contract Name",
+    AR_CONTRACT_CODE_NAME : "Contract Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

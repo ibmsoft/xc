@@ -1,0 +1,36 @@
+{
+  cbx_ledger : '账簿',
+  cbx_period : '期间',
+  cbx_entity : '公司',
+  cbx_currency : '币种',
+  btnQuery : '查询',
+  
+  btnCollect:'采集',
+  btnSave:'保存',
+  btnLock:'锁定',
+  btnUnLock:'解锁',
+  btnClean:'清空',
+  btnCleanTip:'清空报表指标数据',
+  btnBatchHandler:'批量处理',
+  btnBatchHandlerTip:'批量清空、锁定和解锁报表',
+  
+  repWin:'批量处理',
+  txtRepName:'编码/名称',
+  rownum:'序号',
+  SHEET_ID:'报表ID',
+  TAB_ID:'模板ID',
+  TAB_CODE:'报表编码',
+  TAB_NAME:'报表名称',
+  APP_STATUS:'报表状态',
+  draft_status:'草稿',
+  locked_status:'已锁定',
+  not_created:'未创建',
+  TAB_ORDER:'报表序号',
+  
+  btnCleanAll:'清空',
+  btnLockAll:'锁定',
+  btnUnlockAll:'解锁',
+  btnCancel:'取消',
+  
+  rep_status:'报表状态'
+}

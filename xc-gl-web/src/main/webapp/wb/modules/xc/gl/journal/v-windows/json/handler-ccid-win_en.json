@@ -1,0 +1,26 @@
+{
+  okBtn : "OK",
+  cancelBtn : "Cancel",
+  segWinTitle : "Select Account",
+  segAccName : "Account",
+  segAccGroup : "Account Group",
+  accName : "Account Name",
+  cnyCode : "Currency",
+  dimName : "Dimension",
+  cashItems : "Cash Item",
+  segmentGridTitle : "Additional Accounting",
+  SEG_NAME : "Segment",
+  SEG_VAL_NAME : "Segment Value",
+  balanceGridTitle : "Balance Information",
+  CURRENCY : "Currency",
+  BALANCE : "Accounting Balance",
+  T_BALANCE : " Total Balance",
+  
+  VAL_CODE : "Code",
+  VAL_NAME : "Name",
+  
+  bgFromTitle : "Budget Information" ,
+  bgItemName : "Budget Item" ,
+  projects : "PA Porject" ,
+  depts : "Cost Center"
+}

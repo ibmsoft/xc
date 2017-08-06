@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.ArInvGlAdjMapper">
+	<!-- 余额调整单中插入数据 -->
+	<insert id="addArAdjInfo" parameterType="com.xzsoft.xc.ar.modal.ArInvGlAdj">
+		insert into
+		xc_ar_inv_gl_adj (
+		GL_ADJ_ID,
+		GL_ADJ_CODE,
+		LEDGER_ID,
+		CUSTOMER_ID,
+		AR_INV_GL_H_ID,
+		GL_DATE,
+		TO_CCID,
+		DR_OR_CR,
+		ADJ_AMT,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+		) values (
+		#{GL_ADJ_ID,jdbcType=VARCHAR},
+		#{GL_ADJ_CODE,jdbcType=VARCHAR},
+		#{LEDGER_ID,jdbcType=VARCHAR},
+		#{CUSTOMER_ID,jdbcType=VARCHAR},
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+		#{GL_DATE,jdbcType=TIMESTAMP},
+		#{TO_CCID,jdbcType=VARCHAR},
+		#{DR_OR_CR,jdbcType=VARCHAR},
+		#{ADJ_AMT,jdbcType=NUMERIC},
+		#{V_HEAD_ID,jdbcType=VARCHAR},
+		#{V_STATUS,jdbcType=VARCHAR},
+		#{DESCRIPTION,jdbcType=VARCHAR},
+		#{VERIFIER_ID,jdbcType=VARCHAR},
+		#{VERFY_DATE,jdbcType=TIMESTAMP},
+		#{CREATION_DATE,jdbcType=TIMESTAMP},
+		#{CREATED_BY,jdbcType=VARCHAR},
+		#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		)
+	</insert>	
+	<!-- 判断新增或修改调整单 -->
+	<select id="isAddOrEdit" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select 1 from xc_ar_inv_gl_adj where GL_ADJ_ID =
+		#{GL_ADJ_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 交易明细表插入数据 -->
+	<insert id="addInvTrans" parameterType="com.xzsoft.xc.apar.modal.ArInvTransBean">
+		INSERT INTO
+		xc_ar_inv_trans (
+		TRANS_ID,
+		SOURCE_ID,
+		SOURCE_DTL_ID,
+		AR_INV_GL_H_ID,
+		AR_PAY_H_ID,
+		GL_DATE,
+		SOURCE_TAB,
+		AR_DOC_CAT_CODE,
+		AR_CONTRACT_ID,
+		CUSTOMER_ID,
+		DR_AMT,
+		CR_AMT,
+		TRANS_STATUS,
+		CCID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		AR_DOC_CODE,
+		DESCRIPTION
+		) VALUES (
+		#{TRANS_ID,jdbcType=VARCHAR},
+		#{SOURCE_ID,jdbcType=VARCHAR},
+		#{SOURCE_DTL_ID,jdbcType=VARCHAR},
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+		#{AR_PAY_H_ID,jdbcType=VARCHAR},
+		#{GL_DATE,jdbcType=VARCHAR},
+		'XC_AR_INV_GL_ADJ',
+		#{AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+		(select AR_CONTRACT_ID from xc_ar_inv_gl_h b
+		where b.AR_INV_GL_H_ID =
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR}),
+		(select
+		CUSTOMER_ID from xc_ar_inv_gl_h b where b.AR_INV_GL_H_ID =
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR}),
+		#{DR_AMT,jdbcType=VARCHAR},
+		#{CR_AMT,jdbcType=VARCHAR},
+		'0',
+		(select AR_CCID_DEBT from
+		xc_ar_inv_gl_h b where b.AR_INV_GL_H_ID =
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR}),
+		#{CREATION_DATE,jdbcType=TIMESTAMP},
+		#{CREATED_BY,jdbcType=VARCHAR},
+		#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		#{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		#{AR_DOC_CODE,jdbcType=VARCHAR},
+		#{DESCRIPTION,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!--更新应收单 -->
+	<update id="updateInvGlH" parameterType="java.util.HashMap">
+		update xc_ar_inv_gl_h
+		set
+		NO_PAY_AMT=NO_PAY_AMT + #{ADJ_AMT,jdbcType=NUMERIC},
+		ADJ_AMT = ADJ_AMT + #{ADJ_AMT,jdbcType=NUMERIC}
+		WHERE AR_INV_GL_H_ID =
+		#{AR_INV_GL_H_ID,jdbcType=VARCHAR}
+	</update>
+
+
+	<!-- 更新调整单 -->
+	<update id="updateInvGlhadj" parameterType="com.xzsoft.xc.ar.modal.ArInvGlAdj">
+		update
+		xc_ar_inv_gl_adj set
+		GL_ADJ_CODE = #{GL_ADJ_CODE,jdbcType=VARCHAR},
+		LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+		CUSTOMER_ID = #{CUSTOMER_ID,jdbcType=VARCHAR},
+		AR_INV_GL_H_ID= #{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+		GL_DATE = #{GL_DATE,jdbcType=TIMESTAMP},
+		TO_CCID = #{TO_CCID,jdbcType=VARCHAR},
+		DR_OR_CR = #{DR_OR_CR,jdbcType=VARCHAR},
+		ADJ_AMT = #{ADJ_AMT,jdbcType=NUMERIC},
+		DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where 
+		GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 更新交易明细 -->
+	<update id="updateInvtrans" parameterType="com.xzsoft.xc.apar.modal.ArInvTransBean">
+		update xc_ar_inv_trans
+		set
+		AR_INV_GL_H_ID = #{AR_INV_GL_H_ID,jdbcType=VARCHAR},
+		AR_CONTRACT_ID= (select AR_CONTRACT_ID from xc_ar_inv_gl_h b where b.AR_INV_GL_H_ID = #{AR_INV_GL_H_ID,jdbcType=VARCHAR}),
+		CUSTOMER_ID =(select CUSTOMER_ID from xc_ar_inv_gl_h b where b.AR_INV_GL_H_ID = #{AR_INV_GL_H_ID,jdbcType=VARCHAR}),
+		DR_AMT = #{DR_AMT,jdbcType=NUMERIC},
+		CR_AMT= #{CR_AMT,jdbcType=NUMERIC},
+		CCID = #{CCID,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where SOURCE_ID= #{SOURCE_ID,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 更新应收单 -->
+	<update id="updateInvglh" parameterType="java.util.HashMap">
+		update xc_ar_inv_gl_h
+		set
+		NO_PAY_AMT = NO_PAY_AMT-(select ADJ_AMT from xc_ar_inv_gl_adj where GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}) + #{ADJ_AMT,jdbcType=NUMERIC},
+		ADJ_AMT = ADJ_AMT -(select ADJ_AMT from xc_ar_inv_gl_adj where GL_ADJ_ID= #{GL_ADJ_ID,jdbcType=VARCHAR}) + #{ADJ_AMT,jdbcType=NUMERIC}
+		WHERE AR_INV_GL_H_ID = #{AR_INV_GL_H_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 查询调整单的数据 -->
+	<select id="getInvAdjInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvGlAdj">
+	select * from xc_ar_inv_gl_adj  where GL_ADJ_ID = #{GL_ADJ_ID,jdbcType=VARCHAR}
+	</select>
+</mapper>

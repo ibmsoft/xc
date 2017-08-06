@@ -1,0 +1,6 @@
+{
+  CA_NAME 		: "Cash Flow Name",
+  CA_CODE_COL 	: "Cash Flow Code",
+  CA_NAME_COL	: "Cash Flow Name",
+  CA_CODE_NAME	: "Cash Flow Code/Name"
+}

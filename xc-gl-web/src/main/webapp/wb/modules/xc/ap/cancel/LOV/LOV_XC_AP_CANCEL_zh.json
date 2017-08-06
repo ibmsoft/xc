@@ -1,0 +1,33 @@
+{
+  QUERY							: "查询",
+  RESET							: "重置",
+  SURE							: "确认",
+  CANCEL						: "取消",
+  
+  CONTRACT						: "合同",
+  DOC_CODE						: "单据编号",
+  CREATED_BY_NAME				: "制单人",
+  ROWNUM						: "序号",
+  NO_CANCEL_AMT					: "可核销金额",
+  CANCEL_AMT					: "核销金额",
+  GL_DATE						: "业务日期",
+  AP_PAY_H_CODE					: "付款单号",
+  AP_INV_GL_H_CODE				: "应付单号",
+  AR_INV_GL_H_CODE				: "应收单号",
+  DESCRIPTION					: "摘要",
+  VENDOR						: "供应商", 
+  DEPT							: "部门",
+  PROJECT						: "项目",
+  ACC							: "科目",
+  CCID							: "科目组合",
+  CUSTOMER						: "客户",
+  
+  qxzzsytjl						: "请选择至少一条记录！",
+  hxjebnwk						: "核销金额不能为空！",
+  hxjebnwl						: "核销金额不能为 0 ！",
+  qdyxzd						: "确定要选择的",
+  tjlm							: "条记录吗？",
+  hxjebkcgkhxje					: "核销金额不可超过可核销金额！",
+  hxjeydyl						: "核销金额应大于 0 ！",
+  hxjeyxyl						: "核销金额应小于 0 ！"
+}

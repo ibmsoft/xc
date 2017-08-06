@@ -1,0 +1,52 @@
+{
+  XH:'序号',
+
+  saveBtn:'保存',
+  addBtn:'增加',
+
+  delBtn:'删除',
+
+  VAL_CODE_COL:'值编码',
+  VAL_NAME_COL:'账龄类型',
+
+  DESCRIPTION_COL:'说明',
+
+  AR_INTERVAL_ID_COL:'账龄区间ID',
+  AGING_TYPE_CODE_COL:'所属账龄编码',
+  AGING_TYPE_NAME_COL:'所属账龄',
+  INTERVAL_NAME_COL:'区间名称',
+
+
+  INTERVAL_DAYS_COL:'区间天数',
+
+  INTERVAL_START_COL:'开始天数',
+
+  INTERVAL_END_COL:'结束天数',
+
+  TIP:'提示',
+
+  DELTIP:'请选择要删除的记录!',
+  DELOKTIP:'您确定要删除同时删除账龄下区间？',
+  DELOKTIP2:'您确定要删除？',
+  DELTIP1:'删除成功!',
+  EDITETIP:'修改成功！',
+  MSG1:'值编码不可重复!',
+  MSG2:'账龄类型不可重复!',
+  MSG3:'值编码或账龄类型重复!',
+
+
+  MSG4:'请先选择账龄类型!',
+  MSG5:'请先保存账龄类型再添加!',
+  MSG6:'结束日期作为修改项不可修改为空!',
+
+
+  message:'正在保存中...',
+
+  SAVETIP:'保存成功！'
+  
+
+
+
+
+
+}

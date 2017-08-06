@@ -1,0 +1,1 @@
+{"inframe":false,"title":"更新叶子节点","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"update XC_GL_CASH_ITEMS set IS_LEAF='N' where CA_ID ={?CA_ID?}","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

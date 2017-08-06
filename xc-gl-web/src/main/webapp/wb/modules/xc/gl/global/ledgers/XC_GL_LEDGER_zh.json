@@ -1,0 +1,27 @@
+{
+  moduleTitle:"账薄信息管理",
+  
+  cancelBtn:"取消",
+  editBtn:"修改",
+  delBtn:"删除",
+  saveBtn:"保存",
+  authorizeBtn:"授权",
+  addBtn:"增加",
+  rownum:"序号",
+  la_ledgerCode:"账薄编码",
+  la_ledgerName:"账薄名称",
+  la_accountHrcy:"科目体系",
+  la_orgName:"组织",
+  la_currency:"本位币",
+  la_description:"说明",
+  la_startPeriod:"开始会计期",
+  la_necessaryCode:"<font color='red'>*</font>账薄编码",
+  la_necessaryName:"<font color='red'>*</font>账薄名称",
+  la_ledgerTips:"账簿编码长度不能超过4位",
+  la_necessaryHrcy:"<font color='red'>*</font>科目体系",
+  la_necessaryOrg:"<font color='red'>*</font>所属组织",
+  la_ledgerDesc:"账薄说明",
+  la_labelWidth:80,
+  la_addLedger:"新建账薄",
+  la_editLedger:"修改账簿"
+}

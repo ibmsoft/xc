@@ -1,0 +1,1444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.PeriodBalanceManageMapper">
+<insert id="insertExcelDataToBalanceImp" parameterType="java.util.List">
+	INSERT INTO XC_GL_BALANCE_IMP
+	(id,
+	ledger_id,
+	segment01,
+	segment02,
+	segment03,
+	segment04,	
+	segment05,	
+	segment06,	
+	segment07,	
+	segment08,	
+	segment09,	
+	segment10,	
+	segment11,
+	segment12,	
+	segment01_name,	
+	segment02_name,	
+	segment03_name,	
+	segment04_name,	
+	segment05_name,	
+	segment06_name,	
+	segment07_name,	
+	segment08_name,	
+	segment09_name,
+	segment10_name,
+	segment11_name,		
+	segment12_name,	
+	is_valid, 
+	session_id,	
+	period_code,	
+	currency_code,   
+	 amt_y_dr,	
+	 amt_y_cr,	
+	 y_dr,	
+	 y_cr,  
+	 t_y_dr,	
+	 t_y_cr,
+	amt_ytd_dr,	
+	ytd_dr,	
+	t_ytd_dr,	
+	amt_ytd_cr,
+	ytd_cr,	
+	t_ytd_cr,    
+	amt_pjtd_dr,	
+	amt_pjtd_cr,	
+	pjtd_dr,	
+	pjtd_cr,	
+	t_pjtd_dr,
+	t_pjtd_cr,	
+	creation_date,	
+	created_by,	
+	last_update_date,	
+	last_updated_by,
+	b_dr,
+    b_cr,
+    amt_b_dr,
+    amt_b_cr,
+    t_b_dr,
+    t_b_cr,
+    ptd_dr,
+    ptd_cr,
+    amt_ptd_dr,
+    amt_ptd_cr,
+    t_ptd_dr,
+    t_ptd_cr)
+    <foreach collection="list" item="item" index="index"  separator="union all">
+	(select #{item.id,jdbcType=VARCHAR},
+	        #{item.ledgerId,jdbcType=VARCHAR},
+	        #{item.segment01,jdbcType=VARCHAR},
+	        #{item.segment02,jdbcType=VARCHAR},
+	        #{item.segment03,jdbcType=VARCHAR},
+	        #{item.segment04,jdbcType=VARCHAR},
+	        #{item.segment05,jdbcType=VARCHAR},
+	        #{item.segment06,jdbcType=VARCHAR},
+	        #{item.segment07,jdbcType=VARCHAR},
+	        #{item.segment08,jdbcType=VARCHAR},
+	        #{item.segment09,jdbcType=VARCHAR},
+	        #{item.segment10,jdbcType=VARCHAR},
+	        #{item.segment11,jdbcType=VARCHAR},
+	        #{item.segment12,jdbcType=VARCHAR}, 
+	        #{item.segment01Name,jdbcType=VARCHAR},
+	        #{item.segment02Name,jdbcType=VARCHAR},
+	        #{item.segment03Name,jdbcType=VARCHAR},
+	        #{item.segment04Name,jdbcType=VARCHAR},
+	        #{item.segment05Name,jdbcType=VARCHAR},
+	        #{item.segment06Name,jdbcType=VARCHAR},
+	        #{item.segment07Name,jdbcType=VARCHAR},
+	        #{item.segment08Name,jdbcType=VARCHAR},
+	        #{item.segment09Name,jdbcType=VARCHAR},
+	        #{item.segment10Name,jdbcType=VARCHAR},
+	        #{item.segment11Name,jdbcType=VARCHAR},
+	        #{item.segment12Name,jdbcType=VARCHAR}, 
+	        'Y',
+	        #{item.sessionId,jdbcType=VARCHAR},
+	        #{item.periodCode,jdbcType=VARCHAR},
+	        #{item.currencyCode,jdbcType=VARCHAR},
+	        #{item.yearAmount,jdbcType=DOUBLE},
+	        #{item.yearAmount,jdbcType=DOUBLE},
+	        #{item.yearDBalance,jdbcType=DOUBLE},
+	        #{item.yearCBalance,jdbcType=DOUBLE},
+	        #{item.yearDBalanceO,jdbcType=DOUBLE},
+	        #{item.yearCBalanceO,jdbcType=DOUBLE},
+	        #{item.debitAmount,jdbcType=DOUBLE},
+	        #{item.debitBalance,jdbcType=DOUBLE},
+	        #{item.debitBalanceO,jdbcType=DOUBLE},
+	        #{item.crebitAmount,jdbcType=DOUBLE},
+	        #{item.crebitBalance,jdbcType=DOUBLE},
+	        #{item.crebitBalanceO,jdbcType=DOUBLE},
+	        #{item.periodAmount,jdbcType=DOUBLE},
+	        #{item.periodAmount,jdbcType=DOUBLE},
+	        #{item.periodDBalance,jdbcType=DOUBLE},
+	        #{item.periodCBalance,jdbcType=DOUBLE},
+	        #{item.periodDBalanceO,jdbcType=DOUBLE},
+	        #{item.periodCBalanceO,jdbcType=DOUBLE},
+	        #{item.creationDate,jdbcType=DATE},
+	        #{item.createdBy,jdbcType=VARCHAR},
+	        #{item.lastUpdateDate,jdbcType=DATE},
+	        #{item.lastUpdatedBy,jdbcType=VARCHAR},
+	        #{item.initDBalance,jdbcType=DOUBLE},
+	        #{item.initCBalance,jdbcType=DOUBLE},
+	        #{item.initDAmount,jdbcType=DOUBLE},
+	        #{item.initCAmount,jdbcType=DOUBLE},
+	        #{item.initDOBalance,jdbcType=DOUBLE},
+	        #{item.initCOBalance,jdbcType=DOUBLE},
+	        #{item.debitBalance,jdbcType=DOUBLE},
+	        #{item.crebitBalance,jdbcType=DOUBLE},
+	        #{item.debitAmount,jdbcType=DOUBLE}, 
+	        #{item.crebitAmount,jdbcType=DOUBLE},
+	        #{item.debitBalanceO,jdbcType=DOUBLE},
+	        #{item.crebitBalanceO,jdbcType=DOUBLE}
+	           
+	from wb_dual)
+    </foreach>
+  </insert>
+  <!-- 检查科目编码是否存在 -->
+  <update id="checkAccExist" parameterType="java.util.HashMap">
+  	UPDATE
+	xc_gl_balance_imp a
+	SET
+ a.IS_VALID =
+	(SELECT
+	CASE
+	(SELECT
+	COUNT(*)
+	FROM
+	xc_gl_ld_accounts t
+	WHERE t.ACC_ID IN
+	(SELECT
+	b.ACC_ID
+	FROM
+	xc_gl_accounts b
+	WHERE b.ACC_CODE = a.SEGMENT01 AND b.IS_LEAF = 'Y')
+	AND t.LEDGER_ID = a.LEDGER_ID
+	<choose>
+	<!-- mysql -->
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+	  </when>
+	<!-- oracle -->
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+	)
+	WHEN 0
+	THEN 'N'
+	ELSE 'Y'
+	END),
+  a.ENTER_CNY_CODE =(SELECT b.DEFAULT_CURRENCY FROM xc_gl_ld_accounts b WHERE b.ACC_ID IN (
+   SELECT l.ACC_ID FROM xc_gl_accounts l WHERE l.ACC_CODE = a.SEGMENT01) AND b.LEDGER_ID = a.LEDGER_ID ),
+  a.ACC_ID = (SELECT l.ACC_ID FROM xc_gl_ld_accounts l
+                 WHERE l.ACC_ID IN (SELECT b.ACC_ID FROM xc_gl_accounts b WHERE b.ACC_CODE = a.SEGMENT01 AND b.IS_LEAF = 'Y')
+                 AND l.LEDGER_ID = a.LEDGER_ID),
+  a.ERROR_MSG =
+	(SELECT
+	CASE
+	(SELECT
+	COUNT(*)
+	FROM
+	xc_gl_ld_accounts t
+	WHERE t.ACC_ID in
+	(SELECT
+	b.ACC_ID
+	FROM
+	xc_gl_accounts b
+	WHERE b.ACC_CODE = a.SEGMENT01) 
+	and t.LEDGER_ID = a.LEDGER_ID
+	<choose>
+	<!-- mysql -->
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+	  </when>
+	<!-- oracle -->
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+	)
+	WHEN 0
+	THEN '科目信息不存在或当科目已过期！'
+	ELSE (
+	 CASE
+	(select count(1)
+	from xc_gl_ld_accounts lacc,xc_gl_accounts acc,xc_gl_ledgers ld
+    where lacc.ACC_ID = acc.ACC_ID
+    and acc.ACC_HRCY_ID = ld.ACC_HRCY_ID
+    and lacc.LEDGER_ID = ld.LEDGER_ID
+    and ld.LEDGER_ID = a.LEDGER_ID
+    and acc.ACC_CODE = a.SEGMENT01
+    and acc.IS_LEAF = 'Y'
+	)
+    WHEN 0 THEN 
+     '当前科目不是末级科目！'
+    ELSE ''
+    END
+	)
+	END)
+	WHERE a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+ <!-- 检查供应商编码是否存在 -->
+  <update id="checkVendorExist" parameterType="java.util.HashMap">
+  UPDATE  xc_gl_balance_imp a 
+SET a.IS_VALID = (
+    CASE
+      a.SEGMENT02 
+      WHEN '00' 
+      THEN 'Y' 
+      ELSE (
+        CASE
+          (SELECT 
+            COUNT(*) 
+          FROM
+            xc_ap_vendors t 
+          WHERE t.VENDOR_CODE = a.SEGMENT02) 
+          WHEN 0 
+          THEN 'N' 
+          ELSE ( 
+             CASE (SELECT COUNT(1) FROM xc_gl_ld_vendors l 
+                  WHERE l.LEDGER_ID = a.LEDGER_ID 
+                  AND l.VENDOR_ID =(SELECT  p.VENDOR_ID FROM xc_ap_vendors p WHERE p.VENDOR_CODE = a.SEGMENT02) AND l.IS_ENABLED = 1)
+              WHEN 0 THEN 'N' ELSE 'Y' END) 
+        END
+      ) 
+    END
+  ),
+  a.VENDOR_ID = (select v.VENDOR_ID from xc_ap_vendors v where v.VENDOR_CODE = a.SEGMENT02),
+  a.ERROR_MSG = (
+    CASE
+      a.SEGMENT02 
+      WHEN '00' 
+      THEN a.ERROR_MSG 
+      ELSE (
+        CASE
+          (SELECT 
+            COUNT(*) 
+          FROM
+            xc_gl_ld_vendors t 
+          WHERE t.LEDGER_ID = a.LEDGER_ID and t.VENDOR_ID =(SELECT  p.VENDOR_ID FROM xc_ap_vendors p WHERE p.VENDOR_CODE = a.SEGMENT02)) 
+          WHEN 0 
+          THEN '账簿对应的供应商信息不存在！'
+          ELSE (
+               CASE (SELECT COUNT(1) FROM xc_gl_ld_vendors l 
+                  WHERE l.LEDGER_ID = a.LEDGER_ID 
+                  AND l.VENDOR_ID =(SELECT  p.VENDOR_ID FROM xc_ap_vendors p WHERE p.VENDOR_CODE = a.SEGMENT02) AND l.IS_ENABLED = 1)
+              WHEN 0 THEN '账簿对应的供应商未启用' ELSE '' END
+             ) 
+        END
+      ) 
+    END
+  ) WHERE a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <!-- 校验客户是否存在 -->
+  <update id="checkCustomerExist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+SET a.IS_VALID = (
+	CASE a.SEGMENT03
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_customers t
+				WHERE
+					t.CUSTOMER_ID = (
+							SELECT
+								p.CUSTOMER_ID
+							FROM
+								xc_ar_customers p
+							WHERE
+								p.CUSTOMER_CODE = a.SEGMENT03
+						)
+					AND t.LEDGER_ID = a.LEDGER_ID
+			)
+			WHEN 0 THEN
+				'N'
+			ELSE
+				(
+					CASE (
+						SELECT
+							COUNT(1)
+						FROM
+							xc_gl_ld_customers l
+						WHERE
+							l.LEDGER_ID = a.LEDGER_ID
+						AND l.CUSTOMER_ID = (
+							SELECT
+								p.CUSTOMER_ID
+							FROM
+								xc_ar_customers p
+							WHERE
+								p.CUSTOMER_CODE = a.SEGMENT03
+						)
+					 AND l.IS_ENABLED = 1
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			END
+		)
+	END
+),
+a.CUSTOMER_ID = (select v.CUSTOMER_ID from xc_ar_customers v where v.CUSTOMER_CODE = a.SEGMENT03),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT03
+	WHEN '00' THEN
+		a.ERROR_MSG
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_customers t
+				WHERE
+					t.LEDGER_ID = a.LEDGER_ID 
+			    AND t.CUSTOMER_ID =(SELECT  p.CUSTOMER_ID FROM xc_ar_customers p WHERE p.CUSTOMER_CODE = a.SEGMENT03)
+			)
+			WHEN 0 THEN
+				'账簿对应的客户信息不存在！'
+			ELSE
+				( CASE (SELECT COUNT(1) FROM xc_gl_ld_customers l 
+                  WHERE l.LEDGER_ID = a.LEDGER_ID 
+                  AND l.CUSTOMER_ID =(SELECT  p.CUSTOMER_ID FROM xc_ar_customers p WHERE p.CUSTOMER_CODE = a.SEGMENT03) AND l.IS_ENABLED = 1)
+              WHEN 0 THEN '账簿对应的客户未启用' ELSE '' END)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+    <!-- 校验产品是否存在 -->
+  <update id="checkProductExist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+SET a.IS_VALID = (
+	CASE a.SEGMENT04
+	WHEN '00' THEN
+		'Y'
+	ELSE (CASE (SELECT COUNT(1) FROM xc_gl_products b WHERE b.PRODUCT_CODE = a.SEGMENT04)
+        WHEN 0 THEN 
+           'N'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_products c WHERE c.PRODUCT_ID =(SELECT d.PRODUCT_ID FROM xc_gl_products d WHERE d.PRODUCT_CODE = a.SEGMENT04) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                'N'
+               ELSE 'Y' 
+               END)
+         END)
+	END
+),
+a.PRODUCT_ID = (select v.PRODUCT_ID from xc_gl_products v where v.PRODUCT_CODE = a.SEGMENT04),
+a.ERROR_MSG = (
+	CASE a.SEGMENT04
+	WHEN '00' THEN
+		''
+	ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_products b WHERE b.PRODUCT_ID = (SELECT d.PRODUCT_ID FROM xc_gl_products d WHERE d.PRODUCT_CODE = a.SEGMENT04))
+        WHEN 0 THEN 
+           '账簿对应的产品信息不存在！'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_products c WHERE c.PRODUCT_ID =(SELECT d.PRODUCT_ID FROM xc_gl_products d WHERE d.PRODUCT_CODE = a.SEGMENT04) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                '账簿对应的产品未启用！'
+               ELSE ''
+               END )
+          END)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR} AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <!-- 校验内部往来 -->
+  <update id="checkInnerOrgExist" parameterType="java.util.HashMap">
+UPDATE xc_gl_balance_imp a
+SET a.IS_VALID = (
+	CASE a.SEGMENT05
+	WHEN '00' THEN
+		'Y'
+	ELSE (CASE (SELECT COUNT(1) FROM  xip_pub_orgs b WHERE b.ORG_CODE = a.SEGMENT05)
+        WHEN 0 THEN 
+           'N'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_orgs c WHERE c.ORG_ID =(SELECT d.ORG_ID FROM xip_pub_orgs d WHERE d.ORG_CODE = a.SEGMENT05) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                'N'
+               ELSE 'Y' 
+               END)
+         END)
+	END
+),
+a.ORG_ID = (select v.ORG_ID from xip_pub_orgs v where v.ORG_CODE = a.SEGMENT05),
+a.ERROR_MSG = (
+	CASE a.SEGMENT05
+	WHEN '00' THEN
+		''
+	ELSE (CASE (SELECT COUNT(1) FROM xip_pub_orgs b WHERE b.ORG_CODE = a.SEGMENT05)
+        WHEN 0 THEN 
+           '内部往来信息不存在！'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_orgs c WHERE c.ORG_ID =(SELECT d.ORG_ID FROM xip_pub_orgs d WHERE d.ORG_CODE = a.SEGMENT05) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                '账簿对应的内部往来信息未启用！'
+               ELSE ''
+               END )
+          END)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR} AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+   <!-- 校验个人往来 -->
+  <update id="checkPersonalExist" parameterType="java.util.HashMap">
+UPDATE xc_gl_balance_imp a
+SET a.IS_VALID = (
+	CASE a.SEGMENT06
+	WHEN '00' THEN
+		'Y'
+	ELSE (CASE (SELECT COUNT(1) FROM  xip_pub_emps b WHERE b.EMP_CODE = a.SEGMENT06)
+        WHEN 0 THEN 
+           'N'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_emps c WHERE c.EMP_ID =(SELECT d.EMP_ID FROM xip_pub_emps d WHERE d.EMP_CODE = a.SEGMENT06) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                'N'
+               ELSE 'Y' 
+               END)
+         END)
+	END
+),
+a.EMP_ID = (select v.EMP_ID from xip_pub_emps v where v.EMP_CODE = a.SEGMENT06),
+a.ERROR_MSG = (
+	CASE a.SEGMENT06
+	WHEN '00' THEN
+		''
+	ELSE (CASE (SELECT COUNT(1) FROM xip_pub_emps b WHERE b.EMP_CODE = a.SEGMENT06)
+        WHEN 0 THEN 
+           '个人往来信息不存在！'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_emps c WHERE c.EMP_ID =(SELECT d.EMP_ID FROM xip_pub_emps d WHERE d.EMP_CODE = a.SEGMENT06) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                '账簿对应的个人往来信息未启用！'
+               ELSE ''
+               END )
+          END)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR} AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+    <!-- 校验成本中心 -->
+  <update id="checkCostExist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+SET a.IS_VALID = (
+	CASE a.SEGMENT07
+	WHEN '00' THEN
+		'Y'
+	ELSE (CASE (SELECT COUNT(1) FROM  xip_pub_depts b WHERE b.DEPT_CODE = a.SEGMENT07)
+        WHEN 0 THEN 
+           'N'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_depts c WHERE c.DEPT_ID =(SELECT d.DEPT_ID FROM xip_pub_depts d WHERE d.DEPT_CODE = a.SEGMENT07) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                'N'
+               ELSE 'Y' 
+               END)
+         END)
+	END
+),
+a.DEPT_ID = (select v.DEPT_ID from xc_gl_ld_depts v where v.DEPT_ID IN (SELECT DEPT_ID FROM xip_pub_depts b WHERE b.DEPT_CODE=a.SEGMENT07) AND v.LEDGER_ID = a.LEDGER_ID),
+a.ERROR_MSG = (
+	CASE a.SEGMENT06
+	WHEN '00' THEN
+		''
+	ELSE (CASE (SELECT COUNT(1) FROM xip_pub_depts b WHERE b.DEPT_CODE = a.SEGMENT07)
+        WHEN 0 THEN 
+           '成本中心信息不存在！'
+         ELSE (CASE (SELECT COUNT(1) FROM xc_gl_ld_depts c WHERE c.DEPT_ID =(SELECT d.DEPT_ID FROM xip_pub_depts d WHERE d.DEPT_CODE = a.SEGMENT07) AND c.IS_ENABLED = 1)
+               WHEN 0 THEN
+                '账簿对应的成本中心信息未启用！'
+               ELSE ''
+               END )
+          END)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR} AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update> 
+  <!-- 校验项目信息存在与否 -->
+  <update id="checkProjectExist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+   SET a.IS_VALID = (
+	CASE a.SEGMENT08
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		( CASE (SELECT COUNT(1) FROM xc_pm_projects t WHERE t.PROJECT_CODE = a.SEGMENT08 
+	<choose>
+	<!-- mysql -->
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+	  </when>
+	<!-- oracle -->
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE >sysdate]]>
+	  </when>
+	 </choose> 
+		)
+			WHEN 0 THEN
+				'N'
+			ELSE(
+       CASE (SELECT COUNT(1) FROM xc_pm_projects l WHERE l.UP_PROJECT_ID IN (SELECT m.PROJECT_ID FROM xc_pm_projects m WHERE m.PROJECT_CODE = a.SEGMENT08))
+			 WHEN 0 THEN
+						'Y'
+			ELSE
+						'N'
+					END
+				)
+			END
+		)
+	END
+),
+ a.PROJECT_ID = (select t.PROJECT_ID from xc_pm_projects t where t.PROJECT_CODE =a.SEGMENT08 and t.LEDGER_ID = a.LEDGER_ID),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT08
+	WHEN '00' THEN
+		''
+	ELSE
+		( CASE (SELECT COUNT(1) FROM xc_pm_projects t WHERE t.PROJECT_CODE = a.SEGMENT08
+		<choose>
+	<!-- mysql -->
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+	  </when>
+	<!-- oracle -->
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+	  </when>
+	 </choose> 
+		)
+			WHEN 0 THEN
+				'项目信息不存在或项目已过期！'
+			ELSE( CASE (SELECT COUNT(1) FROM xc_pm_projects l WHERE l.UP_PROJECT_ID IN (SELECT m.PROJECT_ID FROM xc_pm_projects m WHERE m.PROJECT_CODE = a.SEGMENT08))
+					  WHEN 0 THEN
+						 ''
+					  ELSE
+						 '账簿对应的项目不是末级项目！'
+					  END
+				)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <!-- 校验自定义段的信息存在与否 -->
+  <update id="checkSD01Exist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+  SET a.IS_VALID = (
+	CASE a.SEGMENT09
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM1'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT09
+				AND t.IS_LEAF = 'Y' 
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+ a.CUSTOM1_ID =(SELECT t.LD_CUST_SEGVAL_ID FROM  xc_gl_ld_cust_ass_segvals t where t.LEDGER_ID = a.LEDGER_ID and t.SEG_CODE='XC_GL_CUSTOM1' and t.LD_CUST_SEGVAL_CODE = a.SEGMENT09),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT09
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM1'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT09
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'自定义1段信息不存在或自定义1段已过期！'
+			ELSE
+				(
+					CASE (
+						SELECT
+							COUNT(*)
+						FROM
+							xc_gl_ld_cust_ass_segvals t
+						WHERE
+							t.SEG_CODE = 'XC_GL_CUSTOM1'
+						AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT09
+						AND t.IS_LEAF = 'Y'
+					)
+					WHEN 0 THEN
+						'自定义1段不为末级自定义段！'
+					ELSE
+						''
+					END
+				)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+ <update id="checkSD02Exist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+  SET a.IS_VALID = (
+	CASE a.SEGMENT10
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM2'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT10
+				AND t.IS_LEAF = 'Y' 
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+a.CUSTOM2_ID =(SELECT t.LD_CUST_SEGVAL_ID FROM  xc_gl_ld_cust_ass_segvals t where t.LEDGER_ID = a.LEDGER_ID and t.SEG_CODE='XC_GL_CUSTOM2' and t.LD_CUST_SEGVAL_CODE = a.SEGMENT10),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT10
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM2'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT10
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE >NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'自定义2段信息不存在或自定义2段已过期！'
+			ELSE
+				(
+					CASE (
+						SELECT
+							COUNT(*)
+						FROM
+							xc_gl_ld_cust_ass_segvals t
+						WHERE
+							t.SEG_CODE = 'XC_GL_CUSTOM2'
+						AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT10
+						AND t.IS_LEAF = 'Y'
+					)
+					WHEN 0 THEN
+						'自定义2段不为末级自定义段！'
+					ELSE
+						''
+					END
+				)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+ <update id="checkSD03Exist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+  SET a.IS_VALID = (
+	CASE a.SEGMENT11
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM3'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT11
+				AND t.IS_LEAF = 'Y' 
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE > NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+a.CUSTOM3_ID =(SELECT t.LD_CUST_SEGVAL_ID FROM  xc_gl_ld_cust_ass_segvals t where t.LEDGER_ID = a.LEDGER_ID and t.SEG_CODE='XC_GL_CUSTOM3' and t.LD_CUST_SEGVAL_CODE = a.SEGMENT11),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT11
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM3'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT11
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE > NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'自定义3段信息不存在或自定义3段已过期！'
+			ELSE
+				(
+					CASE (
+						SELECT
+							COUNT(*)
+						FROM
+							xc_gl_ld_cust_ass_segvals t
+						WHERE
+							t.SEG_CODE = 'XC_GL_CUSTOM3'
+						AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT11
+						AND t.IS_LEAF = 'Y'
+					)
+					WHEN 0 THEN
+						'自定义3段不为末级自定义段！'
+					ELSE
+						''
+					END
+				)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y'  AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+ <update id="checkSD04Exist" parameterType="java.util.HashMap">
+  UPDATE xc_gl_balance_imp a
+  SET a.IS_VALID = (
+	CASE a.SEGMENT12
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM4'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT12
+				AND t.IS_LEAF = 'Y' 
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE > NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+a.CUSTOM4_ID =(SELECT t.LD_CUST_SEGVAL_ID FROM  xc_gl_ld_cust_ass_segvals t where t.LEDGER_ID = a.LEDGER_ID and t.SEG_CODE='XC_GL_CUSTOM4' and t.LD_CUST_SEGVAL_CODE = a.SEGMENT12),
+ a.ERROR_MSG = (
+	CASE a.SEGMENT12
+	WHEN '00' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM
+					xc_gl_ld_cust_ass_segvals t
+				WHERE
+					t.SEG_CODE = 'XC_GL_CUSTOM4'
+				AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT12
+				<choose>
+				<!-- mysql -->
+				 <when test="dbType == 'mysql'">
+				 <![CDATA[AND t.START_DATE < NOW()  AND t.END_DATE > NOW()]]>
+				 </when>
+				<!-- oracle -->
+			    <when test="dbType == 'oracle'">
+			    <![CDATA[and t.START_DATE < sysdate  AND t.END_DATE > sysdate]]>
+		   		</when>
+				</choose>
+			)
+			WHEN 0 THEN
+				'自定义4段信息不存在或自定义4段已过期！'
+			ELSE
+				(
+					CASE (
+						SELECT
+							COUNT(*)
+						FROM
+							xc_gl_ld_cust_ass_segvals t
+						WHERE
+							t.SEG_CODE = 'XC_GL_CUSTOM4'
+						AND t.LD_CUST_SEGVAL_CODE = a.SEGMENT12
+						AND t.IS_LEAF = 'Y'
+					)
+					WHEN 0 THEN
+						'自定义4段不为末级自定义段！'
+					ELSE
+						''
+					END
+				)
+			END
+		)
+	END
+)
+WHERE
+	a.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND a.IS_VALID = 'Y' AND a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+  </update>
+  <!-- 获取Excel余额导入中的不合法记录 -->
+  <select id="getInvalidImportData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ select 
+ t.ID AS "id",
+ t.PERIOD_CODE AS "periodCode",
+ t.SESSION_ID AS "sessionId",
+ t.ERROR_MSG AS "errorMsg",
+ t.ACC_ID AS "accId",
+ t.VENDOR_ID as "vendorId",    
+ t.CUSTOMER_ID as "customerId",  
+ t.PRODUCT_ID as "productId",   
+ t.ORG_ID as "orgId",       
+ t.EMP_ID as "empId",      
+ t.DEPT_ID as "deptId",      
+ t.PROJECT_ID as "projectId",   
+ t.CUSTOM1_ID as "custom1Id",   
+ t.CUSTOM2_ID as "custom2Id",   
+ t.CUSTOM3_ID as "custom3Id",   
+ t.CUSTOM4_ID as "custom4Id",   
+ t.SEGMENT01 AS "segment01",
+ t.SEGMENT02 AS "segment02",
+ t.SEGMENT03 AS "segment03",
+ t.SEGMENT04 AS "segment04",
+ t.SEGMENT05 AS "segment05",
+ t.segment06 AS "segment06",
+ t.SEGMENT07 AS "segment07",
+ t.SEGMENT08 AS "segment08",
+ t.SEGMENT09 AS "segment09",
+ t.SEGMENT10 AS "segment10",
+ t.SEGMENT11 AS "segment11",
+ t.SEGMENT12 AS "segment12",
+ t.SEGMENT01_NAME AS "segment01Name",
+ t.SEGMENT02_NAME AS "segment02Name",
+ t.SEGMENT03_NAME AS "segment03Name",
+ t.SEGMENT04_NAME AS "segment04Name",
+ t.SEGMENT05_NAME AS "segment05Name",
+ t.segment06_NAME AS "segment06Name",
+ t.SEGMENT07_NAME AS "segment07Name",
+ t.SEGMENT08_NAME AS "segment08Name",
+ t.SEGMENT09_NAME AS "segment09Name",
+ t.SEGMENT10_NAME AS "segment10Name",
+ t.SEGMENT11_NAME AS "segment11Name",
+ t.SEGMENT12_NAME AS "segment12Name",
+ t.LEDGER_ID AS "ledgerId",
+ t.CURRENCY_CODE AS "currencyCode" ,
+ t.ENTER_CNY_CODE AS "enterCnyCode",
+ t.CCID AS "ccid",
+ t.Y_DR AS "yearDBalance",
+ t.Y_CR AS "yearCBalance",
+ t.AMT_Y_DR AS "yearAmount",
+ t.T_Y_DR AS "yearDBalanceO",
+ t.T_Y_CR AS "yearCBalanceO",
+ 
+ t.YTD_DR AS "debitBalance",
+ t.AMT_YTD_DR AS "debitAmount",
+ t.T_YTD_DR as "debitBalanceO",
+
+ t.YTD_CR AS "crebitBalance",
+ t.AMT_YTD_CR AS "crebitAmount",
+ t.T_YTD_CR AS "crebitBalanceO",
+
+ t.PJTD_DR AS "periodDBalance",
+ t.PJTD_CR AS "periodCBalance",
+ t.AMT_PJTD_DR AS "periodAmount",
+ t.T_PJTD_DR AS "periodDBalanceO",
+ t.T_PJTD_CR AS "periodCBalanceO"
+from  xc_gl_balance_imp  t 
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND t.IS_VALID = #{isValid,jdbcType=VARCHAR} AND t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+</select> 
+<delete id="deletePeriodBalances" parameterType="java.util.HashMap">
+ delete from xc_gl_balance_imp where SESSION_ID = #{sessionId,jdbcType=VARCHAR} and LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+</delete>  
+<!-- 插入数据到临时临时表中-->
+<insert id="insertDataFromImp" parameterType="java.util.HashMap">
+insert into xc_gl_balance_tmp (
+ID,              
+LEDGER_ID,      
+CCID,            
+PERIOD_CODE,     
+CURRENCY_CODE,   
+ENTER_CNY_CODE,  
+IS_VALID,        
+B_DR,            
+B_CR,            
+Y_DR,            
+Y_CR,            
+PTD_DR,          
+PTD_CR,          
+YTD_DR,          
+YTD_CR,          
+PJTD_DR,         
+PJTD_CR,         
+T_B_DR,          
+T_B_CR,          
+T_Y_DR,          
+T_Y_CR,          
+T_PTD_DR,        
+T_PTD_CR,        
+T_YTD_DR,        
+T_YTD_CR,        
+T_PJTD_DR,       
+T_PJTD_CR,       
+AMT_B_DR,        
+AMT_B_CR,        
+AMT_Y_DR,        
+AMT_Y_CR,        
+AMT_PTD_DR,      
+AMT_PTD_CR,      
+AMT_YTD_DR,      
+AMT_YTD_CR,      
+AMT_PJTD_DR,     
+AMT_PJTD_CR,     
+AMT_T_B_DR,      
+AMT_T_B_CR,      
+AMT_T_Y_DR,      
+AMT_T_Y_CR,      
+AMT_T_PTD_DR,    
+AMT_T_PTD_CR,    
+AMT_T_YTD_DR,    
+AMT_T_YTD_CR,    
+AMT_T_PJTD_DR,   
+AMT_T_PJTD_CR,   
+CREATION_DATE,   
+CREATED_BY,      
+LAST_UPDATE_DATE,
+LAST_UPDATED_BY 
+)
+select
+t.ID,
+t.LEDGER_ID,
+t.CCID,
+t.PERIOD_CODE,
+t.CURRENCY_CODE,
+t.ENTER_CNY_CODE,
+'N',
+t.B_DR,
+t.B_CR,
+t.Y_DR,
+t.Y_CR,
+t.PTD_DR,
+t.PTD_CR,
+t.YTD_DR,
+t.YTD_CR,
+t.PJTD_DR,
+t.PJTD_CR,
+t.T_B_DR,
+t.T_B_CR,
+t.T_Y_DR,
+t.T_Y_CR,
+t.T_PTD_DR,
+t.T_PTD_CR,
+t.T_YTD_DR,
+t.T_YTD_CR,
+t.T_PJTD_DR,
+t.T_PJTD_CR,
+t.AMT_B_DR,
+t.AMT_B_CR,
+t.AMT_Y_DR,
+t.AMT_Y_CR,
+t.AMT_PTD_DR,
+t.AMT_PTD_CR,
+t.AMT_YTD_DR,
+t.AMT_YTD_CR,
+t.AMT_PJTD_DR,
+t.AMT_PJTD_CR,
+t.AMT_T_B_DR,
+t.AMT_T_B_CR,
+t.AMT_T_Y_DR,
+t.AMT_T_Y_CR,
+t.AMT_T_PTD_DR,
+t.AMT_T_PTD_CR,
+t.AMT_T_YTD_DR,
+t.AMT_T_YTD_CR,
+t.AMT_T_PJTD_DR,
+t.AMT_T_PJTD_CR,
+t.CREATION_DATE,
+t.CREATED_BY,
+t.CREATION_DATE, 
+t.CREATED_BY 
+from 
+xc_gl_balance_imp t
+where t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}  AND t.IS_VALID = 'Y' AND t.LEDGER_ID =#{ledgerId,jdbcType=VARCHAR}
+</insert> 
+<!-- 获取要导出的余额初始数据,只导出已经建账的数据 -->
+<select id="getExportBalanceData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT DISTINCT 
+b.LEDGER_ID,
+b.CCID,
+b.PERIOD_CODE,
+b.CURRENCY_CODE,
+c.ACC_CODE,
+c.ACC_NAME,
+c.VENDOR_CODE,
+c.VENDOR_NAME,
+c.CUSTOMER_CODE,
+c.CUSTOMER_NAME,
+c.PRODUCT_CODE,
+c.PRODUCT_NAME,
+c.ORG_CODE,
+c.ORG_NAME,
+c.EMP_CODE,
+c.EMP_NAME,
+c.DEPT_CODE,
+c.DEPT_NAME,
+c.PROJECT_CODE,
+c.PROJECT_NAME,
+c.CUSTOM1_CODE,
+c.CUSTOM1_NAME,
+c.CUSTOM2_CODE,
+c.CUSTOM2_NAME,
+c.CUSTOM3_CODE,
+c.CUSTOM3_NAME,
+c.CUSTOM4_CODE,
+c.CUSTOM4_NAME,
+b.AMT_YTD_DR,
+b.T_YTD_DR,
+b.YTD_DR,
+b.AMT_YTD_CR,
+b.T_YTD_CR,
+b.YTD_CR,
+CASE a.BALANCE_DIRECTION
+WHEN '1' THEN b.AMT_PJTD_DR
+WHEN '-1' THEN b.AMT_PJTD_CR
+END AS "YEAR_AMOUNT",  
+CASE a.BALANCE_DIRECTION
+WHEN '1' THEN b.PJTD_DR
+WHEN '-1' THEN b.PJTD_CR 
+END AS "YEAR_BALANCE",
+CASE a.BALANCE_DIRECTION
+WHEN '1' THEN b.T_PJTD_DR
+WHEN '-1' THEN b.T_PJTD_CR   
+END AS "YEAR_OR_BALANCE"
+FROM
+xc_gl_balance b,
+xc_gl_ccid c,
+xc_gl_ld_accounts d,
+xc_gl_accounts a
+WHERE b.CCID = c.CCID
+AND   b.LEDGER_ID = d.LEDGER_ID
+AND   c.ACC_ID = d.ACC_ID
+AND   d.ACC_ID = a.ACC_ID
+WHERE b.LEDGER_ID = #{ledgerId,jbbcType=VARCHAR}
+AND   b.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+<if test="accId != '00'">
+AND   c.ACC_ID = #{accId,jdbcType=VARCHAR}
+</if>
+<if test="accCategory !='00'">
+AND   a.ACC_CATEGORY_CODE = #{accCategory,jdbcType=VARCHAR}
+</if>
+<if test="accGroup != '00'">
+AND   a.ACC_GROUP_ID = #{accGroup,jdbcType=VARCHAR}
+</if>
+ORDER BY b.CREATION_DATE ASC
+</select>
+<!-- 删除临时表中的冗余数据  -->
+<delete id="deleteCashTmp" parameterType="java.util.HashMap">
+delete from xc_gl_cash_imp where LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} and SESSION_ID=#{sessionId,jdbcType=VARCHAR}
+</delete>
+<!-- 将excel表中的数据插入到临时表中 -->
+<insert id="insertCashTmp" parameterType="java.util.List">
+insert into xc_gl_cash_imp (
+SUM_ID,
+LEDGER_ID,
+PERIOD_CODE,
+ACC_ID,
+ACC_CODE,
+ACC_NAME,
+CA_ID,
+CA_CODE,
+CA_NAME,
+CA_SUM,
+T_CA_SUM,
+SESSION_ID,
+FLAG,
+MSG,
+CREATION_DATE,
+CREATED_BY,
+LAST_UPDATE_DATE,
+LAST_UPDATED_BY
+)
+<foreach collection="list" item="item" index="index" separator="union all">
+(
+select #{item.sum_id,jdbcType=VARCHAR},
+       #{item.ledgerId,jdbcType=VARCHAR},
+       #{item.period_code,jdbcType=VARCHAR},
+       '',
+       #{item.acc_code,jdbcType=VARCHAR},
+       #{item.acc_name,jdbcType=VARCHAR},
+       '',
+       #{item.ca_code,jdbcType=VARCHAR},
+       #{item.ca_name,jdbcType=VARCHAR},
+       #{item.ca_sum,jdbcType=DOUBLE},
+       #{item.ca_sum,jdbcType=DOUBLE},
+       #{item.session_id,jdbcType=VARCHAR},
+       '0',
+       '',
+       #{item.creationDate,jdbcType=DATE},
+       #{item.createdBy,jdbcType=VARCHAR},
+       #{item.lastUpdateDate,jdbcType=DATE},
+       #{item.lastUpdatedBy,jdbcType=VARCHAR}
+       from wb_dual
+)
+</foreach>
+</insert>
+<!-- 获取到无效的数据 -->
+<select id="getInvalidFromCashTmp" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+select LEDGER_ID,ACC_ID,ACC_CODE,ACC_NAME,CA_ID,CA_CODE,CA_NAME,CA_SUM,SESSION_ID as session_id,FLAG,MSG
+from xc_gl_cash_imp
+where SESSION_ID=#{session_id,jdbcType=VARCHAR} and LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} and FLAG=#{flag,jdbcType=VARCHAR}
+</select>
+<!-- 设置临时表中对应得科目id和现金流量项id -->
+<update id="setCaIdAndAccIdByCode" parameterType="java.util.HashMap">
+update xc_gl_cash_tmp x 
+set x.ACC_ID=(
+select ga.ACC_ID 
+from xc_gl_accounts ga,xc_gl_ledgers gl,xc_gl_ld_accounts gla
+WHERE gl.ACC_HRCY_ID = ga.ACC_HRCY_ID
+and gla.ACC_ID = ga.ACC_ID and gla.LEDGER_ID = gl.LEDGER_ID and gl.LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} and ga.ACC_CODE=x.ACC_CODE
+),x.CA_ID=(
+select x2.CA_ID from xc_gl_cash_items x2 
+where x.CA_CODE=x2.CA_CODE
+)
+where x.LEDGER_ID=#{ledgerId,jdbcType=VARCHAR}  and SESSION_ID=#{session_id,jdbcType=VARCHAR}
+</update>
+<!-- 检验现金流项目是否存在-->
+<update id="checkCaExists" parameterType="java.util.HashMap">
+UPDATE xc_gl_cash_imp t 
+SET t.FLAG = (
+	CASE (select count(1) from xc_gl_cash_items p where p.CA_CODE = t.CA_CODE
+		<choose>
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND p.START_DATE < NOW()  AND p.END_DATE >NOW()]]>
+	  </when>
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and p.START_DATE < sysdate  AND p.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+	)  
+  WHEN 0 THEN
+		'1'
+	ELSE
+		'0'
+	END
+),
+t.MSG = (
+	CASE (select count(1) from xc_gl_cash_items p where p.CA_CODE = t.CA_CODE
+		<choose>
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND p.START_DATE < NOW()  AND p.END_DATE >NOW()]]>
+	  </when>
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and p.START_DATE < sysdate  AND p.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+	) 
+  WHEN 0 THEN
+		'现金流项目不存在或当前时间不在现金流项目的有效期内！'
+	ELSE
+		''
+	END
+)
+WHERE LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} AND SESSION_ID=#{session_id,jdbcType=VARCHAR}
+</update>
+<!-- 检验会计科目是否存在-->
+<update id="checkAccExists" parameterType="java.util.HashMap">
+UPDATE xc_gl_cash_imp t 
+SET t.FLAG = (
+	CASE  WHEN  t.ACC_CODE IS NULL OR t.ACC_CODE = '' THEN '0' 
+  ELSE (CASE (select count(1) from  xc_gl_ld_accounts l,xc_gl_accounts h 
+                              where l.ACC_ID = h.ACC_ID 
+                              AND h.ACC_CODE = t.ACC_CODE
+                              AND l.LEDGER_ID=t.LEDGER_ID
+	<choose>
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND h.START_DATE < NOW()  AND h.END_DATE >NOW()]]>
+	  </when>
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and h.START_DATE < sysdate  AND h.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+
+) WHEN 0 THEN '1' ELSE '0' END)
+	END
+),
+t.MSG = (
+	CASE  WHEN  t.ACC_CODE IS NULL OR t.ACC_CODE = '' THEN '' 
+  ELSE (CASE (select count(1) from  xc_gl_ld_accounts l,xc_gl_accounts h 
+                              where l.ACC_ID = h.ACC_ID 
+                              AND h.ACC_CODE = t.ACC_CODE
+                              AND l.LEDGER_ID=t.LEDGER_ID
+	<choose>
+	  <when test="dbType == 'mysql'">
+		<![CDATA[AND h.START_DATE < NOW()  AND h.END_DATE >NOW()]]>
+	  </when>
+	  <when test="dbType == 'oracle'">
+	    <![CDATA[and h.START_DATE < sysdate  AND h.END_DATE > sysdate]]>
+	  </when>
+	 </choose>
+) WHEN 0 THEN '账簿会计科目不存在或当前时间不在科目的有效期内！' ELSE '' END)
+	END
+)
+WHERE LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} AND SESSION_ID=#{session_id,jdbcType=VARCHAR}
+</update>
+<!-- 如果有错误，设置错误信息 -->
+<update id="setMsg" parameterType="java.util.HashMap">
+update xc_gl_cash_tmp set MSG=(
+case WHEN  (select 1 from xc_gl_accounts  where xc_gl_cash_tmp.ACC_ID=xc_gl_accounts.ACC_ID AND xc_gl_accounts.IS_LEAF='N') THEN '该科目不为末级科目'
+     WHEN  (CA_ID IS NULL AND ACC_ID IS NULL)  THEN "现金流量项和科目都不存在"
+     WHEN  (CA_ID IS NULL AND ACC_ID IS NOT NULL)  THEN "现金流量项不存在"
+     WHEN  (CA_ID IS NOT NULL AND ACC_ID IS  NULL)  THEN "科目不存在"   
+  end
+)
+</update>
+<!-- 将临时表的数据保存到sum表中  -->
+<insert id="saveSumFormTmp" parameterType="java.util.HashMap">
+insert into xc_gl_cash_tmp (
+  SUM_ID ,         
+  LEDGER_ID,
+  PERIOD_CODE,    
+  ACC_ID,          
+  ACC_CODE,        
+  ACC_NAME,        
+  CA_ID,           
+  CA_CODE,         
+  CA_NAME,         
+  CA_SUM,          
+  T_CA_SUM,        
+  IS_VALID,        
+  CREATION_DATE,   
+  CREATED_BY,      
+  LAST_UPDATE_DATE,
+  LAST_UPDATED_BY)
+select 
+   t.SUM_ID,
+   t.LEDGER_ID,
+   t.PERIOD_CODE,
+   t.ACC_ID,
+   t.ACC_CODE,
+   t.ACC_NAME,
+   t.CA_ID,
+   t.CA_CODE,
+   t.CA_NAME,
+   t.CA_SUM,
+   t.T_CA_SUM,
+   'N',
+   t.CREATION_DATE,
+   t.CREATED_BY,
+   t.LAST_UPDATE_DATE,
+   t.LAST_UPDATED_BY
+  from xc_gl_cash_imp t
+  where t.LEDGER_ID =#{ledgerId,jdbcType=VARCHAR}
+    and t.SESSION_ID =  #{sessionId,jdbcType=VARCHAR}
+    and t.FLAG = '0'
+</insert>
+<!-- 更新导入的现金流量项目的CA_ID 和 ACC_ID -->
+<update id="updateSumIfHave" parameterType="java.util.HashMap">
+update xc_gl_cash_imp t
+  set  t.CA_ID = (select p.CA_ID from xc_gl_cash_items p where p.CA_CODE = t.CA_CODE),
+       t.ACC_ID = (CASE WHEN t.ACC_CODE IS NULL OR t.ACC_CODE ='' 
+                        THEN '' 
+                        ELSE (select l.ACC_ID from  xc_gl_ld_accounts l,xc_gl_accounts h where l.ACC_ID = h.ACC_ID and h.ACC_CODE = t.ACC_CODE and l.LEDGER_ID = t.LEDGER_ID) END)
+ where t.LEDGER_ID =#{ledgerId,jdbcType=VARCHAR}
+   and t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</update>
+<select id="getStartPeriod_codeByLedger_id" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT START_PERIOD_CODE
+FROM xc_gl_ledgers
+where LEDGER_ID=#{ledgerId,jdbcType=VARCHAR}
+</select>
+<!-- 获取待校验的余额记录 -->
+ <select id="getCheckBalanceList" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.BalanceForExcel">
+SELECT
+	a.LEDGER_ID as "ledgerId",
+	a.PERIOD_CODE as "periodCode",
+	e.ACC_CATEGORY_CODE as "actualCode",
+	e.ACC_CATEGORY_NAME as "accCategoryName",
+	e.BALANCE_DIRECTION as "sumBalancesFlag",
+	d.BALANCE_DIRECTION as "balanceDirection",
+	CASE
+	d.BALANCE_DIRECTION
+	WHEN '1'
+	THEN a.PJTD_DR - a.PJTD_CR
+	WHEN '-1'
+	THEN a.PJTD_CR - a.PJTD_DR end as "periodAmount"
+	FROM
+	xc_gl_balance_tmp a,
+	xc_gl_ccid c,
+	xc_gl_ld_accounts b,
+	xc_gl_accounts d,
+	xc_gl_acc_category e
+	where
+	a.LEDGER_ID = c.LEDGER_ID
+	AND
+	a.LEDGER_ID = b.LEDGER_ID
+	AND
+	a.CCID = c.CCID
+	AND
+	c.ACC_ID = b.ACC_ID
+	AND
+	b.ACC_ID = d.ACC_ID
+	AND
+	d.ACC_CATEGORY_CODE = e.ACC_CATEGORY_CODE
+	AND
+	a.IS_VALID = 'N'
+	AND
+	a.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	AND
+	a.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+</select> 
+</mapper>

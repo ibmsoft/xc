@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStTransshipmentMapper">
+	<!-- 物资调拨单主表列 -->
+	<sql id="xcStTransshipmentHColumn">
+		TR_H_ID,
+		TR_H_CODE,
+		TR_H_NAME,
+		BUSINESS_TYPE_ID,
+		DEPT_ID,
+		DOC_CAT_CODE,
+		OUT_WH_ID,
+		OUT_WH_KEEPER_ID,
+		IN_WH_ID,
+		IN_WH_KEEPER_ID,
+		STATUS,
+		LEDGER_ID,
+		ORG_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		BIZ_DATE,
+		AMOUNT
+	</sql>
+	<!-- 物资调拨单明细列 -->
+	<sql id="xcStTransshipmentLColumn">
+		TR_L_ID,
+		TR_H_ID,
+		MATERIAL_ID,
+		QTY,
+		PRICE,
+		AMOUNT,
+		ENTRY_H_ID,
+		ENTRY_L_ID,
+		LEDGER_ID,
+		ORG_ID,
+		IN_LOCATION_ID,
+		OUT_LOCATION_ID,
+		DIM_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		SERIAL_BATCH_NUM,
+		B_SERIAL_ID
+	</sql>
+	<!-- 根据物资调拨单主键ID得到相应数据信息 -->
+	<select id="selectXcStTransshipmentH" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStTransshipmentHColumn"/>
+		FROM xc_st_transshipment_h
+		WHERE TR_H_ID = #{TR_H_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据物资调拨单行ID得到相应数据信息 -->
+	<select id="selectXcStTransshipmentL" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStTransshipmentLColumn"/>
+		FROM xc_st_transshipment_l
+		WHERE TR_L_ID = #{TR_L_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据物资调拨单主ID得到行相应数据信息 -->
+	<select id="selectXcStTransshipmentLByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStTransshipmentLColumn"/>
+		FROM xc_st_transshipment_l
+		WHERE TR_H_ID = #{TR_H_ID,jdbcType=VARCHAR}
+	</select>
+    <!-- 插入物资调拨单主表 -->
+    <insert id="insertXcStTransshipmentH" parameterType="java.util.Map">
+    	INSERT INTO xc_st_transshipment_h (
+			<include refid="xcStTransshipmentHColumn"/>
+    	)
+		VALUES (
+		   #{TR_H_ID,jdbcType=VARCHAR},
+		   #{TR_H_CODE,jdbcType=VARCHAR},
+		   #{TR_H_NAME,jdbcType=VARCHAR},
+		   #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+		   #{DEPT_ID,jdbcType=VARCHAR},
+		   #{DOC_CAT_CODE,jdbcType=VARCHAR},
+		   #{OUT_WH_ID,jdbcType=VARCHAR},
+		   #{OUT_WH_KEEPER_ID,jdbcType=VARCHAR},
+		   #{IN_WH_ID,jdbcType=VARCHAR},
+		   #{IN_WH_KEEPER_ID,jdbcType=VARCHAR},
+		   #{STATUS,jdbcType=VARCHAR},
+		   #{LEDGER_ID,jdbcType=VARCHAR},
+		   #{ORG_ID,jdbcType=VARCHAR},
+		   #{CREATION_DATE,jdbcType=TIMESTAMP},
+		   #{CREATED_BY,jdbcType=VARCHAR},
+		   #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		   #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		   #{BIZ_DATE,jdbcType=TIMESTAMP},
+		   #{AMOUNT,jdbcType=NUMERIC}
+		)
+    </insert>
+    <!-- 更新物资调拨单主表 -->
+    <update id="updateXcStTransshipmentH" parameterType="java.util.Map">
+    	UPDATE xc_st_transshipment_h SET
+			TR_H_NAME			= #{TR_H_NAME,jdbcType=VARCHAR},
+			BUSINESS_TYPE_ID	= #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+			DEPT_ID				= #{DEPT_ID,jdbcType=VARCHAR},
+			DOC_CAT_CODE		= #{DOC_CAT_CODE,jdbcType=VARCHAR},
+			OUT_WH_ID			= #{OUT_WH_ID,jdbcType=VARCHAR},
+			OUT_WH_KEEPER_ID	= #{OUT_WH_KEEPER_ID,jdbcType=VARCHAR},
+			IN_WH_ID			= #{IN_WH_ID,jdbcType=VARCHAR},
+			IN_WH_KEEPER_ID		= #{IN_WH_KEEPER_ID,jdbcType=VARCHAR},
+			STATUS				= #{STATUS,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE	= #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY		= #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+			BIZ_DATE			= #{BIZ_DATE,jdbcType=TIMESTAMP},
+			AMOUNT				= #{AMOUNT,jdbcType=NUMERIC}
+		WHERE
+			TR_H_ID 		= #{TR_H_ID,jdbcType=VARCHAR}
+    </update>
+	
+	<!-- 保存物资调拨单明细 -->
+	<insert id="insertXcStTransshipmentL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_transshipment_l (
+						<include refid="xcStTransshipmentLColumn"/>
+					)
+					VALUES (
+						#{item.TR_L_ID,jdbcType=VARCHAR},
+						#{item.TR_H_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						IFNULL(#{item.PRICE,jdbcType=NUMERIC},0),
+						IFNULL(#{item.AMOUNT,jdbcType=NUMERIC},0),
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.IN_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.OUT_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},
+						#{item.B_SERIAL_ID,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_transshipment_l (
+						<include refid="xcStTransshipmentLColumn"/>
+					)
+					VALUES (
+						#{item.TR_L_ID,jdbcType=VARCHAR},
+						#{item.TR_H_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						NVL(#{item.PRICE,jdbcType=NUMERIC},0),
+						NVL(#{item.AMOUNT,jdbcType=NUMERIC},0),
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.IN_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.OUT_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},
+						#{item.B_SERIAL_ID,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+
+	<!-- 更新物资调拨单明细  -->
+	<update id="updateXcStTransshipmentL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_transshipment_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						PRICE				= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT				= #{item.AMOUNT,jdbcType=NUMERIC},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						IN_LOCATION_ID		= #{item.IN_LOCATION_ID,jdbcType=VARCHAR},
+						OUT_LOCATION_ID		= #{item.OUT_LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						TR_L_ID	= #{item.TR_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_transshipment_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						PRICE				= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT				= #{item.AMOUNT,jdbcType=NUMERIC},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						IN_LOCATION_ID		= #{item.IN_LOCATION_ID,jdbcType=VARCHAR},
+						OUT_LOCATION_ID		= #{item.OUT_LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						TR_L_ID	= #{item.TR_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 批量删除物资调拨单主表  -->
+	<delete id="deleteXcStTransshipmentH" parameterType="java.util.List">
+		DELETE FROM xc_st_transshipment_h WHERE TR_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据物资调拨单主表ID批量删除物资调拨单行表信息 -->
+	<delete id="deleteXcStTransshipmentLByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_transshipment_l WHERE TR_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据物资调拨单行表ID批量删除物资调拨单行表信息 -->
+	<delete id="deleteXcStTransshipmentLByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_transshipment_l WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_transshipment_l WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+</mapper>

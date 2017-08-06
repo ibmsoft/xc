@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"initScript":"\n","serverScript":"app.update({\n  tableName: 'xc_ap_doc_cats'\n});","itemId":"module"},"children":[],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

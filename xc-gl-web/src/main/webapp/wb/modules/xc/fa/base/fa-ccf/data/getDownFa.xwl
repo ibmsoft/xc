@@ -1,0 +1,1 @@
+{"inframe":false,"title":"获取下级资产","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select * from xc_fa_cats\nwhere UP_CODE = {?cat_code?}","itemId":"getUpFa"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

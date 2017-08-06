@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select AR_PAY_H_ID from XC_AR_PAY_H where AR_PAY_CUSTOMER_H_ID \nin('{#arry#}') and INIT='0'","itemId":"dataprovider1"},"children":[],"type":"dataprovider","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

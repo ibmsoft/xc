@@ -1,0 +1,19 @@
+{
+    XC_ST_WA_LD_SET_searchButton			: 'Query',
+    XC_ST_WA_LD_SET_resetButton				: 'Reset',
+    XC_ST_WA_LD_SET_NUMBER_COL				: 'NO.',
+    XC_ST_WA_LD_SET_AP_PUR_TYPE_NAME		: 'Purchase Type',
+    XC_ST_WA_LD_SET_AP_ACC_ID_INV_NAME		: 'Inventory Or Cost Account',
+    XC_ST_WA_LD_SET_saveBtn					: 'Save',
+    XC_ST_WA_LD_SET_AP_PUR_TYPE_NAME_1		: 'Financial Type',
+    XC_ST_WA_LD_SET_ACC_CODE				: 'Account Code',
+    XC_ST_WA_LD_SET_ACC_NAME				: 'Account Name',
+    XC_ST_WA_LD_SET_ACC_CODE_NAME			: 'Account Code Or Name',
+    XC_ST_WA_LD_SET_qxzck					: 'Please select a warehouse!',
+    XC_ST_WA_LD_SET_qxzxytbdsj				: 'Select data to synchronize!',
+    XC_ST_WA_LD_SET_tbcg					: 'Synchronized success!',
+    XC_ST_WA_LD_SET_qxzxyscdsj				: 'Select the data you want to delete!',
+    XC_ST_WA_LD_SET_sccg					: 'Delete success!',
+    XC_ST_WA_LD_SET_mysjxybc				: 'No data need to be saved!',
+    XC_ST_WA_LD_SET_sjbccg					: 'Data saved successfully!'
+}

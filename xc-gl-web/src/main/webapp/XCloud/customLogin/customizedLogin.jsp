@@ -1,0 +1,125 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<% 
+ String contextPath = request.getContextPath();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset=utf-8 />
+<title>兴竹云ERP-演示Demo</title>
+<script type="text/javascript">
+  var contextPath = '<%=contextPath%>';
+</script>
+<link href="css/base.css" rel="stylesheet"/>
+<link href="css/common.css" rel="stylesheet"/>
+<link href="css/course.css" rel="stylesheet"/>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/loginCheck.js"></script>
+<!-- 
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/xes.core.js"></script>
+<script type="text/javascript" src="js/xes.cookie.js"></script>
+<script type="text/javascript" src="js/xes.dialog.js"></script>
+<script type="text/javascript" src="js/xes.slider.js"></script>
+<script type="text/javascript" src="js/xes.search.js"></script>
+<script type="text/javascript" src="js/xes.tip.js"></script> -->
+<link href="css/login.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- sk-header begin -->
+  <header id="login-header">
+    <div class="sk-wrapper login-topbg">
+       <div class="sk-top-bar">
+             <ul class="mt8">
+               <li id="tb-pyhome"><s class="fixpng"></s><a href="http://xzsoft.cc" target="_blank">云ERP官网</a></li>
+             </ul>
+       </div>
+       <h1 class="login-logo"><span class="fn-left"><a href="http://xzsoft.cc" target="_blank"><span class="fn-left login-logo-font">兴竹云ERP | 提高企业效率的第一选择</span></a></span></h1>
+         <div class="clear"></div>
+    </div>
+  </header>
+  <!-- sk-header end -->
+  <section class="sk-content relative">
+      <div class="bar-blue03"></div>
+      <section class="relative sk-wrapper whiteBg">
+              <div class="sk-wrapper03 minH580">
+	<div class="login-box02">
+		<!-- login-left begin-->
+		<div class="l-b-left">
+			<h2 class="fixpng">用户登录</h2>
+			<div class="l-b-form" id="login-box-form" >
+			
+				<div class="loginTip04" id="errInfo">&nbsp;</div>
+		          <form>
+			          <table border="0" width="100%">
+			              <tbody>
+				              <tr>
+				                  <td align="right" width="22%" height="50" class="pdright10 ft14"><span class="ftred">*</span> 用户名：</td>
+				                  <td width="78%">
+				                      <div class="relative">
+					                   <span class="fn-left pdright10"><input type="text" id="CasUsername" name="CasUsername"  class="login-ipText login-ipText-focus" value="" autocomplete="off" /></span>
+					                 </div>
+				                 </td>
+				              </tr>
+				              <tr>
+				                  <td align="right" height="50" class="pdright10 ft14"><span class="ftred">*</span> 密&#12288;码：</td>
+				                  <td>
+				                  	<span class="fn-left pdright10"><input type="password" class="login-ipText login-ipText-focus" id="CasPassword" name="CasPassword" /></span>
+				                  </td>
+				              </tr>
+				              <tr>
+				                  <td align="right" height="35">&nbsp;</td>
+				                  <td class="login-valign">
+				                      <span class="fn-left pdright10"><input type="checkbox" id="remaindbox" name="checkbox"/></span>
+				                      <label class="fn-left pdright10 ft14 ftgray01" for="remaindbox"><font size=2px>记住用户名</font></label>
+				                  </td>
+				              </tr>
+				              <tr>
+				                  <td align="right" height="68">&nbsp;</td>
+				                  <td>
+				                      <span class="fn-left login-box-btn pdright20"><a href="javascript:void(0);" onclick="return false;" id="loginBtn">登 录</a></span>
+				                  </td>
+				              </tr>
+				          </tbody>
+			          </table>
+		          </form>
+			</div>
+		</div>
+		<!-- login-left end-->
+		<!-- login-right begin-->
+				<div class="l-b-right-two">
+            <p class="mtop20 ft14">觉得兴竹云ERP不错？</p>
+			            <p class="mtop20"><span class="btn-green03"><a class="wid130" href="http://xc.xzsoft.cc/xtm/m?xwl=xc_erp/order" target="_blank">立即购买</a></span></p>
+            <div class="login-p mtop20 ft14">
+                    	<p class="c"><em></em><span>云ERP演示用户信息：</span></p>
+                        <p class="pl15"><font class="ftblue">用户名 ： demo1</font></p>
+                        <p class="pl15"><font class="ftblue">密&nbsp;&nbsp;&nbsp;&nbsp;码：      111111</font></p>
+                    	<p class="c mtop20"><em></em><span>如有疑问请咨询：</span></p>
+                    	                        <p class="ftblue pl15">高晓峰</p>
+                                            	                        <p class="ftblue pl15">18911219966</p>
+                                         	</div>
+        </div>
+        		<!-- login-right end-->
+		<div class="clear"></div>
+	</div>
+</div>
+  <!-- sk-footer begin -->
+  <footer id="sk-footer">
+     <p>咨询电话：010-58842579</p>
+     <p>Copyright 2016 Xintegral, Inc. All Rights Reserved.</script> </p>
+  </footer>
+  <!-- sk-footer end -->
+  <!--go-top begin-->
+  <div id="go_top" class="go_top"><a href="javascript:;" class="goTop fixpng" title="返回顶部"></a></div>
+  <!--go-top end-->
+  <script type="text/javascript">
+  var _userName = getCookie("XC_CLOUD_DEMO_NAME");
+  var _pwd = getCookie("XC_CLOUD_DEMO_PWD");
+  $("#CasUsername").val(_userName);
+  $("#CasPassword").val(_pwd);
+  if(_userName !=null && _userName !='undefined')
+	  $("#remaindbox").attr("checked",true);
+  </script>
+  </body>
+</html>

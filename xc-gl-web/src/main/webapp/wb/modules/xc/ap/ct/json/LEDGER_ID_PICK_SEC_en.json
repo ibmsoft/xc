@@ -1,0 +1,6 @@
+{
+	ledger:'ledger',
+  	ledgerCode:'ledger code',
+  	ledgerName:'ledger name',
+  	condition:'ledger code or name'
+}

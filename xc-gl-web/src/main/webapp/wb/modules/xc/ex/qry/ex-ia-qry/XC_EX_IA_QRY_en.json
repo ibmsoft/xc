@@ -1,0 +1,11 @@
+{
+  empty_text_ledger		: "Please select the account book to query",
+  query_ledger_combo	: "Ledger",
+  queryBtn				: "Query",
+  cancelBtn				: "Reset",
+  row_num_col			: "No",
+  emp_code_col			: "Staff Code",
+  emp_name_col			: "Staff Name",
+  dept_name_col			: "Department",
+  ia_bal_col			: "Reserve fund balance"
+}

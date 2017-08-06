@@ -1,0 +1,8 @@
+{
+    PROJECT_NAME : "项目",
+    DEPT_NAME_COL : "部门",
+    PROJECT_CODE_COL : "项目编码",
+    PROJECT_NAME_COL : "项目名称",
+    PROJECT_CODE_NAME : "项目编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

@@ -1,0 +1,18 @@
+{
+	emptyText1:'Please select books query',
+  	ledger:'ledger',
+  	dept:'department',
+  	pro:'project',
+  	bgYear:'Budget year',
+  	query:'query',
+  	orderBy:'No',
+  	ledgerId:'ledgerId',
+  	proId:'Project ID',
+ 	bgAmt:'Budget Amount',
+  	factAmt:'Actually happen',
+  	factRate:'Actual occurrence rate',
+  	occupyAmt:'Budget occupancy',
+  	occupyRate:'Budget occupancy rate',
+  	remainAmt:'Residual amount',
+  	remainRate:'Residual amount rate'
+}

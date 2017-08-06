@@ -1,0 +1,1 @@
+{"inframe":false,"title":"编辑","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","serverScript":"app.update({\n  tableName: 'XC_FA_LD_ADDING'  \n});","itemId":"module"},"children":[],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

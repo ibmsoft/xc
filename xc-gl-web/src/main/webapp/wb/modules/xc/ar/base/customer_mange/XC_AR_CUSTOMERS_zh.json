@@ -1,0 +1,100 @@
+{
+
+  XH:'序号',
+  CODE_COL:'编码',
+
+  NAME_COL:'名称',
+  CODE_NAME:'编码/名称',
+  IS_USE_COL:'启用',
+  queryBtn:'查询',
+  resetBtn:'重置',
+  addBtn:'新增',
+  saveBtn:'保存',
+  delBtn:'删除',
+  cancelBtn:'取消',
+  editBtn:'修改',
+  editmoreBtn:'批量修改',
+  browseBtn:'查看',
+
+  importBtn:'导入',
+  exportBtn:'导出',
+
+  CODEMSG:'编码重复！',
+  message:'正在保存中...',
+
+  SAVETIP:'保存成功！',
+  DELTIP:'请选择要删除的记录!',
+  DELOKTIP:'您确定要删除？',
+  DELTIP1:'删除成功!',
+  EDITETIP:'修改成功！',
+
+  OPTYPE_COL:'操作类型',
+
+
+  START_DATE1:'开始日期',
+  END_DATE1:'结束日期',
+
+
+  TAX_NO1:'纳税人识别号',
+
+
+  MSG1:'客户信息不完整，请确认!',
+  MSG2:'移动电话格式不合法!',
+  MSG3:'固定电话格式不合法!',
+  MSG4:'邮箱格式不合法!',
+  MSG5:'开始日期不可晚于结束日期!',
+  MSG6:'结束日期作为修改项不可修改为空!',
+
+  MSG7:'开始日期作为修改项不可修改为空!',
+  MSG8:'请勾选要批量修改项!',
+
+  MSG9:'客户已关联银行不可以删除！',
+  MS10:'该客户已被账簿供应商设置引用，不可删除!',
+
+  MS11:'客户编码已存在！',
+  MSG12:'客户名称已存在！',
+  MSG13:'纳税人识别码已存在！',
+  MSG14:'请先保存客户信息',
+  MSG15:'银行账号不可重复!',
+
+  TIP:'提示',
+
+  ADDRESS1:'地址',
+
+  CONTACT1:'联系人',
+
+  TEL1:'办公电话',
+
+  MOBILE1:'移动电话',
+
+  QQ1:'QQ号',
+  EMAIL1:'电子邮件',
+
+  WECHAT1:'微信号',
+
+  VENDOR_NAME:'供应商',
+
+  VENDOR_CODE:'供应商编码',
+
+  CUSTOM_ID1:'客户ID',
+
+  BASE:'基本信息',
+
+
+
+  BANK_ID:'开户行ID',
+  ACCOUNT_NAME:'户名',
+
+  BANK_NAME:'银行名称',
+
+  DEPOSIT_BANK_NAME:'开户行',
+
+  BANK_ACCOUNT:'账号',
+
+  CORRESPONDENT:'联行号',
+
+  IS_DEFAULT:'是否默认',
+
+
+  BANK:'开户行'
+}

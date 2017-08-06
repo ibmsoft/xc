@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.InternalDataMapper">
+	<!-- 获取报表各维度的id值 -->
+	<select id="getRepIds" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		(select modaltype_id from xsr_rep_modaltype where
+		modaltype_code=#{modalTypeCode}
+		and SUIT_ID=(select
+		SUIT_ID from
+		xsr_rep_suit where
+		SUIT_CODE=#{suitCode})) MODALTYPE_ID,
+		(select
+		modalsheet_id
+		from xsr_rep_modalsheet where
+		modalsheet_code=#{modalSheetCode}
+		and MODALTYPE_ID=(select modaltype_id
+		from xsr_rep_modaltype where
+		modaltype_code=#{modalTypeCode}
+		and
+		SUIT_ID=(select
+		SUIT_ID from xsr_rep_suit where
+		SUIT_CODE=#{suitCode}))
+		and SUIT_ID=(select
+		SUIT_ID from xsr_rep_suit where
+		SUIT_CODE=#{suitCode})
+		)
+		MODALSHEET_ID,
+		(select org_id from xip_pub_orgs
+		where
+		org_code=#{entityCode}) ENTITY_ID,
+		(select period_id from
+		xsr_rep_period where period_code=#{periodCode})
+		PERIOD_ID,
+		(select
+		CURRENCY_ID from xsr_rep_currency where
+		currency_code=#{cnyCode})
+		CURRENCY_ID,
+		(select
+		SUIT_ID from xsr_rep_suit where
+		SUIT_CODE=#{suitCode})
+		SUIT_ID
+		from dual
+	</select>
+	<!--删除固定行临时表数据 -->
+	<delete id="deleteInnerFixTable" parameterType="java.util.HashMap">
+		DELETE FROM
+		xsr_rep_inner_data_temp
+		WHERE MODALTYPE_ID =#{modalTypeId}
+		AND ENTITY_ID
+		= #{entityId}
+		AND PERIOD_ID = #{periodId}
+		AND CURRENCY_ID =#{cnyId}
+		AND
+		MODALSHEET_ID =#{modalSheetId}
+	</delete>
+	<!--删除浮动行临时表数据 -->
+	<delete id="deleteInnerFloatTable" parameterType="java.util.HashMap">
+		DELETE FROM
+		xsr_rep_inner_data__fj_temp
+		WHERE MODALTYPE_ID =#{modalTypeId}
+		AND
+		ENTITY_ID = #{entityId}
+		AND PERIOD_ID = #{periodId}
+		AND CURRENCY_ID
+		=#{cnyId}
+		AND MODALSHEET_ID =#{modalSheetId}
+	</delete>
+	<!-- 插入固定行数据 -->
+	<insert id="saveInnerFixData">
+		INSERT INTO xsr_rep_inner_data_temp (
+		SUIT_ID,
+		SUIT_CODE,
+		MODALTYPE_ID,
+		MODALTYPE_CODE,
+		MODALSHEET_ID,
+		MODALSHEET_CODE,
+		ENTITY_ID,
+		ENTITY_CODE,
+		PERIOD_ID,
+		PERIOD_CODE,
+		CURRENCY_ID,
+		CURRENCY_CODE,
+		ROW_NO,
+		COL_NO,
+		DATA_TYPE,
+		CELLVALUE
+		)
+		VALUES
+		<foreach collection="fixdataArray" item="item" index="index"
+			separator=",">
+			(
+			#{suitId},
+			#{suitCode},
+			#{modalTypeId},
+			#{modalTypeCode},
+			#{modalSheetId},
+			#{modalSheetCode},
+			#{entityId},
+			#{entityCode},
+			#{periodId},
+			#{periodCode},
+			#{cnyId},
+			#{cnyCode},
+			#{item.ROWNO},
+			#{item.COLNO},
+			#{item.DATATYPE},
+			#{item.CELLV}
+			)
+		</foreach>
+	</insert>
+	<!-- 插入浮动数据 -->
+	<insert id="saveInnerFloatData">
+		INSERT INTO xsr_rep_inner_data__fj_temp (
+		SUIT_ID,
+		SUIT_CODE,
+		MODALTYPE_ID,
+		MODALTYPE_CODE,
+		MODALSHEET_ID,
+		MODALSHEET_CODE,
+		ENTITY_ID,
+		ENTITY_CODE,
+		PERIOD_ID,
+		PERIOD_CODE,
+		CURRENCY_ID,
+		CURRENCY_CODE,
+		ROW_NO,
+		ROWNUMDTL,
+		DATA1,
+		DATA2,
+		DATA3,
+		DATA4,
+		DATA5,
+		DATA6,
+		DATA7,
+		DATA8,
+		DATA9,
+		DATA10,
+		DATA11,
+		DATA12,
+		DATA13,
+		DATA14,
+		DATA15,
+		DATA16,
+		DATA17,
+		DATA18,
+		DATA19,
+		DATA20,
+		DATA21,
+		DATA22,
+		DATA23,
+		DATA24,
+		DATA25,
+		DATA26,
+		DATA27,
+		DATA28,
+		DATA29,
+		DATA30,
+		DATA31,
+		DATA32,
+		DATA33,
+		DATA34,
+		DATA35,
+		DATA36,
+		DATA37,
+		DATA38,
+		DATA39,
+		DATA40,
+		DATA41,
+		DATA42,
+		DATA43,
+		DATA44,
+		DATA45,
+		DATA46,
+		DATA47,
+		DATA48,
+		DATA49,
+		DATA50,
+		DATA51,
+		DATA52,
+		DATA53,
+		DATA54,
+		DATA55,
+		DATA56,
+		DATA57,
+		DATA58,
+		DATA59,
+		DATA60,
+		DATA61,
+		DATA62,
+		DATA63,
+		DATA64,
+		DATA65,
+		DATA66,
+		DATA67,
+		DATA68,
+		DATA69,
+		DATA70,
+		DATA71,
+		DATA72,
+		DATA73,
+		DATA74,
+		DATA75,
+		DATA76,
+		DATA77,
+		DATA78,
+		DATA79,
+		DATA80,
+		DATA81,
+		DATA82,
+		DATA83,
+		DATA84,
+		DATA85,
+		DATA86,
+		DATA87,
+		DATA88,
+		DATA89,
+		DATA90,
+		DATA91,
+		DATA92,
+		DATA93,
+		DATA94,
+		DATA95,
+		DATA96,
+		DATA97,
+		DATA98,
+		DATA99,
+		DATA100
+		)
+		VALUES
+		<foreach collection="floatdataArray" item="item" index="index"
+			separator=",">
+			(
+			#{suitId},
+			#{suitCode},
+			#{modalTypeId},
+			#{modalTypeCode},
+			#{modalSheetId},
+			#{modalSheetCode},
+			#{entityId},
+			#{entityCode},
+			#{periodId},
+			#{periodCode},
+			#{cnyId},
+			#{cnyCode},
+			#{item.rowno},
+			#{item.rownumdtl},
+			#{item.data1},
+			#{item.data2},
+			#{item.data3},
+			#{item.data4},
+			#{item.data5},
+			#{item.data6},
+			#{item.data7},
+			#{item.data8},
+			#{item.data9},
+			#{item.data10},
+			#{item.data11},
+			#{item.data12},
+			#{item.data13},
+			#{item.data14},
+			#{item.data15},
+			#{item.data16},
+			#{item.data17},
+			#{item.data18},
+			#{item.data19},
+			#{item.data20},
+			#{item.data21},
+			#{item.data22},
+			#{item.data23},
+			#{item.data24},
+			#{item.data25},
+			#{item.data26},
+			#{item.data27},
+			#{item.data28},
+			#{item.data29},
+			#{item.data30},
+			#{item.data31},
+			#{item.data32},
+			#{item.data33},
+			#{item.data34},
+			#{item.data35},
+			#{item.data36},
+			#{item.data37},
+			#{item.data38},
+			#{item.data39},
+			#{item.data40},
+			#{item.data41},
+			#{item.data42},
+			#{item.data43},
+			#{item.data44},
+			#{item.data45},
+			#{item.data46},
+			#{item.data47},
+			#{item.data48},
+			#{item.data49},
+			#{item.data50},
+			#{item.data51},
+			#{item.data52},
+			#{item.data53},
+			#{item.data54},
+			#{item.data55},
+			#{item.data56},
+			#{item.data57},
+			#{item.data58},
+			#{item.data59},
+			#{item.data60},
+			#{item.data61},
+			#{item.data62},
+			#{item.data63},
+			#{item.data64},
+			#{item.data65},
+			#{item.data66},
+			#{item.data67},
+			#{item.data68},
+			#{item.data69},
+			#{item.data70},
+			#{item.data71},
+			#{item.data72},
+			#{item.data73},
+			#{item.data74},
+			#{item.data75},
+			#{item.data76},
+			#{item.data77},
+			#{item.data78},
+			#{item.data79},
+			#{item.data80},
+			#{item.data81},
+			#{item.data82},
+			#{item.data83},
+			#{item.data84},
+			#{item.data85},
+			#{item.data86},
+			#{item.data87},
+			#{item.data88},
+			#{item.data89},
+			#{item.data90},
+			#{item.data91},
+			#{item.data92},
+			#{item.data93},
+			#{item.data94},
+			#{item.data95},
+			#{item.data96},
+			#{item.data97},
+			#{item.data98},
+			#{item.data99},
+			#{item.data100}
+			)
+		</foreach>
+	</insert>
+	<!-- 更新固定行临时表指标 -->
+	<update id="updateInnerFixItem">
+		UPDATE xsr_rep_inner_data_temp T
+		SET T.ROWITEM_ID = (
+		SELECT
+		XR.ROWITEM_ID
+		FROM
+		xsr_rep_rowmodalref XR,
+		xsr_rep_colmodalref XC
+		WHERE
+		T.SUIT_ID = XR.SUIT_ID
+		AND T.MODALSHEET_ID = XR.MODALSHEET_ID
+		AND
+		T.ROW_NO = XR.ROWNO
+		AND T.SUIT_ID = XC.SUIT_ID
+		AND T.MODALSHEET_ID =
+		XC.MODALSHEET_ID
+		AND T.COL_NO = XC.COLNO
+		AND XR.SUIT_ID = XC.SUIT_ID
+		AND
+		XR.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND XR.LANNO = XC.LANNO
+		AND
+		XR.SUIT_ID =#{suitId}
+		AND XR.MODALSHEET_ID = #{modalSheetId}
+		AND
+		XC.SUIT_ID =#{suitId}
+		AND XC.MODALSHEET_ID = #{modalSheetId}
+		),
+		T.ROWITEM_CODE = (
+		SELECT
+		XR.ROWITEM_CODE
+		FROM
+		xsr_rep_rowmodalref XR,
+		xsr_rep_colmodalref XC
+		WHERE
+		T.SUIT_ID = XR.SUIT_ID
+		AND T.MODALSHEET_ID =
+		XR.MODALSHEET_ID
+		AND T.ROW_NO = XR.ROWNO
+		AND T.SUIT_ID = XC.SUIT_ID
+		AND
+		T.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND T.COL_NO = XC.COLNO
+		AND
+		XR.SUIT_ID = XC.SUIT_ID
+		AND XR.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND
+		XR.LANNO = XC.LANNO
+		AND XR.SUIT_ID = #{suitId}
+		AND XR.MODALSHEET_ID =
+		#{modalSheetId}
+		AND XC.SUIT_ID = #{suitId}
+		AND XC.MODALSHEET_ID =
+		#{modalSheetId}
+		),
+		T.COLITEM_ID = (
+		SELECT
+		XC.COLITEM_ID
+		FROM
+		xsr_rep_rowmodalref XR,
+		xsr_rep_colmodalref XC
+		WHERE
+		T.SUIT_ID =
+		XR.SUIT_ID
+		AND T.MODALSHEET_ID = XR.MODALSHEET_ID
+		AND T.ROW_NO =
+		XR.ROWNO
+		AND T.SUIT_ID = XC.SUIT_ID
+		AND T.MODALSHEET_ID =
+		XC.MODALSHEET_ID
+		AND T.COL_NO = XC.COLNO
+		AND XR.SUIT_ID = XC.SUIT_ID
+		AND
+		XR.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND XR.LANNO = XC.LANNO
+		AND
+		XR.SUIT_ID = #{suitId}
+		AND XR.MODALSHEET_ID = #{modalSheetId}
+		AND
+		XC.SUIT_ID = #{suitId}
+		AND XC.MODALSHEET_ID = #{modalSheetId}
+		),
+		T.COLITEM_CODE = (
+		SELECT
+		XC.COLITEM_CODE
+		FROM
+		xsr_rep_rowmodalref XR,
+		xsr_rep_colmodalref XC
+		WHERE
+		T.SUIT_ID = XR.SUIT_ID
+		AND T.MODALSHEET_ID =
+		XR.MODALSHEET_ID
+		AND T.ROW_NO = XR.ROWNO
+		AND T.SUIT_ID = XC.SUIT_ID
+		AND
+		T.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND T.COL_NO = XC.COLNO
+		AND
+		XR.SUIT_ID = XC.SUIT_ID
+		AND XR.MODALSHEET_ID = XC.MODALSHEET_ID
+		AND
+		XR.LANNO = XC.LANNO
+		AND XR.SUIT_ID = #{suitId}
+		AND XR.MODALSHEET_ID =
+		#{modalSheetId}
+		AND XC.SUIT_ID = #{suitId}
+		AND XC.MODALSHEET_ID =
+		#{modalSheetId}
+		)
+		WHERE
+		T.SUIT_ID = #{suitId}
+		AND T.MODALTYPE_ID =
+		#{modalTypeId}
+		AND T.ENTITY_ID = #{entityId}
+		AND T.PERIOD_ID =
+		#{periodId}
+		AND T.CURRENCY_ID = #{cnyId}
+		AND T.MODALSHEET_ID =
+		#{modalSheetId}
+	</update>
+	<!-- 更新附加行临时表指标 -->
+	<update id="updateInnerFloatItem">
+		UPDATE xsr_rep_inner_data__fj_temp T
+		SET
+		T.ROWITEM_ID=(
+		SELECT
+		XR.ROWITEM_ID
+		FROM
+		xsr_rep_rowmodalref XR
+		WHERE
+		T.SUIT_ID = XR.SUIT_ID
+		AND T.MODALSHEET_ID = XR.MODALSHEET_ID
+		AND
+		T.ROW_NO = XR.ROWNO
+		AND XR.SUIT_ID = #{suitId}
+		AND XR.MODALSHEET_ID =
+		#{modalSheetId}
+		),T.ROWITEM_CODE=(
+		SELECT
+		XR.ROWITEM_CODE
+		FROM
+		xsr_rep_rowmodalref XR
+		WHERE
+		T.SUIT_ID = XR.SUIT_ID
+		AND
+		T.MODALSHEET_ID = XR.MODALSHEET_ID
+		AND T.ROW_NO = XR.ROWNO
+		AND
+		XR.SUIT_ID = #{suitId}
+		AND XR.MODALSHEET_ID = #{modalSheetId}
+		)
+		WHERE
+		T.SUIT_ID = #{suitId}
+		AND T.MODALTYPE_ID = #{modalTypeId}
+		AND
+		T.ENTITY_ID = #{entityId}
+		AND T.PERIOD_ID = #{periodId}
+		AND
+		T.CURRENCY_ID = #{cnyId}
+		AND T.MODALSHEET_ID = #{modalSheetId}
+	</update>
+</mapper>

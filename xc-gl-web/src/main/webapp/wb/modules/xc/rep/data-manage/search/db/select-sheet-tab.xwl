@@ -1,0 +1,1 @@
+{"inframe":false,"title":"报表模板","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select t.TAB_ID,t.TAB_NAME from xc_rep_tab t where t.ACC_HRCY_ID = {?accHrcyId?}","itemId":"selectSheetTab"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

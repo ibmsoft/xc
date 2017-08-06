@@ -1,0 +1,14 @@
+{
+  Ledger:'Ledger',
+  Segments:'Segments',
+  condition:'CodeOrName',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  syncBtn:'Sync',
+  delBtn:'Delete',
+  rownum:'Order',
+  VAL_CODE_COL:'Code',
+  VAL_NAME_COL:'Name',
+  IS_ENABLED_COL:'Enabled',
+  condition_et:'Enter Code Or Name '
+}

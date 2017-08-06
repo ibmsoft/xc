@@ -1,0 +1,1 @@
+{"inframe":false,"title":"账簿所属采购类型修改","hidden":false,"roles":{"default":1},"children":[{"configs":{"serverScript":"\napp.update({\n  tableName: 'XC_AP_LD_PUR_TYPE'\n});","itemId":"module"},"children":[],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

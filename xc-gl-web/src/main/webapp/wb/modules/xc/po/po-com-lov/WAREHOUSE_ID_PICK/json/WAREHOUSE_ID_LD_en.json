@@ -1,0 +1,6 @@
+{
+	po_pur_po_com_lov_warehouse:'warehouse',
+  	po_pur_po_com_lov_warehouse_code:'warehouse code',
+  	po_pur_po_com_lov_warehouse_name:'warehouse name',
+  	po_pur_po_com_lov_warehouse_code_name:'warehouse code/name'
+}

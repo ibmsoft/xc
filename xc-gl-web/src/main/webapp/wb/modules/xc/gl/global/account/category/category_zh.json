@@ -1,0 +1,8 @@
+{
+  moduleTitle:"会计科目分类",
+  categoryCode:"编码",
+  categoryName:"名称",
+  balanceDirection:"余额方向",
+  hasYearBalance:"有无年度余额",
+  note:"备注"
+}

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"阻止修改账薄的编码","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","serverScript":"app.run('SELECT 1 FROM XC_GL_LEDGERS WHERE LEDGER_ID = {?ledger_id?} ',{\n\terrorText:'账薄编码不能被修改'\n});\n","itemId":"module"},"children":[],"expanded":false,"type":"module"}],"pageLink":"","iconCls":""}

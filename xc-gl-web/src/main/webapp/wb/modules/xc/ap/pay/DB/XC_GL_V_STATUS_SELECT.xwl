@@ -1,0 +1,1 @@
+{"inframe":false,"title":"凭证状态数据源","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"SELECT * FROM xip_pub_val_set_dtl  WHERE VAL_SET_CODE='XC_GL_V_STATUS' ORDER BY VAL_CODE","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

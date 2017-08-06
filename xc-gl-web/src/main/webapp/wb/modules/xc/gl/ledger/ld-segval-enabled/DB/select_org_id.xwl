@@ -1,0 +1,1 @@
+{"inframe":false,"title":"根据账簿获取组织id","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select t.ORG_ID from xc_gl_ledgers t \nwhere t.LEDGER_ID = {?LEDGER_ID?}","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

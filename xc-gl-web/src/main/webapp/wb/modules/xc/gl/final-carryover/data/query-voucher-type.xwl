@@ -1,0 +1,1 @@
+{"inframe":false,"title":"凭证类型","hidden":true,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"queryModel"},"children":[{"configs":{"sql":"select t.V_CATEGORY_ID,t.V_CATEGORY_NAME from xc_gl_v_category t","itemId":"query"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

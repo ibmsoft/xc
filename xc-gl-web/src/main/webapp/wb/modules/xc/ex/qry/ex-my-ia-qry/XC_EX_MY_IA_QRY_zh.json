@@ -1,0 +1,13 @@
+{
+  empty_text_ledger		: "请选择账薄进行查询",
+  query_ledger_combo	: "账薄",
+  queryBtn				: "查询",
+  row_num_col			: "序号",
+  creation_date_col		: "日期",
+  ex_doc_code_col		: "单据号",
+  ex_reason_col			: "单据摘要",
+  ex_ia_type_col		: "事物类型",
+  ex_ia_fact_amt_col	: "金额",
+  ia_bal_col			: "借款余额"
+  
+}

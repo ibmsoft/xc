@@ -1,0 +1,96 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.VInterfaceMapper">
+	<insert id="insertVInterface" parameterType="com.xzsoft.xc.gl.modal.VInterface">
+		INSERT INTO XC_GL_V_INTERFACE(
+			V_INTERFACE_ID,
+			LEDGER_ID,
+			PERIOD_CODE,
+			TRANS_CODE,
+			DEPT_ID,
+			PROJECT_ID,
+			DR_ACCT,
+			DR_CCID,
+			CR_ACCT,
+			CR_CCID,
+			AMT,
+			SUMMARY,
+			BUS_NO,
+			SRC_H_ID,
+			SRC_L_ID,
+			I_HEAD_ID,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		)values(
+			#{vInterfaceId,jdbcType=VARCHAR},
+			#{ledgerId,jdbcType=VARCHAR},
+			#{periodCode,jdbcType=VARCHAR},
+			#{transCode,jdbcType=VARCHAR},
+			#{deptId,jdbcType=VARCHAR},
+			#{projectId,jdbcType=VARCHAR},
+			#{drAcct,jdbcType=VARCHAR},
+			#{drCcid,jdbcType=VARCHAR},
+			#{crAcct,jdbcType=VARCHAR},
+			#{crCcid,jdbcType=VARCHAR},
+			#{amt,jdbcType=DECIMAL},
+			#{summary,jdbcType=VARCHAR},
+			#{busNo,jdbcType=VARCHAR},
+			#{srcHid,jdbcType=VARCHAR},
+			#{srcLid,jdbcType=VARCHAR},
+			#{iHeadId,jdbcType=VARCHAR},
+			#{creationDate,jdbcType=VARCHAR},
+			#{createdBy,jdbcType=VARCHAR},
+			#{lastUpdateDate,jdbcType=VARCHAR},
+			#{lastUpdateBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getVInterfaceBySrcHid" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VInterface">
+		select
+			V_INTERFACE_ID vInterfaceId,
+			LEDGER_ID ledgerId,
+			PERIOD_CODE periodCode,
+			TRANS_CODE transCode,
+			DEPT_ID deptId,
+			PROJECT_ID projectId,
+			DR_ACCT drAcct,
+			DR_CCID crAcct,
+			CR_ACCT drCcid,
+			CR_CCID crCcid,
+			AMT amt,
+			SUMMARY summary,
+			BUS_NO busNo,
+			SRC_H_ID srcHid,
+			SRC_L_ID srcLid,
+			I_HEAD_ID iHeadId
+		from XC_GL_V_INTERFACE
+	   where SRC_H_ID = #{srcHid}
+	</select>
+	
+	<delete id="deleteVInterfaceBySrcHid"  parameterType="java.lang.String">
+		delete from XC_GL_V_INTERFACE where SRC_H_ID = #{srcHid}
+	</delete>
+	<delete id="deleteVInterfaceBySrc"  parameterType="java.lang.String">
+		delete from XC_GL_V_INTERFACE 
+		where SRC_H_ID = #{srcHId,jdbcType=VARCHAR} 
+		<if test="srcLId!=null and srcLId!=''">
+		   and SRC_H_ID = #{srcLId,jdbcType=VARCHAR}
+		</if>
+		<if test="transCode!=null and transCode!=''">
+		   and TRANS_CODE=#{transCode,jdbcType=VARCHAR}
+		</if>
+	</delete>
+	<select id="getVHeaderId4Interface" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT ih.V_HEAD_ID
+		  FROM xc_gl_v_interface_heads ih,xc_gl_v_interface il
+		 WHERE ih.I_HEAD_ID = il.I_HEAD_ID
+		   and il.SRC_H_ID = #{srcHId,jdbcType=VARCHAR} 
+		<if test="srcLId!=null and srcLId!=''">
+		   and il.SRC_H_ID = #{srcLId,jdbcType=VARCHAR}
+		</if>
+		<if test="transCode!=null and transCode!=''">
+		   and il.TRANS_CODE=#{transCode,jdbcType=VARCHAR}
+		</if>
+	</select>
+</mapper>

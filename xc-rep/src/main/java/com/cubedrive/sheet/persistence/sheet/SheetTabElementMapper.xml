@@ -1,0 +1,123 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetTabElementMapper">
+
+	<resultMap id="sheetTabElementMap"
+		type="com.cubedrive.sheet.domain.sheet.SheetTabElement">
+		<id column="element_id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="etype" property="etype" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<association property="tab" column="tab_id" select="com.cubedrive.sheet.persistence.sheet.SheetTabMapper.getById" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		sheet_tab_element.element_id, 
+		sheet_tab_element.name,
+		sheet_tab_element.etype,
+		sheet_tab_element.content,
+		sheet_tab_element.tab_id
+	</sql>
+	
+	<insert id="insert">
+		<selectKey resultType="java.lang.Integer" keyProperty="element.id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		sheet_tab_element(name, etype, content, tab_id)
+		values(#{element.name,jdbcType=VARCHAR},
+			#{element.etype,jdbcType=VARCHAR},	
+			#{element.content,jdbcType=VARCHAR},		
+			#{element.tab.id,jdbcType=INTEGER})
+	</insert>
+	
+	<insert id="batchInsert">
+		insert into sheet_tab_element(name, etype, content, tab_id) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.name,jdbcType=VARCHAR},	#{item.etype,jdbcType=VARCHAR},	#{item.content,jdbcType=VARCHAR}, #{item.tab.id,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+	
+	
+	<update id="update">
+		update sheet_tab_element
+		set content = #{json,jdbcType=VARCHAR}		    
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		  AND name = #{name,jdbcType=VARCHAR}	
+	</update>
+	
+	<update id="updateContent">
+		update sheet_tab_element
+		set content = #{json,jdbcType=VARCHAR}		    
+		where element_id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteByTab">
+		delete from sheet_tab_element
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(name)">
+			AND name = #{name,jdbcType=VARCHAR}
+		</if>	
+	</delete>
+	
+	<delete id="delete">
+		delete from sheet_tab_element
+		where element_id = #{elementId,jdbcType=INTEGER}
+	</delete>
+
+	<select id="getElementById" parameterType="java.lang.Integer"
+		resultMap="sheetTabElementMap">
+		select
+		<include refid="base_column_list" />
+		from sheet_tab_element where element_id = #{elementId}
+	</select>
+	
+	<select id="findElementsByTabAndType" resultMap="sheetTabElementMap">
+		select <include refid="base_column_list" />
+		from sheet_tab_element where tab_id = #{tabId} and etype=#{type}
+	</select>
+	
+	<select id="getElementsByName" resultMap="sheetTabElementMap">
+		select <include refid="base_column_list" />
+		from sheet_tab_element where tab_id = #{tabId} and etype=#{type} and name=#{name}
+	</select>
+	
+    <select id="findElementsByTab" resultMap="sheetTabElementMap">
+		select
+		<include refid="base_column_list" />
+		from sheet_tab_element where tab_id = #{tabId}
+	</select>
+	
+	<select id="findActiveTabElements" resultMap="sheetTabElementMap">
+		select
+		<include refid="base_column_list" />
+		from sheet_tab_element, sheet_tab 
+		where sheet_tab.document_file_id = #{documentId}
+		  AND sheet_tab.is_active = true
+		  AND sheet_tab_element.tab_id = sheet_tab.tab_id
+	</select>
+
+    <insert id="copy">
+		insert into sheet_tab_element(name, etype, content, tab_id)
+		select name, etype, content, #{toTabId}
+		  from sheet_tab_element
+		 where tab_id=#{fromTabId}
+	</insert>
+	
+	<select id="countElementByTab" parameterType="java.lang.Integer" resultType="java.lang.Long">
+		select count(element_id) from sheet_tab_element where tab_id = #{tabId}
+	</select>
+	
+	<select id="loadElementsOnDemand" resultMap="sheetTabElementMap">
+		select <include refid="base_column_list" />
+		from sheet_tab_element where element_id &gt; #{startElementId} and tab_id = #{tabId} 
+		order by element_id ASC limit #{size}
+	</select>
+	<!-- 云ERP根据tabId和eType查询报表单元格格式 -->
+	<select id="findTabElementById" parameterType="java.util.HashMap" resultType="com.cubedrive.sheet.domain.sheet.SheetTabElement">
+			select NAME, ETYPE, CONTENT
+		from xc_rep_tab_element where TAB_ID = #{tabId} and etype =#{eType}
+	</select>
+</mapper>

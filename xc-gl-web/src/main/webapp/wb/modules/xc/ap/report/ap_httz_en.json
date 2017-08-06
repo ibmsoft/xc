@@ -1,0 +1,11 @@
+{
+  LEDGER		    : "Account Book",
+  VENDOR_NAME		: "Supplier",
+  PERIOD 			: "Accounting Period",
+  TO 			    : "to",
+  PROJECT_NAME		: "Project",
+  DEPT_NAME			: "Cost Center",
+  AP_CONTRACT_DATE  : "Contract Date",
+  queryBtn			: "Search",
+  clearBtn			: "Reset",
+}

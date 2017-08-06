@@ -1,0 +1,84 @@
+{
+  /* wrzPanel */
+  wrzPanel:'Not processed',
+  
+  /* queryWrzPanel */
+  queryWrzLedger:'Ledger',
+  queryWrzTransType:'Trans Type',
+  queryWrzSummary:'Summary',
+  queryWrzBtn:'Query',
+  resetWrzBtn:'Reset',
+  
+  /* wrzGrid */
+    /* columns */
+    ledgerNameCol:'Ledger',
+    periodCodeCol:'Period',
+    transNamecCol:'Trans Type',
+    deptCode:'Cost Center',
+    deptNameCol:'Cost Center',
+    projectCode:'Project',
+    projectNameCol:'Project',
+    drAcctNameCol:'Debit Account',
+    drCcidNameCol:'Combination Of Debit Account',
+    crAcctNameCol:'Credit Account',
+    crCcidNameCol:'Combination Of Credit Account',
+    amtCol:'Amount',
+    summaryCol:'Summary',
+    busNoCol:'Business Code',
+    selectLedgerFirst:'Please select ledger first',
+    selectPeriodFirst:'Please select period first',
+  
+    saveBtn:'Save',
+    saveCheck:'Message is incomplete, please confirm',
+    generateBtn:'Generate',
+    generateSaveCheck:'If there are unsaved records, save them first',
+    generateSelCheck:'Please select the records first',
+  
+    account:'Account',
+    accountCode:'Account',
+    accountName:'Account',
+    accountCodeName:'Account Code/Name',
+    
+  /* faAdditionWin */
+  generateWin:'Generate',
+  combDr:'Merge Debit Account',
+  combCr:'Merge Credit Account',
+  combSummary:'Header Summary',
+  ensureBtn:'Confirm',
+  cancelBtn:'Cancel',
+  saveWaitMsg:'Generating, please wait ...',
+  saveSuccessMsg:'Generate success',
+  saveFailureMsg:'Generate failure',
+  
+  /* rzGrid */
+    /* columns */
+    drAmtCol:'Debit Amount',
+    crAmtCol:'Credit Amount',
+    vSerialNumCol:'Document Number',
+    vStatusCol:'Status',
+    vStatusCol4qc:'Drafting',
+    vStatusCol4ysh:'Audited',
+    vStatusCol4yjz:'Billed',
+  
+    viewSubBtn:'Details',
+    submitBtn:'Submit',
+    draftBtn:'Revoke',
+    deleteBtn:'Delete',
+    viewSubSelCheck:'Please select the records',
+    opWaitMsg:'Operating, please wait ...',
+    opSuccessMsg:'Success',
+    opFailureMsg:'Failure',
+  
+  rzPanel:'Processed',
+  successMsg:'Save success',
+  notSameGl:'The same transaction type can be combined to generate the voucher',
+  notNull:' cant not be null',
+  
+  onQcCanBeSubmitted:'Drafting status can be submitted',
+  onQcCanBeDeleted:'Drafting status can be deleted',
+  onYshCanBeRevoke:'Audited status can be revoked',
+  requestFailure:'Request failure',
+  notInCurrentPeriod:'The selected record is not in the current accounting period',
+  drccidAndCrccidNotNull:'Combination of debit account and combination of credit account can not bu null'
+  
+}

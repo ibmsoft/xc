@@ -1,0 +1,80 @@
+{"PARAM_CODE":"1","LANG_CODE":"zh","PARAM_NAME":"1","DESCRIPTION":null}
+{"PARAM_CODE":"apple","LANG_CODE":"zh","PARAM_NAME":"麦当劳好吃么","DESCRIPTION":null}
+{"PARAM_CODE":"AUTH_MODAL","LANG_CODE":"en","PARAM_NAME":"Authorization mode","DESCRIPTION":"User Function Authorization/ User Role Authorization"}
+{"PARAM_CODE":"AUTH_MODAL","LANG_CODE":"zh","PARAM_NAME":"授权模式","DESCRIPTION":"授权模式：USER/ROLE"}
+{"PARAM_CODE":"CAN_LOGIN_AGAIN","LANG_CODE":"en","PARAM_NAME":"Whether allow duplicate logins","DESCRIPTION":"whether allow duplicate logins without limit"}
+{"PARAM_CODE":"CAN_LOGIN_AGAIN","LANG_CODE":"zh","PARAM_NAME":"是否允许重复登录","DESCRIPTION":"是否允许重复登录默认不限制"}
+{"PARAM_CODE":"CUST_CONTEXT_DEST","LANG_CODE":"en","PARAM_NAME":" custom clean up when the project is closed","DESCRIPTION":"Implement the custContextDestroyed method of interface com.xzsoft.xip.platform.cust.PlatformCustInterface"}
+{"PARAM_CODE":"CUST_CONTEXT_DEST","LANG_CODE":"zh","PARAM_NAME":"自定义工程关闭时清理","DESCRIPTION":"实现接口com.xzsoft.xip.platform.cust.PlatformCustInterface的custContextDestroyed方法"}
+{"PARAM_CODE":"CUST_CONTEXT_INIT","LANG_CODE":"en","PARAM_NAME":"Custom the initialization when the project start up","DESCRIPTION":"Implement the custContextInitialized method of interface com.xzsoft.xip.platform.cust.PlatformCustInterface"}
+{"PARAM_CODE":"CUST_CONTEXT_INIT","LANG_CODE":"zh","PARAM_NAME":"自定义工程启动时初始化","DESCRIPTION":"实现接口com.xzsoft.xip.platform.cust.PlatformCustInterface的custContextInitialized方法"}
+{"PARAM_CODE":"CUST_LOGIN_INIT","LANG_CODE":"en","PARAM_NAME":"Custom the initialization when login","DESCRIPTION":"Implement the custLoginInit method of interface com.xzsoft.xip.platform.cust.PlatformCustInterface"}
+{"PARAM_CODE":"CUST_LOGIN_INIT","LANG_CODE":"zh","PARAM_NAME":"自定义登录时初始化","DESCRIPTION":"实现接口com.xzsoft.xip.platform.cust.PlatformCustInterface的custLoginInit方法"}
+{"PARAM_CODE":"CUST_ROLE_CHANGED","LANG_CODE":"en","PARAM_NAME":"Custom the operation when the role changed","DESCRIPTION":"Implement the CustRoleChanged method of interface com.xzsoft.xip.platform.cust.PlatformCustInterface, this parameter can be set in platform and application level"}
+{"PARAM_CODE":"CUST_ROLE_CHANGED","LANG_CODE":"zh","PARAM_NAME":"自定义角色切换后处理","DESCRIPTION":"实现接口CustRoleChanged，此参数可以设置平台级和应用级的值"}
+{"PARAM_CODE":"DEFAULT_PASSWORD","LANG_CODE":"en","PARAM_NAME":"Default user passoword","DESCRIPTION":"the default password of a new user"}
+{"PARAM_CODE":"DEFAULT_PASSWORD","LANG_CODE":"zh","PARAM_NAME":"用户初始密码","DESCRIPTION":"新增用户的初始密码"}
+{"PARAM_CODE":"FUNC_LOG_FLAG","LANG_CODE":"en","PARAM_NAME":"Function log switch","DESCRIPTION":"the switch of function click log"}
+{"PARAM_CODE":"FUNC_LOG_FLAG","LANG_CODE":"zh","PARAM_NAME":"点击功能日志开关","DESCRIPTION":"点击功能日志开关"}
+{"PARAM_CODE":"HOME_PAGE","LANG_CODE":"en","PARAM_NAME":"Home Page URL","DESCRIPTION":"Home Page URL"}
+{"PARAM_CODE":"HOME_PAGE","LANG_CODE":"zh","PARAM_NAME":"页签首页","DESCRIPTION":"页签首页"}
+{"PARAM_CODE":"IS_ENABLE_ARCH","LANG_CODE":"en","PARAM_NAME":"Whether enable the workflow archive","DESCRIPTION":"Whether enable the archive when the workflow instance is done"}
+{"PARAM_CODE":"IS_ENABLE_ARCH","LANG_CODE":"zh","PARAM_NAME":"是否启用流程实例归档","DESCRIPTION":"在流程实例结束后是否启用归档处理"}
+{"PARAM_CODE":"LOGIN_CHECK_URL","LANG_CODE":"en","PARAM_NAME":"Login validation URL","DESCRIPTION":"The login page initiates a login validation request based on this parameter. If the return verification is successful, the login initialization is performed. If this parameter is not set, the default platform validation method is used."}
+{"PARAM_CODE":"LOGIN_CHECK_URL","LANG_CODE":"zh","PARAM_NAME":"登录验证URL","DESCRIPTION":"登录页面根据此参数来发起登录验证请求。如果返回验证成功，则执行登录初始化。如果此参数未设置则使用平台默认验证方法。"}
+{"PARAM_CODE":"LOGIN_CHECK_WS","LANG_CODE":"en","PARAM_NAME":"Integrated login authentication Web service","DESCRIPTION":"Integrated login authentication Web service"}
+{"PARAM_CODE":"LOGIN_CHECK_WS","LANG_CODE":"zh","PARAM_NAME":"被集成登录验证WEB服务","DESCRIPTION":"集成平台系统提供的验证WS"}
+{"PARAM_CODE":"LOGIN_LOG_FLAG","LANG_CODE":"en","PARAM_NAME":"Login logs switch","DESCRIPTION":"Login logs switch"}
+{"PARAM_CODE":"LOGIN_LOG_FLAG","LANG_CODE":"zh","PARAM_NAME":"登录日志开关","DESCRIPTION":"登录日志开关"}
+{"PARAM_CODE":"LOGIN_PAGE_URL","LANG_CODE":"en","PARAM_NAME":"Custom login page URL","DESCRIPTION":"Customized login page URL (requires full URL), if CAS is enabled, this parameter has no effect. This login page must call the platform login authentication method (/platformAction.do?method=personalLogin), if it is empty, use the default platform login page"}
+{"PARAM_CODE":"LOGIN_PAGE_URL","LANG_CODE":"zh","PARAM_NAME":"客户化登录页面URL","DESCRIPTION":"客户化登录页面URL(需要完整URL)，如果启用CAS，此参数不起作用。此登录页面必须调用平台登录验证方法（/platformAction.do?method=personalLogin），如果为空则使用平台默认登录页面"}
+{"PARAM_CODE":"MAIL_PASSWORD","LANG_CODE":"en","PARAM_NAME":"Mail sender's password","DESCRIPTION":"Mail sender's password"}
+{"PARAM_CODE":"MAIL_PASSWORD","LANG_CODE":"zh","PARAM_NAME":"发件人的账号密码","DESCRIPTION":"发件人的账号密码"}
+{"PARAM_CODE":"MAIL_SERVER_AUTH","LANG_CODE":"en","PARAM_NAME":"Whether authentication is required","DESCRIPTION":"Whether authentication is required"}
+{"PARAM_CODE":"MAIL_SERVER_AUTH","LANG_CODE":"zh","PARAM_NAME":"是否需要身份验证","DESCRIPTION":"是否需要身份验证"}
+{"PARAM_CODE":"MAIL_SERVER_HOST","LANG_CODE":"en","PARAM_NAME":"The mail server","DESCRIPTION":"the IP address of mail server"}
+{"PARAM_CODE":"MAIL_SERVER_HOST","LANG_CODE":"zh","PARAM_NAME":"邮件发送服务器","DESCRIPTION":"邮件发送服务器IP"}
+{"PARAM_CODE":"MAIL_SERVER_PORT","LANG_CODE":"en","PARAM_NAME":"The mail server port","DESCRIPTION":"The mail server port"}
+{"PARAM_CODE":"MAIL_SERVER_PORT","LANG_CODE":"zh","PARAM_NAME":"邮件发送服务器端口  ","DESCRIPTION":"邮件发送服务器端口  "}
+{"PARAM_CODE":"MAIL_USER","LANG_CODE":"en","PARAM_NAME":"Mail sender's account","DESCRIPTION":"Mail sender's account"}
+{"PARAM_CODE":"MAIL_USER","LANG_CODE":"zh","PARAM_NAME":"发件人的账号","DESCRIPTION":"发件人的账号"}
+{"PARAM_CODE":"MAIN_PAGE_URL","LANG_CODE":"en","PARAM_NAME":"Custom main page URL","DESCRIPTION":"Customize the main page URL, if not set, then use the default platform main page"}
+{"PARAM_CODE":"MAIN_PAGE_URL","LANG_CODE":"zh","PARAM_NAME":"客户化主页面URL","DESCRIPTION":"客户化主页面URL,如果不设置，则使用平台自带主页面"}
+{"PARAM_CODE":"NAVIGATOR_MODEL","LANG_CODE":"en","PARAM_NAME":"Navigation mode","DESCRIPTION":"Navigation mode: Tree/Menu/Drawer"}
+{"PARAM_CODE":"NAVIGATOR_MODEL","LANG_CODE":"zh","PARAM_NAME":"首页导航方式","DESCRIPTION":"首页导航方式：TREE/MENU"}
+{"PARAM_CODE":"NOTICE_DETAIL_URL","LANG_CODE":"en","PARAM_NAME":"mobile immediate custom todo URL","DESCRIPTION":"mobile immediate custom todo URL"}
+{"PARAM_CODE":"NOTICE_DETAIL_URL","LANG_CODE":"zh","PARAM_NAME":"移动端即时客户化待办","DESCRIPTION":"移动端即时客户化待办"}
+{"PARAM_CODE":"NOTICE_EMAIL","LANG_CODE":"en","PARAM_NAME":"whether enable email notice","DESCRIPTION":"whether enable email notice"}
+{"PARAM_CODE":"NOTICE_EMAIL","LANG_CODE":"zh","PARAM_NAME":"是否启用邮件提醒","DESCRIPTION":"是否启用邮件提醒"}
+{"PARAM_CODE":"NOTICE_MODE","LANG_CODE":"en","PARAM_NAME":"notice mode","DESCRIPTION":"notice mode"}
+{"PARAM_CODE":"NOTICE_MODE","LANG_CODE":"zh","PARAM_NAME":"待办提醒模式","DESCRIPTION":"待办提醒模式"}
+{"PARAM_CODE":"NOTICE_NOTE","LANG_CODE":"en","PARAM_NAME":"whether enable message notice","DESCRIPTION":"whether enable message notice"}
+{"PARAM_CODE":"NOTICE_NOTE","LANG_CODE":"zh","PARAM_NAME":"是否启用短信提醒","DESCRIPTION":"是否启用短信提醒"}
+{"PARAM_CODE":"NOTICE_TOTAL_URL","LANG_CODE":"en","PARAM_NAME":"mobile Summary custom todo URL","DESCRIPTION":"mobile Summary custom todo URL"}
+{"PARAM_CODE":"NOTICE_TOTAL_URL","LANG_CODE":"zh","PARAM_NAME":"移动端汇总客户化待办","DESCRIPTION":"移动端汇总客户化待办"}
+{"PARAM_CODE":"NOTICE_WEIXIN","LANG_CODE":"en","PARAM_NAME":"whether enable wechat notice","DESCRIPTION":"whether enable wechat notice"}
+{"PARAM_CODE":"NOTICE_WEIXIN","LANG_CODE":"zh","PARAM_NAME":"是否启用微信提醒","DESCRIPTION":"是否启用微信提醒"}
+{"PARAM_CODE":"PERSONAL_SET","LANG_CODE":"en","PARAM_NAME":"personal settings","DESCRIPTION":"personal settings"}
+{"PARAM_CODE":"PERSONAL_SET","LANG_CODE":"zh","PARAM_NAME":"个性化设置","DESCRIPTION":"个性化设置"}
+{"PARAM_CODE":"PW_INCLUDE_CHAR","LANG_CODE":"en","PARAM_NAME":"whether enable password complexity","DESCRIPTION":"the password mus"}
+{"PARAM_CODE":"PW_INCLUDE_CHAR","LANG_CODE":"zh","PARAM_NAME":"是否启用口令复杂度","DESCRIPTION":"Whether the password must contain letters or non-alphabetic characters, Y / N"}
+{"PARAM_CODE":"PW_LEN_LIMIT","LANG_CODE":"en","PARAM_NAME":"password length limit","DESCRIPTION":"password length limit,0 represents no limit"}
+{"PARAM_CODE":"PW_LEN_LIMIT","LANG_CODE":"zh","PARAM_NAME":"口令长度限制","DESCRIPTION":"口令长度限制,0为不限制"}
+{"PARAM_CODE":"PW_TERM","LANG_CODE":"en","PARAM_NAME":"Password validity period","DESCRIPTION":"Password validity period, 0 represents no limit"}
+{"PARAM_CODE":"PW_TERM","LANG_CODE":"zh","PARAM_NAME":"口令有效期","DESCRIPTION":"口令有效期,0为不失效"}
+{"PARAM_CODE":"SHOW_TOP_BANNER","LANG_CODE":"en","PARAM_NAME":"whether show the top banner","DESCRIPTION":"whether show the top banner"}
+{"PARAM_CODE":"SHOW_TOP_BANNER","LANG_CODE":"zh","PARAM_NAME":"是否显示顶部 BANNER","DESCRIPTION":"是否显示顶部 BANNER"}
+{"PARAM_CODE":"TASK_NOTICE_INTER","LANG_CODE":"en","PARAM_NAME":"task notice interface","DESCRIPTION":"task notice interface"}
+{"PARAM_CODE":"TASK_NOTICE_INTER","LANG_CODE":"zh","PARAM_NAME":"待办提醒接口实现类","DESCRIPTION":"待办提醒接口实现类"}
+{"PARAM_CODE":"TOP_BANNER_HEIGHT","LANG_CODE":"en","PARAM_NAME":"top banner height","DESCRIPTION":"Set the height of the top BANNER, not set to 120, can only set the value less than or equal to 120"}
+{"PARAM_CODE":"TOP_BANNER_HEIGHT","LANG_CODE":"zh","PARAM_NAME":"顶部BANNER高度","DESCRIPTION":"设置顶部BANNER的高度，不设置的为120，只能设置小于或等于120的值"}
+{"PARAM_CODE":"TOUCH_PERSONAL_SET","LANG_CODE":"en","PARAM_NAME":"mobile personal settings","DESCRIPTION":"mobile personal settings"}
+{"PARAM_CODE":"TOUCH_PERSONAL_SET","LANG_CODE":"zh","PARAM_NAME":"移动端个性化设置","DESCRIPTION":"移动端个性化设置"}
+{"PARAM_CODE":"USE_CAS_FLAG","LANG_CODE":"en","PARAM_NAME":"Whether to enable CAS single sign-on authentication","DESCRIPTION":"Marks whether to enable CAS for single sign-on authentication"}
+{"PARAM_CODE":"USE_CAS_FLAG","LANG_CODE":"zh","PARAM_NAME":"是否启用CAS单点登录认证","DESCRIPTION":"标记是否启动CAS进行单点登录认证"}
+{"PARAM_CODE":"USE_COOKIES","LANG_CODE":"en","PARAM_NAME":"whether enable cookies","DESCRIPTION":"If cookies are enabled, the session is re-created according to the cookie after the session is invalid. Otherwise, you need to enter the login page to log in again."}
+{"PARAM_CODE":"USE_COOKIES","LANG_CODE":"zh","PARAM_NAME":"是否启用Cookie","DESCRIPTION":"如果启用Cookie，Session失效后贵根据Cookie重新创建，否则需要进入登录页面重新登录"}
+{"PARAM_CODE":"USE_USER_REG","LANG_CODE":"en","PARAM_NAME":"whether enable user register","DESCRIPTION":"whether enable user register"}
+{"PARAM_CODE":"USE_USER_REG","LANG_CODE":"zh","PARAM_NAME":"是否启用自助注册用户","DESCRIPTION":"是否启用自助注册用户"}
+{"PARAM_CODE":"XIP_DEFAULT_LANG","LANG_CODE":"en","PARAM_NAME":"default language","DESCRIPTION":"default language"}
+{"PARAM_CODE":"XIP_DEFAULT_LANG","LANG_CODE":"zh","PARAM_NAME":"平台默认语言","DESCRIPTION":"平台默认语言"}

@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.ModalsheetMapper">
+
+	<resultMap id="ModalFormatResultMap" type="com.xzsoft.xsr.core.modal.ModalSheetFormat">
+		<!-- <id column="FORMAT_ID" property="formatId"/> -->
+		<result column="MSFORMAT_ID" property="sheet"/>
+		<result column="X" property="row"/>
+		<result column="Y" property="col"/>
+		<result column="IS_CAL" property="cal"/>
+		<result column="CONTENT" property="json"/>
+	</resultMap>
+
+	<resultMap id="ModalElementResultMap" type="com.xzsoft.xsr.core.modal.ModalSheetElement">
+		<result column="MSFORMAT_ID" property="sheet"/>
+		<result column="NAME" property="name"/>
+		<result column="ETYPE" property="ftype"/>
+		<result column="CONTENT" property="json"/>
+	</resultMap>
+	
+	<resultMap id="ModalSheetResultMap" type="com.xzsoft.xsr.core.modal.ModalSheet">
+		<result column="FORMAT_ID" property="id"/>
+		<result column="MODALSHEET_CODE" property="code"/>
+		<result column="MODALSHEET_NAME" property="name"/>
+	</resultMap>
+	
+	<resultMap id="CellDataMap" type="com.xzsoft.xsr.core.modal.CellData">
+		<!-- <id column="FORMAT_ID" property="formatId"/> -->
+		<result column="MSFORMAT_ID" property="sheet" />
+		<result column="X" property="row" />
+		<result column="Y" property="col" />
+		<result column="PRO_VALUE" property="json" />
+		<result column="APPLYWAY" property="applyWay" />
+	</resultMap>
+	
+	<select id="isModaLFormatExist" parameterType="String" resultType="int">
+		select count(1) from xsr_rep_modalsheet_format t where t.MSFORMAT_ID = #{msFormatId}
+	</select>
+	
+	<select id="isModalsheetExistByCode" resultType="int">
+		select count(1) from xsr_rep_modalsheet t where t.modaltype_id = #{0} and t.modalsheet_code = #{1}
+	</select>
+
+	<delete id="deleleModalsheetFormat" parameterType="String">
+		delete from xsr_rep_modalsheet_format where MSFORMAT_ID = #{msFormatId}
+	</delete>
+	
+	<delete id="deleleModalsheetElement" parameterType="String">
+		delete from xsr_rep_modalsheet_element where MSFORMAT_ID = #{msFormatId}
+	</delete>
+	
+	<insert id="insertBatchFormatCell">
+		<!-- <selectKey resultType="java.lang.String" keyProperty="formatId" order="BEFORE">
+			SELECT uuid()
+		</selectKey> -->
+		insert into xsr_rep_modalsheet_format(FORMAT_ID, MSFORMAT_ID, X, Y, CONTENT, 
+		             IS_CAL, CELL_COMMENT, CELL_COMMENT_TYPE, CREATION_DATE, CREATED_BY) values
+		<foreach collection="formatCells" item="formatCell" index="index" separator=",">
+			(#{formatCell.formatId},
+			 #{formatCell.sheet},
+			 #{formatCell.row},
+			 #{formatCell.col},
+			 #{formatCell.json},
+			 #{formatCell.cal},
+			 #{formatCell.cell_comment},
+			 #{formatCell.cell_comment_type},
+			 #{formatCell.creationDate},
+			 #{formatCell.createdBy})
+		</foreach>
+	</insert>
+	
+	<insert id="insertBatchModalSheetElement">
+		<!-- <selectKey resultType="java.lang.String" keyProperty="elementId" order="BEFORE">
+			SELECT uuid()
+		</selectKey> -->
+		insert into xsr_rep_modalsheet_element(ELEMENT_ID, MSFORMAT_ID, NAME, ETYPE, CONTENT, CREATION_DATE, CREATED_BY) values
+		<foreach collection="elementCells" item="elementCell" index="index" separator=",">
+			(#{elementCell.elementId},
+			 #{elementCell.sheet},
+			 #{elementCell.name},
+			 #{elementCell.ftype},
+			 #{elementCell.json},
+			 #{elementCell.creationDate},
+			 #{elementCell.createdBy})
+		</foreach>
+	</insert>
+	
+	<select id="getModalsheetFormatCellList" resultMap="ModalFormatResultMap">
+		select t.MSFORMAT_ID, t.X, t.Y, t.IS_CAL, t.CONTENT, t.CELL_COMMENT, t.CELL_COMMENT_TYPE 
+		  from xsr_rep_modalsheet_format t 
+		 where t.MSFORMAT_ID = #{msFormatId} ORDER BY t.X,t.Y
+	</select>
+	
+	<select id="getModalsheetElementList" resultMap="ModalElementResultMap">
+		select t.MSFORMAT_ID, t.NAME, t.ETYPE, t.CONTENT
+		  from xsr_rep_modalsheet_element t 
+		 where t.MSFORMAT_ID = #{msFormatId}
+	</select>
+
+	<select id="getOneRowitem" parameterType="hashmap" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		SELECT t.ROWITEM_ID, t.ROWITEM_NAME, t.ISFJITEM, t.DIRECTION, t.UPCODE
+		  FROM xsr_rep_rowitem t
+		 WHERE t.ROWITEM_CODE = #{rowitemCode}
+		   and t.SUIT_ID = #{suitId}
+	</select>
+	
+	<select id="getOneColitem" parameterType="hashmap" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		select DISTINCT c.COLITEM_ID,c.COLITEM_NAME, c.DATATYPE, c.UPCODE 
+		  from xsr_rep_colitem c, xsr_rep_colmodalref rf
+		 where c.COLITEM_ID = rf.COLITEM_ID
+		   and rf.MODALSHEET_ID = #{modalsheetId}
+		   and c.COLITEM_CODE = #{colitemCode}
+		   and c.SUIT_ID = #{suitId}
+	</select>
+
+	<select id="isModalCodeUsedForRowUpcode" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+          FROM XSR_REP_ROWITEM XRR
+         WHERE XRR.ROWITEM_CODE LIKE '${value}%'
+           AND XRR.UPCODE = 'ROOT'
+	</select>
+
+	<select id="isModalCodeUsedForColUpcode" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+		  FROM XSR_REP_COLITEM XRC
+		 WHERE XRC.COLITEM_CODE LIKE '${value}%'
+		   AND XRC.UPCODE = 'ROOT'
+	</select>
+
+	<insert id="insertRowitemUpcode">
+		INSERT INTO XSR_REP_ROWITEM
+        (ROWITEM_ID,SUIT_ID,ROWITEM_CODE,ROWITEM_NAME,
+         ITEMALIAS,UPCODE,ISICP,
+         CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+        VALUES
+        (#{rowitem.ROWITEM_ID},#{rowitem.SUIT_ID},#{rowitem.ROWITEM_CODE},#{rowitem.ROWITEM_NAME},
+         #{rowitem.ITEMALIAS},#{rowitem.UPCODE},#{rowitem.ISICP},
+         #{rowitem.CREATION_DATE},#{rowitem.CREATED_BY},#{rowitem.LAST_UPDATE_DATE},#{rowitem.LAST_UPDATED_BY})
+	</insert>
+	
+	<insert id="insertColitemUpcode">
+		INSERT INTO XSR_REP_COLITEM
+        (COLITEM_ID,SUIT_ID,COLITEM_CODE,COLITEM_NAME,
+         ITEMALIAS,UPCODE,
+         CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+        VALUES
+        (#{colitem.COLITEM_ID},#{colitem.SUIT_ID},#{colitem.COLITEM_CODE},#{colitem.COLITEM_NAME},
+         #{colitem.ITEMALIAS},#{colitem.UPCODE},
+         #{colitem.CREATION_DATE},#{colitem.CREATED_BY},#{colitem.LAST_UPDATE_DATE},#{colitem.LAST_UPDATED_BY})
+	</insert>
+
+	<update id="updateModalSheetRowUpcode">
+        UPDATE XSR_REP_MODALSHEET
+           SET ROWUPCODE = #{0}
+         WHERE MODALSHEET_ID = #{1}
+	</update>
+	
+	<update id="updateModalSheetColUpcode">
+        UPDATE XSR_REP_MODALSHEET
+           SET COLUPCODE = #{0}
+         WHERE MODALSHEET_ID = #{1}
+	</update>
+	
+	<select id="countOfRowitem" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+	      FROM XSR_REP_ROWITEM XRR
+	     WHERE SUBSTR(XRR.ROWITEM_CODE, 1, LENGTH(#{upCode})) = #{upCode}
+	       AND XRR.UPCODE = #{upCode}
+	</select>
+	
+	<select id="countOfColitem" parameterType="String" resultType="int">
+		SELECT COUNT(1)
+	      FROM XSR_REP_COLITEM XRC
+	     WHERE SUBSTR(XRC.COLITEM_CODE, 1, LENGTH(#{upCode})) = #{upCode}
+	       AND XRC.UPCODE = #{upCode}
+	</select>
+	
+	<select id="isRowitemCodeExist" resultType="String">
+		SELECT R.ROWITEM_ID
+	      FROM XSR_REP_ROWITEM R
+	     WHERE R.ROWITEM_CODE = #{0}
+	       AND R.SUIT_ID = #{1}
+	</select>
+	
+	<select id="isColitemCodeExist" resultType="String">
+		SELECT C.COLITEM_ID
+	      FROM XSR_REP_COLITEM C
+	     WHERE C.COLITEM_CODE = #{0}
+	       AND C.SUIT_ID = #{1}
+	</select>
+
+	<select id="getMaxRowitmeCode" parameterType="String" resultType="String">
+		SELECT MAX(ROWITEM_CODE)
+		  FROM XSR_REP_ROWITEM
+		 WHERE SUBSTR(ROWITEM_CODE, 1, LENGTH(#{upCode})) = #{upCode}
+		   AND UPCODE = #{upCode}
+	</select>
+	
+	<select id="getMaxColitmeCode" parameterType="String" resultType="String">
+		SELECT MAX(COLITEM_CODE)
+		  FROM XSR_REP_COLITEM
+		 WHERE SUBSTR(COLITEM_CODE, 1, LENGTH(#{upCode})) = #{upCode}
+		   AND UPCODE = #{upCode}
+	</select>
+	
+	<insert id="insertRowitem">
+	    INSERT INTO XSR_REP_ROWITEM
+	      (ROWITEM_ID,SUIT_ID,ROWITEM_CODE,ROWITEM_NAME,
+	       ITEMALIAS,UPCODE,ISFJITEM,DIRECTION,ISICP,
+	       ORDERBY,CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+	    VALUES
+        (#{rowitem.ROWITEM_ID},#{rowitem.SUIT_ID},#{rowitem.ROWITEM_CODE},#{rowitem.ROWITEM_NAME},
+         #{rowitem.ITEMALIAS},#{rowitem.UPCODE},#{rowitem.ISFJITEM},#{rowitem.DIRECTION},#{rowitem.ISICP},
+         #{rowitem.ORDERBY},#{rowitem.CREATION_DATE},#{rowitem.CREATED_BY},#{rowitem.LAST_UPDATE_DATE},#{rowitem.LAST_UPDATED_BY})
+	</insert>
+	
+	<insert id="insertBatchRowitemList">
+	    INSERT INTO XSR_REP_ROWITEM
+	      (ROWITEM_ID,SUIT_ID,ROWITEM_CODE,ROWITEM_NAME,
+	       ITEMALIAS,UPCODE,ISFJITEM,DIRECTION,ISICP,
+	       ORDERBY,CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+	    VALUES
+		<foreach collection="rowitems" item="rowitem" index="index" separator=",">
+			(#{rowitem.ROWITEM_ID},#{rowitem.SUIT_ID},#{rowitem.ROWITEM_CODE},#{rowitem.ROWITEM_NAME},
+	         #{rowitem.ITEMALIAS},#{rowitem.UPCODE},#{rowitem.ISFJITEM},#{rowitem.DIRECTION},#{rowitem.ISICP},
+	         #{rowitem.ORDERBY},#{rowitem.CREATION_DATE},#{rowitem.CREATED_BY},#{rowitem.LAST_UPDATE_DATE},
+	         #{rowitem.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+
+	<update id="updateRowitem">
+	    UPDATE XSR_REP_ROWITEM
+	       SET ROWITEM_NAME = #{rowitem.ROWITEM_NAME},
+	           ITEMALIAS = #{rowitem.ITEMALIAS},
+	           ISFJITEM = #{rowitem.ISFJITEM},
+	           ORDERBY = #{rowitem.ORDERBY},
+	           DIRECTION = #{rowitem.DIRECTION},
+	           LAST_UPDATE_DATE = #{rowitem.LAST_UPDATE_DATE},
+	           LAST_UPDATED_BY = #{rowitem.LAST_UPDATED_BY}
+	     WHERE ROWITEM_CODE = #{rowitem.ROWITEM_CODE}
+	       AND SUIT_ID = #{rowitem.SUIT_ID}
+	</update>
+
+	<update id="updateBatchRowitemList">
+		<foreach collection="rowitems" item="rowitem" index="index"
+			separator=";">
+			update XSR_REP_ROWITEM
+			<set>
+				ROWITEM_NAME = #{rowitem.ROWITEM_NAME},
+				ITEMALIAS = #{rowitem.ITEMALIAS},
+				ISFJITEM = #{rowitem.ISFJITEM},
+				ORDERBY = #{rowitem.ORDERBY},
+				DIRECTION = #{rowitem.DIRECTION},
+				LAST_UPDATE_DATE = #{rowitem.LAST_UPDATE_DATE},
+				LAST_UPDATED_BY = #{rowitem.LAST_UPDATED_BY}
+			</set>
+			where ROWITEM_ID = #{rowitem.ROWITEM_ID}
+		</foreach>
+	</update>
+	
+	<insert id="insertColitem">
+	    INSERT INTO XSR_REP_COLITEM
+	      (COLITEM_ID,SUIT_ID,COLITEM_CODE,COLITEM_NAME,
+	       ITEMALIAS,UPCODE,ORDERBY,DATATYPE,
+	       CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY) 
+	    VALUES
+        (#{colitem.COLITEM_ID},#{colitem.SUIT_ID},#{colitem.COLITEM_CODE},#{colitem.COLITEM_NAME},
+         #{colitem.ITEMALIAS},#{colitem.UPCODE},#{colitem.ORDERBY},#{colitem.DATATYPE},
+         #{colitem.CREATION_DATE},#{colitem.CREATED_BY},#{colitem.LAST_UPDATE_DATE},#{colitem.LAST_UPDATED_BY})
+	</insert>
+
+	<insert id="insertBatchColitemList">
+		INSERT INTO XSR_REP_COLITEM
+		(COLITEM_ID,SUIT_ID,COLITEM_CODE,COLITEM_NAME,
+		ITEMALIAS,UPCODE,ORDERBY,DATATYPE,
+		CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+		VALUES
+		<foreach collection="colitems" item="colitem" index="index"
+			separator=",">
+			(#{colitem.COLITEM_ID},#{colitem.SUIT_ID},#{colitem.COLITEM_CODE},#{colitem.COLITEM_NAME},
+			#{colitem.ITEMALIAS},#{colitem.UPCODE},#{colitem.ORDERBY},#{colitem.DATATYPE},
+			#{colitem.CREATION_DATE},#{colitem.CREATED_BY},#{colitem.LAST_UPDATE_DATE},#{colitem.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	
+	<update id="updateColitem">
+	    UPDATE XSR_REP_COLITEM
+	       SET COLITEM_NAME = #{colitem.COLITEM_NAME},
+	           ITEMALIAS = #{colitem.ITEMALIAS},
+	           ORDERBY = #{colitem.ORDERBY},
+	           DATATYPE = #{colitem.DATATYPE},
+	           LAST_UPDATE_DATE = #{colitem.LAST_UPDATE_DATE},
+	           LAST_UPDATED_BY = #{colitem.LAST_UPDATED_BY}
+	     WHERE COLITEM_CODE = #{colitem.COLITEM_CODE}
+	       AND SUIT_ID = #{colitem.SUIT_ID}
+	</update>
+
+	<update id="updateBatchColitemList">
+		<foreach collection="colitems" item="colitem" index="index"
+			separator=";">
+			UPDATE XSR_REP_COLITEM
+			<set>
+				COLITEM_NAME = #{colitem.COLITEM_NAME},
+				ITEMALIAS = #{colitem.ITEMALIAS},
+				ORDERBY = #{colitem.ORDERBY},
+				DATATYPE = #{colitem.DATATYPE},
+				LAST_UPDATE_DATE = #{colitem.LAST_UPDATE_DATE},
+				LAST_UPDATED_BY = #{colitem.LAST_UPDATED_BY}
+			</set>
+			where COLITEM_ID = #{colitem.COLITEM_ID}
+		</foreach>
+	</update>
+	
+	<delete id="deleteRowModalRef">
+		delete from xsr_rep_rowmodalref where modalsheet_id = #{0} and lanno = #{1}
+	</delete>
+	
+	<delete id="deleteRowModalRefByMID">
+		delete from xsr_rep_rowmodalref where modalsheet_id = #{modalsheetId}
+	</delete>
+	
+	<delete id="deleteRowModalRefByCode">
+		delete from xsr_rep_rowmodalref 
+		 where modalsheet_code = #{0}
+		   and modaltype_code = #{1}
+		   and suit_id = #{2}
+	</delete>
+	
+	<delete id="deleteColModalRef" parameterType="String">
+		delete from xsr_rep_colmodalref where modalsheet_id = #{modalsheetId}
+	</delete>
+	
+	<delete id="deleteColModalRefByCode" parameterType="String">
+		delete from xsr_rep_colmodalref 
+		 where modalsheet_code = #{0}
+		   and modaltype_code = #{1}
+		   and suit_id = #{2}
+	</delete>
+	
+	<insert id="insertBthRowitemRef">
+		INSERT INTO XSR_REP_ROWMODALREF
+	      (ROWREF_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,
+	       MODALSHEET_ID,MODALSHEET_CODE,ROWITEM_ID,ROWITEM_CODE,
+	       ROWNO,LANNO,REF_FLAG,ROW,COL,
+		   CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+	    VALUES
+		<foreach collection="rowitems" item="rowitem" index="index" separator=",">
+			(#{rowitem.ROWREF_ID},
+			 #{rowitem.SUIT_ID},
+			 #{rowitem.MODALTYPE_ID},
+			 #{rowitem.MODALTYPE_CODE},
+			 #{rowitem.MODALSHEET_ID},
+			 #{rowitem.MODALSHEET_CODE},
+			 #{rowitem.ROWITEM_ID},
+			 #{rowitem.ROWITEM_CODE},
+			 #{rowitem.ROWNO},
+			 #{rowitem.LANNO},
+			 'Y',
+			 #{rowitem.ROW},
+			 #{rowitem.COL},
+			 #{rowitem.CREATION_DATE},
+			 #{rowitem.CREATED_BY},
+			 #{rowitem.LAST_UPDATE_DATE},
+			 #{rowitem.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	
+	<insert id="insertBthColitemRef">
+		INSERT INTO XSR_REP_COLMODALREF
+	      (COLREF_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,
+	       MODALSHEET_ID,MODALSHEET_CODE,COLITEM_ID,COLITEM_CODE,
+	       COLNO,LANNO,
+		   CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+	    VALUES
+		<foreach collection="colitems" item="colitem" index="index" separator=",">
+			(#{colitem.COLREF_ID},
+			 #{colitem.SUIT_ID},
+			 #{colitem.MODALTYPE_ID},
+			 #{colitem.MODALTYPE_CODE},
+			 #{colitem.MODALSHEET_ID},
+			 #{colitem.MODALSHEET_CODE},
+			 #{colitem.COLITEM_ID},
+			 #{colitem.COLITEM_CODE},
+			 #{colitem.COLNO},
+			 #{colitem.LANNO},
+			 #{colitem.CREATION_DATE},
+			 #{colitem.CREATED_BY},
+			 #{colitem.LAST_UPDATE_DATE},
+			 #{colitem.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	
+	<select id="getOtherRowitemList" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		select rf.MODALSHEET_ID, rf.ROWITEM_ID, rf.ROWITEM_CODE, rm.ROWITEM_NAME, rm.UPCODE, rf.ROWNO, rf.LANNO, rm.ISFJITEM, rm.DIRECTION
+		  from xsr_rep_rowmodalref rf left join xsr_rep_rowitem rm on rf.ROWITEM_ID = rm.ROWITEM_ID
+		 where rf.MODALSHEET_ID = #{0}
+		   and rf.LANNO != #{1}
+	</select>
+	
+	<select id="getRowUpcodeByModalsheetId" resultType="String">
+		select rm.ROWITEM_CODE 
+		  from xsr_rep_rowitem rm, 
+		       xsr_rep_modalsheet mt
+		 where mt.MODALSHEET_ID = #{0}
+		   and rm.ROWITEM_CODE = mt.ROWUPCODE
+		   and rm.UPCODE = 'ROOT'
+		   and rm.SUIT_ID = #{1}
+	</select>
+	
+	<delete id="deleteDataColSet" parameterType="String">
+		delete from xsr_rep_fj_colitem_set where MODALSHEET_ID = #{modalsheetId}
+	</delete>
+	
+	<insert id="insertBthDataColSet">
+	    insert into xsr_rep_fj_colitem_set(FJITEM_SET_ID, SUIT_ID, MODALSHEET_ID,DATA_COL,COLITEM_ID,
+	       COLITEM_CODE, COLNO, ROW, COL, CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+	    VALUES
+		<foreach collection="colitems" item="colitem" index="index" separator=",">
+			(#{colitem.FJITEM_SET_ID},
+			 #{colitem.SUIT_ID},
+			 #{colitem.MODALSHEET_ID},
+			 #{colitem.DATA_COL},
+			 #{colitem.COLITEM_ID},
+			 #{colitem.COLITEM_CODE},
+			 #{colitem.COLNO},
+			 #{colitem.ROW},
+			 #{colitem.COL},
+			 #{colitem.CREATION_DATE},
+			 #{colitem.CREATED_BY},
+			 #{colitem.LAST_UPDATE_DATE},
+			 #{colitem.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	
+	<select id="getCountFjColSet" resultType="int">
+		select COUNT(1) from xsr_rep_fj_colitem_set t where t.MODALSHEET_ID = #{modalsheetId}
+	</select>
+	
+	<select id="getModalsheetById" parameterType="String" resultMap="ModalSheetResultMap">
+		SELECT FORMAT_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,MODALSHEET_CODE,MODALSHEET_NAME,SHORTNAME,
+				DESCRIPTION,SORTNUM,VERIFIER_ID,CLASSIFICATION,FRAQ_CODE,FJITEM_NO,ENABLED,ROWUPCODE,
+				COLUPCODE,TYPE,FJ_FLAG,TITLE_MAX_ROW,LAST_UPDATED_BY,CREATED_BY
+		  FROM XSR_REP_MODALSHEET
+		 WHERE MODALSHEET_ID = #{modalsheetId}
+	</select>
+	
+	<select id="isModaLSheetExist" resultMap="ModalSheetResultMap">
+		SELECT t.MODALSHEET_ID, t.FORMAT_ID, t.MODALTYPE_CODE, t.MODALSHEET_NAME
+		  FROM xsr_rep_modalsheet t
+		 WHERE t.MODALSHEET_CODE = #{0}
+		   AND t.MODALTYPE_ID = #{1}
+		   AND t.SUIT_ID = #{2}
+	</select>
+	
+	<insert id="insertModalsheet">
+		INSERT INTO XSR_REP_MODALSHEET
+        (MODALSHEET_ID,FORMAT_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,MODALSHEET_CODE,MODALSHEET_NAME,SHORTNAME,DESCRIPTION,SORTNUM,VERIFIER_ID,
+        CLASSIFICATION,FRAQ_CODE,FJITEM_NO,ROWUPCODE,COLUPCODE,TYPE,FJ_FLAG,TITLE_MAX_ROW,CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+        VALUES
+        (#{MODALSHEET_ID},#{id},#{SUIT_ID},#{MODALTYPE_ID},#{MODALTYPE_CODE},#{code},#{name},#{SHORTNAME},#{DESCRIPTION},#{SORTNUM},#{VERIFIER_ID},
+        #{CLASSIFICATION},#{FRAQ_CODE},#{FJITEM_NO},#{ROWUPCODE},#{COLUPCODE},#{TYPE},#{FJ_FLAG},#{TITLE_MAX_ROW},#{CREATION_DATE},#{CREATED_BY},#{LAST_UPDATE_DATE},#{LAST_UPDATED_BY})
+	</insert>
+	
+	<update id="updateModalsheet">
+		UPDATE xsr_rep_modalsheet 
+		   set MODALSHEET_NAME = #{modalsheet.name}, 
+		       SHORTNAME = #{modalsheet.SHORTNAME}, 
+		       DESCRIPTION = #{modalsheet.DESCRIPTION}, 
+		       SORTNUM = #{modalsheet.SORTNUM}, 
+		       CLASSIFICATION = #{modalsheet.CLASSIFICATION}, 
+		       FRAQ_CODE = #{modalsheet.FRAQ_CODE}, 
+			   FJITEM_NO = #{modalsheet.FJITEM_NO}, 
+			   ROWUPCODE = #{modalsheet.ROWUPCODE}, 
+			   COLUPCODE = #{modalsheet.COLUPCODE}, 
+			   TYPE = #{modalsheet.TYPE}, 
+			   TITLE_MAX_ROW = #{modalsheet.TITLE_MAX_ROW}, 
+			   FJ_FLAG = #{modalsheet.FJ_FLAG},
+			   LAST_UPDATE_DATE = #{modalsheet.LAST_UPDATE_DATE},
+			   LAST_UPDATED_BY = #{modalsheet.LAST_UPDATED_BY}
+		 where MODALSHEET_CODE = #{modalsheet.code}
+		   AND MODALTYPE_CODE = #{modalsheet.MODALTYPE_CODE}
+		   AND SUIT_ID = #{modalsheet.SUIT_ID}
+	</update>
+	
+	<select id="getMaxModaLFormat" resultType="Integer">
+		SELECT MAX(FORMAT_ID)+1
+		  FROM XSR_REP_MODALSHEET 
+	</select>
+	
+	<select id="getRowmodalref" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		SELECT ROWREF_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,MODALSHEET_ID,MODALSHEET_CODE,
+		       ROWITEM_ID,ROWITEM_CODE,ROWNO,LANNO,REF_FLAG,ROW,COL 
+		  FROM XSR_REP_ROWMODALREF 
+		 WHERE SUIT_ID = #{0}
+		   AND MODALTYPE_ID=#{1}
+		   AND MODALSHEET_ID=#{2}
+	</select>
+	
+	<select id="getColmodalref" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		select COLREF_ID,SUIT_ID,MODALTYPE_ID,MODALTYPE_CODE,MODALSHEET_ID,MODALSHEET_CODE,
+		       COLITEM_ID,COLITEM_CODE,COLNO,LANNO,REF_FLAG
+		  FROM XSR_REP_COLMODALREF 
+		 WHERE SUIT_ID = #{0} 
+		   AND MODALTYPE_ID=#{1}
+		   AND MODALSHEET_ID=#{2}
+	</select>
+	
+	<select id="getModaltype" parameterType="String" resultType="com.xzsoft.xsr.core.modal.ModalType">
+		select t.MODALTYPE_ID, t.MODALTYPE_CODE, t.MODALTYPE_NAME, t.SUIT_ID, t.PERIOD_TYPE, t.CHK_SCHEME_ID 
+		  from xsr_rep_modaltype t
+		 where t.MODALTYPE_ID = #{modaltypeId}
+		   
+	</select>
+	
+	<select id="isModaLTypeExist" resultType="String">
+		select t.MODALTYPE_ID
+		  from xsr_rep_modaltype t
+		 where t.MODALTYPE_CODE = #{0}
+		   and t.SUIT_ID = #{1}
+	</select>
+	
+	<update id="updateModaltype">
+		update xsr_rep_modaltype 
+		   set MODALTYPE_NAME = #{modaltype.MODALTYPE_NAME}, 
+		       PERIOD_TYPE = #{modaltype.PERIOD_TYPE},
+		       LAST_UPDATE_DATE = #{modaltype.LAST_UPDATE_DATE},
+		       LAST_UPDATED_BY = #{modaltype.LAST_UPDATED_BY}
+		 where MODALTYPE_CODE = #{modaltype.MODALTYPE_CODE}
+		   and SUIT_ID = #{modaltype.SUIT_ID}
+	</update>
+	
+	<insert id="insertModaltype">
+		insert into xsr_rep_modaltype(MODALTYPE_ID, SUIT_ID, MODALTYPE_CODE, MODALTYPE_NAME, PERIOD_TYPE, 
+	                         CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY) 
+	     VALUES (#{modaltype.MODALTYPE_ID}, #{modaltype.SUIT_ID}, #{modaltype.MODALTYPE_CODE}, 
+	     #{modaltype.MODALTYPE_NAME},#{modaltype.PERIOD_TYPE},#{modaltype.CREATION_DATE},#{modaltype.CREATED_BY},
+	     #{modaltype.LAST_UPDATE_DATE},#{modaltype.LAST_UPDATED_BY})
+	</insert>
+	
+	<select id="getRowitemList" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		select rm.ROWITEM_ID, rm.ROWITEM_CODE, rm.ROWITEM_NAME, rm.ISSUM, rm.ISFJITEM, rm.ISICP,
+		       rm.ITEMUNIT, rm.ITEMALIAS, rm.UPCODE, rm.DIRECTION, rm.ORDERBY, rm.DESCRIPTION
+		  from xsr_rep_rowitem rm 
+		  where EXISTS (select 1 
+		                  from xsr_rep_rowmodalref rf 
+		                 where rf.rowitem_id = rm.ROWITEM_ID
+		                   and rf.modalsheet_id = #{2}
+		                   and rf.modaltype_id = #{1}
+		                   and rf.suit_id = #{0})
+		UNION
+		select rm.ROWITEM_ID, rm.ROWITEM_CODE, rm.ROWITEM_NAME, rm.ISSUM, rm.ISFJITEM, rm.ISICP,
+		       rm.ITEMUNIT, rm.ITEMALIAS, rm.UPCODE, rm.DIRECTION, rm.ORDERBY, rm.DESCRIPTION
+		  from xsr_rep_rowitem rm 
+		  where rm.ROWITEM_CODE in (select DISTINCT rrm.UPCODE from xsr_rep_rowitem rrm
+		                           where rrm.SUIT_ID = #{0}
+		                             and EXISTS(select rf.ROWITEM_ID
+												from xsr_rep_rowmodalref rf 
+											 where rf.rowitem_id = rrm.ROWITEM_ID
+												 and rf.modalsheet_id = #{2}
+												 and rf.modaltype_id = #{1}
+												 and rf.suit_id = #{0}))	
+	</select>
+	
+	<select id="getColitemList" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		select cm.COLITEM_ID, cm.COLITEM_CODE, cm.COLITEM_NAME, cm.ISSUM, cm.ITEMUNIT, cm.ITEMALIAS, 
+		       cm.UPCODE, cm.DIRECTION, cm.ORDERBY, cm.DESCRIPTION, cm.DATATYPE
+		  from xsr_rep_colitem cm
+		  where EXISTS (select 1 
+		                  from xsr_rep_colmodalref cf 
+		                 where cf.COLITEM_ID = cm.COLITEM_ID
+		                   and cf.modalsheet_id = #{2}
+		                   and cf.modaltype_id = #{1}
+		                   and cf.suit_id = #{0})
+		UNION
+		select cm.COLITEM_ID, cm.COLITEM_CODE, cm.COLITEM_NAME, cm.ISSUM, cm.ITEMUNIT, 
+		       cm.ITEMALIAS, cm.UPCODE, cm.DIRECTION, cm.ORDERBY, cm.DESCRIPTION, cm.DATATYPE
+		  from xsr_rep_colitem cm 
+		  where cm.COLITEM_CODE in (select DISTINCT ccm.UPCODE from xsr_rep_colitem ccm
+		                           where ccm.SUIT_ID = #{0}
+		                             and EXISTS(select cf.COLITEM_ID
+												from xsr_rep_colmodalref cf 
+											 where cf.COLITEM_ID = ccm.COLITEM_ID
+												 and cf.modalsheet_id = #{2}
+												 and cf.modaltype_id = #{1}
+												 and cf.suit_id = #{0}))
+	</select>
+
+<!-- 	<select id="getFjCoitemSetList" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		   select t.DATA_COL, cf.COLITEM_CODE, t.SUIT_ID, t.MODALSHEET_ID, t.COLITEM_ID
+		     from xsr_rep_fj_colitem_set t
+		left join xsr_rep_colmodalref cf 
+		       on cf.MODALSHEET_ID = t.MODALSHEET_ID 
+		      and cf.COLITEM_ID = t.COLITEM_ID
+		    where t.MODALSHEET_ID = #{1}
+		      and cf.LANNO = 1
+		      and t.SUIT_ID = #{0}
+	</select> -->
+	
+	<select id="getFjCoitemSetList" resultType="com.xzsoft.xsr.core.modal.Colitem">
+	   select t.SUIT_ID, t.MODALSHEET_ID, t.COLITEM_ID, t.COLITEM_CODE, t.DATA_COL, t.COLNO, t.ROW, t.COL
+	     from xsr_rep_fj_colitem_set t
+	    where t.MODALSHEET_ID = #{1}
+	      and t.SUIT_ID = #{0}
+	</select>
+	
+	<select id="getFjCoitemSet" resultType="com.xzsoft.xsr.core.modal.Colitem">
+	   select t.SUIT_ID, t.MODALSHEET_ID, t.COLITEM_ID, t.COLITEM_CODE, t.DATA_COL, t.COLNO, t.ROW, t.COL
+	     from xsr_rep_fj_colitem_set t
+	    where t.MODALSHEET_ID = #{c.MODALSHEET_ID}
+	      and t.COLITEM_CODE = #{c.COLITEM_CODE}
+	      and t.SUIT_ID = #{c.SUIT_ID}
+	</select>
+	
+	<update id="batUpdateFjColnoCol">
+		<foreach collection="colitems" item="colitem" index="index"
+				separator=";">
+			update xsr_rep_fj_colitem_set
+			<set>
+				COL = #{colitem.COL}
+			</set>
+			where MODALSHEET_ID = #{colitem.MODALSHEET_ID}
+			  and COLITEM_ID = #{colitem.COLITEM_ID}
+		</foreach>
+	</update>
+	
+	<select id="getRowAndColitemId" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT
+			rf.ROWITEM_ID ROWITEM_ID ,cf.COLITEM_ID COLITEM_ID
+		FROM
+			xsr_rep_rowmodalref rf,
+			xsr_rep_colmodalref cf
+		WHERE rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		  AND rf.LANNO = cf.LANNO
+		  and rf.SUIT_ID = cf.SUIT_ID 
+		  and rf.MODALSHEET_ID = #{modalsheetId}
+		  and rf.ROWITEM_CODE = #{rowitemCode}
+		  and cf.COLITEM_CODE = #{colitemCode}
+		  and rf.SUIT_ID = #{suitId}
+	</select>
+	
+	<update id="updateTitleMaxRow">
+		update xsr_rep_modalsheet set TITLE_MAX_ROW = #{1} where MODALSHEET_ID = #{0}
+	</update>
+	<!-- 查询属性表里是否已经有属性 -->
+	<select id="isItemProperty" resultType="int">
+		select count(1) from
+		xsr_rep_item_property t where t.MODALSHEET_ID = #{0}
+		and t.SUIT_ID=#{1}
+		and t.PRO_TYPE=#{2}
+	</select>
+	<!-- 删除属性表里已经有的属性 -->
+	<delete id="deleleItemProperty">
+		delete from
+		xsr_rep_item_property
+		where MODALSHEET_ID= #{0}
+		and SUIT_ID=#{1}
+		and PRO_TYPE=#{2}
+	</delete>
+	<!-- 删除属性表里所有的属性 -->
+	<delete id="deleleItemPropertyAlltype">
+		delete 
+		  from xsr_rep_item_property
+		 where MODALSHEET_ID= #{0}
+		   and SUIT_ID=#{1}
+	</delete>
+	<!-- 保存模版指标属性 -->
+	<insert id="insertItemProperty">
+		INSERT INTO xsr_rep_item_property
+		(ITEM_PRO_ID ,
+		SUIT_ID ,
+		MODALTYPE_ID ,
+		MODALSHEET_ID ,
+		ROWITEM_ID ,
+		COLITEM_ID ,
+		PRO_TYPE ,
+		PRO_VALUE ,
+		ATTR1 ,
+		ATTR2 ,
+		ATTR3 ,
+		ATTR4 ,
+		ATTR5 ,
+		CREATION_DATE
+		,
+		CREATED_BY ,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY)
+		VALUES
+		(#{property.ITEM_PRO_ID},
+		#{property.SUIT_ID},
+		#{property.MODALTYPE_ID},
+		#{property.MODALSHEET_ID},
+		#{property.ROWITEM_ID},
+		#{property.COLITEM_ID},
+		#{property.PRO_TYPE},
+		#{property.PRO_VALUE},
+		#{property.ATTR1},
+		#{property.ATTR2},
+		#{property.ATTR3},
+		#{property.ATTR4},
+		#{property.ATTR5},
+		#{property.CREATION_DATE},
+		#{property.CREATED_BY},
+		#{property.LAST_UPDATE_DATE},
+		#{property.LAST_UPDATED_BY})
+	</insert>
+	<!-- 批量插入模板指标属性 -->
+	<insert id="insertBthItemProperty">
+		INSERT INTO xsr_rep_item_property
+			(ITEM_PRO_ID, SUIT_ID, MODALTYPE_ID, MODALSHEET_ID, ROWITEM_ID, 
+        	 COLITEM_ID, PRO_TYPE, PRO_VALUE, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY) 
+		values
+		<foreach collection="items" item="item" index="index" separator=",">
+			(#{item.ITEM_PRO_ID},
+			 #{item.SUIT_ID},
+			 #{item.MODALTYPE_ID},
+			 #{item.MODALSHEET_ID},
+			 #{item.ROWITEM_ID},
+			 #{item.COLITEM_ID},
+			 #{item.PRO_TYPE},
+			 #{item.PRO_VALUE},
+			 #{item.CREATION_DATE},
+			 #{item.CREATED_BY},
+			 #{item.LAST_UPDATE_DATE},
+			 #{item.LAST_UPDATED_BY})
+		</foreach>
+	</insert>
+	<!-- 保存模版指标属性或汇总属性 -->
+	<select id="loadItemProperty" resultMap="CellDataMap">
+		select
+		f.MSFORMAT_ID,f.X,f.Y,concat("{data:'",t.PRO_VALUE,"'}") PRO_VALUE
+		,'apply' APPLYWAY
+		from
+		xsr_rep_item_property
+		t,xsr_rep_modalsheet_format
+		f
+		where
+		f.MSFORMAT_ID=#{0}
+		and
+		f.CELL_COMMENT_TYPE='DATA'
+		and
+		f.CELL_COMMENT=concat(t.ROWITEM_ID,',',t.COLITEM_ID)
+		and
+		t.SUIT_ID=#{1}
+		and
+		t.PRO_TYPE=#{2}
+	</select>
+
+	<select id="getItemPropertyList" resultType="com.xzsoft.xsr.core.modal.Item_Property">
+		select ip.MODALTYPE_ID, ip.MODALSHEET_ID, ip.ROWITEM_ID, rf.ROWITEM_CODE, ip.COLITEM_ID, cf.COLITEM_CODE, ip.PRO_TYPE, ip.PRO_VALUE
+		  from xsr_rep_item_property ip,
+		       xsr_rep_rowmodalref rf,
+		       xsr_rep_colmodalref cf
+		 where ip.ROWITEM_ID = rf.ROWITEM_ID
+		   and ip.COLITEM_ID = cf.COLITEM_ID
+		   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		   and rf.LANNO = cf.LANNO
+		   and rf.MODALSHEET_ID = #{0}
+		   and ip.SUIT_ID = #{1}
+	</select>
+	
+	<select id="getSheetCountByModalsheetId" parameterType="String" resultType="int">
+		select count(1) from xsr_rep_sheets t where t.MODALSHEET_ID = #{modalsheetId} 
+	</select>
+	
+	<delete id="deleteModalsheet" parameterType="String">
+		delete from xsr_rep_modalsheet where MODALSHEET_ID = #{modalsheetId} 
+	</delete>
+	
+	<update id="batUpdateRowitemRefRow">
+		<foreach collection="rowitems" item="rowitem" index="index"
+			separator=";">
+			update xsr_rep_rowmodalref
+		<set>
+			ROW = #{rowitem.ROW}
+		</set>
+		where MODALSHEET_ID = #{modalsheetId}
+		  and ROWITEM_CODE = #{rowitem.ROWITEM_CODE}
+		</foreach>
+	</update>
+</mapper>

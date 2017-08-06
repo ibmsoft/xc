@@ -1,0 +1,30 @@
+{
+  moduleTitle:"Cash Item Management",
+  la_projectTree:"Project Tree",
+  la_code:"Code",
+  la_name:"Name",
+  la_direction:"Direction",
+  la_startDate:"Start Date",
+  la_endDate:"End Date",
+  la_upcode:"Up Code",
+  la_isLeaf:"Is Leaf",
+  la_necessaryName:"<font color='red'>*</font>Name",
+  la_cashItemDirect:"Direction",
+  la_necessaryCode:"<font color='red'>*</font>Code",
+  la_description:"Description",
+  la_level:"Level",
+  
+  cancelBtn:"Cancel",
+  delBtn:"Delete",
+  saveBtn:"Save",
+  importBtn:"Import",
+  exportBtn:"Export",
+  
+  la_importTitle:"Importing The Data Of Cash Items",
+  la_fileTip:"Please Select Microsoft Office Excel Document",
+  la_fileName:"<font color='red'>*</font>File",
+  la_importLogs:"Importing Logs",
+  la_incorrectColumn:"Incorrect No",
+  la_errorInformation:"Error Information",
+  la_labelWidth:100
+}

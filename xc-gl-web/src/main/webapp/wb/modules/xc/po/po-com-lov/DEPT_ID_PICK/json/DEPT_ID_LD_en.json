@@ -1,0 +1,7 @@
+{
+    DEPT_NAME : "Dept",
+    DEPT_CODE_COL : "Dept Code",
+    DEPT_NAME_COL : "Dept Name",
+    DEPT_CODE_NAME : "Dept Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

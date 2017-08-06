@@ -1,0 +1,199 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.xzsoft.xc</groupId>
+		<artifactId>xc-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../xc-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>xc-gl-web</artifactId>
+	<packaging>war</packaging>
+
+	<name>xc-gl-web Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<xc.version>${project.version}</xc.version>
+	</properties>	
+
+	<dependencies>
+		<!-- 平台2.0模块 -->
+		<dependency>
+	  		<groupId>com.xzsoft.xip</groupId>
+	  		<artifactId>xip-workflow</artifactId>		
+	  		<exclusions>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
+	  		</exclusions>
+		</dependency>
+		<!-- 云ERP公共模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-util</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+			  		<groupId>com.xzsoft.xip</groupId>
+			  		<artifactId>xip-workflow</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<!-- 云ERP预算模块 -->	
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-bg</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-util</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<!-- 云ERP总账模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-gl</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-bg</artifactId>				
+				</exclusion>
+			</exclusions>
+		</dependency>		
+		<!-- 云ERP报表模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-rep</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+			  		<groupId>com.xzsoft.xip</groupId>
+			  		<artifactId>xip-workflow</artifactId>
+				</exclusion>			
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>			
+		</dependency>
+		<!-- 云ERP应收应付公共模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-apar</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 云ERP报销模块 -->	
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-ex</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 云ERP应付模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-ap</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<!-- 云ERP资产模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-fa</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-ap</artifactId>
+				</exclusion>
+			</exclusions>			
+		</dependency>
+		<!-- 云ERP应收模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-ar</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 云ERP库存模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-st</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 云ERP采购模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-po</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 云ERP销售模块 -->
+		<dependency>
+			<groupId>com.xzsoft.xc</groupId>
+			<artifactId>xc-so</artifactId>
+			<version>${xc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.xzsoft.xc</groupId>
+					<artifactId>xc-gl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- 平台2.0资源文件 -->
+		<dependency>
+	  		<groupId>com.xzsoft.xip</groupId>
+	  		<artifactId>xip-workflow-web</artifactId>		
+	  		<type>war</type>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>xc</finalName>
+	</build>
+</project>

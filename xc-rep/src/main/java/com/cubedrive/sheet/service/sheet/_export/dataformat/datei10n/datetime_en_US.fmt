@@ -1,0 +1,14 @@
+#2014-12-06 14:34:00(Y-m-d H:i:s)
+Y-m-d H:i:s<=>yyyy\-mm\-dd h:mm:ss;@
+#2014-12-06 14:34(Y-m-d H:i)
+Y-m-d H:i<=>yyyy\-mm\-dd h:mm;@
+#2014-12-06 02:34 PM(Y-m-d g:i A)
+Y-m-d g:i A<=>yyyy\-mm\-dd\ h:mm\ AM/PM;@
+#2014-12-06 02:34:00 PM(Y-m-d g:i:s A)
+Y-m-d g:i:s A<=>yyyy\-mm\-dd\ h:mm:ss\ AM/PM;@
+#2014-12-06 14:34:00 PM(Y-m-d G:i:s A)
+Y-m-d G:i:s A<=>yyyy\-mm\-dd\ h:mm:ss\ AM/PM;@
+#Dec 14,2014, 16:37(M d, Y, H:i)
+M d, Y, H:i<=>[$-409]mmm\ dd\,\ yyyy\,\ h:mm;@
+#Dec 14,2014, 16:37(M d, Y, H:i:s)
+M d, Y, H:i:s<=>[$-409]mmm\ dd\,\ yyyy\,\ h:mm:ss;@

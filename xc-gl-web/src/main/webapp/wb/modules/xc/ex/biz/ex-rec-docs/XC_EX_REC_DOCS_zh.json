@@ -1,0 +1,47 @@
+{
+  EX_DOC_ID					: "单据ID",
+  EX_DOC_CODE				: "单据编号",
+  details_enclosure_btn		: "附件",
+  details_sign_btn			: "签收",
+  details_refuse_btn		: "拒签",
+  
+  empty_text_ledger			: "请选择账薄进行查询",
+  query_no_sign_ledger		: "账簿",
+  query_no_sign_code		: "单据编号/摘要",
+  query_no_sign_emp			: "报销人",
+  query_no_sign_dept		: "成本中心",
+  query_no_sign_project		: "项目",
+  
+  noSignQueryBtn			: "查询",
+  noSignResetBtn			: "重置",
+  
+  no_sign_row_num			: "序号",
+  ex_doc_code_col			: "单据编码",
+  ex_reason_col				: "单据摘要",
+  amount_col				: "报销金额",
+  ex_cat_code_col			: "单据类型编码",
+  ex_cat_name_col			: "报销单类型",
+  emp_name_col				: "报销人",
+  dept_name_col				: "成本中心",
+  project_name_col			: "项目",
+  sign_status_col			: "签收状态",
+  creation_date_col			: "创建日期",
+  	
+  seeBtn					: "查看详情",
+  signBtn					: "签收",
+  refuseBtn					: "拒签",
+  enclosureBtn				: "附件",
+  monitorBtn			    : "监控",
+  
+  query_alread_sign_ledger	: "账薄",
+  query_alread_sign_code	: "单据编号/摘要",
+  query_alread_sign_emp		: "报销人",
+  query_alread_sign_dept	: "成本中心",
+  query_alread_sign_project	: "项目",
+  alreadSignQueryBtn		: "查询",
+  alreadSignResetBtn		: "重置",
+  
+  
+  reviewBtn					: "复核"
+  
+}

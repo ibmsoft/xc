@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.EXVoucherMapper">
+	
+	<!-- 查询账簿收付款方式  -->
+	<select id="getPayModeBean" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.ex.modal.PayModeBean">
+		select a.ld_mode_id ldModeId,
+		       a.ledger_id ledgerId,
+		       a.mode_id modeId,
+		       a.pay_acc_id payAccId,
+		       a.rec_acc_id recAccId,
+		       b.mode_type modeType,
+		       b.mode_name modeName,
+		       b.mode_desc modeDesc
+		  from xc_gl_ld_pr_modes a, xc_gl_pr_modes b
+		 where a.MODE_ID = b.MODE_ID
+		   and b.is_enabled = 'Y'
+		   and a.LEDGER_ID = #{ledgerId}	
+		   and b.mode_id = #{modeId} 
+	</select>
+	
+	<!-- 查询账簿开户行信息  -->
+	<select id="getPayBank" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.PayBankModeBean">
+		select deposit_bank_id depositBankId,
+		       ledger_id ledgerId,
+		       acc_id accId,
+		       currency_code cnyCode,
+		       account_name accountName,
+		       bank_name bankName,
+		       deposit_bank_name depositBankName,
+		       bank_account bankAccount,
+		       correspondent,
+		       start_date startDate,
+		       end_date endDate,
+		       deposit_bank_desc depositBankDesc
+		  from xc_gl_ld_deposit_bank t
+		where t.deposit_bank_id = #{depositBankId}	
+	</select>
+	
+	<!-- 查询费用项目对应的科目信息  -->
+	<select id="getExItemAccs" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select distinct A.EX_ITEM_ID, B.ACC_ID, D.ACC_CODE, D.IS_BANK_ACC, D.IS_CASH_ACC
+		  from xc_ex_doc_dtl     a,
+		       xc_ex_ld_items    b,
+		       xc_gl_ld_accounts c,
+		       xc_gl_accounts    d
+		 where a.ex_item_id = b.ex_item_id
+		   and c.acc_id = d.acc_id
+		   and b.acc_id = d.acc_id
+		   and b.ledger_id = c.ledger_id
+		   and a.ex_doc_id = #{docId}
+		   and b.ledger_id = #{ledgerId}
+		   and a.ex_item_id in 
+			<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</select>
+
+</mapper>

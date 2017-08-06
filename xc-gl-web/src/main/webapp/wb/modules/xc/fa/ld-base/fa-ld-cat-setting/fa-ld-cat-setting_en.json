@@ -1,0 +1,72 @@
+{
+  /* 查询条件 */
+  ledgerCombox:'Ledger',
+  catName:'Cat Name',
+  faProperty:'Asset Property',
+  faProperty4CatWin:'Property',
+  queryBtn: 'Query',
+  resetBtn: 'Reset',
+  
+  /* 查询列表 */
+  syncBtn: 'Sync',
+      syncCheckMsg:'Please select ledger first',
+      syncWaitMsg:'SyncIng please wait...',
+      syncSuccessMsg:'Sync success',
+      syncErrorMsg:'Sync faliure',
+      syncFailureMsg:'Sync faliure, The server is not responding',
+  editBtn: 'Edit',
+      editCheckMsg:'Please select the modified records',
+  delBtn: 'Delete',
+      delCheckMsg:'Please select the deleted records',
+      delMsg:'Determine to delete the selected records?',
+      delSeccessMsg:'delete success',
+      delFailureMsg:'delete failure',
+  impBtn: 'Import',
+  expBtn: 'Export',
+      expFileName:'The Ledger Asset Category Setting',
+  
+  rowCol:'',
+  catNameCol: 'Cat Name',
+  upCatNameCol: 'Superior Category Name',
+  faPropertyCol: 'Asset Property',
+  synxCol: 'Service Life(Month)',
+  czlCol:'Residual Rate(%)',
+  yzkmCol:'Original Account',
+  ljzktxkmCol:'AD/AA',
+  ljzktxkmCol_tips:'Accumulated Depreciation/Amortisation Account',
+  jzzbkmCol:'Impairment Allowance Account',
+  qlkmCol:'Cleanup Account',
+  fykmCol:'Cost Account',
+  jzsskmCol:'Impairment Loss Account',
+  
+  /* 表单 */
+  upcatName:'Superior Category',
+  sfzj:'Is Depreciation',
+  zjff:'Depreciation',
+  txgz:'Amortization Rules',
+  synx:'Service life',
+  synxN:'Year',
+  synxY:'Mon',
+  
+  saveBtn:'Save',
+      saveCheckMsg:'Information is not complete, please confirm',
+      zjAndJzffNotNull:'When depreciation, the depreciation method can not be null',
+      zjAndTxgzNotNull:'When depreciation, the amortization rule can not be null',
+      saveWaitMsg:'Saving please wait...',
+      saveSuccessMsg:'Save success',
+      saveFailureMsg:'Save failure',
+  cancelBtn:'Cancel',
+  
+  /* faCatsWin */
+  faCatsWinTitle:'Please select asset category first',
+  ensureBtn:'Ensure',
+      ensureCheckMsg:'Please select the synchronous records',
+  
+  /* faCatsGrid */
+  catCodeCol:'Asset Category Code',
+  
+  /* 其他 */
+  errorMsgLeft: ',information【',
+  errorMsgRight: '】',
+  hasRefAsset:' has been related that can not be deleted'
+}

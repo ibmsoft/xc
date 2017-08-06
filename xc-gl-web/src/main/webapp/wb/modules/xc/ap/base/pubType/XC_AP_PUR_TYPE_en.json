@@ -1,0 +1,48 @@
+{
+  XH:'num',
+
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+
+
+  importBtn:'import',
+  exportBtn:'export',
+
+
+  AP_PUR_TYPE_ID_COL:'Procurement object ID',
+  AP_PUR_TYPE_NAME_COL:'Classification of procurement',
+
+  PUR_OBJECT_COL:'Procurement object',
+  IS_SYSTEM_AP_COL:'Deal with the system',
+  IS_SYSTEM_PUR_COL:'Procurement system',
+
+  QUERY_CODE_NAME:'code/name',
+
+
+  DESCRIPTION_COL:'description',
+
+  CREATION_DATE_COL:'create date',
+
+  CREATED_BY_COL:'creater',
+  LAST_UPDATE_DATE_COL:'last update date',
+  LAST_UPDATED_BY_COL:'last modifier ',
+
+  CODEMSG:'coding repeat！',
+  message:'saving...',
+
+  SAVETIP:'save success！',
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete？',
+  DELTIP1:'Delete  success!',
+  EDITETIP:'Modify  success！',
+
+  TIP:'tip',
+
+  MSG1:'It has been set the reference books of the suppliers, do not delete!',
+  MSG2:'Procurement object  cat not repeatable!'
+
+
+
+}
+

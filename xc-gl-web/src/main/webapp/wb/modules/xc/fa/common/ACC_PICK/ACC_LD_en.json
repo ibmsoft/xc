@@ -1,0 +1,7 @@
+{
+  account:'account',
+  accountCode:'account code',
+  accountName:'account name',
+  accountCodeName:'account code/name',
+  checkMsg:'Please select ledger first'
+}

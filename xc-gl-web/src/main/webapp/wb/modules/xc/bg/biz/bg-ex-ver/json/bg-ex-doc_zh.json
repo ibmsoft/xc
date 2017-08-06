@@ -1,0 +1,60 @@
+{
+    titleLabel : "成本费用预算单",
+    titleLabel1 : "项目预算单",
+    saveButton : "保存",
+    submitButton : "提交",
+  
+  
+    LEDGER_NAME : "账簿",
+    ORG_ID : "组织",
+    PROJECT_NAME : "项目",
+    BG_VER_NAME : "预算版本",
+  
+    BG_DOC_CODE : "预算单号",
+    Automatically  : "自动生成",
+    BG_VER_PERIOD : "预算年度",
+    BG_DOC_DESC : "说明",
+  
+	addButton : "增行",
+	deleteButton : "删行",
+    cancelsBtn : "清空",
+  
+    ORDERBY : "序号",
+	BG_ITEM_NAME : "预算项目",
+	DEPT_NAME : "成本中心",
+	PERIOD_CODE : "月度",
+    AMOUNT : "金额",
+    BG_DTL_DESC : "说明",
+  
+    saveInfo1 : "账簿不能为空！请重新输入！",
+    saveInfo2 : "该账簿级预算类型没有启用编码规则！",
+    saveInfo3 : "正在保存中...",
+    saveInfo4 : "数据保存成功！",
+  
+    submitInfo1 : "请填写所有必填项！",
+    submitInfo2 : "请先保存数据，再提交！",
+    submitInfo3 : "预算单",
+    submitInfo4 : "没有预算单明细，不能提交！",
+    submitInfo5 : "该预算单类型没有启用审批流程！",
+    submitInfo6 : "没有选择电脑端审批单据！",
+    submitInfo7 : "流程提交成功！",
+    submitInfo8 : "流程已提交,请重新选择！",
+    submitInfo9 : "流程信息不正确！",
+  
+    deleteInfo1 : "请选择需要删除的记录！",
+    deleteInfo2 : "确定要删除选择的",
+    deleteInfo3 : "条记录吗？",
+    deleteInfo4 : "条预算单明细删除成功！",
+  
+    item_text : "根据编码/名称查询",
+    queryButton : "查询",
+    resetButton : "重置",
+  
+    BG_ITEM_CODE_COL : "预算项目编码",
+    BG_ITEM_NAME_COL : "预算项目名称",
+    DEPT_CODE_COL : "成本中心编码",
+    DEPT_NAME_COL : "成本中心名称",
+    PROJECT_CODE_COL : "项目编码",
+    PROJECT_NAME_COL : "项目名称"
+
+}

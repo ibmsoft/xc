@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoCommonMapper">
+
+    <!-- 获取账簿费用单据信息  -->
+    <select id="getLdCatInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+            SELECT A.LEDGER_ID,
+                   A.PO_DOC_CAT_CODE,
+                   C.PO_CAT_NAME,
+                   A.PROCESS_ID,
+                   B.PROCESS_CODE,
+                   A.RULE_CODE,
+                   C.ATT_CAT_CODE
+              FROM xc_po_doc_cats C, xc_po_ld_doc_cats A
+              LEFT JOIN XIP_WF_PROCESSES B ON A.PROCESS_ID = B.PROCESS_ID
+              WHERE C.PO_CAT_CODE = A.PO_DOC_CAT_CODE
+                    AND A.LEDGER_ID = #{ledgerId}
+                    AND A.PO_DOC_CAT_CODE = #{docCat}
+    </select>
+        
+    <!-- 获取全局费用单据类型信息  -->
+    <select id="getGbCatInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+            select A.PO_CAT_CODE,
+                   A.PO_CAT_NAME,
+                   A.IS_SIGN,
+                   A.PROCESS_ID,
+                   B.PROCESS_CODE,
+                   A.ATT_CAT_CODE,
+                   A.PC_W_FORM_ID,
+                   C.FORM_URL PC_W_FORM_URL,
+                   A.PC_A_FORM_ID,
+                   D.FORM_URL PC_A_FORM_URL,
+                   A.PC_P_FORM_ID,
+                   E.FORM_URL PC_P_FORM_URL,
+                   A.M_W_FORM_ID,
+                   F.FORM_URL M_W_FORM_URL,
+                   A.M_A_FORM_ID,
+                   G.FORM_URL M_A_FORM_URL
+              from xc_po_doc_cats a
+                  left join xip_wf_processes b on a.process_id = b.process_id and b.enable_flag = 'Y'
+                  left join xip_wf_process_forms c on a.pc_w_form_id = c.form_id and c.client_type = 'PC' and c.enable_flag = 'Y'
+                  left join xip_wf_process_forms d on a.pc_a_form_id = d.form_id and d.client_type = 'PC' and d.enable_flag = 'Y'
+                  left join xip_wf_process_forms e on a.pc_p_form_id = e.form_id and e.client_type = 'PC' and e.enable_flag = 'Y'
+                  left join xip_wf_process_forms f on a.m_w_form_id = f.form_id and f.client_type = 'Mobile' and f.enable_flag = 'Y'
+                  left join xip_wf_process_forms g on a.m_a_form_id = g.form_id and g.client_type = 'Mobile' and g.enable_flag = 'Y'
+             where a.PO_CAT_CODE = #{docCat}
+    </select>
+</mapper>

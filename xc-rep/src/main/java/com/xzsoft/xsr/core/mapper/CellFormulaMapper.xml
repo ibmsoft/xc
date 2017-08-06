@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.CellFormulaMapper">
+
+	<resultMap id="cellDataResultMap" type="com.xzsoft.xsr.core.modal.CellData">
+		<result column="MSFORMAT_ID" property="sheet" />
+		<result column="X" property="row" />
+		<result column="Y" property="col" />
+		<result column="DATAFORMULA" property="json" />
+		<result column="APPLYWAY" property="applyWay" />
+	</resultMap>
+	
+	<insert id="insertBatchCellFormat">
+		insert into
+		xsr_rep_cal_formula(FORMULA_ID,SUIT_ID,ROWITEM_ID,COLITEM_ID,ENTITY_ID,DATAFORMULA,FORMULA_DESC,F_CALTYPE,LAST_UPDATE_DATE,LAST_UPDATED_BY,CREATION_DATE,CREATED_BY)
+		values
+		<foreach collection="formatCells" item="formatCell" index="index"
+			separator=",">
+			(#{formatCell.FORMULA_ID},
+			#{formatCell.SUIT_ID},
+			#{formatCell.ROWITEM_ID},
+			#{formatCell.COLITEM_ID},
+			#{formatCell.ENTITY_ID},
+			#{formatCell.DATAFORMULA},
+			#{formatCell.FORMULA_DESC},
+			#{formatCell.F_CALTYPE},
+			#{formatCell.LAST_UPDATE_DATE},
+			#{formatCell.LAST_UPDATED_BY},
+			#{formatCell.CREATION_DATE},
+			#{formatCell.CREATED_BY})
+		</foreach>
+	</insert>
+
+	<delete id="deleteByRC" parameterType="String">
+		delete from
+		xsr_rep_cal_formula where ROWITEM_ID = #{0} and COLITEM_ID=#{1} and
+		ENTITY_ID=#{2} and SUIT_ID=#{3}
+	</delete>
+	<!-- 通过行列指标确定公式是否存在 -->
+	<select id="isExistByRC" parameterType="String" resultType="int">
+		select count(1) from xsr_rep_cal_formula where ROWITEM_ID = #{0} and
+		COLITEM_ID=#{1} and ENTITY_ID=#{2} and SUIT_ID=#{3}
+	</select>
+	<!-- 通过行列指标查公式ID -->
+	<select id="selectIdByRC" parameterType="String" resultType="String">
+		select FORMULA_ID from xsr_rep_cal_formula where ROWITEM_ID = #{0} and
+		COLITEM_ID=#{1} and ENTITY_ID=#{2} and SUIT_ID=#{3}
+	</select>
+	<!-- 通过公式ID更新公式 -->
+	<update id="updateByID" parameterType="com.xzsoft.xsr.core.modal.CellFormula">
+		UPDATE xsr_rep_cal_formula
+		SET DATAFORMULA = #{DATAFORMULA},
+		FORMULA_DESC = #{FORMULA_DESC},
+		F_CALTYPE = #{F_CALTYPE},
+		LAST_UPDATE_DATE = #{LAST_UPDATE_DATE},
+		LAST_UPDATED_BY = #{LAST_UPDATED_BY}
+		WHERE
+		FORMULA_ID = #{FORMULA_ID}
+	</update>
+	<!-- 根据MSFORMAT_ID加载数据单元格 -->
+	<select id="loadValue" parameterType="String" resultMap="cellDataResultMap">
+		select f.MSFORMAT_ID,f.X,f.Y,
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     concat("{data:'",t.DATAFORMULA,"'}") DATAFORMULA, 
+                 </when>
+                 <when test="dbType == 'oracle'">
+                     '{data:'''||t.DATAFORMULA||'''}' DATAFORMULA,
+                 </when>
+         </choose> 
+		'apply' APPLYWAY
+		from
+		xsr_rep_cal_formula t,xsr_rep_modalsheet_format f
+		where
+		f.MSFORMAT_ID=#{0}
+		and t.ENTITY_ID=#{1}
+		and t.SUIT_ID=#{2}
+		and f.CELL_COMMENT_TYPE='DATA'
+		and	f.CELL_COMMENT=
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     concat(t.ROWITEM_ID,',',t.COLITEM_ID)
+                 </when>
+                 <when test="dbType == 'oracle'">
+                     t.ROWITEM_ID||','||t.COLITEM_ID
+                 </when>
+         </choose>
+	</select>
+	
+	<select id="getDictPeriod" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		select t.ITEM_CODE code,t.ITEM_NAME name from xsr_rep_dict t where t.DICT_NAME = 'PERIOD_DIM'
+	</select>
+	
+	<select id="getPeriodByCode" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		SELECT t.ITEM_CODE code, t.ITEM_NAME name
+		FROM xsr_rep_dict t
+		WHERE T.DICT_NAME = 'PERIOD_DIM' and t.ITEM_CODE=#{1}
+		UNION
+		SELECT p.PERIOD_CODE code, p.PERIOD_NAME name
+		FROM xsr_rep_period p
+		WHERE SUIT_ID =#{0} 
+		and p.PERIOD_CODE=#{1}
+	</select>
+	
+	<select id="getEntityByCode" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		SELECT o.ORG_CODE CODE, o.ORG_NAME NAME
+		FROM xsr_rep_org_property s, xip_pub_orgs o
+		WHERE s.org_id = o.org_id
+		AND s.suit_id = #{0}
+		and o.ORG_CODE=#{1}
+	</select>
+	
+	<select id="getRowByCode" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		select t.ROWITEM_CODE code,
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     CONCAT('[',a.ROWITEM_NAME,']-[',t.ROWITEM_NAME,']') name
+                 </when>
+                 <when test="dbType == 'oracle'">
+                      '['||a.ROWITEM_NAME||']-['||t.ROWITEM_NAME||']' name
+                 </when>
+         </choose>		
+		from xsr_rep_rowitem t, xsr_rep_rowitem a
+		where t.UPCODE = a.ROWITEM_CODE 
+		and t.suit_id = #{0}
+		and a.suit_id = #{0}
+		and t.ROWITEM_CODE =#{1}
+	</select>
+	
+	<select id="getColByCode" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		SELECT t.COLITEM_CODE CODE,
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     CONCAT('[',a.COLITEM_NAME,']-[',t.COLITEM_NAME,']') NAME
+                 </when>
+                 <when test="dbType == 'oracle'">
+                      '['||a.COLITEM_NAME||']-['||t.COLITEM_NAME||']' NAME
+                 </when>
+         </choose>
+		FROM xsr_rep_colitem t, xsr_rep_colitem a 
+		WHERE t.UPCODE = a.COLITEM_CODE
+		and t.suit_id = #{0}
+		and a.suit_id = #{0}
+		and t.COLITEM_CODE =#{1}
+	</select>
+	
+	<!-- SELECT	t.ROWITEM_NAME 
+		FROM xsr_rep_rowitem t
+		WHERE  -->
+	<select id="getRowNameById" resultType="String">
+		select <choose>
+                 <when test="dbType == 'mysql'">
+                     CONCAT('[',a.ROWITEM_NAME,']-[',t.ROWITEM_NAME,']') name
+                 </when>
+                 <when test="dbType == 'oracle'">
+                      '['||a.ROWITEM_NAME||']-['||t.ROWITEM_NAME||']' name
+                 </when>
+         </choose>		
+		from xsr_rep_rowitem t, xsr_rep_rowitem a
+		where t.UPCODE = a.ROWITEM_CODE 
+		and t.suit_id = #{0}
+		and a.suit_id = #{0}
+		and t.ROWITEM_ID =#{1}
+	</select>
+	
+	<select id="getColNameById" resultType="String">
+		SELECT  <choose>
+                 <when test="dbType == 'mysql'">
+                     CONCAT('[',a.COLITEM_NAME,']-[',t.COLITEM_NAME,']') NAME
+                 </when>
+                 <when test="dbType == 'oracle'">
+                      '['||a.COLITEM_NAME||']-['||t.COLITEM_NAME||']' NAME
+                 </when>
+         </choose>
+		FROM xsr_rep_colitem t, xsr_rep_colitem a 
+		where t.UPCODE = a.COLITEM_CODE 
+		and t.suit_id = #{0}
+		and a.suit_id = #{0}
+		and t.COLITEM_ID =#{1}
+	</select>
+	
+	<select id="getCnyByCode" resultType="com.xzsoft.xsr.core.modal.DataDTO">
+		select t.CURRENCY_CODE code,t.CURRENCY_NAME name from xsr_rep_currency t 
+		where t.SUIT_ID= #{0}
+		and t.CURRENCY_CODE= #{1}
+	</select>
+	
+	<select id="getRepValue" parameterType="java.util.HashMap" resultType="String">
+		select t.CELLV repValue from xsr_rep_cellvalue t where t.SUIT_ID=#{suitId}
+		<if test="entityCode != null">
+	   		and t.ENTITY_CODE=#{entityCode}
+	   	</if>
+		<if test="entityId != null">
+	   		and t.ENTITY_ID=#{entityId}
+	   	</if>
+	   	<if test="periodCode != null">
+	   		and t.PERIOD_CODE=#{periodCode}
+	   	</if>
+		<if test="period_id != null">
+	   		and t.PERIOD_ID=#{period_id}
+	   	</if>
+	<!-- 	and t.ENTITY_ID=#{entityId}
+		and t.PERIOD_ID=#{periodId} -->
+		and t.ROWITEM_CODE=#{rowCode}
+		and t.COLITEM_CODE=#{colCode}
+		<if test="cnyCode != null">
+	   		and t.CURRENCY_CODE=#{cnyCode}
+	   	</if>
+		<if test="cnyId != null">
+	   		and t.CURRENCY_ID=#{cnyId}
+	   	</if>
+	</select>
+	<select id="getFUN_DB_SUB" resultType="String">
+		select t.FUN_DB_SUB from xsr_rep_fun t where t.FUN_CODE= #{0}
+	</select>
+	
+	<select id="getFunInfo" resultType="java.util.HashMap">
+		select t.FUN_TYPE,t.FUN_CALTYPE,t.FUN_DB_SUB from xsr_rep_fun t where t.FUN_CODE= #{0}
+	</select>
+	
+	<!-- 调用存储过程，funName为调用的存储过程或函数名,paramArr为输入参数 -->
+    <select id="testByProc" statementType="CALLABLE" parameterType="java.util.HashMap" resultType="String">
+       <![CDATA[
+           {call  DB_Test(
+              #{funName,mode=IN,jdbcType=VARCHAR},
+              #{params,mode=IN,jdbcType=VARCHAR},
+              #{o_result,mode=OUT,jdbcType=VARCHAR}
+           )}    
+       ]]>
+    </select>
+    <!-- 通过模板ID查询出该模板的公共级公式, 如果isOnlyImpRepFormula=‘true’,只导出REP类型公式 -->
+    <select id="getCalFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CellFormula">
+	    select t.SUIT_ID, t.ROWITEM_ID, rf.ROWITEM_CODE, t.COLITEM_ID, cf.COLITEM_CODE, t.DATAFORMULA, t.FORMULA_DESC, t.F_CALTYPE, t.ORDERBY_FLAG
+		  from xsr_rep_cal_formula t,
+		       xsr_rep_rowmodalref rf,
+		       xsr_rep_colmodalref cf
+		 where t.ROWITEM_ID = rf.ROWITEM_ID
+		   and t.COLITEM_ID = cf.COLITEM_ID
+		   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		   and rf.LANNO = cf.LANNO
+		   and rf.MODALSHEET_ID = #{modalsheetId}
+		   and t.ENTITY_ID = '-1'
+		   and t.SUIT_ID = #{suitId}
+		<!-- <if test="#{isOnlyImpRepFormula} == 'true'"> 这样写不正确-->
+	   	<if test="isOnlyImpRepFormula == 'true'">
+	   		and t.F_CALTYPE = 'REP'
+	   	</if>
+    </select>
+    <!-- 通过模板ID查询出该模板的固定公式：单位级公式优先 -->
+    <!-- by songyh 2016-01-27, 报表采集，数据运算调用-->
+    <select id="getRepFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CellFormula">
+	    select * from (
+			 select t.entity_id, t.SUIT_ID, t.ROWITEM_ID, rf.ROWITEM_CODE, t.COLITEM_ID, cf.COLITEM_CODE, t.DATAFORMULA, t.FORMULA_DESC, t.F_CALTYPE, t.ORDERBY_FLAG
+					  from xsr_rep_cal_formula t,
+					       xsr_rep_rowmodalref rf,
+					       xsr_rep_colmodalref cf
+					 where t.ROWITEM_ID = rf.ROWITEM_ID
+					   and t.COLITEM_ID = cf.COLITEM_ID
+					   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+					   and rf.LANNO = cf.LANNO
+					   and rf.MODALSHEET_ID = #{MODALSHEET_ID}
+					   and t.ENTITY_ID = '-1'
+					   and t.SUIT_ID = #{suitId}
+					   <if test="fType == 'REP'">
+					   		and t.F_CALTYPE = 'REP'
+					   </if>
+					   and not exists(select 1 from xsr_rep_cal_formula t1 where t1.suit_id=t.SUIT_ID
+			                 and t1.rowitem_id=t.ROWITEM_ID and t1.colitem_id=t.COLITEM_ID  
+											 and t1.entity_id=#{ENTITY_ID})
+			   union 
+			   select t.entity_id, t.SUIT_ID, t.ROWITEM_ID, rf.ROWITEM_CODE, t.COLITEM_ID, cf.COLITEM_CODE, t.DATAFORMULA, t.FORMULA_DESC, t.F_CALTYPE, t.ORDERBY_FLAG
+					  from xsr_rep_cal_formula t,
+					       xsr_rep_rowmodalref rf,
+					       xsr_rep_colmodalref cf
+					 where t.ROWITEM_ID = rf.ROWITEM_ID
+					   and t.COLITEM_ID = cf.COLITEM_ID
+					   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+					   and rf.LANNO = cf.LANNO
+					   and rf.MODALSHEET_ID = #{MODALSHEET_ID}
+					   and t.ENTITY_ID = #{ENTITY_ID}
+					   and t.SUIT_ID = #{suitId}
+					   <if test="fType == 'REP'">
+					   		and t.F_CALTYPE = 'REP'
+					   </if>
+					   ) r order by orderby_flag,rowitem_code,colitem_code
+			  
+    </select>
+    <!-- 通过模板id，删除该模板上的公共级采集公式 -->
+    <delete id="deleteCalFormula" parameterType="java.util.HashMap">
+	    delete t from xsr_rep_cal_formula t 
+		 where EXISTS (select 1 
+		                 from xsr_rep_rowmodalref rf 
+		                where rf.MODALSHEET_ID = #{modalsheetId}
+		                  and t.ROWITEM_ID = rf.ROWITEM_ID)
+		   and EXISTS (select 1 
+		                 from xsr_rep_colmodalref cf
+		                where cf.MODALSHEET_ID = #{modalsheetId}
+		                  and t.COLITEM_ID = cf.COLITEM_ID)
+		   and t.ENTITY_ID = '-1'
+		   and t.SUIT_ID = #{suitId}
+		<if test="isOnlyImpRepFormula == 'true'">
+	   		and t.F_CALTYPE = 'REP'
+	   	</if>
+    </delete>
+    
+    <select id="getCalFormulaId" resultType="String">
+    	select t.FORMULA_ID 
+		  from xsr_rep_cal_formula t 
+		 where t.COLITEM_ID = #{colitemId}
+		   and t.ROWITEM_ID = #{rowitemId}
+		   and t.ENTITY_ID = #{entityId}
+		   and t.SUIT_ID = #{suitId}
+    </select>
+    
+    <update id="updateBatchCalFormula">
+		<foreach collection="cellFormulas" item="cellFormula" index="index"
+			separator=";">
+			UPDATE xsr_rep_cal_formula
+			<set>
+				DATAFORMULA = #{cellFormula.DATAFORMULA},
+				FORMULA_DESC = #{cellFormula.FORMULA_DESC},
+				F_CALTYPE = #{cellFormula.F_CALTYPE},
+				LAST_UPDATE_DATE = #{cellFormula.LAST_UPDATE_DATE},
+				LAST_UPDATED_BY = #{cellFormula.LAST_UPDATED_BY}
+			</set>
+			where FORMULA_ID = #{cellFormula.FORMULA_ID}
+		</foreach>
+	</update>
+	
+	<select id="getPeriodCodeById" parameterType="String" resultType="String">
+    	select t.PERIOD_CODE from xsr_rep_period t WHERE t.PERIOD_ID=#{0}
+    </select>
+    <select id="getDimCodeCloumn" parameterType="String" resultType="String">
+    	select t.ATTR2 from xsr_dc_dim_set t where t.DIM_MEANING=#{0} and t.DC_ID=#{1}
+    </select>
+    <select id="getDcVal" parameterType="java.util.HashMap" resultType="String">
+    	select sum(${BA_TYPE}) from xsr_dc_etl_ba t where  t.DC_ID =#{DC_ID}
+			and t.ACC_CLASS='BA'
+			and t.ACCOUNT_CODE=#{KM}
+			<if test="entity_id!=null">
+				and t.ENTITY_ID=#{entity_id}
+			</if>
+			<if test="DW!=null">
+				and t.ENTITY_CODE=#{DW}
+			</if>
+			and t.PERIOD_NAME=#{periodCode}
+			<if test="cnyId!=null">
+				and t.CURRENCY_ID=#{cnyId}
+			</if>
+			<if test="BZ!=null">
+				and t.CURRENCY_CODE=#{BZ}
+			</if>
+			<if test="DIM_CUS1_CODE!=null">
+				and t.DIM_CUS1_CODE=#{DIM_CUS1_CODE}
+			</if>
+			<if test="DIM_CUS2_CODE!=null">
+				and t.DIM_CUS2_CODE=#{DIM_CUS2_CODE}
+			</if>
+			<if test="DIM_CUS3_CODE!=null">
+				and t.DIM_CUS3_CODE=#{DIM_CUS3_CODE}
+			</if>
+			<if test="DIM_CUS4_CODE!=null">
+				and t.DIM_CUS4_CODE=#{DIM_CUS4_CODE}
+			</if>
+			<if test="DIM_CUS5_CODE!=null">
+				and t.DIM_CUS5_CODE=#{DIM_CUS5_CODE}
+			</if>
+			<if test="DIM_CUS6_CODE!=null">
+				and t.DIM_CUS6_CODE=#{DIM_CUS6_CODE}
+			</if>
+			<if test="DIM_CUS7_CODE!=null">
+				and t.DIM_CUS7_CODE=#{DIM_CUS7_CODE}
+			</if>
+			<if test="DIM_CUS8_CODE!=null">
+				and t.DIM_CUS8_CODE=#{DIM_CUS8_CODE}
+			</if>
+			<if test="DIM_CUS9_CODE!=null">
+				and t.DIM_CUS9_CODE=#{DIM_CUS9_CODE}
+			</if>
+			<if test="DIM_CUS10_CODE!=null">
+				and t.DIM_CUS10_CODE=#{DIM_CUS10_CODE}
+			</if>
+			<if test="DIM_CUS11_CODE!=null">
+				and t.DIM_CUS11_CODE=#{DIM_CUS11_CODE}
+			</if>
+    </select>
+    
+    <select id="getDcCashVal" parameterType="java.util.HashMap" resultType="String">
+    	select sum(PTD_JE) from xsr_dc_etl_ba t 
+    	 where  t.DC_ID = #{DC_ID}
+			and t.ACC_CLASS='CA'
+			and t.ATTR1 = #{cashCode}
+			<if test="entity_id!=null">
+				and t.ENTITY_ID = #{entity_id}
+			</if>
+			<if test="BA_TYPE == 'PTD_JE'">
+				and t.PERIOD_NAME = #{periodCode}
+			</if>
+			<if test="BA_TYPE == 'YTD_JE'">
+				and (t.PERIOD_NAME <![CDATA[<=]]> #{periodCode} and t.PERIOD_NAME <![CDATA[>=]]> #{periodStart})
+			</if>
+			<if test="cnyId!=null">
+				and t.CURRENCY_ID = #{cnyId}
+			</if>
+    </select>
+    
+	<select id="getDcIdByOrg" resultType="String">
+		select DC_ID from xsr_rep_suit_src
+		where SUIT_ID=#{suitId}
+		and ENTITY_ID=#{entityId}
+	</select>
+	
+	<select id="getDefaultDcId" resultType="String">
+		select DC_ID from xsr_rep_suit_src
+		where SUIT_ID=#{suitId}
+		and ENTITY_ID='-1'
+	</select>
+	
+	<!-- 查询行指标信息 -->
+	<select id="getRowItemById" parameterType="java.lang.String" resultType="com.xzsoft.xsr.core.modal.Rowitem">
+		select rr.ROWITEM_ID,
+		       rr.ROWITEM_CODE,
+		       rr.ROWITEM_NAME,
+		       rr.SUIT_ID,
+		       rr.DESCRIPTION,
+		       rr.ISSUM,
+		       rr.ISFJITEM,
+		       rr.ITEMALIAS,
+		       rr.ITEMUNIT,
+		       rr.UPCODE,
+		       rr.DIRECTION,
+		       rr.ISICP,
+		       rr.ORDERBY
+		  from xsr_rep_rowitem rr
+		 where rr.ROWITEM_ID = #{rowItemId}
+		 order by rr.ORDERBY
+	</select>
+	<!-- 查询列指标信息 -->
+	<select id="getColitemById" parameterType="java.lang.String" resultType="com.xzsoft.xsr.core.modal.Colitem">
+		select rc.COLITEM_ID,
+		       rc.SUIT_ID,
+		       rc.COLITEM_CODE,
+		       rc.COLITEM_NAME,
+		       rc.DESCRIPTION,
+		       rc.ISSUM,
+		       rc.ITEMALIAS,
+		       rc.ITEMUNIT,
+		       rc.UPCODE,
+		       rc.DIRECTION,
+		       rc.ORDERBY,
+		       rc.DATATYPE
+		  from xsr_rep_colitem rc
+		 where rc.COLITEM_ID = #{colItemId}
+		 order by rc.ORDERBY
+	</select>
+	
+</mapper>

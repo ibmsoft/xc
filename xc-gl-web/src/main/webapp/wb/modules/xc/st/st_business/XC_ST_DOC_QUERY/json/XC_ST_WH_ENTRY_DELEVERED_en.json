@@ -1,0 +1,27 @@
+{
+    XC_ST_WH_ENTRY_DELEVERED_WAREHOUSE				: 'Warehouse',
+    XC_ST_WH_ENTRY_DELEVERED_DOC_CODE				: 'Doc Num',
+    XC_ST_WH_ENTRY_DELEVERED_BUSINESS_TYPE_NAME		: 'Business Type',
+    XC_ST_WH_ENTRY_DELEVERED_BIZ_DATE				: 'Business Date',
+    XC_ST_WH_ENTRY_DELEVERED_TO						: 'To',
+    XC_ST_WH_ENTRY_DELEVERED_STATUS					: 'Status',
+    XC_ST_WH_ENTRY_DELEVERED_STATUS_1				: 'Draft',
+    XC_ST_WH_ENTRY_DELEVERED_STATUS_2				: 'Already submitted',
+    XC_ST_WH_ENTRY_DELEVERED_STATUS_3				: 'Already account',
+    XC_ST_WH_ENTRY_DELEVERED_DEPT_NAME				: 'Business department',
+    XC_ST_WH_ENTRY_DELEVERED_PROJECT_NAME			: 'Project',
+    XC_ST_WH_ENTRY_DELEVERED_searchButton			: 'Query',
+    XC_ST_WH_ENTRY_DELEVERED_resetButton			: 'Reset',
+  
+    XC_ST_WH_ENTRY_DELEVERED_NUMBER_COL				: 'NO.',
+    XC_ST_WH_ENTRY_DELEVERED_ST_CAT_NAME			: 'Doc Type',
+    XC_ST_WH_ENTRY_DELEVERED_EMP_NAME				: 'Single man',
+    XC_ST_WH_ENTRY_DELEVERED_WAREHOUSE_KEPPER		: 'Warehouse keeper',
+    XC_ST_WH_ENTRY_DELEVERED_DOC_NAME				: 'Summary',
+    XC_ST_WH_ENTRY_DELEVERED_DOC_CODE_NAME			: 'Doc Num/Summary',
+    XC_ST_WH_ENTRY_DELEVERED_MATERIAL				: 'Include material',
+    XC_ST_WH_ENTRY_DELEVERED_BUYER_ID				: 'Salesman',
+    XC_ST_WH_ENTRY_DELEVERED_MATERIAL_NAME			: 'Materiel',
+    XC_ST_WH_ENTRY_DELEVERED_RK_QTY					: 'Storage quantity',
+    XC_ST_WH_ENTRY_DELEVERED_CK_QTY					: 'Outbound quantity'
+}

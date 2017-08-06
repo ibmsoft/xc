@@ -1,0 +1,1 @@
+{"inframe":false,"title":"获取预算单据信息","hidden":true,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"{#WHERESQL#}","itemId":"getBudgetData"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

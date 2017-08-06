@@ -1,0 +1,126 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.base.persistence.document.DocumentFileMapper">
+
+	<resultMap id="documentFileMap" type="com.cubedrive.base.domain.document.DocumentFile">
+		<id column="document_id" property="id" jdbcType="INTEGER" />
+		<result column="document_name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="star" property="star" jdbcType="BOOLEAN" />
+		<result column="exname" property="exname" jdbcType="CHAR" />
+		<result column="parent_id" property="parentId" jdbcType="CHAR" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+		<association property="author"
+			select="com.cubedrive.base.persistence.account.UserMapper.getById" column="author_id" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		document_file.document_id,
+		document_file.document_name,
+		document_file.description,
+		document_file.create_date,
+		document_file.update_date,
+		document_file.star,
+		document_file.exname,
+		document_file.parent_id,
+		document_file.author_id
+	</sql>
+
+	<insert id="insertDocumentFile">
+		<selectKey resultType="java.lang.Integer" keyProperty="document.id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		document_file(document_name, description,create_date,update_date, author_id, star, parent_id, exname)
+		values(#{document.name,jdbcType=VARCHAR},
+		#{document.description,jdbcType=VARCHAR},		
+		#{document.createDate,jdbcType=TIMESTAMP},
+		#{document.updateDate,jdbcType=TIMESTAMP},
+		#{document.author.id,jdbcType=INTEGER},
+		#{document.star,jdbcType=BOOLEAN},
+		#{document.parentId,jdbcType=CHAR},
+		#{document.exname,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateDocumentFile">
+		update document_file
+		set document_name = #{document.name,jdbcType=VARCHAR},	
+		    star = #{document.star,jdbcType=BOOLEAN}	    
+		<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(document.updateDate)">
+			, update_date = #{document.updateDate,jdbcType=TIMESTAMP}
+		</if>
+		where document_id = #{document.id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Integer"
+		resultMap="documentFileMap">
+		select
+		<include refid="base_column_list" />
+		from document_file where document_id = #{documentId}
+	</select>
+
+    <!-- count all document under some condition -->
+	<select id="countDocument" resultType="java.lang.Integer">
+		select count(document_id) 
+		  from document_file
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">		
+			author_id = #{authorId} 	
+			<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(exnames)">
+				AND exname IN
+				<foreach item="item" index="index" collection="exnames"
+			             open="(" separator="," close=")">
+			        #{item}
+			    </foreach>
+			</if>	
+			<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(queryBy)">
+				<if test="queryBy == 'document_name'">
+					AND document_name like #{query}
+				</if>
+			</if>
+		</trim>
+	</select>
+
+	<select id="findDocuments" resultMap="documentFileMap">
+		select
+		<include refid="base_column_list" />
+		from document_file
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			author_id = #{authorId} 
+			
+			<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(exnames)">
+				AND exname IN
+				<foreach item="item" index="index" collection="exnames"
+			             open="(" separator="," close=")">
+			        #{item}
+			    </foreach>
+			</if>
+			
+			<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(queryBy)">
+				<if test="queryBy == 'document_name'">
+					AND document_name like #{query}
+				</if>
+			</if>
+			
+		</trim>
+		<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(sort)">
+			order by ${sort} ${sortBy}
+		</if>
+		<if test="limit !=null">
+			LIMIT #{limit} OFFSET #{start}
+		</if>
+	</select>
+	
+	<update id="updateDocDate">
+		update document_file set update_date=#{updateDate,jdbcType=TIMESTAMP}
+		where document_id=#{documentId,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from document_file where document_file.document_id=#{documentId}
+	</delete>
+
+</mapper>

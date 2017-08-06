@@ -1,0 +1,12 @@
+{
+  moduleTitle:"Voucher Category Management",
+  addBtn:"Add",
+  editBtn:"Edit",
+  delBtn:"Delete",
+  saveBtn:"save",
+  
+  rownum:'NO',
+  la_categoryCode:"Category Code",
+  la_categoryName:"Category Name",
+  la_description:"Description"
+}

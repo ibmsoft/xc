@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.bg.mapper.XCBGCommonMapper">
+	<!-- 根据预算单ID得到预算单明细信息 -->
+	<select id="getDocDtl" parameterType="java.lang.String" resultType="com.xzsoft.xc.bg.modal.BgDocDtl">
+	SELECT
+	 t.BG_DOC_ID AS bgDocId,
+	 t.BG_DTL_ID AS bgDtlId,
+	 a.INS_CODE AS insCode,
+	 v.BG_VER_PERIOD as bgYear,
+	 case when t.BG_ITEM_ID is null then 'A' else t.BG_ITEM_ID end as bgItemId,
+	 t.PROJECT_ID AS projectId,
+	 case when t.DEPT_ID is null then 'A' else t.DEPT_ID end as deptId,
+	 t.PERIOD_CODE AS periodCode,
+	 t.AMOUNT AS amount,
+	 t.AMOUNT AS bgAmount,
+	 t.BG_DTL_DESC AS bgDtlDesc,
+     a.BG_CAT_CODE AS bgCatCode,
+     a.LEDGER_ID as ledgerId
+	FROM
+	xc_bg_doc_dtl t,
+	xc_bg_docs a left join xc_bg_cost_ver v on a.BG_VER_ID = v.BG_VER_ID
+	WHERE
+	a.BG_DOC_ID = t.BG_DOC_ID
+	AND
+	t.BG_DOC_ID = #{bgDocId}
+	</select>
+	<!-- 根据预算单ID得到账簿ID -->
+	<select id="getLedgerID" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			LEDGER_ID			as ledgerId
+		FROM
+			xc_bg_docs
+		WHERE
+			BG_DOC_ID = #{bgDocId}
+	</select>
+	
+	<!-- 根据预算项ID查询预算项信息(多条) -->
+	<select id="getBgItems" parameterType="java.util.List" resultType="com.xzsoft.xc.bg.modal.BgItemBean">
+		SELECT
+			BG_ITEM_ID			as bgItemId,
+			BG_HRCY_ID			as bgHrcyId,
+			BG_ITEM_CODE		as bgItemCode,
+			BG_ITEM_NAME		as bgItemName,
+			BG_ITEM_DESC		as bgItemDesc,
+			BG_ITEM_UP_ID		as bgItemUpId,
+			BG_ITEM_PROP		as bgItemProp,
+			BG_ITEM_TYPE		as bgItemType,
+			START_DATE			as startDate,
+			END_DATE			as endDate
+		FROM
+			xc_bg_items
+		WHERE
+			BG_ITEM_ID IN
+			<foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+				#{item}
+			</foreach>
+	</select>
+	
+	<!-- 根据预算项ID查询预算项信息(一条) -->
+	<select id="getBgItem" parameterType="java.lang.String" resultType="com.xzsoft.xc.bg.modal.BgItemBean">
+		SELECT
+			BG_ITEM_ID			as bgItemId,
+			BG_HRCY_ID			as bgHrcyId,
+			BG_ITEM_CODE		as bgItemCode,
+			BG_ITEM_NAME		as bgItemName,
+			BG_ITEM_DESC		as bgItemDesc,
+			BG_ITEM_UP_ID		as bgItemUpId,
+			BG_ITEM_PROP		as bgItemProp,
+			BG_ITEM_TYPE		as bgItemType,
+			START_DATE			as startDate,
+			END_DATE			as endDate
+		FROM
+			xc_bg_items
+		WHERE
+			BG_ITEM_ID = #{bgItemId}
+	</select>
+	
+	<!-- 根据预算项ID查询账簿级预算项信息 -->
+	<select id="getBgLdItem" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.bg.modal.BgLdItemBean">
+		SELECT
+			BG_LD_ITEM_ID			as bgLdItemId,
+			LEDGER_ID				as ledgerId,
+			BG_ITEM_ID				as bgItemId,
+			BG_CTRL_DIM				as bgCtrlDim,
+			BG_CTRL_MODE			as bgCtrlMode,
+			IS_ENABLED				as isEnabled
+		FROM
+			xc_bg_ld_items
+		WHERE
+			BG_ITEM_ID = #{bgItemId}
+			AND LEDGER_ID = #{ledgerId}
+	</select>
+
+	<!-- 查询账簿项目信息  -->
+	<select id="getProjects" parameterType="java.util.List" resultType="com.xzsoft.xc.util.modal.Project">
+		select t.project_id    projectId,
+		       t.ledger_id     ledgerId,
+		       t.project_code  projectCode,
+		       t.project_name  projectName,
+		       t.up_project_id upPorjectId,
+		       t.start_date    startDate,
+		       t.end_date      endDate,
+		       t.prj_ctrl_dim  prjCtrlDim,
+		       t.prj_ctrm_mode prjCtrlMode,
+		       t.is_bg_ctrl    isBgCtrl,
+		       a.dept_id       deptId,
+		       a.user_id       userId
+		  from xc_pm_projects t
+		  left join xc_pm_prj_dept a on t.ledger_id = a.ledger_id and t.project_id = a.project_id
+		 where t.project_id in	
+		 <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		 	#{item}
+		 </foreach>
+		 order by t.project_id
+	</select>
+	
+	<!-- 查询预算项目信息  -->
+	<select id="getBudgetItems" parameterType="java.util.List" resultType="com.xzsoft.xc.bg.modal.BgItemDTO">
+	
+	</select>
+	
+	<!-- 查询成本中心信息  -->
+	<select id="getDepts" parameterType="java.util.List" resultType="com.xzsoft.xc.util.modal.Department">
+	
+	</select>
+	
+	<!-- 查询账簿信息  -->
+	<select id="getLedger" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Ledger">
+		select t.LEDGER_ID         ledgerId,
+		       t.LEDGER_CODE       ledgerCode,
+		       t.LEDGER_NAME       ledgerName,
+		       t.ACC_HRCY_ID       accHrcyId,
+		       t.START_PERIOD_CODE startPeriodCode,
+		       t.CURRENCY_CODE     cnyCode,
+		       t.ORG_ID            orgId,
+		       t.RETAINED_ACC_ID   retainedAccId,
+		       t.EXCHANGE_ACC_ID   exchangeAccId,
+		       t.LEDGER_ACC_DESC   ledgerDesc,
+		       t.is_valid	isValid,
+		       t.bg_hrcy_id	bgHrcyId,
+		       t.bg_is_chk	bgIsChk,
+		       t.bg_ex_period	bgExPeriod,
+		       t.bg_is_special	bgIsSpecial,
+		       t.bg_is_cash	bgIsCash,
+		       t.ex_hrcy_id	exHrcyId,
+		       t.ex_ia_acc_id	exIaAccId,
+		       t.ex_cr_acc_id	exCrAccId,
+		       t.is_cr_pay	isCrPay
+		  from xc_gl_ledgers t
+		 where t.LEDGER_ID = #{ledgerId}
+	</select>
+	
+</mapper>

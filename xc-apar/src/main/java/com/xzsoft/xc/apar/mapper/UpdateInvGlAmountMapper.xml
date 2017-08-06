@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.apar.mapper.UpdateInvGlAmountMapper">
+	<!-- 根据应付单ID更新应付单中的金额（未付金额、已付金额、核销金额、占用金额、调整金额） -->
+	<update id="updateApInvGlAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ap_inv_gl_h SET
+						NO_PAY_AMT		= #{item.NO_PAY_AMT},
+						PAID_AMT		= #{item.PAID_AMT},
+						CANCEL_AMT		= #{item.CANCEL_AMT},
+						ADJ_AMT			= #{item.ADJ_AMT},
+						OCCUPY_AMT		= #{item.OCCUPY_AMT}
+					WHERE
+						AP_INV_GL_H_ID	= #{item.AP_INV_GL_H_ID}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ap_inv_gl_h SET
+						NO_PAY_AMT		= #{item.NO_PAY_AMT},
+						PAID_AMT		= #{item.PAID_AMT},
+						CANCEL_AMT		= #{item.CANCEL_AMT},
+						ADJ_AMT			= #{item.ADJ_AMT},
+						OCCUPY_AMT		= #{item.OCCUPY_AMT}
+					WHERE
+						AP_INV_GL_H_ID	= #{item.AP_INV_GL_H_ID}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 根据应收单ID更新应收单中的金额（未收金额、已收金额、核销金额、调整金额） -->
+	<update id="updateArInvGlAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_inv_gl_h SET
+						NO_PAY_AMT		= #{item.NO_PAY_AMT},
+						PAID_AMT		= #{item.PAID_AMT},
+						CANCEL_AMT		= #{item.CANCEL_AMT},
+						ADJ_AMT			= #{item.ADJ_AMT}
+					WHERE
+						AR_INV_GL_H_ID	= #{item.AR_INV_GL_H_ID}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_inv_gl_h SET
+						NO_PAY_AMT		= #{item.NO_PAY_AMT},
+						PAID_AMT		= #{item.PAID_AMT},
+						CANCEL_AMT		= #{item.CANCEL_AMT},
+						ADJ_AMT			= #{item.ADJ_AMT}
+					WHERE
+						AR_INV_GL_H_ID	= #{item.AR_INV_GL_H_ID}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+</mapper>

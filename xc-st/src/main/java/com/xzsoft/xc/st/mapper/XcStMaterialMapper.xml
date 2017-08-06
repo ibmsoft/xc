@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStMaterialMapper">
+	<!-- 物质编码列信息 -->
+	<sql id="stMaterialColumn">
+		MATERIAL_ID,
+		MATERIAL_CODE,
+		MATERIAL_NAME,
+		MATERIAL_PRO,
+		MATERIAL_SET_ID,
+		MATERIAL_TYPE_ID,
+		FINACE_TYPE_ID,
+		SPECIFICATION,
+		DIM_ID,
+		IS_BATCH,
+		IS_SERIAL,
+		IS_PURCHASE,
+		IS_PURCHASE_EXCESS,
+		IS_SALE,
+		IS_SALE_EXCESS,
+		PURCHASE_PRICE,
+		SALE_PRICE,
+		SALE_TYPE_ID,
+		IMAGES,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+    <!-- 插入物质信息 -->
+    <insert id="insertXcStMaterial" parameterType="com.xzsoft.xc.st.modal.XcStMaterialBean">
+    	INSERT INTO xc_st_material (
+			<include refid="stMaterialColumn"/>
+    	)
+		VALUES (
+		   #{MATERIAL_ID,jdbcType=VARCHAR},
+		   #{MATERIAL_CODE,jdbcType=VARCHAR},
+		   #{MATERIAL_NAME,jdbcType=VARCHAR},
+		   #{MATERIAL_PRO,jdbcType=VARCHAR},
+		   #{MATERIAL_SET_ID,jdbcType=VARCHAR},
+		   #{MATERIAL_TYPE_ID,jdbcType=VARCHAR},
+		   #{FINACE_TYPE_ID,jdbcType=VARCHAR},
+		   #{SPECIFICATION,jdbcType=VARCHAR},
+		   #{DIM_ID,jdbcType=VARCHAR},
+		   #{IS_BATCH,jdbcType=VARCHAR},
+		   #{IS_SERIAL,jdbcType=VARCHAR},
+		   #{IS_PURCHASE,jdbcType=VARCHAR},
+		   #{IS_PURCHASE_EXCESS,jdbcType=VARCHAR},
+		   #{IS_SALE,jdbcType=VARCHAR},
+		   #{IS_SALE_EXCESS,jdbcType=VARCHAR},
+		   #{PURCHASE_PRICE,jdbcType=NUMERIC},
+		   #{SALE_PRICE,jdbcType=NUMERIC},
+		   #{SALE_TYPE_ID,jdbcType=VARCHAR},
+		   #{IMAGES,jdbcType=CLOB},
+		   #{CREATION_DATE,jdbcType=TIMESTAMP},
+		   #{CREATED_BY,jdbcType=VARCHAR},
+		   #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		   #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		)
+    </insert>
+    <!-- 更新物资信息 -->
+    <update id="updateXcStMaterial" parameterType="com.xzsoft.xc.st.modal.XcStMaterialBean">
+    	UPDATE xc_st_material SET
+			MATERIAL_CODE		= #{MATERIAL_CODE,jdbcType=VARCHAR},
+			MATERIAL_NAME		= #{MATERIAL_NAME,jdbcType=VARCHAR},
+			MATERIAL_PRO		= #{MATERIAL_PRO,jdbcType=VARCHAR},
+			MATERIAL_SET_ID		= #{MATERIAL_SET_ID,jdbcType=VARCHAR},
+			MATERIAL_TYPE_ID	= #{MATERIAL_TYPE_ID,jdbcType=VARCHAR},
+			FINACE_TYPE_ID		= #{FINACE_TYPE_ID,jdbcType=VARCHAR},
+			SPECIFICATION		= #{SPECIFICATION,jdbcType=VARCHAR},
+			DIM_ID				= #{DIM_ID,jdbcType=VARCHAR},
+			IS_BATCH			= #{IS_BATCH,jdbcType=VARCHAR},
+			IS_SERIAL			= #{IS_SERIAL,jdbcType=VARCHAR},
+			IS_PURCHASE			= #{IS_PURCHASE,jdbcType=VARCHAR},
+			IS_PURCHASE_EXCESS	= #{IS_PURCHASE_EXCESS,jdbcType=VARCHAR},
+			IS_SALE				= #{IS_SALE,jdbcType=VARCHAR},
+			IS_SALE_EXCESS		= #{IS_SALE_EXCESS,jdbcType=VARCHAR},
+			PURCHASE_PRICE		= #{PURCHASE_PRICE,jdbcType=NUMERIC},
+			SALE_PRICE			= #{SALE_PRICE,jdbcType=NUMERIC},
+			SALE_TYPE_ID		= #{SALE_TYPE_ID,jdbcType=VARCHAR},
+			IMAGES				= #{IMAGES,jdbcType=CLOB},
+			LAST_UPDATE_DATE	= #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY		= #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		WHERE
+			MATERIAL_ID 		= #{MATERIAL_ID,jdbcType=VARCHAR}
+    </update>
+     
+	<!-- 删除物资的时候校验是否被使用，使用的不能删除  -->
+	<select id="xcStMaterialWhetherCited" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS COUNT
+		FROM
+			xc_st_material_parms
+		WHERE
+			MATERIAL_ID = #{MATERIAL_ID}
+	</select>
+	<!-- 删除账簿级物料信息时判断是否被引用，使用的不能删除  -->
+	<select id="xcStMaterialParamsWhetherCited" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT l.MATERIAL_ID from xc_st_wh_entry_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_cost_change_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_wh_delevered_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_transshipment_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_location_adjust_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_use_apply_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_st_wh_init_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_po_pur_ap_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_po_order_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_po_arrival_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+		UNION
+		SELECT l.MATERIAL_ID from xc_po_return_l l WHERE l.MATERIAL_ID = #{MATERIAL_ID} AND l.ORG_ID = #{ORG_ID}
+	</select>
+	<!-- 批量删除物资信息  -->
+	<delete id="deleteXcStMaterial" parameterType="java.util.List">
+		DELETE FROM xc_st_material WHERE MATERIAL_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 批量删除账簿级物资信息  -->
+	<delete id="deleteXcStMaterialParams" parameterType="java.util.List">
+		DELETE FROM xc_st_material_parms WHERE MATERIAL_PARMS_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 验证物料编码或名称是否重复 -->
+	<select id="stMaterialCodeOrNameIsExists" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			sm.MATERIAL_CODE
+		FROM
+			xc_st_material sm
+		LEFT JOIN xc_st_material_type smt ON sm.MATERIAL_TYPE_ID = smt.MATERIAL_TYPE_ID
+		WHERE
+			(sm.MATERIAL_CODE = #{MATERIAL_CODE} OR sm.MATERIAL_NAME = #{MATERIAL_NAME})
+		AND smt.MAT_TYPE_SET_ID = #{MAT_TYPE_SET_ID}
+		AND sm.MATERIAL_ID != #{MATERIAL_ID}
+	</select>
+</mapper>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.XCGLFetchDataMapper">
+    <!-- 账簿信息SQL列 -->
+    <sql id="ledgerColumn">
+       t.ledger_id         ledgerId,        
+       t.ledger_code       ledgerCode,   
+       t.ledger_name       ledgerName,
+       t.acc_hrcy_id       accHrcyId,  
+       t.start_period_code startPeriodCode,
+       t.currency_code     cnyCode,
+       t.org_id            orgId,      
+       t.retained_acc_id   retainedAccId,
+       t.exchange_acc_id   exchangeAccId,
+       t.ledger_acc_desc   ledgerDesc,
+       t.bg_hrcy_id        bgHrcyId,
+       t.bg_is_chk         bgIsChk, 
+       t.bg_ex_period      bgExPeriod,
+       t.bg_is_special     bgIsSpecial,
+       t.bg_is_cash        bgIsCash,
+       t.ex_hrcy_id        exHrcyId,
+       t.ex_ia_acc_id      exIaAccId,
+       t.ex_cr_acc_id      exCrAccId,
+       t.is_cr_pay         isCrPay, 
+       t.creation_date     creationDate,
+       t.created_by        createdBy,
+       t.last_update_date  lastUpdateDate,
+       t.is_valid          isValid,
+       t.last_updated_by   lastUpdatedBy,
+       (select max(p.last_update_date) FROM xc_gl_ledgers p)  maxUpdateDate 
+    </sql>
+    <!-- CCID -->
+    <sql id="ccidColumn">
+       t.CCID            ccid,        
+       t.CCID_CODE       ccidCode,   
+       t.CCID_NAME       ccidName,
+       t.LEDGER_ID       ledgerId,  
+       t.ACC_ID          accId,
+       t.ACC_CODE        accCode,
+       t.ACC_NAME        accName, 
+       t.VENDOR_ID       vendorId,
+       t.VENDOR_CODE     vendorCode,
+       t.VENDOR_NAME     vendorName,
+       t.CUSTOMER_ID     customerId,
+       t.CUSTOMER_CODE   customerCode, 
+       t.CUSTOMER_NAME   customerName,
+       t.PRODUCT_ID      productId,
+       t.PRODUCT_CODE    productCode,
+       t.PRODUCT_NAME    productName,
+       t.ORG_ID          orgId,
+       t.ORG_CODE        orgCode,
+       t.ORG_NAME        orgName,
+       t.EMP_ID          empId,
+       t.EMP_CODE        empCode,
+       t.EMP_NAME        empName,
+       t.DEPT_ID         deptId,
+       t.DEPT_CODE       deptCode, 
+       t.DEPT_NAME       deptName,
+       t.PROJECT_ID      projectId,
+       t.PROJECT_CODE    projectCode,
+       t.PROJECT_NAME    projectName,
+       t.CUSTOM1_ID       custom1Id,
+       t.CUSTOM1_CODE     custom1Code,
+       t.CUSTOM1_NAME     custom1Name,
+       t.CUSTOM2_ID       custom2Id,
+       t.CUSTOM2_CODE     custom2Code,
+       t.CUSTOM2_NAME     custom2Name,
+       t.CUSTOM3_ID       custom3Id,
+       t.CUSTOM3_CODE     custom3Code,
+       t.CUSTOM3_NAME     custom3Name,
+       t.CUSTOM4_ID       custom4Id,
+       t.CUSTOM4_CODE     custom4Code,
+       t.CUSTOM4_NAME     custom4Name,
+       t.IS_LEAF          isLeaf,
+       t.creation_date     creationDate,
+       t.created_by        createdBy,
+       t.last_update_date  lastUpdateDate,
+       t.last_updated_by   lastUpdatedBy,
+       (select max(p.last_update_date) from  xc_gl_ccid p) synchronizeDate 
+    </sql>
+	<!-- 凭证头SQL列 -->
+	<sql id="headItemColumn">
+	   t.v_head_id headId,
+	   (select p.ledger_code from xc_gl_ledgers p where p.LEDGER_ID = t.LEDGER_ID) as "ledgerCode",
+       t.ledger_id ledgerId,
+       t.period_code periodCode,
+       t.v_category_id categoryId,
+       t.v_src_code srcCode,
+       t.V_SRC_ID srcId ,
+       t.v_serial_num serialNum,
+       t.v_attch_total attchTotal,
+       t.verifier_id verifierId,
+       t.verifier verifier,
+       t.verfy_date verifyDate,
+       t.is_signed isSigned,
+       t.signatory_id signatoryId,
+       t.signatory,
+       t.sign_date signDate,
+       t.bookkeeper_id bookkeeperId,
+       t.bookkeeper bookkeeper,
+       t.book_date bookDate,
+       t.is_write_off isWriteOff,
+       t.write_off_num writeOffNum,
+       t.t_dr totalDR,
+       t.t_cr totalCR,
+       t.summary,
+       t.v_template_type templateType,
+       t.v_status vStatus,
+       t.sum_flag sumFlag,
+       t.created_name createdName,
+       t.creation_date creationDate,
+       t.created_by createdBy,
+       (select max(p.last_update_date) from xc_gl_v_heads p)  synchronizeDate
+	</sql>
+	
+	<!-- 凭证分录行SQL列 -->
+	<sql id="lineItemColumn">
+		t.v_line_id lineId,
+		t.v_head_id headId,
+		t.summary,
+		t.ccid,
+		t.account_dr accountDR,
+		t.account_cr accountCR,
+		t.currency_code currencyCode,
+		t.exchange_rate exchageRate,
+		t.enter_dr enterDR,
+		t.enter_cr enterCR,
+		t.amount,
+		t.dim_id dimId,
+		t.orderby orderBy,
+		t.ca_id caId,
+		t.v_src_dtl_id srcDtlId,
+		t.creation_date creationDate,
+		t.created_by createdBy,
+		t.last_update_date lastUpdateDate,
+		t.last_updated_by lastUpdatedBy,
+		(select max(q.last_update_date) from xc_gl_v_lines q)  synchronizeDate
+	</sql>
+	<!-- 查询账簿信息 -->
+	<select id="fecthLedgerData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.util.modal.Ledger"> 
+	       select  <include refid="ledgerColumn" />,(select a.org_code from xip_pub_orgs a where a.org_id = t.org_id)  as "org_code"
+	         from  xc_gl_ledgers t
+	         where t.last_update_date > #{fetchDate,jdbcType=DATE}
+	</select>
+	<!--查询总账科目信息 -->
+	<select id="fecthAccountData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		select t.acc_id as "accId", 
+		       t.acc_code as "accCode",
+		       t.acc_name as "accName",
+		       t.up_acc_code as "upAccCode",
+		       t.acc_category_code as "accCategoryCode",
+		       t.acc_group_id as "accGroupId",
+		       t.acc_hrcy_id as "accHrcyId",
+		       t.balance_direction as "balanceDirection",
+		       t.is_bank_acc as "isBankAcc",
+		       t.is_cash_acc as "isCashAcc",
+		       t.is_cash_item as "isCashItem",
+		       t.start_date as "startDate",
+		       t.end_date as "endDate",
+		       t.is_leaf as "isLeaf",
+		       t.acc_level as "accLevel",
+	           l.acc_hrcy_code as "hrcyCode",
+	           t.creation_date as "creationDate",
+	           t.created_by as "createdBy",
+	           t.last_update_date as "lastUpdateDate",
+	           t.last_updated_by as "lastUpdatedBy",
+	           (select max(st.last_update_date) from xc_gl_accounts st) as "maxUpdateDate"
+	   from xc_gl_accounts t, xc_gl_acc_hrcy l
+	   where t.ACC_HRCY_ID = l.ACC_HRCY_ID  
+	     and t.last_update_date > #{fetchDate,jdbcType=DATE}  
+	     and l.acc_hrcy_code = #{hrcyCode}
+	</select>
+	<!--查询供应商信息 -->
+	<select id="fetchVendorData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Vendor">
+	select vendor_id as "vendorId", 
+	       vendor_code as "vendorCode",
+	       vendor_name as "vendorName",
+	       start_date as "startDate",
+	       end_date as "endDate",
+	       creation_date as "creationDate",
+	       created_by as "createdBy",
+	       last_update_date as "lastUpdateDate",
+	       last_updated_by as "lastUpdatedBy",
+	       (select max(p.last_update_date) from xc_ap_vendors p) as "synchronizeDate"
+	 from xc_ap_vendors  
+	 where  last_update_date > #{fetchDate,jdbcType=DATE}    
+	</select>
+	<!--查询客户信息 -->
+	<select id="fetchCustomerData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Customer">
+	select t.customer_id as "customerId", 
+	       t.customer_code as "customerCode",
+	       t.customer_name as "customerName",
+	       t.start_date as "startDate",
+	       t.end_date as "endDate",
+	       t.creation_date as "creationDate",
+	       t.created_by as "createdBy",
+	       t.last_update_date as "lastUpdateDate",
+	       t.last_updated_by as "lastUpdatedBy",
+	       (select max(p.last_update_date) from xc_ar_customers p) as "synchronizeDate"
+	 from xc_ar_customers t  
+	 where  t.last_update_date > #{fetchDate,jdbcType=DATE}    
+	</select>
+	<!--查询科目自定义段信息 -->
+	<select id="fetchCustomData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Custom">
+	select   l.ledger_id as "ledgerId", 
+	       (select t.ledger_code from xc_gl_ledgers t where t.ledger_id = l.ledger_id) as "ledgerCode",
+	       l.seg_code as "segCode",
+	       l.ld_cust_segval_id as "segvalId",
+	       l.ld_cust_segval_code as "segvalCode",
+	       l.ld_cust_segval_name as "segvalName",
+	       l.up_cust_segval_id as "upSegvalId",
+	       l.start_date as "startDate",
+	       l.end_date  as "endDate",
+	       l.ld_cust_segval_desc as "segvalDesc",
+	       l.is_leaf as "isLeaf",
+	       l.segval_level as "segvalLevel",
+	       case l.up_cust_segval_id when '-1' then '-1' else (select t.ld_cust_segval_code from xc_gl_ld_cust_ass_segvals t where t.ld_cust_segval_id = up_cust_segval_id) end as "upSegvalCode",
+	       l.created_by as "createdBy",
+	       l.last_update_date as "lastUpdateDate",
+	       l.last_updated_by as "lastUpdatedBy",
+	       (select max(p.last_update_date) from xc_gl_ld_cust_ass_segvals p) as "synchronizeDate"
+	 from xc_gl_ld_cust_ass_segvals  l
+	 where  l.last_update_date > #{fetchDate,jdbcType=DATE}  
+	   and  l.seg_code = #{segmentCode,jdbcType=VARCHAR}  
+	   <if test="ledgerCode !='-1'.toString()">
+	      and l.ledger_id in (select a.ledger_id from xc_gl_ledgers a where a.ledger_code = #{ledgerCode,jdbcType=VARCHAR})
+	   </if>
+	</select>
+	<!-- 查询组织信息，全局不根据账簿过滤 -->
+	<select id="fetchOrganizationData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Organization">
+	select
+	  t.org_id as "orgId",
+	  t.org_code as "orgCode",
+	  t.org_name as "orgName",
+	  t.org_short_name as "orgShortName",
+	  t.up_org_id as "upOrgId",
+	  case t.up_org_id when '-1' then '-1' else (select a.org_code from xip_pub_orgs a where a.org_id = t.up_org_id) end as "upOrgCode",
+	  t.created_by as "createdBy",
+	  t.last_update_date as "lastUpdateDate",
+	  t.last_updated_by as "lastUpdatedBy",
+	  (select max(p.last_update_date) from xip_pub_orgs p) as "synchronizeDate"
+	from xip_pub_orgs t 
+	where t.last_update_date > #{fetchDate,jdbcType=DATE} 
+	</select>
+	<!-- 查询个人往来信息 -->
+	<select id="fetchEmpData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Employee">
+	select
+	  t.EMP_ID as "empId",
+	  t.EMP_CODE as "empCode",
+	  t.EMP_NAME as "empName",
+	  t.created_by as "createdBy",
+	  t.last_update_date as "lastUpdateDate",
+	  t.last_updated_by as "lastUpdatedBy",
+	 (select max(p.last_update_date) from xip_pub_emps p) as "synchronizeDate"
+	from xip_pub_emps t
+	where t.LAST_UPDATE_DATE > #{fetchDate,jdbcType=DATE} 
+	</select>
+	<!-- 查询产品信息 -->
+	<select id="fetchProductData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Product">
+    select   
+      t.PRODUCT_ID as "productId",
+      t.PRODUCT_CODE as "productCode", 
+      t.PRODUCT_NAME as "productName",
+      t.START_DATE as "startDate",
+      t.END_DATE as "endDate",
+      t.created_by as "createdBy",
+	  t.last_update_date as "lastUpdateDate",
+	  t.last_updated_by as "lastUpdatedBy",
+	  (select max(p.last_update_date) from xc_gl_products p) as "synchronizeDate"
+    from xc_gl_products t
+	where t.LAST_UPDATE_DATE > #{fetchDate,jdbcType=DATE} 
+	</select>
+	<!-- 查询成本中心信息 -->
+	<select id="fetchDepartmentData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.util.modal.Department">
+    select a.DEPT_ID as "deptId",
+       b.DEPT_CODE as "deptCode",
+       (select p.LEDGER_CODE from xc_gl_ledgers p where p.LEDGER_ID = a.LEDGER_ID) as "ledgerCode",
+       b.DEPT_NAME as "deptName",
+       b.DEPT_SHORT_NAME as "deptShortName",
+       b.UP_DP_ID as "upDeptId",
+       case b.UP_DP_ID when '-1' then '-1' else (select t.DEPT_CODE from xip_pub_depts t where t.DEPT_ID = b.DEPT_ID) end as "upDeptCode",
+       b.ORG_ID as "orgId",
+       a.LEDGER_ID as "ledgerId",
+       a.created_by as "createdBy",
+	   a.last_update_date as "lastUpdateDate",
+	   a.last_updated_by as "lastUpdatedBy",
+       (select max(p.last_update_date) from xc_gl_ld_depts p) as "synchronizeDate"
+    from 
+      xc_gl_ld_depts a,
+      xip_pub_depts b 
+ where a.DEPT_ID = b.DEPT_ID
+   and a.LAST_UPDATE_DATE> #{fetchDate,jdbcType=DATE} 
+   <if test="ledgerCode != '-1'.toString()">
+       and a.LEDGER_ID in (select l.LEDGER_ID from xc_gl_ledgers l where l.LEDGER_CODE=#{ledgerCode,jdbcType=VARCHAR} )
+   </if>
+	</select>
+	<!-- 查询项目信息 -->
+	<select id="fetchProjectData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.util.modal.Project">
+	select
+	  t.PROJECT_ID as "projectId",
+	  t.PROJECT_CODE as "projectCode",
+	  t.PROJECT_NAME as "projectName",
+	  t.LEDGER_ID as "ledgerId",
+	  t.UP_PROJECT_ID as "upPorjectId",
+	  (select p.LEDGER_CODE from xc_gl_ledgers p where p.LEDGER_ID = t.LEDGER_ID) as "ledgerCode",
+	  case t.UP_PROJECT_ID when '-1' then '-1' else (select a.PROJECT_CODE from xc_pm_projects a where a.PROJECT_ID = t.UP_PROJECT_ID) end as "upProjectCode",
+	  t.created_by as "createdBy",
+	  t.last_update_date as "lastUpdateDate",
+	  t.last_updated_by as "lastUpdatedBy",
+	  (select max(p.last_update_date) from xc_pm_projects p) as "synchronizeDate"
+	from xc_pm_projects t
+	where t.last_update_date> #{fetchDate,jdbcType=DATE} 
+   <if test="ledgerCode != '-1'.toString()">
+       and t.LEDGER_ID in (select l.LEDGER_ID from xc_gl_ledgers l where l.LEDGER_CODE=#{ledgerCode,jdbcType=VARCHAR} )
+   </if>
+	</select>
+	<!-- 查询余额信息 -->
+	<select id="fetchBalancesData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Balances">
+	SELECT
+	t.LEDGER_ID,
+	t.CCID,
+	t.PERIOD_CODE,
+	t.CURRENCY_CODE,
+	t.B_DR,
+	t.B_CR,
+	t.Y_DR,
+	t.Y_CR,
+	t.PTD_DR,
+	t.PTD_CR,
+	t.YTD_DR,
+	t.YTD_CR,
+	t.PJTD_DR,
+	t.PJTD_CR,
+	t.T_B_DR,
+	t.T_B_CR,
+	t.T_Y_DR,
+	t.T_Y_CR,
+	t.T_PTD_DR,
+	t.T_PTD_CR,
+	t.T_YTD_DR,
+	t.T_YTD_CR,
+	t.T_PJTD_DR,
+	t.T_PJTD_CR,
+	t.AMT_B_DR,
+	t.AMT_B_CR,
+	t.AMT_Y_DR,
+	t.AMT_Y_CR,
+	t.AMT_PTD_DR,
+	t.AMT_PTD_CR,
+	t.AMT_YTD_DR,
+	t.AMT_YTD_CR,
+	t.AMT_PJTD_DR,
+	t.AMT_PJTD_CR,
+	t.AMT_T_B_DR,
+	t.AMT_T_B_CR,
+	t.AMT_T_Y_DR,
+	t.AMT_T_Y_CR,
+	t.AMT_T_PTD_DR,
+	t.AMT_T_PTD_CR,
+	t.AMT_T_YTD_DR,
+	t.AMT_T_YTD_CR,
+	t.AMT_T_PJTD_DR,
+	t.AMT_T_PJTD_CR,
+	t.CREATION_DATE,
+	t.CREATED_BY,
+	t.LAST_UPDATE_DATE,
+	t.LAST_UPDATED_BY,
+	(select l.LEDGER_CODE from xc_gl_ledgers l where l.LEDGER_ID = t.LEDGER_ID) as "LEDGER_CODE",
+	c.ACC_CODE as "XC_GL_ACCOUNTS",
+	c.VENDOR_CODE as "XC_AP_VENDORS",
+	c.CUSTOMER_CODE as "XC_AR_CUSTOMERS",
+	c.EMP_CODE as "XIP_PUB_EMPS",
+	c.ORG_CODE as "XIP_PUB_ORGS",
+	c.PRODUCT_CODE as "XC_GL_PRODUCTS",
+	c.DEPT_CODE as "XIP_PUB_DEPTS",
+	c.PROJECT_CODE as "XC_PM_PROJECTS",
+	c.CUSTOM1_CODE as "XC_GL_CUSTOM1",
+	c.CUSTOM2_CODE as "XC_GL_CUSTOM2",
+	c.CUSTOM3_CODE as "XC_GL_CUSTOM3",
+	c.CUSTOM4_CODE as "XC_GL_CUSTOM4",
+	(select max(p.last_update_date) from xc_gl_balance p) as "synchronizeDate"
+	FROM
+	xc_gl_balance t,
+	xc_gl_ccid c
+	WHERE
+	t.LEDGER_ID = c.LEDGER_ID
+	AND t.CCID = c.CCID
+	AND t.LAST_UPDATE_DATE >#{fetchDate,jdbcType=DATE} 
+	  <if test="ledgerCode != '-1'.toString()">
+	    and t.LEDGER_ID  in (select l.LEDGER_ID from xc_gl_ledgers l where l.LEDGER_CODE=#{ledgerCode,jdbcType=VARCHAR} )
+	  </if>
+	</select>
+	<!-- 查询科目组合信息 -->
+	<select id="fetchCcidData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.CCID">
+	 select  <include refid="ccidColumn" /> 
+	 from  xc_gl_ccid t 
+	 where  t.last_update_date > #{fetchDate,jdbcType=DATE} 
+	  <if test="ledgerCode != '-1'.toString()">
+	    and t.ledger_id  in (select l.ledger_id from xc_gl_ledgers l where l.ledger_code=#{ledgerCode,jdbcType=VARCHAR} )
+	  </if>
+	</select>
+	<!-- 批量查询凭证头信息  -->
+	<select id="fetchVoucherHeads" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select <include refid="headItemColumn" />
+		  from xc_gl_v_heads t 
+		   where t.ledger_id in (select  l.ledger_id from xc_gl_ledgers l where l.ledger_code = #{ledgerCode,jdbcType=VARCHAR})
+		     and t.last_update_date > #{fetchDate,jdbcType=DATE}
+	</select>
+
+	<!-- 查询单张凭证分录行信息  -->
+	<select id="fetchVoucherLines" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.VLine">
+		select <include refid="lineItemColumn" />
+		  from xc_gl_v_lines t 
+		   where t.v_head_id in (select l.v_head_id from xc_gl_v_heads l 
+		                                           where l.last_update_date>#{fetchDate,jdbcType=DATE}
+		                                             and l.ledger_id in (select  p.ledger_id from xc_gl_ledgers p where p.ledger_code = #{ledgerCode,jdbcType=VARCHAR}))
+	</select>
+	<!-- 查询现金流信息  -->
+	<select id="fetchCashSumData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.CashSum">
+		select t.SUM_ID as "sumId",
+		       t.LEDGER_ID as "ledgerId",
+		       c.LEDGER_CODE as "ledgerCode",
+		       c.currency_code as "currencyCode",
+		       t.PERIOD_CODE as "periodCode",
+		       t.ACC_ID as "accId",
+		       a.acc_code as "accCode",
+		       t.CA_ID as "caId",
+		       b.ca_code as "caCode",
+		       t.CA_SUM as "caSum",
+		       t.T_CA_SUM as "tCaSum",
+		       t.creation_date as "creationDate",
+		       t.created_by as "createdBy",
+		       t.last_update_date as "lastUpdateDate",
+		       t.last_updated_by as "lastUpdatedBy",
+		       (select max(p.last_update_date) from xc_gl_cash_sum p) as "synchronizeDate"
+		  from xc_gl_cash_sum t, xc_gl_accounts a,  xc_gl_cash_items b, xc_gl_ledgers c
+		 where t.acc_id = a.acc_id
+		   and t.ca_id = b.ca_id
+		   and a.acc_hrcy_id = c.acc_hrcy_id
+		   and t.ledger_id = c.ledger_id
+		   and t.last_update_date > #{fetchDate,jdbcType=DATE}
+		 <if test="ledgerCode !='-1'.toString()">
+		   and c.LEDGER_CODE = #{ledgerCode,jdbcType=VARCHAR}
+		 </if>
+	</select>
+	<!-- 查询现金流项目信息  -->
+	<select id="fetchCashItemData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.CashItem">
+	select
+	t.ca_id as "caId",
+	t.ca_code as "caCode",
+	t.CA_NAME as "caName",
+	(select l.CA_CODE from xc_gl_cash_items l where l.CA_ID = t.UP_ID) as "upCode",
+	t.ca_direction as "caDirection",
+	t.ass_key as "assKey",
+	t.ca_level as "caLevel",
+	t.is_leaf as "isLeaf",
+	t.start_date as "startDate",
+	t.end_date as "endDate",
+	t.ca_desc as "caDesc",
+	t.orderby as "orderby",
+	t.creation_date as "creationDate",
+	t.created_by as
+	"createdBy",
+	t.last_update_date as "lastUpdateDate",
+	t.last_updated_by as
+	"lastUpdatedBy",
+	(select max(p.last_update_date) from xc_gl_cash_sum p) as "synchronizeDate"
+	from xc_gl_cash_items t
+	where 
+	 t.last_update_date > #{fetchDate,jdbcType=DATE}
+	</select>
+	<!-- 云ERP获取内置流程的审批节点阈值 -->
+	<select id="getBillQuota" resultType="java.util.HashMap">
+	   select t.LIMITED_VAL,
+	          t.IS_ENABLED from xc_wf_condition_list t 
+	    where t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+	      and t.BILLS_TYPE = #{billType,jdbcType=VARCHAR} 
+	      and t.REAL_ACT_CODE = #{actCode,jdbcType=VARCHAR}
+	    order by t.ACT_CODE ASC
+	</select>
+	<!--获取预算审批流程表单-->
+	<select id="getBgBillAuditPage" parameterType="java.lang.String" resultType="java.lang.String">
+	  ${sql}
+	</select>
+</mapper>

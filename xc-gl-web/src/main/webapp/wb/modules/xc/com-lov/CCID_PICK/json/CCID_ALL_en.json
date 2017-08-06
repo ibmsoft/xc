@@ -1,0 +1,7 @@
+{
+    CCID_NAME : "Acc Com",
+    CCID_CODE_COL : "Acc Com Code",
+    CCID_NAME_COL : "Acc Com Name",
+    CCID_CODE_NAME : "Acc Com Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

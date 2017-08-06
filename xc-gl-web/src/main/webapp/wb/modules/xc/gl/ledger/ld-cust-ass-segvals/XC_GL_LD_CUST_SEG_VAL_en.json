@@ -1,0 +1,16 @@
+{
+  ledgerName:'Ledger Name',
+  segName1:'Custom Segments',
+  segName1_lw:150,
+  tree1:'Content',
+  allEditBtn:'Batch Edit',
+  saveBtn:'Save',
+  importBtn:'Import',
+  exportBtn:'Export',
+  rownumber:'Order',
+  LD_CUST_SEGVAL_CODE_COL:'Code',
+  LD_CUST_SEGVAL_NAME_COL:'Name',
+  START_DATE:'Start Date',
+  END_DATE:'End Date',
+  LD_CUST_SEGVAL_DESC_COL:'Description'
+}

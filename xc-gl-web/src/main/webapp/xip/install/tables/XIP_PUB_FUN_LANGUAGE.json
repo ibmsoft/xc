@@ -1,0 +1,515 @@
+{"FUN_CODE":"XIP2_ATTCH","FUN_LANG":"zh","FUN_LANG_VAL":"附件管理"}
+{"FUN_CODE":"XIP2_WF_DEMO","FUN_LANG":"zh","FUN_LANG_VAL":"工作流调用演示"}
+{"FUN_CODE":"XIP2_CONF_IE","FUN_LANG":"zh","FUN_LANG_VAL":"平台数据移植"}
+{"FUN_CODE":"XIP2_WF_ACT_EXECUTOR","FUN_LANG":"zh","FUN_LANG_VAL":"节点执行人授权"}
+{"FUN_CODE":"XIP2_ATTCH_SERVER","FUN_LANG":"zh","FUN_LANG_VAL":"附件服务器管理"}
+{"FUN_CODE":"XIP2_CONF_YHZCQX","FUN_LANG":"zh","FUN_LANG_VAL":"用户注册默认权限"}
+{"FUN_CODE":"XIP2_WB7_IDE","FUN_LANG":"zh","FUN_LANG_VAL":"WB7集成开发环境"}
+{"FUN_CODE":"XIP2_CONC_PROGRAM","FUN_LANG":"zh","FUN_LANG_VAL":"程序管理"}
+{"FUN_CODE":"XIP2_DATA_MODEL","FUN_LANG":"zh","FUN_LANG_VAL":"数据库模型"}
+{"FUN_CODE":"XIP2_CONF_TENANT","FUN_LANG":"zh","FUN_LANG_VAL":"租户管理"}
+{"FUN_CODE":"XIP2_CONF_WBYGZC","FUN_LANG":"zh","FUN_LANG_VAL":"外部员工注册审批"}
+{"FUN_CODE":"XIP2_CHART_TMP","FUN_LANG":"zh","FUN_LANG_VAL":"图表模板配置"}
+{"FUN_CODE":"XIP2_WF_HOLIDAY_USER","FUN_LANG":"zh","FUN_LANG_VAL":"假期规则设置"}
+{"FUN_CODE":"XIP2_ATTCH_FILE","FUN_LANG":"zh","FUN_LANG_VAL":"附件查询"}
+{"FUN_CODE":"XIP2_WF_MONITOR","FUN_LANG":"zh","FUN_LANG_VAL":"流程运行监控"}
+{"FUN_CODE":"XIP2_WF_FORMS","FUN_LANG":"zh","FUN_LANG_VAL":"流程关联表单"}
+{"FUN_CODE":"XIP_PORTLET_UNIT","FUN_LANG":"zh","FUN_LANG_VAL":"Portal组件定义"}
+{"FUN_CODE":"XIP2_CONC_TASK","FUN_LANG":"zh","FUN_LANG_VAL":"任务管理"}
+{"FUN_CODE":"XIP2_AUTH_ROLE","FUN_LANG":"zh","FUN_LANG_VAL":"角色管理"}
+{"FUN_CODE":"XIP2_WB_IDE","FUN_LANG":"zh","FUN_LANG_VAL":"WB6集成开发环境"}
+{"FUN_CODE":"XIP2_AUTH_UF","FUN_LANG":"zh","FUN_LANG_VAL":"用户功能授权"}
+{"FUN_CODE":"XIP2_TOOL","FUN_LANG":"zh","FUN_LANG_VAL":"平台工具"}
+{"FUN_CODE":"XIP2_CONF_IE_DEF","FUN_LANG":"zh","FUN_LANG_VAL":"平台数据移植定义"}
+{"FUN_CODE":"XIP2_WF_ENTITY","FUN_LANG":"zh","FUN_LANG_VAL":"实体管理"}
+{"FUN_CODE":"XIP2_AUTH_UR","FUN_LANG":"zh","FUN_LANG_VAL":"用户角色授权"}
+{"FUN_CODE":"XIP2_AUTH_FUNC","FUN_LANG":"zh","FUN_LANG_VAL":"菜单功能注册"}
+{"FUN_CODE":"XIP2_WF_DEMO_WS","FUN_LANG":"zh","FUN_LANG_VAL":"工作流调用演示(WS)"}
+{"FUN_CODE":"XIP2_ATTCH_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"附件分类管理"}
+{"FUN_CODE":"XIP2_WF","FUN_LANG":"zh","FUN_LANG_VAL":"工作流管理"}
+{"FUN_CODE":"XIP2_AUTH_ORG","FUN_LANG":"zh","FUN_LANG_VAL":"组织授权"}
+{"FUN_CODE":"XIP2_CONF_IO_TEMPLATE","FUN_LANG":"zh","FUN_LANG_VAL":"数据导入导出模板"}
+{"FUN_CODE":"XIP2_WF_CHART","FUN_LANG":"zh","FUN_LANG_VAL":"绘制流程图"}
+{"FUN_CODE":"XIP2_WF_HOLIDAY","FUN_LANG":"zh","FUN_LANG_VAL":"假期规则"}
+{"FUN_CODE":"XIP2_CONF_WS","FUN_LANG":"zh","FUN_LANG_VAL":"平台WS服务配置"}
+{"FUN_CODE":"XIP2_CONF","FUN_LANG":"zh","FUN_LANG_VAL":"平台设置"}
+{"FUN_CODE":"XIP2_HR","FUN_LANG":"zh","FUN_LANG_VAL":"HR信息"}
+{"FUN_CODE":"XIP2_AUTH","FUN_LANG":"zh","FUN_LANG_VAL":"权限管理"}
+{"FUN_CODE":"XIP2_CONF_VALSET","FUN_LANG":"zh","FUN_LANG_VAL":"值集管理"}
+{"FUN_CODE":"XIP2_CONF_APP","FUN_LANG":"zh","FUN_LANG_VAL":"应用管理"}
+{"FUN_CODE":"XIP2_CONF_PARAM","FUN_LANG":"zh","FUN_LANG_VAL":"参数管理"}
+{"FUN_CODE":"XIP2_HR_EMP","FUN_LANG":"zh","FUN_LANG_VAL":"员工管理"}
+{"FUN_CODE":"XIP2_HR_DEPT","FUN_LANG":"zh","FUN_LANG_VAL":"部门管理"}
+{"FUN_CODE":"XIP2_HR_ORG","FUN_LANG":"zh","FUN_LANG_VAL":"组织管理"}
+{"FUN_CODE":"XIP2_AUTH_USER","FUN_LANG":"zh","FUN_LANG_VAL":"用户管理"}
+{"FUN_CODE":"XIP2_CONF_NOTICE","FUN_LANG":"zh","FUN_LANG_VAL":"通知发布"}
+{"FUN_CODE":"XIP2_CONC","FUN_LANG":"zh","FUN_LANG_VAL":"并发管理"}
+{"FUN_CODE":"XIP2_ATTCH_CAT","FUN_LANG":"en","FUN_LANG_VAL":"Attachment Category"}
+{"FUN_CODE":"XIP2_ATTCH_FILE","FUN_LANG":"en","FUN_LANG_VAL":"Attachment Inquiry"}
+{"FUN_CODE":"XIP2_ATTCH_SERVER","FUN_LANG":"en","FUN_LANG_VAL":"Attachment Server"}
+{"FUN_CODE":"XIP2_ATTCH","FUN_LANG":"en","FUN_LANG_VAL":"Attachment"}
+{"FUN_CODE":"XIP2_AUTH_FUNC","FUN_LANG":"en","FUN_LANG_VAL":"Menu Function Register"}
+{"FUN_CODE":"XIP2_AUTH_ORG","FUN_LANG":"en","FUN_LANG_VAL":"Organization Authority"}
+{"FUN_CODE":"XIP2_AUTH_ROLE","FUN_LANG":"en","FUN_LANG_VAL":"Role"}
+{"FUN_CODE":"XIP2_AUTH_UF","FUN_LANG":"en","FUN_LANG_VAL":"User Functions Authority"}
+{"FUN_CODE":"XIP2_AUTH_UR","FUN_LANG":"en","FUN_LANG_VAL":"User Role Authority"}
+{"FUN_CODE":"XIP2_AUTH_USER","FUN_LANG":"en","FUN_LANG_VAL":"Users"}
+{"FUN_CODE":"XIP2_CHART_TMP","FUN_LANG":"en","FUN_LANG_VAL":"Chart Template"}
+{"FUN_CODE":"XIP2_CONC","FUN_LANG":"en","FUN_LANG_VAL":"Concurrency"}
+{"FUN_CODE":"XIP2_CONC_PROGRAM","FUN_LANG":"en","FUN_LANG_VAL":"Program"}
+{"FUN_CODE":"XIP2_CONC_TASK","FUN_LANG":"en","FUN_LANG_VAL":"Task"}
+{"FUN_CODE":"XIP2_CONF_APP","FUN_LANG":"en","FUN_LANG_VAL":"Application"}
+{"FUN_CODE":"XIP2_CONF_IE","FUN_LANG":"en","FUN_LANG_VAL":"Data Migration"}
+{"FUN_CODE":"XIP2_CONF_IE_DEF","FUN_LANG":"en","FUN_LANG_VAL":" Data Migration Definitions"}
+{"FUN_CODE":"XIP2_CONF_IO_TEMPLATE","FUN_LANG":"en","FUN_LANG_VAL":"Data Import And Export Templates"}
+{"FUN_CODE":"XIP2_CONF_NOTICE","FUN_LANG":"en","FUN_LANG_VAL":"Notice"}
+{"FUN_CODE":"XIP2_CONF_PARAM","FUN_LANG":"en","FUN_LANG_VAL":"Parameter"}
+{"FUN_CODE":"XIP2_CONF_TENANT","FUN_LANG":"en","FUN_LANG_VAL":"Tenant"}
+{"FUN_CODE":"XIP2_CONF_VALSET","FUN_LANG":"en","FUN_LANG_VAL":"Value Set"}
+{"FUN_CODE":"XIP2_CONF_WBYGZC","FUN_LANG":"en","FUN_LANG_VAL":"External Staff Registration Approval"}
+{"FUN_CODE":"XIP2_CONF_WS","FUN_LANG":"en","FUN_LANG_VAL":"WebService"}
+{"FUN_CODE":"XIP2_CONF_YHZCQX","FUN_LANG":"en","FUN_LANG_VAL":"Default Permissions for User"}
+{"FUN_CODE":"XIP2_DATA_MODEL","FUN_LANG":"en","FUN_LANG_VAL":"Database Model"}
+{"FUN_CODE":"XIP2_HR_DEPT","FUN_LANG":"en","FUN_LANG_VAL":"Department"}
+{"FUN_CODE":"XIP2_HR_EMP","FUN_LANG":"en","FUN_LANG_VAL":"Employee"}
+{"FUN_CODE":"XIP2_HR_ORG","FUN_LANG":"en","FUN_LANG_VAL":"Organization"}
+{"FUN_CODE":"XIP2_WB7_IDE","FUN_LANG":"en","FUN_LANG_VAL":"Webbuilder 7 IDE"}
+{"FUN_CODE":"XIP2_WB_IDE","FUN_LANG":"en","FUN_LANG_VAL":"Webbuilder 6 IDE"}
+{"FUN_CODE":"XIP2_WF_ACT_EXECUTOR","FUN_LANG":"en","FUN_LANG_VAL":"Authorized Executor Node"}
+{"FUN_CODE":"XIP2_WF_CHART","FUN_LANG":"en","FUN_LANG_VAL":"Flowchart Design"}
+{"FUN_CODE":"XIP2_WF_DEMO","FUN_LANG":"en","FUN_LANG_VAL":" Demo"}
+{"FUN_CODE":"XIP2_WF_DEMO_WS","FUN_LANG":"en","FUN_LANG_VAL":"Demo For WebService"}
+{"FUN_CODE":"XIP2_WF_ENTITY","FUN_LANG":"en","FUN_LANG_VAL":"Entity"}
+{"FUN_CODE":"XIP2_WF_FORMS","FUN_LANG":"en","FUN_LANG_VAL":"Process Association Form"}
+{"FUN_CODE":"XIP2_WF_HOLIDAY","FUN_LANG":"en","FUN_LANG_VAL":"Holiday Rules"}
+{"FUN_CODE":"XIP2_WF_HOLIDAY_USER","FUN_LANG":"en","FUN_LANG_VAL":"Holiday Rules Configuration"}
+{"FUN_CODE":"XIP2_WF_MONITOR","FUN_LANG":"en","FUN_LANG_VAL":"Process Monitoring"}
+{"FUN_CODE":"XIP_PORTLET_UNIT","FUN_LANG":"en","FUN_LANG_VAL":"Portal Component Definition"}
+{"FUN_CODE":"XIP2_AUTH_FUNC_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"菜单功能多语言配置"}
+{"FUN_CODE":"XIP2_AUTH_MENUGROUP_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"角色菜单多语言配置"}
+{"FUN_CODE":"XIP2_AUTH_FUNC_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Menu Function Multilanguage Config"}
+{"FUN_CODE":"XIP2_AUTH_MENUGROUP_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Role Function Multilanguage Config"}
+{"FUN_CODE":"XIP2_WF","FUN_LANG":"en","FUN_LANG_VAL":"Workflow"}
+{"FUN_CODE":"XIP2_AUTH","FUN_LANG":"en","FUN_LANG_VAL":"Authority"}
+{"FUN_CODE":"XIP2_CONF","FUN_LANG":"en","FUN_LANG_VAL":"Configuration"}
+{"FUN_CODE":"XIP2_TOOL","FUN_LANG":"en","FUN_LANG_VAL":"Tools"}
+{"FUN_CODE":"XIP2_HR","FUN_LANG":"en","FUN_LANG_VAL":"HR"}
+{"FUN_CODE":"XIP2_AUTH_ROLE_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"角色多语言配置"}
+{"FUN_CODE":"XIP2_AUTH_UF_GRADE","FUN_LANG":"zh","FUN_LANG_VAL":"分级用户功能授权"}
+{"FUN_CODE":"XIP2-ML","FUN_LANG":"en","FUN_LANG_VAL":"Multilanguage"}
+{"FUN_CODE":"XIP2_AUTH_ROLE_GRADE","FUN_LANG":"en","FUN_LANG_VAL":"Grade Role"}
+{"FUN_CODE":"XIP2_AUTH_ROLE_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Role Multilanguage Config"}
+{"FUN_CODE":"XIP2_AUTH_UF_GRADE","FUN_LANG":"en","FUN_LANG_VAL":"Grade User Functions Authority"}
+{"FUN_CODE":"XIP2_AUTH_UR_GRADE","FUN_LANG":"en","FUN_LANG_VAL":"Grade User Role Authority"}
+{"FUN_CODE":"XIP2_CONF_APP_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Application Multilanguage Config"}
+{"FUN_CODE":"XIP2_CONF_VALSET_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Value Set Multilanguage Config"}
+{"FUN_CODE":"XIP2_CONF_VALSET_VAL_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Value Set Multilanguage Detail Config"}
+{"FUN_CODE":"XIP2-ML","FUN_LANG":"zh","FUN_LANG_VAL":"多语言"}
+{"FUN_CODE":"XIP2_AUTH_ROLE_GRADE","FUN_LANG":"zh","FUN_LANG_VAL":"分级角色管理"}
+{"FUN_CODE":"XIP2_AUTH_UR_GRADE","FUN_LANG":"zh","FUN_LANG_VAL":"分级用户角色授权"}
+{"FUN_CODE":"XIP2_CONF_APP_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"应用多语言配置"}
+{"FUN_CODE":"XIP2_CONF_VALSET_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"值集多语言配置"}
+{"FUN_CODE":"XIP2_CONF_VALSET_VAL_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"值集值多语言配置"}
+{"FUN_CODE":"XIP2_CONF_MSG_CONF","FUN_LANG":"en","FUN_LANG_VAL":"Excepiton Message Config"}
+{"FUN_CODE":"XIP2_CONF_MSG_CONF","FUN_LANG":"zh","FUN_LANG_VAL":"异常消息配置"}
+{"FUN_CODE":"XC_BG_DEPT_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"费用预算执行查询"}
+{"FUN_CODE":"XC_EX_LD_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"单据类型设置"}
+{"FUN_CODE":"XC_GL_GB_CURRENCY","FUN_LANG":"zh","FUN_LANG_VAL":"币种"}
+{"FUN_CODE":"XC_EX_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"全局基础信息"}
+{"FUN_CODE":"XC_GL_LD_REP_BANK","FUN_LANG":"zh","FUN_LANG_VAL":"银行日记账"}
+{"FUN_CODE":"XC_GL_GB_V_SRC","FUN_LANG":"zh","FUN_LANG_VAL":"凭证来源"}
+{"FUN_CODE":"XC_BG_MYQRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的预算查询"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H_MY","FUN_LANG":"zh","FUN_LANG_VAL":"我的付款申请"}
+{"FUN_CODE":"XC_EX_LD","FUN_LANG":"zh","FUN_LANG_VAL":"费用参数设置"}
+{"FUN_CODE":"XC_GL_LD_V_R_NORMAL","FUN_LANG":"zh","FUN_LANG_VAL":"金额式凭证"}
+{"FUN_CODE":"XC_BG_PRJ_DOC","FUN_LANG":"zh","FUN_LANG_VAL":"项目预算单录入"}
+{"FUN_CODE":"XC_EX_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"财务查询"}
+{"FUN_CODE":"XC_GL_LD_REP_ENTRY","FUN_LANG":"zh","FUN_LANG_VAL":"总分类账"}
+{"FUN_CODE":"XC_EX_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"单据类型"}
+{"FUN_CODE":"XC_EX_CHK_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"单据复核及入账"}
+{"FUN_CODE":"XC_GL_TOOLS_CACHE","FUN_LANG":"zh","FUN_LANG_VAL":"基础数据缓存"}
+{"FUN_CODE":"XC_EX_DOC_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"单据查询"}
+{"FUN_CODE":"XC_EX_EXT_EMPS","FUN_LANG":"zh","FUN_LANG_VAL":"员工扩展信息管理"}
+{"FUN_CODE":"XC_AP_OPER","FUN_LANG":"zh","FUN_LANG_VAL":"应付业务处理"}
+{"FUN_CODE":"XC_GL_GB_V_CATEGORY","FUN_LANG":"zh","FUN_LANG_VAL":"凭证分类"}
+{"FUN_CODE":"XC_GL_GB_PERIOD","FUN_LANG":"zh","FUN_LANG_VAL":"会计期"}
+{"FUN_CODE":"XC_GL_GB_DIMENSION","FUN_LANG":"zh","FUN_LANG_VAL":"计量单位"}
+{"FUN_CODE":"XC_GL_GB_ACC_HRCY","FUN_LANG":"zh","FUN_LANG_VAL":"科目体系"}
+{"FUN_CODE":"XC_EX_BASE_LD","FUN_LANG":"zh","FUN_LANG_VAL":"账簿基础信息"}
+{"FUN_CODE":"XC_BG_DOC_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"预算单查询"}
+{"FUN_CODE":"XC_EX_LD_ITEMS","FUN_LANG":"zh","FUN_LANG_VAL":"费用项目设置"}
+{"FUN_CODE":"XC_BG_LD","FUN_LANG":"zh","FUN_LANG_VAL":"预算参数设置"}
+{"FUN_CODE":"XC_AP_PAY_H_SIGN","FUN_LANG":"zh","FUN_LANG_VAL":"付款单签字"}
+{"FUN_CODE":"XC_BG_EX_VER","FUN_LANG":"zh","FUN_LANG_VAL":"费用预算版本管理"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_SUM","FUN_LANG":"zh","FUN_LANG_VAL":"辅助统计表（1）"}
+{"FUN_CODE":"XC_GL_LD_REP_YE","FUN_LANG":"zh","FUN_LANG_VAL":"余额表"}
+{"FUN_CODE":"XC_EX_PAY_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"单据支付及入账"}
+{"FUN_CODE":"XC_BG_LD_ITEM","FUN_LANG":"zh","FUN_LANG_VAL":"预算项目设置"}
+{"FUN_CODE":"XC_EX_MYIA_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的备用金"}
+{"FUN_CODE":"XC_GL_LD_V_R_FOREIGN","FUN_LANG":"zh","FUN_LANG_VAL":"外币金额式凭证"}
+{"FUN_CODE":"XC_GL_TOOLS","FUN_LANG":"zh","FUN_LANG_VAL":"总账工具集"}
+{"FUN_CODE":"XC_GL_LD_V_RECORD","FUN_LANG":"zh","FUN_LANG_VAL":"凭证查询"}
+{"FUN_CODE":"XC_GL_LD_REP_DTL","FUN_LANG":"zh","FUN_LANG_VAL":"明细账"}
+{"FUN_CODE":"XC_BG","FUN_LANG":"zh","FUN_LANG_VAL":"预算管理"}
+{"FUN_CODE":"XC_GL_LD_LEDGER","FUN_LANG":"zh","FUN_LANG_VAL":"账簿管理"}
+{"FUN_CODE":"XC_BG_ITEM","FUN_LANG":"zh","FUN_LANG_VAL":"预算项目"}
+{"FUN_CODE":"XC_BG_EX_DOC","FUN_LANG":"zh","FUN_LANG_VAL":"费用预算单录入"}
+{"FUN_CODE":"XC_EX_HRCY","FUN_LANG":"zh","FUN_LANG_VAL":"费用项目体系"}
+{"FUN_CODE":"XC_EX_BIZ","FUN_LANG":"zh","FUN_LANG_VAL":"业务处理"}
+{"FUN_CODE":"XC_BG_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"预算基础信息"}
+{"FUN_CODE":"XC_AP_INV_MY","FUN_LANG":"zh","FUN_LANG_VAL":"我的采购发票"}
+{"FUN_CODE":"XC_BG_PRJ_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"项目预算执行查询"}
+{"FUN_CODE":"XC_GL_GB_ACC_GROUP","FUN_LANG":"zh","FUN_LANG_VAL":"科目组"}
+{"FUN_CODE":"XC_BG_BIZ","FUN_LANG":"zh","FUN_LANG_VAL":"预算业务处理"}
+{"FUN_CODE":"XC_EX_ITEMS","FUN_LANG":"zh","FUN_LANG_VAL":"费用项目"}
+{"FUN_CODE":"XC_EX_REC_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"单据签收"}
+{"FUN_CODE":"XC_BG_LD_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"预算单类型设置"}
+{"FUN_CODE":"XC_GL_GB_RULE","FUN_LANG":"zh","FUN_LANG_VAL":"编号规则"}
+{"FUN_CODE":"XC_EX_MYQRY","FUN_LANG":"zh","FUN_LANG_VAL":"业务查询"}
+{"FUN_CODE":"XC_GL_LD_V_R_AMOUNT","FUN_LANG":"zh","FUN_LANG_VAL":"数量式凭证"}
+{"FUN_CODE":"XC_EX","FUN_LANG":"zh","FUN_LANG_VAL":"费用报销"}
+{"FUN_CODE":"XC_BG_HRCY","FUN_LANG":"zh","FUN_LANG_VAL":"预算项目体系"}
+{"FUN_CODE":"XC_GL_LD_V_SUMMARY","FUN_LANG":"zh","FUN_LANG_VAL":"凭证摘要"}
+{"FUN_CODE":"XC_GL_LD_V_R","FUN_LANG":"zh","FUN_LANG_VAL":"凭证录入"}
+{"FUN_CODE":"XC_EX_IA_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"备用金查询"}
+{"FUN_CODE":"XC_GL_GB_ACC_CATEGORY","FUN_LANG":"zh","FUN_LANG_VAL":"科目分类"}
+{"FUN_CODE":"XC_BG_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"预算业务查询"}
+{"FUN_CODE":"XC_EX_FIN","FUN_LANG":"zh","FUN_LANG_VAL":"财务处理"}
+{"FUN_CODE":"XC_BG_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"预算单类型"}
+{"FUN_CODE":"XSR_ReportManagement","FUN_LANG":"zh","FUN_LANG_VAL":"报表管理"}
+{"FUN_CODE":"XC_GL","FUN_LANG":"en","FUN_LANG_VAL":"General ledger（GL）"}
+{"FUN_CODE":"XC_GL_GB","FUN_LANG":"en","FUN_LANG_VAL":"GL Global information management"}
+{"FUN_CODE":"XC_GL_LD","FUN_LANG":"en","FUN_LANG_VAL":"GL ledger setup"}
+{"FUN_CODE":"XC_GL_LD_B_BA","FUN_LANG":"en","FUN_LANG_VAL":"Initial account balance"}
+{"FUN_CODE":"XC_GL_GB_ACCOUNT","FUN_LANG":"en","FUN_LANG_VAL":"Accounting subjects"}
+{"FUN_CODE":"XC_GL_GB_ACC_CATEGORY","FUN_LANG":"en","FUN_LANG_VAL":"Classification of subjects"}
+{"FUN_CODE":"XC_GL_GB_ACC_GROUP","FUN_LANG":"en","FUN_LANG_VAL":"Group of subjects"}
+{"FUN_CODE":"XC_GL_GB_ACC_HRCY","FUN_LANG":"en","FUN_LANG_VAL":"Accounting system"}
+{"FUN_CODE":"XC_GL_GB_ASS_SEGMENT","FUN_LANG":"en","FUN_LANG_VAL":"Multidimensional management of subjects"}
+{"FUN_CODE":"XC_GL_GB_CA_ITEM","FUN_LANG":"en","FUN_LANG_VAL":"Cash flow project management"}
+{"FUN_CODE":"XC_GL_GB_CODE","FUN_LANG":"en","FUN_LANG_VAL":"Subject management"}
+{"FUN_CODE":"XC_GL_GB_CURRENCY","FUN_LANG":"en","FUN_LANG_VAL":"Currency"}
+{"FUN_CODE":"XC_GL_GB_CUSTOMER","FUN_LANG":"en","FUN_LANG_VAL":"Customer Dimension"}
+{"FUN_CODE":"XC_GL_GB_DIMENSION","FUN_LANG":"en","FUN_LANG_VAL":"Measurement Units"}
+{"FUN_CODE":"XC_GL_GB_PERIOD","FUN_LANG":"en","FUN_LANG_VAL":"Accounting period"}
+{"FUN_CODE":"XC_GL_GB_PRODUCT","FUN_LANG":"en","FUN_LANG_VAL":"Product Dimension"}
+{"FUN_CODE":"XC_GL_GB_RULE","FUN_LANG":"en","FUN_LANG_VAL":"Coding Rules"}
+{"FUN_CODE":"XC_GL_GB_VENDOR","FUN_LANG":"en","FUN_LANG_VAL":"Supplier Dimension"}
+{"FUN_CODE":"XC_GL_GB_V_CATEGORY","FUN_LANG":"en","FUN_LANG_VAL":"Classification of voucher"}
+{"FUN_CODE":"XC_GL_GB_V_SRC","FUN_LANG":"en","FUN_LANG_VAL":"Source  of voucher"}
+{"FUN_CODE":"XC_GL_LD_ACCOUNT","FUN_LANG":"en","FUN_LANG_VAL":"Subject setting"}
+{"FUN_CODE":"XC_GL_LD_ASS_SEG_ENABLED","FUN_LANG":"en","FUN_LANG_VAL":"Multi dimension setting of subjects"}
+{"FUN_CODE":"XC_GL_LD_DEPOSIT_BANK","FUN_LANG":"en","FUN_LANG_VAL":"Bank Account"}
+{"FUN_CODE":"XC_GL_LD_LEDGER","FUN_LANG":"en","FUN_LANG_VAL":"Ledger  management"}
+{"FUN_CODE":"XC_GL_LD_PARAMS","FUN_LANG":"en","FUN_LANG_VAL":"Ledger setting"}
+{"FUN_CODE":"XC_GL_LD_PERIOD","FUN_LANG":"en","FUN_LANG_VAL":"Period setting"}
+{"FUN_CODE":"XC_GL_LD_PROJECT","FUN_LANG":"en","FUN_LANG_VAL":"Project"}
+{"FUN_CODE":"XC_GL_LD_PR_MODE","FUN_LANG":"en","FUN_LANG_VAL":"Payment method for ledger"}
+{"FUN_CODE":"XC_GL_LD_REP","FUN_LANG":"en","FUN_LANG_VAL":"GL Reports"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_DTL","FUN_LANG":"en","FUN_LANG_VAL":"Multidimensional detailed account"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_GROUP","FUN_LANG":"en","FUN_LANG_VAL":"Multidimensional statistics  account（2）"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_SUM","FUN_LANG":"en","FUN_LANG_VAL":"Multidimensional  statistics  account（1）"}
+{"FUN_CODE":"XC_GL_LD_REP_BANK","FUN_LANG":"en","FUN_LANG_VAL":"Bank account journal"}
+{"FUN_CODE":"XC_GL_LD_REP_CASH","FUN_LANG":"en","FUN_LANG_VAL":"Cash journal entry"}
+{"FUN_CODE":"XC_GL_LD_REP_CA_DTL","FUN_LANG":"en","FUN_LANG_VAL":"Cash flow detailed account"}
+{"FUN_CODE":"XC_GL_LD_REP_CA_SUM","FUN_LANG":"en","FUN_LANG_VAL":"Cash flow statistics  account"}
+{"FUN_CODE":"XC_GL_LD_REP_DTL","FUN_LANG":"en","FUN_LANG_VAL":"Detailed account"}
+{"FUN_CODE":"XC_GL_LD_REP_ENTRY","FUN_LANG":"en","FUN_LANG_VAL":"General ledger"}
+{"FUN_CODE":"XC_GL_LD_REP_YE","FUN_LANG":"en","FUN_LANG_VAL":"Account balance "}
+{"FUN_CODE":"XC_GL_LD_SEC","FUN_LANG":"en","FUN_LANG_VAL":"Ledgers grant"}
+{"FUN_CODE":"XC_GL_LD_V","FUN_LANG":"en","FUN_LANG_VAL":" Voucher business"}
+{"FUN_CODE":"XC_GL_LD_V_ACCOUNT","FUN_LANG":"en","FUN_LANG_VAL":"Voucher accounting"}
+{"FUN_CODE":"XC_GL_LD_V_CHECK","FUN_LANG":"en","FUN_LANG_VAL":"Voucher audit"}
+{"FUN_CODE":"XC_GL_LD_V_R","FUN_LANG":"en","FUN_LANG_VAL":"Voucher entry"}
+{"FUN_CODE":"XC_GL_LD_V_RECORD","FUN_LANG":"en","FUN_LANG_VAL":"Voucher query"}
+{"FUN_CODE":"XC_GL_LD_V_R_AMOUNT","FUN_LANG":"en","FUN_LANG_VAL":"Quantity  voucher"}
+{"FUN_CODE":"XC_GL_LD_V_R_FOREIGN","FUN_LANG":"en","FUN_LANG_VAL":"Foreign currency  voucher"}
+{"FUN_CODE":"XC_GL_LD_V_R_NORMAL","FUN_LANG":"en","FUN_LANG_VAL":"Standard Currency voucher"}
+{"FUN_CODE":"XC_GL_LD_V_SIGN","FUN_LANG":"en","FUN_LANG_VAL":"Casher Signature for  voucher"}
+{"FUN_CODE":"XC_GL_LD_V_SUMMARY","FUN_LANG":"en","FUN_LANG_VAL":"Description for  voucher"}
+{"FUN_CODE":"XC_GL_LD_WF_CONF","FUN_LANG":"en","FUN_LANG_VAL":"Workflow Setup"}
+{"FUN_CODE":"XC_GL_PR_MODE","FUN_LANG":"en","FUN_LANG_VAL":"Payment method"}
+{"FUN_CODE":"XC_GL_TOOLS","FUN_LANG":"en","FUN_LANG_VAL":"Ledger Tools"}
+{"FUN_CODE":"XC_GL_TOOLS_CACHE","FUN_LANG":"en","FUN_LANG_VAL":"Data Cache"}
+{"FUN_CODE":"XC_GL_TOOLS_IMP_MODEL","FUN_LANG":"en","FUN_LANG_VAL":"Import template"}
+{"FUN_CODE":"XC_AP_INV_SIGN","FUN_LANG":"en","FUN_LANG_VAL":"Casher Signature for Payment order"}
+{"FUN_CODE":"XC_AP_PAY_H_SIGN","FUN_LANG":"en","FUN_LANG_VAL":"Casher Signature for Payment order"}
+{"FUN_CODE":"XC_EX_SIGN_DOCS","FUN_LANG":"en","FUN_LANG_VAL":"Casher Signature for Payment order"}
+{"FUN_CODE":"XC_AP_INV_MY","FUN_LANG":"en","FUN_LANG_VAL":"My purchasing invoice"}
+{"FUN_CODE":"XC_EX_APPLY_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"费用申请单"}
+{"FUN_CODE":"XC_EX_LEND_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"借款单"}
+{"FUN_CODE":"XC_EX_MYDOC_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的报销单"}
+{"FUN_CODE":"XC_EX_SIGN_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"报销出纳签字"}
+{"FUN_CODE":"XC_EX_REPAY_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"还款单"}
+{"FUN_CODE":"XC_EX_ACC_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"费用报销单"}
+{"FUN_CODE":"XC_EX_TRA_DOCS","FUN_LANG":"zh","FUN_LANG_VAL":"差旅报销单"}
+{"FUN_CODE":"XC_BG_MYPRJ_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的项目预算执行查询"}
+{"FUN_CODE":"XC_BG_MYDEPT_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的费用预算执行查询"}
+{"FUN_CODE":"XC_BG_MYDOC_QRY","FUN_LANG":"zh","FUN_LANG_VAL":"我的预算单查询"}
+{"FUN_CODE":"XIP2_WF_DEMO_PD","FUN_LANG":"zh","FUN_LANG_VAL":"流程驱动演示"}
+{"FUN_CODE":"XIP2_WF_DEMO_PD","FUN_LANG":"en","FUN_LANG_VAL":"Demo For PD"}
+{"FUN_CODE":"XIP2_CONC_NODE","FUN_LANG":"zh","FUN_LANG_VAL":"节点管理"}
+{"FUN_CODE":"XIP2_CONC_NODE","FUN_LANG":"en","FUN_LANG_VAL":"Node"}
+{"FUN_CODE":"XC_AP_INV_GL_H_BQ","FUN_LANG":"zh","FUN_LANG_VAL":"应付期初"}
+{"FUN_CODE":"XC_AP_INV_SIGN","FUN_LANG":"zh","FUN_LANG_VAL":"采购发票签收"}
+{"FUN_CODE":"XC_AP_PAY_H_F","FUN_LANG":"zh","FUN_LANG_VAL":"付款单管理"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"付款申请查询"}
+{"FUN_CODE":"XC_AP_INVOICE_H_CHECK_INPUT","FUN_LANG":"zh","FUN_LANG_VAL":"采购发票复核"}
+{"FUN_CODE":"XC_AP_PAY_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"付款单处理"}
+{"FUN_CODE":"XSR_REP_ModalStyleSet","FUN_LANG":"zh","FUN_LANG_VAL":"模板管理"}
+{"FUN_CODE":"XSR_REP_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"基础管理"}
+{"FUN_CODE":"XSR_REP_DATA","FUN_LANG":"zh","FUN_LANG_VAL":"数据管理"}
+{"FUN_CODE":"XSR_REP_CalFormula","FUN_LANG":"zh","FUN_LANG_VAL":"采集公式设置（公共）"}
+{"FUN_CODE":"XSR_REP_CalFormula_Corp","FUN_LANG":"zh","FUN_LANG_VAL":"采集公式设置（单位）"}
+{"FUN_CODE":"XSR_REP_FunReg","FUN_LANG":"zh","FUN_LANG_VAL":"函数管理"}
+{"FUN_CODE":"XSR_REP_ItemManage","FUN_LANG":"zh","FUN_LANG_VAL":"指标管理"}
+{"FUN_CODE":"XSR_REP_RowItem","FUN_LANG":"zh","FUN_LANG_VAL":"行指标管理"}
+{"FUN_CODE":"XSR_REP_ColItem","FUN_LANG":"zh","FUN_LANG_VAL":"列指标管理"}
+{"FUN_CODE":"XSR_REP_RowItemRef","FUN_LANG":"zh","FUN_LANG_VAL":"行指标引用"}
+{"FUN_CODE":"XSR_REP_ColItemRef","FUN_LANG":"zh","FUN_LANG_VAL":"列指标引用"}
+{"FUN_CODE":"XSR_REP_CreateReport","FUN_LANG":"zh","FUN_LANG_VAL":"报表生成"}
+{"FUN_CODE":"XSR_REP_QryReport","FUN_LANG":"zh","FUN_LANG_VAL":"报表查询"}
+{"FUN_CODE":"XSR_REP_BatExp","FUN_LANG":"zh","FUN_LANG_VAL":"批量导出"}
+{"FUN_CODE":"XSR_REP_BASE_F","FUN_LANG":"zh","FUN_LANG_VAL":"公共级公式设置"}
+{"FUN_CODE":"XSR_REP_BASE_F_L","FUN_LANG":"zh","FUN_LANG_VAL":"账簿级公式设置"}
+{"FUN_CODE":"XC_AP_PUR_INV_SEARCH","FUN_LANG":"zh","FUN_LANG_VAL":"采购发票查询"}
+{"FUN_CODE":"XC_AP_INVOICE_H","FUN_LANG":"zh","FUN_LANG_VAL":"采购发票管理"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H","FUN_LANG":"zh","FUN_LANG_VAL":"付款申请管理"}
+{"FUN_CODE":"XC_REP_BASE_TPL","FUN_LANG":"zh","FUN_LANG_VAL":"模板管理"}
+{"FUN_CODE":"XC_AP_LD","FUN_LANG":"zh","FUN_LANG_VAL":"应付账簿信息管理"}
+{"FUN_CODE":"XC_REP_BASE_FUN","FUN_LANG":"zh","FUN_LANG_VAL":"函数管理"}
+{"FUN_CODE":"XC_REP_BASE_F","FUN_LANG":"zh","FUN_LANG_VAL":"公共级公式设置"}
+{"FUN_CODE":"XC_REP_BASE_F_L","FUN_LANG":"zh","FUN_LANG_VAL":"账簿级公式设置"}
+{"FUN_CODE":"XC_REP_DATA_C","FUN_LANG":"zh","FUN_LANG_VAL":"报表生成"}
+{"FUN_CODE":"XC_REP_DATA_Q","FUN_LANG":"zh","FUN_LANG_VAL":"报表查询"}
+{"FUN_CODE":"XC_REP_DATA_E","FUN_LANG":"zh","FUN_LANG_VAL":"批量导出"}
+{"FUN_CODE":"XC_GL_LD_WF_CONF","FUN_LANG":"zh","FUN_LANG_VAL":"审批流程配置"}
+{"FUN_CODE":"XC_GL_TOOLS_SUM","FUN_LANG":"zh","FUN_LANG_VAL":"总账余额汇总"}
+{"FUN_CODE":"XC_AP","FUN_LANG":"en","FUN_LANG_VAL":"Accounts payable management（AP）"}
+{"FUN_CODE":"XC_AP_AGING_INTERVAL","FUN_LANG":"en","FUN_LANG_VAL":"Aging of accounts payable"}
+{"FUN_CODE":"XC_AP_BASE","FUN_LANG":"en","FUN_LANG_VAL":"AP global information management"}
+{"FUN_CODE":"XC_AP_BIZ","FUN_LANG":"en","FUN_LANG_VAL":"Financial management"}
+{"FUN_CODE":"XC_AP_CANCEL_H_F","FUN_LANG":"en","FUN_LANG_VAL":"Document  of write-off "}
+{"FUN_CODE":"XC_AP_CONTRACT","FUN_LANG":"en","FUN_LANG_VAL":"Contract management"}
+{"FUN_CODE":"XC_AP_CONTRACT_F","FUN_LANG":"en","FUN_LANG_VAL":"Contract management"}
+{"FUN_CODE":"XC_AP_DOC_CATS","FUN_LANG":"en","FUN_LANG_VAL":"Payable document type setting"}
+{"FUN_CODE":"XC_AP_GL_LD_SEGVAL_ENABLED","FUN_LANG":"en","FUN_LANG_VAL":"Supplier information setting"}
+{"FUN_CODE":"XC_AP_GL_LEDGERS","FUN_LANG":"en","FUN_LANG_VAL":"AP ledger settings"}
+{"FUN_CODE":"XC_AP_INVOICE_H","FUN_LANG":"en","FUN_LANG_VAL":"Purchase invoice management"}
+{"FUN_CODE":"XC_AP_INVOICE_H_CHECK_INPUT","FUN_LANG":"en","FUN_LANG_VAL":"Purchase invoice review"}
+{"FUN_CODE":"XC_AP_INVOICE_H_LIST","FUN_LANG":"en","FUN_LANG_VAL":"Payable management"}
+{"FUN_CODE":"XC_AP_INV_GL_ADJ_F","FUN_LANG":"en","FUN_LANG_VAL":"Adjust document management"}
+{"FUN_CODE":"XC_AP_INV_GL_ADJ_SEARCH","FUN_LANG":"en","FUN_LANG_VAL":"Adjust document management"}
+{"FUN_CODE":"XC_AP_INV_GL_CANCEL_H_S","FUN_LANG":"en","FUN_LANG_VAL":"Document  of write-off "}
+{"FUN_CODE":"XC_AP_INV_GL_H","FUN_LANG":"en","FUN_LANG_VAL":"Payable management"}
+{"FUN_CODE":"XC_AP_INV_GL_H_BQ","FUN_LANG":"en","FUN_LANG_VAL":"Opening Balance of accounts payable"}
+{"FUN_CODE":"XC_AP_LD_DOC_CAT","FUN_LANG":"en","FUN_LANG_VAL":"Ledger Document type setting"}
+{"FUN_CODE":"XC_AP_LD_PUR_TYPE","FUN_LANG":"en","FUN_LANG_VAL":"Purchase account setting"}
+{"FUN_CODE":"XC_AP_OPER","FUN_LANG":"en","FUN_LANG_VAL":"Business process"}
+{"FUN_CODE":"XC_AP_LD","FUN_LANG":"en","FUN_LANG_VAL":"Ledger information management"}
+{"FUN_CODE":"XC_AP_PUR_INV_SEARCH","FUN_LANG":"en","FUN_LANG_VAL":"Purchase Invoice Inquiry"}
+{"FUN_CODE":"XC_AR","FUN_LANG":"en","FUN_LANG_VAL":"Accounts receivable management（AR)"}
+{"FUN_CODE":"XC_AR_AGING","FUN_LANG":"en","FUN_LANG_VAL":"Aging of accounts receivable"}
+{"FUN_CODE":"XC_AR_BASE","FUN_LANG":"en","FUN_LANG_VAL":"global information management"}
+{"FUN_CODE":"XC_AP_PAY_BQ","FUN_LANG":"en","FUN_LANG_VAL":"Opening Balance of prepayment"}
+{"FUN_CODE":"XC_AP_PAY_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Payment management"}
+{"FUN_CODE":"XC_AP_PAY_H_F","FUN_LANG":"en","FUN_LANG_VAL":"Payment management"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H","FUN_LANG":"en","FUN_LANG_VAL":"Payment application management"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Payment application for the query"}
+{"FUN_CODE":"XC_AP_PAY_REQ_H_MY","FUN_LANG":"en","FUN_LANG_VAL":"My payment application"}
+{"FUN_CODE":"XC_AP_PUR_TYPE","FUN_LANG":"en","FUN_LANG_VAL":"Purchasing type"}
+{"FUN_CODE":"XC_AP_VENDORS","FUN_LANG":"en","FUN_LANG_VAL":"Supplier management"}
+{"FUN_CODE":"XC_AR_CUSTOMER_TYPE_TYPE","FUN_LANG":"en","FUN_LANG_VAL":"Customer classification management"}
+{"FUN_CODE":"XC_AR_CUSTOMERS","FUN_LANG":"en","FUN_LANG_VAL":"Customer management"}
+{"FUN_CODE":"XC_AR_DOC_CATS","FUN_LANG":"en","FUN_LANG_VAL":"Document type setting"}
+{"FUN_CODE":"XC_AR_SALE_TYPE","FUN_LANG":"en","FUN_LANG_VAL":"Sales type"}
+{"FUN_CODE":"XC_AR_GL_LD_CUSTOMERS","FUN_LANG":"en","FUN_LANG_VAL":"Customer information set"}
+{"FUN_CODE":"XC_AR_GL_LEDGERS","FUN_LANG":"zh","FUN_LANG_VAL":"应收账簿设置"}
+{"FUN_CODE":"XC_AR_GL_LEDGERS","FUN_LANG":"en","FUN_LANG_VAL":"Parameter Settings"}
+{"FUN_CODE":"XC_AR_LD_SALE_TYPE","FUN_LANG":"en","FUN_LANG_VAL":"Income subject setting"}
+{"FUN_CODE":"XC_AR_LD_DOC_CAT","FUN_LANG":"en","FUN_LANG_VAL":"Ledger Document type setting"}
+{"FUN_CODE":"XC_AR_LD","FUN_LANG":"en","FUN_LANG_VAL":"Ledger information management"}
+{"FUN_CODE":"XC_AR_CUSTOMER_INV_GL_H","FUN_LANG":"zh","FUN_LANG_VAL":"应收期初"}
+{"FUN_CODE":"XC_AR_CUSTOMER_INV_GL_H","FUN_LANG":"en","FUN_LANG_VAL":"Opening Balance of accounts receivable"}
+{"FUN_CODE":"XC_AR_CUSTOMER_PAY_H","FUN_LANG":"en","FUN_LANG_VAL":"Opening Balance of received in advance"}
+{"FUN_CODE":"XC_AR_CANCEL","FUN_LANG":"en","FUN_LANG_VAL":"Document  of write-off "}
+{"FUN_CODE":"XC_AR_CANCEL_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Document  of write-off "}
+{"FUN_CODE":"XC_AR_CONTRACT","FUN_LANG":"en","FUN_LANG_VAL":"Contract management"}
+{"FUN_CODE":"XC_AR_CONTRACT_F","FUN_LANG":"en","FUN_LANG_VAL":"Contract management"}
+{"FUN_CODE":"XC_AR_INVOICE_H","FUN_LANG":"en","FUN_LANG_VAL":"Sales invoice management"}
+{"FUN_CODE":"XC_AR_INVOICE_H","FUN_LANG":"zh","FUN_LANG_VAL":"销售发票管理"}
+{"FUN_CODE":"XC_AR_INVOICE_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Sales invoice query"}
+{"FUN_CODE":"XC_AR_INVOICE_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"销售发票查询"}
+{"FUN_CODE":"XC_AR_INVOICE_H_OPEN","FUN_LANG":"en","FUN_LANG_VAL":"Issue sales invoice"}
+{"FUN_CODE":"XC_AR_INVOICE_H_FIN","FUN_LANG":"en","FUN_LANG_VAL":"Sales invoice review"}
+{"FUN_CODE":"XC_AR_INVOICE_H_MY","FUN_LANG":"en","FUN_LANG_VAL":"My sales invoice"}
+{"FUN_CODE":"XC_AR_INVOICE_H_MY","FUN_LANG":"zh","FUN_LANG_VAL":"我的销售发票"}
+{"FUN_CODE":"XC_AR_INVOICE_H_FIN","FUN_LANG":"zh","FUN_LANG_VAL":"销售发票复核"}
+{"FUN_CODE":"XC_AR_INV_GL","FUN_LANG":"en","FUN_LANG_VAL":"Receivables management"}
+{"FUN_CODE":"XC_AR_INV_GL_ADJ","FUN_LANG":"en","FUN_LANG_VAL":"Adjust document  management"}
+{"FUN_CODE":"XC_AR_INV_GL_ADJ_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Adjust document  management"}
+{"FUN_CODE":"XC_AR_INV_GL_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Receivables management"}
+{"FUN_CODE":"XC_AR_INV_GL_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"应收单处理"}
+{"FUN_CODE":"XC_AR_PAY","FUN_LANG":"en","FUN_LANG_VAL":"Receipt document management"}
+{"FUN_CODE":"XC_AR_PAY_H_ALL","FUN_LANG":"en","FUN_LANG_VAL":"Receipt document management"}
+{"FUN_CODE":"XC_AR_PAY_H_SIGN","FUN_LANG":"en","FUN_LANG_VAL":"Cashier sign the receipts"}
+{"FUN_CODE":"XC_AR_BIZ","FUN_LANG":"zh","FUN_LANG_VAL":"应收业务处理"}
+{"FUN_CODE":"XC_AR_LEDGER_PROCESS","FUN_LANG":"en","FUN_LANG_VAL":"Approval process setting"}
+{"FUN_CODE":"XC_AR_OPER","FUN_LANG":"en","FUN_LANG_VAL":"Financial processes"}
+{"FUN_CODE":"XC_AR_BIZ","FUN_LANG":"en","FUN_LANG_VAL":"Business process"}
+{"FUN_CODE":"XC_AP_BIZ","FUN_LANG":"zh","FUN_LANG_VAL":"应付财务处理"}
+{"FUN_CODE":"XC_GL_LD_CARRYOVER","FUN_LANG":"en","FUN_LANG_VAL":"Balance of account transfer account"}
+{"FUN_CODE":"XC_GL_TOOLS_MODEL","FUN_LANG":"en","FUN_LANG_VAL":"Basic data import template"}
+{"FUN_CODE":"XC_GL_TOOLS_SUM","FUN_LANG":"en","FUN_LANG_VAL":"General ledger balance summary"}
+{"FUN_CODE":"XC_AR_PAY","FUN_LANG":"zh","FUN_LANG_VAL":"收款单管理"}
+{"FUN_CODE":"XC_AR_PAY_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"收款单管理"}
+{"FUN_CODE":"XC_AR_PAY_H_SIGN","FUN_LANG":"zh","FUN_LANG_VAL":"收款单签字"}
+{"FUN_CODE":"XC_GL_LD_REP_JOURNAL","FUN_LANG":"zh","FUN_LANG_VAL":"序时账"}
+{"FUN_CODE":"XC_GL_LD_REP_JOURNAL","FUN_LANG":"en","FUN_LANG_VAL":"Chronological account"}
+{"FUN_CODE":"XC_REP_BASE_R","FUN_LANG":"zh","FUN_LANG_VAL":"行指标管理"}
+{"FUN_CODE":"XC_REP_BASE_C","FUN_LANG":"zh","FUN_LANG_VAL":"列指标管理"}
+{"FUN_CODE":"XC_REP_BASE_RM","FUN_LANG":"zh","FUN_LANG_VAL":"行指标引用"}
+{"FUN_CODE":"XC_REP_BASE_CM","FUN_LANG":"zh","FUN_LANG_VAL":"列指标引用"}
+{"FUN_CODE":"XC_AR","FUN_LANG":"zh","FUN_LANG_VAL":"应收管理"}
+{"FUN_CODE":"XC_REP","FUN_LANG":"zh","FUN_LANG_VAL":"报表管理"}
+{"FUN_CODE":"XC_GL_GB_CODE","FUN_LANG":"zh","FUN_LANG_VAL":"科目管理"}
+{"FUN_CODE":"XC_GL_GB_ACCOUNT","FUN_LANG":"zh","FUN_LANG_VAL":"会计科目"}
+{"FUN_CODE":"XC_GL_LD_SEC","FUN_LANG":"zh","FUN_LANG_VAL":"账簿权限"}
+{"FUN_CODE":"XC_GL_GB_CA_ITEM","FUN_LANG":"zh","FUN_LANG_VAL":"现金流量项目管理"}
+{"FUN_CODE":"XC_GL","FUN_LANG":"zh","FUN_LANG_VAL":"总账管理"}
+{"FUN_CODE":"XC_GL_LD_B_BA","FUN_LANG":"zh","FUN_LANG_VAL":"科目期初"}
+{"FUN_CODE":"XC_GL_LD_V_ACCOUNT","FUN_LANG":"zh","FUN_LANG_VAL":"凭证记账"}
+{"FUN_CODE":"XC_GL_LD_V_CHECK","FUN_LANG":"zh","FUN_LANG_VAL":"凭证审核"}
+{"FUN_CODE":"XC_GL_LD_V_SIGN","FUN_LANG":"zh","FUN_LANG_VAL":"凭证出纳签字"}
+{"FUN_CODE":"XC_GL_LD_CARRYOVER","FUN_LANG":"zh","FUN_LANG_VAL":"期末余额结转"}
+{"FUN_CODE":"XC_GL_LD_REP_CASH","FUN_LANG":"zh","FUN_LANG_VAL":"现金日记账"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_DTL","FUN_LANG":"zh","FUN_LANG_VAL":"辅助明细账"}
+{"FUN_CODE":"XC_GL_LD_REP_CA_DTL","FUN_LANG":"zh","FUN_LANG_VAL":"现金流量明细账"}
+{"FUN_CODE":"XC_GL_LD_REP_CA_SUM","FUN_LANG":"zh","FUN_LANG_VAL":"现金流量统计表"}
+{"FUN_CODE":"XC_GL_LD_REP_ASS_GROUP","FUN_LANG":"zh","FUN_LANG_VAL":"辅助统计表（2）"}
+{"FUN_CODE":"XC_GL_TOOLS_MODEL","FUN_LANG":"zh","FUN_LANG_VAL":"基础数据导入模板"}
+{"FUN_CODE":"XC_AP","FUN_LANG":"zh","FUN_LANG_VAL":"应付管理"}
+{"FUN_CODE":"XC_GL_GB_PRODUCT","FUN_LANG":"zh","FUN_LANG_VAL":"产品段"}
+{"FUN_CODE":"XC_GL_GB_CUSTOMER","FUN_LANG":"zh","FUN_LANG_VAL":"客户段"}
+{"FUN_CODE":"XC_GL_GB_VENDOR","FUN_LANG":"zh","FUN_LANG_VAL":"供应商段"}
+{"FUN_CODE":"XC_AP_PAY_BQ","FUN_LANG":"zh","FUN_LANG_VAL":"预付期初"}
+{"FUN_CODE":"XC_GL_GB","FUN_LANG":"zh","FUN_LANG_VAL":"总账全局信息管理"}
+{"FUN_CODE":"XC_GL_LD","FUN_LANG":"zh","FUN_LANG_VAL":"总账账簿信息管理"}
+{"FUN_CODE":"XC_GL_LD_REP","FUN_LANG":"zh","FUN_LANG_VAL":"总账账表"}
+{"FUN_CODE":"XC_GL_LD_V","FUN_LANG":"zh","FUN_LANG_VAL":"凭证处理"}
+{"FUN_CODE":"XC_AP_DOC_CATS","FUN_LANG":"zh","FUN_LANG_VAL":"应付单据类型"}
+{"FUN_CODE":"XC_AP_PUR_TYPE","FUN_LANG":"zh","FUN_LANG_VAL":"采购类型"}
+{"FUN_CODE":"XC_AP_AGING_INTERVAL","FUN_LANG":"zh","FUN_LANG_VAL":"应付账龄"}
+{"FUN_CODE":"XC_AP_LD_DOC_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"应付单据类型设置"}
+{"FUN_CODE":"XC_GL_LD_ACCOUNT","FUN_LANG":"zh","FUN_LANG_VAL":"科目设置"}
+{"FUN_CODE":"XC_GL_GB_ASS_SEGMENT","FUN_LANG":"zh","FUN_LANG_VAL":"科目辅助段管理"}
+{"FUN_CODE":"XC_GL_LD_PARAMS","FUN_LANG":"zh","FUN_LANG_VAL":"总账账簿设置"}
+{"FUN_CODE":"XC_GL_LD_PERIOD","FUN_LANG":"zh","FUN_LANG_VAL":"会计期设置"}
+{"FUN_CODE":"XC_GL_LD_ASS_SEG_ENABLED","FUN_LANG":"zh","FUN_LANG_VAL":"辅助段设置"}
+{"FUN_CODE":"XC_GL_LD_PROJECT","FUN_LANG":"zh","FUN_LANG_VAL":"项目"}
+{"FUN_CODE":"XC_GL_LD_DEPOSIT_BANK","FUN_LANG":"zh","FUN_LANG_VAL":"开户行"}
+{"FUN_CODE":"XC_AP_GL_LEDGERS","FUN_LANG":"zh","FUN_LANG_VAL":"应付账簿设置"}
+{"FUN_CODE":"XC_AP_GL_LD_SEGVAL_ENABLED","FUN_LANG":"zh","FUN_LANG_VAL":"应付供应商设置"}
+{"FUN_CODE":"XC_AP_INV_GL_H","FUN_LANG":"zh","FUN_LANG_VAL":"应付单管理"}
+{"FUN_CODE":"XC_AP_INVOICE_H_LIST","FUN_LANG":"zh","FUN_LANG_VAL":"应付单处理"}
+{"FUN_CODE":"XC_AP_CANCEL_H_F","FUN_LANG":"zh","FUN_LANG_VAL":"应付核销单管理"}
+{"FUN_CODE":"XC_AP_INV_GL_CANCEL_H_S","FUN_LANG":"zh","FUN_LANG_VAL":"应付核销单处理"}
+{"FUN_CODE":"XC_AP_INV_GL_ADJ_F","FUN_LANG":"zh","FUN_LANG_VAL":"应付调整单管理"}
+{"FUN_CODE":"XC_AP_INV_GL_ADJ_SEARCH","FUN_LANG":"zh","FUN_LANG_VAL":"应付调整单处理"}
+{"FUN_CODE":"ap_ywzz","FUN_LANG":"zh","FUN_LANG_VAL":"应付业务总账"}
+{"FUN_CODE":"ap_httz","FUN_LANG":"zh","FUN_LANG_VAL":"应付合同台帐"}
+{"FUN_CODE":"ap_httzmx","FUN_LANG":"zh","FUN_LANG_VAL":"应付合同明细"}
+{"FUN_CODE":"ap_ywzzmx","FUN_LANG":"zh","FUN_LANG_VAL":"应付业务明细账"}
+{"FUN_CODE":"ap_zlfx","FUN_LANG":"zh","FUN_LANG_VAL":"应付账龄分析"}
+{"FUN_CODE":"XC_AP_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"应付全局信息管理"}
+{"FUN_CODE":"APZB","FUN_LANG":"zh","FUN_LANG_VAL":"应付帐表查询"}
+{"FUN_CODE":"XC_AR_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"应收全局信息管理"}
+{"FUN_CODE":"XC_AR_CUSTOMER_TYPE_TYPE","FUN_LANG":"zh","FUN_LANG_VAL":"客户分类"}
+{"FUN_CODE":"XC_AR_DOC_CATS","FUN_LANG":"zh","FUN_LANG_VAL":"应收单据类型"}
+{"FUN_CODE":"XC_AR_SALE_TYPE","FUN_LANG":"zh","FUN_LANG_VAL":"销售类型"}
+{"FUN_CODE":"XC_AR_AGING","FUN_LANG":"zh","FUN_LANG_VAL":"应收账龄"}
+{"FUN_CODE":"XC_AR_GL_LD_CUSTOMERS","FUN_LANG":"zh","FUN_LANG_VAL":"应收客户设置"}
+{"FUN_CODE":"XC_AR_LEDGER_PROCESS","FUN_LANG":"zh","FUN_LANG_VAL":"应收审批流程设置"}
+{"FUN_CODE":"XC_AR_LD_DOC_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"应收单据类型设置"}
+{"FUN_CODE":"XC_AR_LD","FUN_LANG":"zh","FUN_LANG_VAL":"应收账簿信息管理"}
+{"FUN_CODE":"XC_AR_CUSTOMER_PAY_H","FUN_LANG":"zh","FUN_LANG_VAL":"预收期初"}
+{"FUN_CODE":"XC_AR_CONTRACT","FUN_LANG":"zh","FUN_LANG_VAL":"销售合同管理"}
+{"FUN_CODE":"XC_AP_CONTRACT_F","FUN_LANG":"zh","FUN_LANG_VAL":"采购合同管理"}
+{"FUN_CODE":"XC_AP_CONTRACT","FUN_LANG":"zh","FUN_LANG_VAL":"采购合同处理"}
+{"FUN_CODE":"XC_AR_CONTRACT_F","FUN_LANG":"zh","FUN_LANG_VAL":"销售合同处理"}
+{"FUN_CODE":"XC_AR_INVOICE_H_OPEN","FUN_LANG":"zh","FUN_LANG_VAL":"税控系统开票"}
+{"FUN_CODE":"XC_AR_INV_GL_ADJ","FUN_LANG":"zh","FUN_LANG_VAL":"应收调整单管理"}
+{"FUN_CODE":"XC_AR_INV_GL_ADJ_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"应收调整单处理"}
+{"FUN_CODE":"XC_AR_CANCEL_H_ALL","FUN_LANG":"zh","FUN_LANG_VAL":"应收核销单处理"}
+{"FUN_CODE":"XC_AR_CANCEL","FUN_LANG":"zh","FUN_LANG_VAL":"应收核销单管理"}
+{"FUN_CODE":"XC_AR_OPER","FUN_LANG":"zh","FUN_LANG_VAL":"应收财务处理"}
+{"FUN_CODE":"XC_AR_INV_GL","FUN_LANG":"zh","FUN_LANG_VAL":"应收单管理"}
+{"FUN_CODE":"XC_GL_LD_PR_MODE","FUN_LANG":"zh","FUN_LANG_VAL":"收付款方式设置"}
+{"FUN_CODE":"XC_GL_PR_MODE","FUN_LANG":"zh","FUN_LANG_VAL":"收付款方式"}
+{"FUN_CODE":"XC_FA","FUN_LANG":"zh","FUN_LANG_VAL":"资产管理"}
+{"FUN_CODE":"XC_FA_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"资产全局基础信息"}
+{"FUN_CODE":"XC_FA_LD_BASE","FUN_LANG":"zh","FUN_LANG_VAL":"资产账簿基础信息"}
+{"FUN_CODE":"XC_FA_BUSSINESS","FUN_LANG":"zh","FUN_LANG_VAL":"日常业务"}
+{"FUN_CODE":"XC_FA_CAT","FUN_LANG":"zh","FUN_LANG_VAL":"资产分类"}
+{"FUN_CODE":"XC_FA_USAGE","FUN_LANG":"zh","FUN_LANG_VAL":"资产使用情况"}
+{"FUN_CODE":"XC_FA_ADDING","FUN_LANG":"zh","FUN_LANG_VAL":"资产增加方式"}
+{"FUN_CODE":"XC_FA_LD_PARAM","FUN_LANG":"zh","FUN_LANG_VAL":"资产账簿设置"}
+{"FUN_CODE":"XC_FA_LD_PERIOD","FUN_LANG":"zh","FUN_LANG_VAL":"资产会计期设置"}
+{"FUN_CODE":"XC_FA_LD_CAT_SETTING","FUN_LANG":"zh","FUN_LANG_VAL":"资产分类设置"}
+{"FUN_CODE":"XC_FA_LD_INIT_FA","FUN_LANG":"zh","FUN_LANG_VAL":"资产初始化"}
+{"FUN_CODE":"XC_FA_FA_MANAGMENT","FUN_LANG":"zh","FUN_LANG_VAL":"资产管理"}
+{"FUN_CODE":"XC_FA_SPLIT","FUN_LANG":"zh","FUN_LANG_VAL":"资产拆分"}
+{"FUN_CODE":"XC_FA_DEPR","FUN_LANG":"zh","FUN_LANG_VAL":"计提折旧"}
+{"FUN_CODE":"XC_FA","FUN_LANG":"en","FUN_LANG_VAL":"Fixed Assets Management（FA）"}
+{"FUN_CODE":"XC_FA_ADDING","FUN_LANG":"en","FUN_LANG_VAL":"Method of increasing assets"}
+{"FUN_CODE":"XC_FA_ADJ","FUN_LANG":"en","FUN_LANG_VAL":"Asset adjustment"}
+{"FUN_CODE":"XC_FA_ADJ_AFTER","FUN_LANG":"en","FUN_LANG_VAL":"Adjusted after asset depreciation"}
+{"FUN_CODE":"XC_FA_ADJ_BEFORE","FUN_LANG":"en","FUN_LANG_VAL":"Adjusted beforer asset depreciation"}
+{"FUN_CODE":"XC_FA_BASE","FUN_LANG":"en","FUN_LANG_VAL":"Global Information Management"}
+{"FUN_CODE":"XC_FA_BUSSINESS","FUN_LANG":"en","FUN_LANG_VAL":"Daily business"}
+{"FUN_CODE":"XC_FA_CAT","FUN_LANG":"en","FUN_LANG_VAL":"Asset classification"}
+{"FUN_CODE":"XC_FA_CLEAN","FUN_LANG":"en","FUN_LANG_VAL":"Asset clean"}
+{"FUN_CODE":"XC_FA_CLEAN_REASON","FUN_LANG":"en","FUN_LANG_VAL":"Reason for asset clean"}
+{"FUN_CODE":"XC_FA_DEPR","FUN_LANG":"en","FUN_LANG_VAL":"Depreciation"}
+{"FUN_CODE":"XC_FA_DEPR_METHOD","FUN_LANG":"en","FUN_LANG_VAL":"Depreciation method of assets"}
+{"FUN_CODE":"XC_FA_FA_MANAGMENT","FUN_LANG":"en","FUN_LANG_VAL":"Asset management"}
+{"FUN_CODE":"XC_FA_LD_ADDING","FUN_LANG":"en","FUN_LANG_VAL":"Account setting for the increase of the asset"}
+{"FUN_CODE":"XC_FA_LD_BASE","FUN_LANG":"en","FUN_LANG_VAL":"Ledger information management"}
+{"FUN_CODE":"XC_FA_LD_CAT_SETTING","FUN_LANG":"en","FUN_LANG_VAL":"Asset classification settings"}
+{"FUN_CODE":"XC_FA_LD_INIT_FA","FUN_LANG":"en","FUN_LANG_VAL":"Asset initialization"}
+{"FUN_CODE":"XC_FA_LD_PARAM","FUN_LANG":"en","FUN_LANG_VAL":"Ledger settings"}
+{"FUN_CODE":"XC_FA_LD_PERIOD","FUN_LANG":"en","FUN_LANG_VAL":"Period settings"}
+{"FUN_CODE":"XC_FA_SPLIT","FUN_LANG":"en","FUN_LANG_VAL":"Asset splitting"}
+{"FUN_CODE":"XC_FA_USAGE","FUN_LANG":"en","FUN_LANG_VAL":"Asset Usage"}
+{"FUN_CODE":"XC_AP_ZBCX","FUN_LANG":"zh","FUN_LANG_VAL":"应付帐表查询"}
+{"FUN_CODE":"XC_AP_YWZZMX","FUN_LANG":"zh","FUN_LANG_VAL":"应付业务明细账"}
+{"FUN_CODE":"XC_AP_YWZZ","FUN_LANG":"zh","FUN_LANG_VAL":"应付业务总账"}
+{"FUN_CODE":"XC_AP_HTTZMX","FUN_LANG":"zh","FUN_LANG_VAL":"应付合同明细"}
+{"FUN_CODE":"XC_AP_HTTZ","FUN_LANG":"zh","FUN_LANG_VAL":"应付合同台帐"}
+{"FUN_CODE":"XC_AP_ZLFX","FUN_LANG":"zh","FUN_LANG_VAL":"应付账龄分析"}
+{"FUN_CODE":"XC_AP_YWZZ","FUN_LANG":"en","FUN_LANG_VAL":"AP Business general ledger"}
+{"FUN_CODE":"XC_AP_YWZZMX","FUN_LANG":"en","FUN_LANG_VAL":"AP business subsidiary ledger"}
+{"FUN_CODE":"XC_AP_ZBCX","FUN_LANG":"en","FUN_LANG_VAL":"AP Reports"}
+{"FUN_CODE":"XC_AP_ZLFX","FUN_LANG":"en","FUN_LANG_VAL":"AP Aging analysis"}
+{"FUN_CODE":"XC_AP_HTTZ","FUN_LANG":"en","FUN_LANG_VAL":"AP contract general ledger"}
+{"FUN_CODE":"XC_AP_HTTZMX","FUN_LANG":"en","FUN_LANG_VAL":"AP contract subsidiary ledger"}
+{"FUN_CODE":"XC_FA_CLEAN_REASON","FUN_LANG":"zh","FUN_LANG_VAL":"资产清理原因"}
+{"FUN_CODE":"XC_FA_DEPR_METHOD","FUN_LANG":"zh","FUN_LANG_VAL":"资产折旧方法"}
+{"FUN_CODE":"XC_FA_LD_ADDING","FUN_LANG":"zh","FUN_LANG_VAL":"增加方式设置"}
+{"FUN_CODE":"XC_FA_REPORT","FUN_LANG":"zh","FUN_LANG_VAL":"资产报表管理"}
+{"FUN_CODE":"XC_FA_DGZCMXZ","FUN_LANG":"zh","FUN_LANG_VAL":"单个资产明细账"}
+{"FUN_CODE":"FA_DEPR_GRID","FUN_LANG":"zh","FUN_LANG_VAL":"折旧清单"}
+{"FUN_CODE":"XC_FA_REPORT","FUN_LANG":"en","FUN_LANG_VAL":"Asset statement management"}
+{"FUN_CODE":"XC_FA_ADJ","FUN_LANG":"zh","FUN_LANG_VAL":"资产调整"}
+{"FUN_CODE":"XC_FA_ADJ_BEFORE","FUN_LANG":"zh","FUN_LANG_VAL":"资产调整（折旧前）"}
+{"FUN_CODE":"XC_FA_ADJ_AFTER","FUN_LANG":"zh","FUN_LANG_VAL":"资产调整（折旧后）"}
+{"FUN_CODE":"XC_FA_CLEAN","FUN_LANG":"zh","FUN_LANG_VAL":"资产清理"}
+{"FUN_CODE":"XC_FA_ZCMXZ","FUN_LANG":"zh","FUN_LANG_VAL":"资产明细帐"}
+{"FUN_CODE":"XC_FA_ASSET_TOTAL","FUN_LANG":"zh","FUN_LANG_VAL":"资产统计表"}
+{"FUN_CODE":"XC_AP_PROCESS","FUN_LANG":"zh","FUN_LANG_VAL":"应付审批流程设置"}
+{"FUN_CODE":"XC_AP_VENDORS","FUN_LANG":"zh","FUN_LANG_VAL":"供应商管理"}
+{"FUN_CODE":"XC_AP_LD_PUR_TYPE","FUN_LANG":"zh","FUN_LANG_VAL":"采购科目设置"}
+{"FUN_CODE":"XC_AR_CUSTOMERS","FUN_LANG":"zh","FUN_LANG_VAL":"客户管理"}
+{"FUN_CODE":"XC_AR_LD_SALE_TYPE","FUN_LANG":"zh","FUN_LANG_VAL":"销售类型科目设置"}
+{"FUN_CODE":"XIP2_PUB_PARAM_LANG","FUN_LANG":"zh","FUN_LANG_VAL":"参数多语言"}
+{"FUN_CODE":"XIP2_PUB_PARAM_LANG","FUN_LANG":"en","FUN_LANG_VAL":"Parameter Multilanguage Config"}

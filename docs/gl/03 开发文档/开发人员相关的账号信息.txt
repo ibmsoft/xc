@@ -1,0 +1,24 @@
+SVN账号信息：
+
+	ruanxin =ruanxin123
+	weicw = weicw123
+	renjj = renjj123
+	zhenghy = zhenghy123
+	chenby = chenby123
+	lizh = lizh123
+	fengquan = fengquan123
+
+	
+
+
+问题管理平台账号信息：
+
+	系统访问地址：http://xzsoft.cc/xip
+
+	李志会		LIZH01774 / 111111
+	陈炳允		CHENBY / 111111
+	任建建		RENJJ / 111111
+	韦才文		WEICW / 11111
+	郑海洋		ZHENGHIY / 111111
+	阮欣		RUANXIN / 111111
+	冯全		FENGQUAN / 111111

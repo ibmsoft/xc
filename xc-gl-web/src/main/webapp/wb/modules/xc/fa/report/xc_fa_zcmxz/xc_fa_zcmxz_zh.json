@@ -1,0 +1,14 @@
+{
+  LEDGER				 	: "账簿",
+  DEPT	 					: "成本中心",
+  AssetAttributes			: "资产属性",
+  FA_CAT 					: "分类",
+  PERIOD		 			: "会计期",
+  TO		 				: "至",
+  QUERY						: "查询",
+  RESET						: "重置",
+
+  qxxzzb					: "请先选择账簿",
+  qxxzzcsx					: "请先选择资产属性",
+  qtxsybtx					: "请填写所有必填项",
+}

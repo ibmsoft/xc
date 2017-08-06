@@ -1,0 +1,24 @@
+{
+  dimensionName :"单位名称",
+  dimensionCategory:"类别",
+  queryBtn:"查询",
+  resetBtn:"重置",
+  rownum : "序号",
+  dimensionCode:"单位缩写",
+  dimensionDesc:"说明",
+  addBtn:"增加",
+  delBtn:"删除",
+  saveBtn:"保存",
+  importBtn:"导入",
+  exprotBtn:"导出",
+  
+  importTitle:"计量单位数据导入",
+  fileTip:"请选择Excel文件",
+  fileName:"<font color='red'>*</font>选择文件",
+  importLogs:"导入日志信息",
+  incorrectColumn:"错误行",
+  errorInformation:"错误信息",
+  labelWidth:80
+  
+  
+}

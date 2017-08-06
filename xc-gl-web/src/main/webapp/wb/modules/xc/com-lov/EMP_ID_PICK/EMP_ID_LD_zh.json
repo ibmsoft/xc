@@ -1,0 +1,7 @@
+{
+	empName:'负责人',
+  	empCode:'员工编码',
+  	name:'员工名称',
+  	empCodeName:'员工编码/名称',
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

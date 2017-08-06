@@ -1,0 +1,22 @@
+{
+  
+  query        : "Search",
+  reset        : "Reset",
+  add          : "Add",
+  edit         : "Edit",
+  delete       : "Delete",
+  useCode      : "Code",
+  useName      : "Usage Name",
+  useDesc      : "Desc",
+  fa_property  : "Asset Property",
+  save         : "Save",
+  close        : "Close",
+  import       : "Import",
+  export       : "Export",
+  please       : "Please Choose ",
+  confirm      : "Are you sure you want to delete this data?",
+  selRecord    : "Please select the record of the operation!",
+  rowNo        : "NO.",
+  checkDel     : "The usage has been related!"
+
+ }

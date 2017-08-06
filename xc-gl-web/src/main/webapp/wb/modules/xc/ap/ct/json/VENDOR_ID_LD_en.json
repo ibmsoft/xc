@@ -1,0 +1,6 @@
+{
+	vendor:'vendor',
+  	vendorCode:'vendor code',
+  	vendorName:'vendor name',
+  	condition:'vendor code or name'
+}

@@ -1,0 +1,23 @@
+{
+  la_currency:"币&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;种",
+  la_ledgerLabel:"<font color='red'>*</font>账&nbsp;&nbsp;&nbsp;&nbsp;簿",
+  la_startPeriod:"<font color='red'>*</font>会&nbsp;计&nbsp;期",
+  la_isSign:"是否签字",
+  la_all:"全部",
+  la_y:"否",
+  la_x:"是",
+  la_container:"含未记账",
+  la_account:"科目范围",
+  la_ledgerFormat:"账簿格式",
+  la_cashWay:"金额式",
+  la_foreign:"外币金额式",
+  la_amount:"数量金额式",
+  la_queryBtn:"查询",
+  la_resetBtn:"重置",
+  la_selectLedger:"请先选择账簿！",
+  la_selectPeriod:"请选择起止会计期间",
+  la_labelWidth:90,
+  la_project:"项目范围",
+  la_accountGroup:"科目分组",
+  la_summaryLevel:"汇总层级"
+}

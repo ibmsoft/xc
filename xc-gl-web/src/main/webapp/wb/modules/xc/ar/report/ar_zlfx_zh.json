@@ -1,0 +1,12 @@
+{
+  LEDGER			: "账簿",
+  CUSTOMER_NAME		: "客户",
+  PERIOD 			: "会计期",
+  TO 			    : "至",
+  AR_CONTRACT_NAME  : "合同",
+  OBJECT_ANALYSIS	: "分析对象",
+  PROPORTION_IS_SHOW: "显示比例",
+  ACC_NAME		    : "科目",
+  queryBtn			: "查询",
+  clearBtn			: "重置"
+}

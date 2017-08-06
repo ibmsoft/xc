@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"itemId":"module"},"children":[{"configs":{"tableName":"XC_AP_PAY_L","itemId":"updater1","mode":"delete"},"children":[],"type":"updater","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

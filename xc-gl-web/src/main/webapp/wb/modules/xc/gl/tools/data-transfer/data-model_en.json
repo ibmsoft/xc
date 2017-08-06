@@ -1,0 +1,38 @@
+{
+  setTitle : "Query Condition",
+  ledgerLabel : "Ledger",
+  rownum : "NO",
+  modelCode:"Template Code",
+  modelName:"Template Name",
+  templateName:"Tempalte Name",
+  modelSummary:"Template Description",
+  modelTitle:"Template Information",
+  modelColumn:"Template Columns",
+  belongApp:"Belongs Application",
+  creationDate:"Creation Date",
+  creator:"Creator",
+  lastUpdateDate:"Date Last Updated",
+  lastUpdatedBy:"Last Modifier",
+  
+  addBtn  	: "Add",
+  editBtn   : "Edit",
+  delBtn    : "Delete",
+  queryBtn:"Query",
+  resetBtn:"Reset",
+  saveBtn:"Save",
+  cancelBtn:"Cancel",
+  downloadBtn:"Download Template",
+  addColumn :"Add Column",
+  deleteColumn:"Delete Column",  
+  closeBtn:"Close",
+  acceptBtn:"Confirm",
+  
+  applicationName:"<font color='red'>*</font>Application Name",
+  necessaryTemplate:"<font color='red'>*</font>Tempalte Name",
+  columnCode:"Column Code",
+  columnName:"Column Name",
+  columnType:"Data Type",
+  columnAlias:"<font color='red'>*</font>Column Alias",
+  columnOrder:"<font color='red'>*</font>Column Order"
+
+}

@@ -1,0 +1,14 @@
+{
+	ledger:'账簿',
+  	periodAccount:'会计期',
+  	showDetail:'显示明细' ,
+  	yes:'是',
+  	no:'否',
+  	accountStart:'科目范围',
+  	isAccount:'含未记账',
+  	select:'查询',
+  	reset:'重置',
+  	segCode:'辅助段编码',
+  	segName:'辅助段名称',
+    la_labelWidth:90
+}

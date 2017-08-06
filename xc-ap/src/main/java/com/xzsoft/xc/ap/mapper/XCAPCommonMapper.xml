@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ap.mapper.XCAPCommonMapper">
+	<!-- 获取单据的编码规则 -->
+	<select id="getApCode" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			RULE_CODE
+		FROM
+			xc_ap_ld_doc_cat
+		WHERE
+			LEDGER_ID = #{ledgerId}
+		AND AP_DOC_CAT_CODE = #{apDocCatCode}
+	</select>
+	<!-- 应付单主表列 -->
+	<sql id="apInvGlHColumn">
+		AP_INV_GL_H_ID,
+		AP_INV_GL_H_CODE,
+		AP_DOC_CAT_CODE,
+		LEDGER_ID,
+		L_AP_INV_GL_H_ID,
+		AP_INV_H_ID,
+		GL_DATE,
+		VENDOR_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AP_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		PAID_AMT,
+		NO_PAY_AMT,
+		OCCUPY_AMT,
+		ADJ_AMT,
+		REQ_AMT,
+		NO_REQ_AMT,
+		AP_ACC_ID_DEBT,
+		AP_ACC_ID_TAX,
+		AP_CCID_DEBT,
+		AP_CCID_TAX,
+		INIT,
+		SOURCE,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 核销单主表列 -->
+	<sql id="apCancelHColumn">
+		AP_CANCEL_H_ID,
+		AP_CANCEL_H_CODE,
+		LEDGER_ID,
+		AP_CANCEL_TYPE,
+		GL_DATE,
+		SRC_ID,
+		SRC_AMT,
+		DESCRIPTION,
+		V_HEAD_ID,
+		V_STATUS,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 付款单主表列 -->
+	<sql id="apPayHColumn">
+		AP_PAY_H_ID,
+		AP_PAY_H_CODE,
+		AP_DOC_CAT_CODE,
+		LEDGER_ID,
+		GL_DATE,
+		VENDOR_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AP_CONTRACT_ID,
+		AMOUNT,
+		SOURCE,
+		PAY_TYPE,
+		DEPOSIT_BANK_ID,
+		PAY_ACC_ID,
+		PAY_CCID,
+		CA_ID,
+		ACCOUNT_NAME,
+		DEPOSIT_BANK_NAME,
+		BANK_ACCOUNT,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		SIGN_USER_ID,
+		SIGN_STATUS,
+		SIGN_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 余额调整单列 -->
+	<sql id="apInvGlAdjColumn">
+		GL_ADJ_ID,
+		GL_ADJ_CODE,
+		LEDGER_ID,
+		VENDOR_ID,
+		AP_INV_GL_H_ID,
+		GL_DATE,
+		TO_CCID,
+		DR_OR_CR,
+		ADJ_AMT,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 付款申请单主表列 -->
+	<sql id="apPayReqHColumn">
+		AP_PAY_REQ_H_ID,
+		AP_PAY_REQ_H_CODE,
+		AP_DOC_CAT_CODE,
+		LEDGER_ID,
+		BIZ_DATE,
+		VENDOR_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AP_CONTRACT_ID,
+		AMOUNT,
+		PAID_AMT,
+		NO_PAY_AMT,
+		OCCUPY_AMT,
+		PAY_TYPE,
+		ACCOUNT_NAME,
+		DEPOSIT_BANK_NAME,
+		BANK_ACCOUNT,
+		IS_CLOSE,
+		DESCRIPTION,
+		SYS_AUDIT_STATUS,
+		SYS_AUDIT_STATUS_DESC,
+		INS_CODE,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		AUDIT_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 采购发票主表列 -->
+	<sql id="apInvHColumn">
+		AP_INV_H_ID,
+		AP_INV_H_CODE,
+		AP_DOC_CAT_CODE,
+		L_AP_INV_H_ID,
+		LEDGER_ID,
+		BIZ_DATE,
+		VENDOR_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AP_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		INV_NO,
+		INS_CODE,
+		DESCRIPTION,
+		SYS_AUDIT_STATUS,
+		SYS_AUDIT_STATUS_DESC,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		SIGN_STATUS,
+		FIN_USER_ID,
+		FIN_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 应付单行表列 -->
+	<sql id="apInvGlLColumn">
+		AP_INV_GL_L_ID,
+		AP_INV_GL_H_ID,
+		L_AP_INV_GL_L_ID,
+		L_AP_INV_GL_H_ID,
+		AP_PUR_TYPE_ID,
+		ACC_ID,
+		CCID,
+		BG_ITEM_ID,
+		AMOUNT,
+		QTY,
+		DIM_CODE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 核销单行表列 -->
+	<sql id="apCancelLColumn">
+		AP_CANCEL_L_ID,
+		AP_CANCEL_H_ID,
+		AP_CANCEL_TYPE,
+		TARGET_ID,
+		TARGET_AMT,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 付款单行表列 -->
+	<sql id="apPayLColumn">
+		AP_PAY_L_ID,
+		AP_PAY_H_ID,
+		AP_PAY_REQ_H_ID,
+		AP_INV_GL_H_ID,
+		AP_PUR_TYPE_ID,
+		BG_ITEM_ID,
+		AMOUNT,
+		ACC_ID,
+		CCID,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 付款申请单行表列 -->
+	<sql id="apPayReqLColumn">
+		AP_PAY_REQ_L_ID,
+		AP_PAY_REQ_H_ID,
+		AP_INV_GL_H_ID,
+		AP_CONTRACT_ID,
+		AP_PUR_TYPE_ID,
+		BG_ITEM_ID,
+		AMOUNT,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 采购发票行表列 -->
+	<sql id="apInvLColumn">
+		AP_INV_L_ID,
+		AP_INV_H_ID,
+		L_AP_INV_H_ID,
+		L_AP_INV_L_ID,
+		AP_PUR_TYPE_ID,
+		BG_ITEM_ID,
+		ORDER_H_ID,
+		ORDER_L_ID,
+		MATERIAL_ID,
+		AMOUNT,
+		QTY,
+		DIM_CODE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 查询应付单主表信息 -->
+	<select id="getApInvGlH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apInvGlHColumn"/>
+		FROM
+			xc_ap_inv_gl_h
+		where AP_INV_GL_H_ID = #{AP_INV_GL_H_ID}
+	</select>
+	
+	<!-- 查询应付单主表信息（根据采购发票ID） -->
+	<select id="getApInvGlHByInvId" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apInvGlHColumn"/>
+		FROM
+			xc_ap_inv_gl_h
+		where AP_INV_H_ID = #{AP_INV_H_ID}
+		AND AP_INV_H_ID != ''
+	</select>
+	
+	<!-- 查询核销单主表信息 -->
+	<select id="getApCancelH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apCancelHColumn"/>
+		FROM
+			xc_ap_cancel_h
+		WHERE
+			AP_CANCEL_H_ID = #{AP_CANCEL_H_ID}
+	</select>
+	
+	<!-- 查询付款单主表信息 -->
+	<select id="getApPayH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apPayHColumn"/>
+		FROM
+			xc_ap_pay_h
+		WHERE
+			AP_PAY_H_ID = #{AP_PAY_H_ID}
+	</select>
+	
+	<!-- 查询余额调整单信息 -->
+	<select id="getApInvAdj" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apInvGlAdjColumn"/>
+		FROM
+			xc_ap_inv_gl_adj
+		WHERE
+			GL_ADJ_ID = #{GL_ADJ_ID}
+	</select>
+	
+	<!-- 查询付款申请单主表信息 -->
+	<select id="getApPayReqH" parameterType="java.lang.String" resultType="com.xzsoft.xc.ap.modal.ApPayReqHBean">
+		SELECT
+			<include refid="apPayReqHColumn"/>
+		FROM
+			xc_ap_pay_req_h
+		WHERE
+			AP_PAY_REQ_H_ID = #{AP_PAY_REQ_H_ID}
+	</select>
+	
+	<!-- 查询采购发票主表信息 -->
+	<select id="getApInvoiceH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apInvHColumn"/>
+		FROM
+			xc_ap_invoice_h
+		WHERE
+			AP_INV_H_ID = #{AP_INV_H_ID}
+	</select>
+	
+	<!-- 查询应付单行表信息 -->
+	<select id="getApInvGlL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apInvGlLColumn"/>
+		FROM
+			xc_ap_inv_gl_l
+		WHERE
+			AP_INV_GL_H_ID = #{AP_INV_GL_H_ID}
+	</select>
+	
+	<!-- 查询核销单行表信息 -->
+	<select id="getApCancelL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apCancelLColumn"/>
+		FROM
+			xc_ap_cancel_l
+		WHERE
+			AP_CANCEL_H_ID = #{AP_CANCEL_H_ID}
+	</select>
+	
+	<!-- 查询核销单行表信息 -->
+	<select id="getApCancelLAndGlL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apCancelLColumn"/>
+		FROM
+			xc_ap_inv_gl_l
+		WHERE
+			AP_INV_GL_H_ID in (SELECT TARGET_ID FROM xc_ap_cancel_l WHERE AP_CANCEL_H_ID = #{AP_CANCEL_H_ID} )
+	</select>
+	
+	<!-- 查询付款单行表信息 -->
+	<select id="getApPayL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apPayLColumn"/>
+		FROM
+			xc_ap_pay_l
+		WHERE
+			AP_PAY_H_ID = #{AP_PAY_H_ID}
+	</select>
+	
+	<!-- 查询付款申请单行表信息 -->
+	<select id="getApPayReqL" parameterType="java.lang.String" resultType="com.xzsoft.xc.ap.modal.ApPayReqLBean">
+		SELECT
+			<include refid="apPayReqLColumn"/>
+		FROM
+			xc_ap_pay_req_l
+		WHERE
+			AP_PAY_REQ_H_ID = #{AP_PAY_REQ_H_ID}
+	</select>
+	
+	<!-- 查询采购发票行表信息(根据采购发票主表ID) -->
+	<select id="getApInvoiceL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apInvLColumn"/>
+		FROM
+			xc_ap_invoice_l
+		WHERE
+			AP_INV_H_ID = #{AP_INV_H_ID}
+	</select>
+	
+	<!-- 查询采购发票行表信息(根据采购发票行表ID) -->
+	<select id="getApInvoiceLById" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apInvLColumn"/>
+		FROM
+			xc_ap_invoice_l
+		WHERE
+			AP_INV_L_ID = #{AP_INV_L_ID}
+	</select>
+	<!-- 删除单据 -->
+	<delete id="deleteApDoc" parameterType="com.xzsoft.xc.ap.modal.ApVoucherHandlerBean">
+		DELETE
+		FROM
+			${tableName}
+		WHERE
+			${priKey} = #{apId}
+	</delete>
+	
+	<!-- 通过科目组合ID得到科目信息 -->
+	<select id="getAccId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			ACC_ID
+		FROM
+			xc_gl_ccid
+		WHERE
+			CCID = #{ccId}
+	</select>
+	
+	<!-- 红字发票需要判断应付单的未付金额是否还够冲销当前红色发票（通过应收单蓝字ID） -->
+	<select id="judgmentInvAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			AP_INV_GL_H_CODE
+		FROM
+			xc_ap_inv_gl_h
+		WHERE
+			AP_INV_GL_H_ID = #{lApInvHId}
+		AND (NO_PAY_AMT + #{invAmount}) &lt; 0
+	</select>
+	
+	<!-- 红字发票需要判断应收单的未付金额是否还够冲销当前红色发票（通过发票蓝字ID） -->
+	<select id="judgmentInvoiceAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			AP_INV_GL_H_CODE
+		FROM
+			xc_ap_inv_gl_h
+		WHERE
+			AP_INV_H_ID = #{lApInvHId}
+		AND (NO_PAY_AMT + #{invAmount}) &lt; 0
+	</select>
+	
+	<!-- 按预算项目统计单据明细信息  -->
+	<select id="getApDocLByBgItemId" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<choose>
+					<!-- 采购发票明细 -->
+					<when test="apDocCat == 'CGFP'.toString()">
+						SELECT
+							IF(IFNULL(t.BG_ITEM_ID,'') = '','A',t.BG_ITEM_ID) BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_invoice_l t
+						WHERE
+							t.AP_INV_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+					<!-- 应付单明细 -->
+					<when test="apDocCat == 'YFD'.toString()">
+						SELECT
+							IF(IFNULL(t.BG_ITEM_ID,'') = '','A',t.BG_ITEM_ID) BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_inv_gl_l t
+						WHERE
+							t.AP_INV_GL_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+					<!-- 付款单明细 -->
+					<when test="apDocCat == 'FKD'.toString()">
+						SELECT
+							IF(IFNULL(t.BG_ITEM_ID,'') = '','A',t.BG_ITEM_ID) BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_pay_l t
+						WHERE
+							t.AP_PAY_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+				</choose>
+			</when>
+			<when test="dbType == 'oracle'">
+				<choose>
+					<!-- 采购发票明细 -->
+					<when test="apDocCat == 'CGFP'.toString()">
+						SELECT
+							NVL(t.BG_ITEM_ID,'A') BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_invoice_l t
+						WHERE
+							t.AP_INV_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+					<!-- 应付单明细 -->
+					<when test="apDocCat == 'YFD'.toString()">
+						SELECT
+							NVL(t.BG_ITEM_ID,'A') BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_inv_gl_l t
+						WHERE
+							t.AP_INV_GL_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+					<!-- 付款单明细 -->
+					<when test="apDocCat == 'FKD'.toString()">
+						SELECT
+							NVL(t.BG_ITEM_ID,'A') BG_ITEM_ID,
+							sum(t.AMOUNT) AMOUNT
+						FROM
+							xc_ap_pay_l t
+						WHERE
+							t.AP_PAY_H_ID = #{apDocId}
+						GROUP BY
+							t.BG_ITEM_ID
+					</when>
+				</choose>
+			</when>
+		</choose>
+	</select>
+	<!-- 采购发票选择采购订单保存时回写采购订单对应的已已开票金额等信息 -->
+	<update id="updatePoOrderLAmtInfo" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_po_order_l SET
+						INVOICE_AMOUNT	= IFNULL(INVOICE_AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						ORDER_L_ID		= #{item.priKey}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_po_order_l SET
+						INVOICE_AMOUNT	= NVL(INVOICE_AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						ORDER_L_ID		= #{item.priKey}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+</mapper>

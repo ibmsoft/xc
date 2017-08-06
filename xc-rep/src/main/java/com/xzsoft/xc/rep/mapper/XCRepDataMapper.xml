@@ -1,0 +1,353 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.XCRepDataMapper">
+
+	<!-- 报表查询列信息 -->
+	<sql id="sheetItemMap">
+		SHEET_ID,
+		TAB_ID,
+		LEDGER_ID,
+		ORG_ID,
+		PERIOD_CODE,
+		CNY_CODE,
+		SHEET_DESC,
+		APP_STATUS,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		AUDIT_DATE,
+		INSTANCE_CODE,
+		CREATED_BY,
+		CREATION_DATE,
+		LAST_UPDATED_BY,
+		LAST_UPDATE_DATE
+	</sql>
+	
+	<!-- 报表基础信息表 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.RepSheetBean" id="repSheetBeanMap">
+		<id property="sheetId" column="SHEET_ID" />
+		<result property="tabId" column="TAB_ID" />
+		<result property="tabName" column="TAB_NAME" />
+		<result property="ledgerId" column="LEDGER_ID" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="periodCode" column="PERIOD_CODE" />
+		<result property="cnyCode" column="CNY_CODE" />
+		<result property="sheetDesc" column="SHEET_DESC" />
+		<result property="appStatus" column="APP_STATUS" />
+		<result property="instanceCode" column="INSTANCE_CODE" />
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="auditStatusDesc" column="AUDIT_STATUS_DESC" />
+		<result property="auditDate" column="AUDIT_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+	</resultMap>
+	
+	<!-- 报表指标数据信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.CellValueBean" id="cellValueBeanMap">
+		<id property="valId" column="VAL_ID" />
+		<result property="ledgerId" column="LEDGER_ID" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="rowItemId" column="ROWITEM_ID" />
+		<result property="colItemId" column="COLITEM_ID" />
+		<result property="periodCode" column="PERIOD_CODE" />
+		<result property="cnyCode" column="CNY_CODE" />
+		<result property="rowItemCode" column="ROWITEM_CODE" />
+		<result property="colItemCode" column="COLITEM_CODE" />
+		<result property="cellV" column="CELLV" />
+		<result property="cellTextV" column="CELLTEXTV" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+	</resultMap>
+	
+
+
+	<!-- 修改单张报表状态信息 -->
+	<update id="updRepStatus" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean">
+		update xc_rep_sheets t
+		   set t.APP_STATUS     = #{appStatus,jdbcType=VARCHAR}, 
+		   	   t.LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}, 
+		   	   t.LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP}
+		 where t.APP_STATUS = #{oldAppStatus}
+	       and t.LEDGER_ID = #{ledgerId}
+	       and t.PERIOD_CODE = #{periodCode}
+	       and EXISTS (select 1 from xc_rep_tab tab  where t.TAB_ID = tab.TAB_ID
+		                  and tab.ACC_HRCY_ID = #{accHrcyId}  
+		                  and tab.TAB_ORDER = ${tabOrder}
+		              )	
+	</update>
+	
+	<!-- 批量修改报表状态 -->
+	<update id="batchUpdRepStatus" parameterType="java.util.HashMap">
+		update xc_rep_sheets t
+		   set t.APP_STATUS = #{appStatus,jdbcType=VARCHAR}, 
+		   	   t.LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}, 
+		   	   t.LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP}
+		 where t.APP_STATUS = #{oldAppStatus}
+		   and t.SHEET_ID in 
+		   <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		   	#{item}
+		   </foreach>
+	</update>	
+	
+	<!-- 查询报表状态信息 -->
+	<select id="getSheetBaseInfo" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean" resultType="java.util.HashMap">
+		select sht.SHEET_ID,
+		       tab.TAB_ID,
+		       tab.TAB_CODE,
+		       tab.TAB_NAME,
+		       tab.TAB_ORDER,
+		       sht.LEDGER_ID,
+		       sht.ORG_ID,
+		       sht.PERIOD_CODE,
+		       sht.CNY_CODE,
+		       sht.APP_STATUS,
+		       sht.AUDIT_STATUS
+		  from xc_rep_sheets sht, xc_rep_tab tab
+		 where sht.TAB_ID = tab.TAB_ID
+		   and sht.LEDGER_ID = #{ledgerId}
+		   and sht.PERIOD_CODE = #{periodCode}
+		   and tab.ACC_HRCY_ID = #{accHrcyId}
+		   and tab.TAB_ORDER = #{tabOrder}
+	</select>
+	
+	<!-- 查询单张报表信息  -->
+	<select id="getRepSheetByTabId" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean" resultMap="repSheetBeanMap">
+	  SELECT <include refid="sheetItemMap"/>
+		FROM xc_rep_sheets T
+		WHERE T.LEDGER_ID = #{ledgerId}
+		  AND T.PERIOD_CODE = #{periodCode}
+		  AND T.TAB_ID = #{tabId}	
+	</select>
+	
+	<!-- 按模板序号查询单张报表基础信息  -->
+	<select id="getRepSheetByTabOrder" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean" resultMap="repSheetBeanMap">
+		select  sht.SHEET_ID,
+				sht.TAB_ID,
+				tab.TAB_NAME,
+				sht.LEDGER_ID,
+				sht.ORG_ID,
+				sht.PERIOD_CODE,
+				sht.CNY_CODE,
+				sht.SHEET_DESC,
+				sht.APP_STATUS,
+				sht.AUDIT_STATUS,
+				sht.AUDIT_STATUS_DESC,
+				sht.AUDIT_DATE,
+				sht.INSTANCE_CODE,
+				sht.CREATED_BY,
+				sht.CREATION_DATE,
+				sht.LAST_UPDATED_BY,
+				sht.LAST_UPDATE_DATE
+			from xc_rep_sheets sht , xc_rep_tab tab
+		  where sht.TAB_ID = tab.TAB_ID
+		    and tab.ACC_HRCY_ID = #{accHrcyId}
+		    and tab.TAB_ORDER = #{tabOrder}
+		    and sht.LEDGER_ID = #{ledgerId}
+		    and sht.PERIOD_CODE = #{periodCode}
+	</select>
+	
+	<!--  根据报表ID查询报表基础信息  -->
+	<select id="getSheetsByIds" parameterType="java.util.List" resultMap="repSheetBeanMap">
+		select <include refid="sheetItemMap" />
+		  from xc_rep_sheets t
+		 where t.SHEET_ID in
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 按报表查询固定行指标值信息 -->
+	<select id="getFixedCellValuesByTab" parameterType="java.util.HashMap" resultMap="cellValueBeanMap">
+		select t.VAL_ID,
+		       t.LEDGER_ID,
+		       t.ORG_ID,
+		       t.PERIOD_CODE,
+		       t.CNY_CODE,
+		       t.ROWITEM_ID,
+		       t.COLITEM_ID,
+		       t.CELLV,
+		       t.CELLTEXTV
+		  from xc_rep_cellvalues t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.PERIOD_CODE = #{periodCode}
+		   and exists (select 1
+		          from xc_rep_rm_ref rr
+		         where t.ROWITEM_ID = rr.ROWITEM_ID
+		           and rr.TAB_ID = #{tabId}
+		           and rr.ENABLED = 'Y')
+		   and exists (select 1
+		          from xc_rep_cm_ref cr
+		         where t.COLITEM_ID = cr.COLITEM_ID
+		           and cr.TAB_ID = #{tabId}
+		           and cr.ENABLED = 'Y')
+	</select>
+	
+	<!-- 创建报表基础信息 -->
+	<insert id="insertSheet" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean">
+		INSERT INTO xc_rep_sheets (
+			sheet_id,
+			tab_id,
+			ledger_id,
+			org_id,
+			period_code,
+			cny_code,
+			sheet_desc,
+			app_status,
+			audit_status,
+			audit_status_desc,
+			audit_date,
+			instance_code,
+			creation_date,
+			created_by,
+			last_update_date,
+			last_updated_by
+		)VALUES(
+			#{sheetId, jdbcType=VARCHAR},
+			#{tabId, jdbcType=VARCHAR},
+			#{ledgerId, jdbcType=VARCHAR},
+			#{orgId, jdbcType=VARCHAR},
+			#{periodCode, jdbcType=VARCHAR},
+			#{cnyCode, jdbcType=VARCHAR},
+			#{sheetDesc, jdbcType=VARCHAR},
+			#{appStatus, jdbcType=VARCHAR},
+			#{auditStatus, jdbcType=VARCHAR},
+			#{auditStatusDesc, jdbcType=VARCHAR},
+			#{auditDate, jdbcType=TIMESTAMP},
+			#{instanceCode, jdbcType=VARCHAR},
+			#{creationDate, jdbcType=TIMESTAMP},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastUpdateDate, jdbcType=TIMESTAMP},
+			#{lastUpdatedBy, jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<!-- 更新报表基础信息 -->
+	<update id="updateSheet" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean">
+		update xc_rep_sheets t 
+			<set>
+				<if test="sheetDesc != null"> 
+					t.sheet_desc = #{sheetDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="appStatus != null"> 
+					t.app_status = #{appStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="instanceCode != null"> 
+					t.instance_code = #{instanceCode, jdbcType=VARCHAR} ,
+				</if>
+				<if test="auditStatus != null"> 
+					t.audit_status = #{auditStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="auditStatusDesc != null"> 
+					t.audit_status_desc = #{auditStatusDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="auditDate != null"> 
+					t.audit_date = #{auditDate, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="lastUpdatedBy != null"> 
+					t.last_updated_by = #{lastUpdatedBy, jdbcType=VARCHAR} ,
+				</if>
+				<if test="lastUpdateDate != null"> 
+					t.last_update_date = #{lastUpdateDate, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+		where t.SHEET_ID = #{sheetId}
+	</update>
+	
+	<!-- 删除报表指标数据信息 -->
+	<delete id="deleteCellValues" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean">
+		delete from xc_rep_cellvalues 
+		where LEDGER_ID = #{ledgerId}
+		  and PERIOD_CODE = #{periodCode}
+		  and exists (select 1
+		          from xc_rep_rm_ref rr
+		         where xc_rep_cellvalues.ROWITEM_ID = rr.ROWITEM_ID
+		           and rr.TAB_ID = #{tabId}
+		           )
+		  and exists (select 1
+		          from xc_rep_cm_ref cr
+		         where xc_rep_cellvalues.COLITEM_ID = cr.COLITEM_ID
+		           and cr.TAB_ID = #{tabId}
+		           )
+	</delete>
+	
+	<!-- 新增指标数据 -->
+	<insert id="insertCellValue" parameterType="com.xzsoft.xc.rep.modal.CellValueBean">
+		INSERT INTO xc_rep_cellvalues (
+			val_id,
+			ledger_id,
+			org_id,
+			period_code,
+			cny_code,
+			rowitem_id,
+			colitem_id,
+			cellv,
+			celltextv,
+			creation_date,
+			created_by,
+			last_updated_by,
+			last_update_date
+		)VALUES(
+			#{valId,jdbcType=VARCHAR},
+			#{ledgerId,jdbcType=VARCHAR},
+			#{orgId,jdbcType=VARCHAR},
+			#{periodCode,jdbcType=VARCHAR},
+			#{cnyCode,jdbcType=VARCHAR},
+			#{rowItemId,jdbcType=VARCHAR},
+			#{colItemId,jdbcType=VARCHAR},
+			#{cellV,jdbcType=DOUBLE},
+			#{cellTextV,jdbcType=VARCHAR},
+			#{creationDate,jdbcType=TIMESTAMP},
+			#{createdBy,jdbcType=VARCHAR},
+			#{lastUpdatedBy,jdbcType=VARCHAR},
+			#{lastUpdateDate,jdbcType=TIMESTAMP}
+		)	
+	</insert>
+	
+	<!-- 更新指标数据 -->
+	<update id="updateCellValue" parameterType="com.xzsoft.xc.rep.modal.CellValueBean">
+		update xc_rep_cellvalues t 	
+			<set>
+				<if test="cellV != null">
+					t.cellv = #{cellV,jdbcType=DOUBLE},
+				</if>
+				<if test="cellTextV != null">
+					t.celltextv = #{cellTextV,jdbcType=VARCHAR},
+				</if>
+				<if test="lastUpdatedBy != null">
+					t.last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+				</if>
+				<if test="lastUpdateDate != null">
+					t.last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+				</if>
+			</set> 
+		where t.VAL_ID = #{valId}	
+	</update>
+	
+	<!-- 删除单个指标值  -->
+	<delete id="deleteCellValue" parameterType="com.xzsoft.xc.rep.modal.CellValueBean">
+		delete from xc_rep_cellvalues where val_id = #{valId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 获取单个指标值信息 -->
+	<select id="getCellValueBean" parameterType="com.xzsoft.xc.rep.modal.CellValueBean" resultMap="cellValueBeanMap">
+		select t.VAL_ID,
+		       t.LEDGER_ID,
+		       t.ORG_ID,
+		       t.PERIOD_CODE,
+		       t.CNY_CODE,
+		       t.ROWITEM_ID,
+		       t.COLITEM_ID,
+		       t.CELLV,
+		       t.CELLTEXTV
+		  from xc_rep_cellvalues t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.PERIOD_CODE = #{periodCode}
+		   and t.ORG_ID = #{orgId}
+		   and t.CNY_CODE = #{cnyCode}
+		   and t.ROWITEM_ID = #{rowItemId}
+		   and t.COLITEM_ID = #{colItemId}
+	</select>
+	
+</mapper>

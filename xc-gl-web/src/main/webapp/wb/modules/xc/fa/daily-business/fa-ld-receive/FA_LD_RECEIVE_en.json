@@ -1,0 +1,26 @@
+{
+  /* queryPanel */
+     queryLedger:'Ledger',
+     queryPeriods:'Accounting Period',
+     queryFaName:'Asset Name',
+     queryBtn:'Query',
+     resetBtn:'Reset',
+     selectLedgerMsgTips:'Please select ledger first',
+  
+  /* grid */
+    /* tbar */
+      receiveBtn:'Receive Asset',
+      delBtn:'Delete',
+    /* columns */
+      faNameCol:'Asset Name',
+      periodsCol:'Accounting period',
+      vendorNameCol:'Vendor',
+      cgfpCol:'Purchase Invoice',
+      slCol:'Quantity',
+      dwCol:'Unit',
+      wsjeCol:'No tax amount',
+      ywrqCol:'Business Date',
+      zckmCol:'Assert Account',
+      cbzxCol:'Cost Center'
+  
+}

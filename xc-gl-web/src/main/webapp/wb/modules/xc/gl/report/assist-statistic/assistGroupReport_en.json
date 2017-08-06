@@ -1,0 +1,14 @@
+{
+	ledger:'Ledger',
+  	periodAccount:'Period',
+  	showDetail:'Show Detail' ,
+  	yes:'Y',
+  	no:'N',
+  	accountStart:'Account',
+  	isAccount:'Include account',
+  	select:'query',
+  	reset:'reset',
+  	segCode:'Auxiliary code',
+  	segName:'Auxiliary name',
+    la_labelWidth:100
+}

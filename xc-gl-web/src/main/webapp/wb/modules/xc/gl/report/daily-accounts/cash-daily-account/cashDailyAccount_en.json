@@ -1,0 +1,23 @@
+{
+  la_currency:"Currency",
+  la_ledgerLabel:"<font color='red'>*</font>Ledger",
+  la_startPeriod:"<font color='red'>*</font>Period",
+  la_isSign:"Sign",
+  la_all:"All",
+  la_y:"No",
+  la_x:"Yes",
+  la_container:"Include Accounting",
+  la_account:"Scope Of Account",
+  la_ledgerFormat:"Ledger Format",
+  la_cashWay:"Cash",
+  la_foreign:"Foreign",
+  la_amount:"Amount",
+  la_queryBtn:"Query",
+  la_resetBtn:"Reset",
+  la_selectLedger:"Choose ledger first!",
+  la_selectPeriod:"Select the start end period!",
+  la_labelWidth:120,
+  la_project:"Project",
+  la_accountGroup:"Account Group",
+  la_summaryLevel:"Collect Level"
+}

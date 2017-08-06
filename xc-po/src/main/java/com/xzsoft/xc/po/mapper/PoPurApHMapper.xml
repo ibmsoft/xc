@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoPurApHMapper">
+
+    <!-- 判断采购申主表为新增或删除 -->
+    <select id="ifExistH" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoPurApHBean">
+        select * from xc_po_pur_ap_h where PUR_AP_H_ID = #{PUR_AP_H_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 添加采购申请主表信息 -->
+    <insert id="addPurHInfo" parameterType="com.xzsoft.xc.po.modal.PoPurApHBean">
+        insert into xc_po_pur_ap_h(PUR_AP_H_ID,
+        ORG_ID,
+        LEDGER_ID,
+        PUR_AP_H_CODE,
+        PUR_AP_H_NAME,
+        PO_DOC_CAT_CODE,
+        PROJECT_ID,
+        DEPT_ID,
+        AMOUNT,
+        IS_CLOSE,
+        INS_CODE,
+        AUDIT_STATUS,
+        AUDIT_STATUS_DESC,
+        AUDIT_DATE,
+        SYS_AUDIT_STATUS,
+        SYS_AUDIT_STATUS_DESC,
+        CREATION_DATE,
+        CREATED_BY,
+        LAST_UPDATE_DATE,
+        LAST_UPDATED_BY,
+        DOCUMENT_DATE)
+        values(#{PUR_AP_H_ID,jdbcType=VARCHAR},
+            #{ORG_ID,jdbcType=VARCHAR},
+            #{LEDGER_ID,jdbcType=VARCHAR},
+            #{PUR_AP_H_CODE,jdbcType=VARCHAR},
+            #{PUR_AP_H_NAME,jdbcType=VARCHAR},
+            #{PO_DOC_CAT_CODE,jdbcType=VARCHAR},
+            #{PROJECT_ID,jdbcType=VARCHAR},
+            #{DEPT_ID,jdbcType=VARCHAR},
+            #{AMOUNT,jdbcType=NUMERIC},
+            #{IS_CLOSE,jdbcType=VARCHAR},
+            #{INS_CODE,jdbcType=VARCHAR},
+            #{AUDIT_STATUS,jdbcType=VARCHAR},
+            #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+            #{AUDIT_DATE,jdbcType=TIMESTAMP},
+            #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+            #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+            #{CREATION_DATE,jdbcType=TIMESTAMP},
+            #{CREATED_BY,jdbcType=VARCHAR},
+            #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+            #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+            #{DOCUMENT_DATE,jdbcType=TIMESTAMP})
+    </insert>
+    
+    <!-- 修改采购申请主表信息 -->
+    <update id="editPurHInfo" parameterType="com.xzsoft.xc.po.modal.PoPurApHBean">
+        update xc_po_pur_ap_h
+            set ORG_ID = #{ORG_ID,jdbcType=VARCHAR},
+                LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+                AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                PUR_AP_H_CODE = #{PUR_AP_H_CODE,jdbcType=VARCHAR},
+                PUR_AP_H_NAME = #{PUR_AP_H_NAME,jdbcType=VARCHAR},
+                PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+                DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+                DOCUMENT_DATE =   #{DOCUMENT_DATE,jdbcType=TIMESTAMP}
+            where
+                PUR_AP_H_ID = #{PUR_AP_H_ID,jdbcType=VARCHAR}
+                
+    </update>
+    
+    <!-- 删除采购申请主表信息 -->
+    <delete id="deletePurHInfo" parameterType="java.util.List">
+        delete from xc_po_pur_ap_h
+             where PUR_AP_H_ID in
+    <foreach collection="list" index="index" item="item" open="("
+        close=")" separator=",">
+        #{item,jdbcType=VARCHAR}
+    </foreach>
+    </delete>
+    
+    <!-- 添加采购申请行表信息 -->
+    <insert id="addPurLInfo" parameterType="com.xzsoft.xc.po.modal.PoPurApLBean">
+        insert into xc_po_pur_ap_l(PUR_AP_L_ID,
+            PUR_AP_H_ID,
+            MATERIAL_ID,
+            DIM_ID,
+            QTY,
+            PRICE,
+            AMOUNT,
+            REQUIRED_DATE,
+            PURCHASE_REASON,
+            ORG_ID,
+            LEDGER_ID,
+            PO_ORDER_L_ID,
+            PO_ORDER_H_ID,
+            CREATION_DATE,
+            CREATED_BY,
+            LAST_UPDATE_DATE,
+            LAST_UPDATED_BY)
+            values(#{PUR_AP_L_ID,jdbcType=VARCHAR},
+            #{PUR_AP_H_ID,jdbcType=VARCHAR},
+            #{MATERIAL_ID,jdbcType=VARCHAR},
+            #{DIM_ID,jdbcType=VARCHAR},
+            #{QTY,jdbcType=NUMERIC},
+            #{PRICE,jdbcType=NUMERIC},
+            #{AMOUNT,jdbcType=NUMERIC},
+            #{REQUIRED_DATE,jdbcType=TIMESTAMP},
+            #{PURCHASE_REASON,jdbcType=VARCHAR},
+            #{ORG_ID,jdbcType=VARCHAR},
+            #{LEDGER_ID,jdbcType=VARCHAR},
+            #{PO_ORDER_L_ID,jdbcType=VARCHAR},
+            #{PO_ORDER_H_ID,jdbcType=VARCHAR},
+            #{CREATION_DATE,jdbcType=TIMESTAMP},
+            #{CREATED_BY,jdbcType=VARCHAR},
+            #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+            #{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改采购申请单行表信息 -->
+    <update id="editPurLInfo" parameterType="com.xzsoft.xc.po.modal.PoPurApLBean">
+        update xc_po_pur_ap_l 
+            set QTY = #{QTY,jdbcType=NUMERIC},
+            	PRICE = #{PRICE,jdbcType=NUMERIC},
+                AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                REQUIRED_DATE = #{REQUIRED_DATE,jdbcType=TIMESTAMP},
+                PURCHASE_REASON = #{PURCHASE_REASON,jdbcType=VARCHAR},
+                LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+             where
+                PUR_AP_L_ID = #{PUR_AP_L_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 删除采购申请行表信息 -->
+    <delete id="deletePurLInfo" parameterType="java.util.List">
+        delete from xc_po_pur_ap_l
+            where PUR_AP_L_ID in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <!-- 删除采购申请行表信息（通过采购申请主ID） -->
+    <delete id="deletePurLInfoByHId" parameterType="java.util.List">
+        delete from xc_po_pur_ap_l
+            where PUR_AP_H_ID in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <!-- 判断采购申请行信息新增或修改 -->
+    <select id="ifExistL" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoPurApLBean">
+        select * from xc_po_pur_ap_l where PUR_AP_L_ID = #{PUR_AP_L_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 关闭或打开采购申请单 -->
+    <update id="editPurIsClose" parameterType="java.util.HashMap">
+        <choose>
+            <when test=" dbType == 'mysql' ">
+                <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+                    update xc_po_pur_ap_h set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                                           where PUR_AP_H_ID = #{item.PUR_AP_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+            <when test=" dbType == 'oracle' ">
+                <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+                    update xc_po_pur_ap_h set IS_CLOSE = #{item.IS_CLOSE,jdbcType=VARCHAR}
+                                           where PUR_AP_H_ID = #{item.PUR_AP_H_ID,jdbcType=VARCHAR}
+                </foreach>
+            </when>
+        </choose>
+    </update>
+</mapper>

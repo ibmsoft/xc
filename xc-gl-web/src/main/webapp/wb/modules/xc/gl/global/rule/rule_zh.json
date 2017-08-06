@@ -1,0 +1,20 @@
+{
+  moduleTitle:"规则管理",
+  editBtn:"规则修改",
+  saveBtn:"保存",
+  rownum:"序号",
+  la_ruleCode:"规则分类码",
+  la_ruleDescription:"规则说明",
+  la_finance:"流水依据",
+  la_financeLength:"流水号位数",
+  la_ruleTypeCode:"规则分类码",
+  la_prefixItem:"前缀项",
+  la_separator:"分隔符",
+  la_orderDepency:"<font color='red'>*</font> 排序依据",
+  la_digit:"<font color='red'>*</font> 位数",
+  la_tip:"请输入正整数",
+  la_fixedPrefix:"固定前缀",
+  la_example:"示　　例",
+  la_seeExample:"查看示例",
+  la_labelWidth:100
+}

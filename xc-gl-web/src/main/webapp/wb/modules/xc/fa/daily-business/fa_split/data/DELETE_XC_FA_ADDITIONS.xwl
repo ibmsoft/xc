@@ -1,0 +1,1 @@
+{"inframe":false,"title":"删除拆分资产","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"DELETE T.*\nFROM\n\txc_fa_additions T\nWHERE\n\tT.UP_ASSET_ID = {?UP_ASSET_ID?}","itemId":"query1"},"children":[],"expanded":false,"type":"query"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

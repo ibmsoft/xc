@@ -1,0 +1,6 @@
+{
+	dept:'部门',
+  	deptCode:'部门编码',
+  	deptName:'部门名称',
+  	deptCodeName:'成本中心编码/名称'
+}

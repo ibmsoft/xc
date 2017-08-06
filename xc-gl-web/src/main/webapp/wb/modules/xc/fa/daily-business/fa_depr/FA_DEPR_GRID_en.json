@@ -1,0 +1,19 @@
+{
+  ledgerCombox:'Ledger',
+  periodCombox:'Period',
+  catCombox:'Category',
+  cbzx:'Cost Center',
+  faPropertyCombox:'Asset Property',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  selectLedgerMsgTips:'Please select ledger first',
+  selectFaPropertyMsgTips:'Please select asset property first',
+  
+  zcbmCol:'Asset Code',
+  zcmcCol:'Asset Name',
+  yzCol:'Original Value',
+  zjCol:'Current Depreciation',
+  ljzjljtxCol:'Accumulated Depreciation',
+  jzzbCol:'Impairment Provision',
+  jzCol:'Net Worth'
+}

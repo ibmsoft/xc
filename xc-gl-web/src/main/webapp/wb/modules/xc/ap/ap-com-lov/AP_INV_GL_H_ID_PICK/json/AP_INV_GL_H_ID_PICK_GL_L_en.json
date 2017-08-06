@@ -1,0 +1,11 @@
+{
+    AP_INV_GL_H_CODE : "Blue Inv Gl",
+    AP_INV_GL_H_CODE1 : "Pay Doc",
+    AP_INV_H_CODE_COL : "Doc Num",
+    DESCRIPTION : "Summary",
+    AP_DOC_CAT_NAME : "Doc Type",
+    NO_PAY_AMT : "Pay Amount",
+    AP_INV_H_CODE_NAME : "Doc Num/Summary",
+    EMPTY_LEDGER_INFO : "Please select the books information!",
+    EMPTY_VENDOR_INFO : "Please select supplier information!"
+}

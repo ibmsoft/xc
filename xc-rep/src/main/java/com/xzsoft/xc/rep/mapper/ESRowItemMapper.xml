@@ -1,0 +1,195 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.ESRowItemMapper">
+	
+	<!-- 行指标信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESRowItemBean" id="rowitemResultMap">
+		<id property="rowitemId" column="ROWITEM_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="rowitemCode" column="ROWITEM_CODE" />
+		<result property="rowitemName" column="ROWITEM_NAME" />
+		<result property="rowitemDesc" column="ROWITEM_DESC" />
+		<result property="rowitemAlias" column="ROWITEM_ALIAS" />
+		<result property="upcode" column="UPCODE" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	
+	<!-- 行指标引用关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESRowItemRefBean" id="rowitemRefResultMap">
+		<id property="rmRefId" column="RM_REF_ID" />
+		<result property="tabId" column="TAB_ID" />
+		<result property="rowitemId" column="ROWITEM_ID" />
+		<result property="rowno" column="ROWNO" />
+		<result property="lanno" column="LANNO" />
+		<result property="x" column="X" />
+		<result property="y" column="Y" />
+		<result property="enabled" column="ENABLED" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	
+	<!-- 模板行指标和引用关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabBean" id="rowitemAndRefResultMap">
+		<id property="tabId" column="TAB_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="tabCode" column="TAB_CODE" />
+		<result property="tabName" column="TAB_NAME" />
+		<result property="tabOrder" column="TAB_ORDER" />
+		<result property="isActive" column="IS_ACTIVE" />
+		<result property="color" column="COLOR" />
+		<collection property="rowItems" ofType="com.xzsoft.xc.rep.modal.ESRowItemBean">
+			<id property="rowitemId" column="ROWITEM_ID" />
+			<result property="accHrcyId" column="ACC_HRCY_ID" />
+			<result property="rowitemCode" column="ROWITEM_CODE" />
+			<result property="rowitemName" column="ROWITEM_NAME" />
+			<result property="rowitemDesc" column="ROWITEM_DESC" />
+			<result property="rowitemAlias" column="ROWITEM_ALIAS" />
+			<result property="upcode" column="UPCODE" />
+		</collection>
+		<collection property="rowItemsRef" ofType="com.xzsoft.xc.rep.modal.ESRowItemRefBean">
+			<id property="rmRefId" column="RM_REF_ID" />
+			<result property="tabId" column="TAB_ID" />
+			<result property="rowitemId" column="ROWITEM_ID" />
+			<result property="rowitemCode" column="ROWITEM_CODE" />
+			<result property="rowno" column="ROWNO" />
+			<result property="lanno" column="LANNO" />
+			<result property="x" column="X" />
+			<result property="y" column="Y" />
+			<result property="enabled" column="ENABLED" />
+		</collection>
+	</resultMap>
+	
+	<!-- 根据模板ID删除模板行指标引用关系 -->
+	<delete id="delRowItemRef" parameterType="java.lang.String">
+		delete from xc_rep_rm_ref where tab_id = #{tabId}
+	</delete>
+	
+	<!-- 按模板及栏次删除行指标引用关系 -->
+	<delete id="delRowItemRefByLanno" parameterType="java.util.HashMap">
+		delete from xc_rep_rm_ref where tab_id = #{tabId} and LANNO = #{lanno}
+	</delete>
+	
+	<!-- 获取模板行指标信息 -->
+	<select id="getRowItemsByHrcyId" parameterType="java.lang.String" resultMap="rowitemResultMap">
+		SELECT
+			t.ACC_HRCY_ID,
+		  	t.ROWITEM_ID,
+			t.ROWITEM_CODE,
+			t.ROWITEM_NAME,
+			t.ROWITEM_DESC,
+			t.ROWITEM_ALIAS,
+			t.UPCODE,
+			t.CREATION_DATE,
+			t.CREATED_BY,
+			t.LAST_UPDATE_DATE,
+			t.LAST_UPDATED_BY
+		FROM
+			xc_rep_rowitems t
+		WHERE
+			t.ACC_HRCY_ID = #{accHrcyId}
+	</select>
+	
+	<!-- 按模板查询行指标和行指标引用关系 -->
+	<select id="getRowItemsAndRefByTab" parameterType="java.lang.String" resultMap="rowitemAndRefResultMap">
+		select t.TAB_ID,
+		       t.ACC_HRCY_ID,
+		       t.TAB_CODE,
+		       t.TAB_NAME,
+		       t.TAB_ORDER,
+		       t.IS_ACTIVE,
+		       t.COLOR,
+		       r.ROWITEM_ID,
+		       r.ROWITEM_CODE,
+		       r.ROWITEM_NAME,
+		       r.ROWITEM_DESC,
+		       r.ROWITEM_ALIAS,
+		       r.UPCODE,
+		       rr.RM_REF_ID,
+		       rr.ROWNO,
+		       rr.LANNO,
+		       rr.X,
+		       rr.Y,
+		       rr.ENABLED
+		  from xc_rep_rowitems r, xc_rep_rm_ref rr, xc_rep_tab t
+		 where r.ROWITEM_ID = rr.ROWITEM_ID
+		   and rr.TAB_ID = t.TAB_ID
+		   and r.ACC_HRCY_ID = t.ACC_HRCY_ID
+		   and rr.TAB_ID = #{tabId}
+		ORDER BY rr.LANNO,rr.ROWNO
+	</select>
+	
+	<!-- 查询模板行指标信息 -->
+	<select id="getTabRowitems" parameterType="java.lang.String" resultMap="rowitemResultMap">
+		SELECT RR.ROWITEM_ID,
+		       RR.ACC_HRCY_ID,
+		       RR.ROWITEM_CODE,
+		       RR.ROWITEM_NAME,
+		       RR.ROWITEM_DESC,
+		       RR.ROWITEM_ALIAS,
+		       RR.UPCODE,
+		       RR.CREATION_DATE,
+		       RR.CREATED_BY,
+		       RR.LAST_UPDATE_DATE,
+		       RR.LAST_UPDATED_BY
+		  FROM XC_REP_ROWITEMS RR, XC_REP_RM_REF RM
+		 WHERE RR.ROWITEM_ID = RM.ROWITEM_ID
+		   AND RM.TAB_ID = #{tabId}
+		 ORDER BY RM.LANNO, RM.ROWNO
+	</select>
+	
+	<!-- 查询模板行指标引用关系 -->
+	<select id="getTabRowitemsRef" parameterType="java.lang.String" resultMap="rowitemRefResultMap">
+		SELECT RM_REF_ID,
+		       TAB_ID,
+		       ROWITEM_ID,
+		       ROWNO,
+		       LANNO,
+		       X,
+		       Y,
+		       ENABLED,
+		       CREATION_DATE,
+		       CREATED_BY,
+		       LAST_UPDATE_DATE,
+		       LAST_UPDATED_BY
+		  FROM XC_REP_RM_REF T
+		 WHERE T.TAB_ID = #{tabId}
+		 ORDER BY T.LANNO, T.ROWNO
+	</select>
+
+	<!-- 批量查询模板行指标引用关系 -->
+	<select id="getRowItemsAndRefByTabs" parameterType="java.util.List" resultMap="rowitemAndRefResultMap">
+		select t.TAB_ID,
+		       t.ACC_HRCY_ID,
+		       t.TAB_CODE,
+		       t.TAB_NAME,
+		       t.TAB_ORDER,
+		       t.IS_ACTIVE,
+		       t.COLOR,
+		       r.ROWITEM_ID,
+		       r.ROWITEM_CODE,
+		       r.ROWITEM_NAME,
+		       r.ROWITEM_DESC,
+		       r.ROWITEM_ALIAS,
+		       r.UPCODE,
+		       rr.RM_REF_ID,
+		       rr.ROWNO,
+		       rr.LANNO,
+		       rr.X,
+		       rr.Y,
+		       rr.ENABLED
+		  from xc_rep_rowitems r, xc_rep_rm_ref rr, xc_rep_tab t
+		 where r.ROWITEM_ID = rr.ROWITEM_ID
+		   and rr.TAB_ID = t.TAB_ID
+		   and r.ACC_HRCY_ID = t.ACC_HRCY_ID
+		   and rr.TAB_ID in 
+			 <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			 	#{item}
+			 </foreach>
+		ORDER BY t.TAB_ID, rr.LANNO,rr.ROWNO
+	</select>	
+	
+</mapper>

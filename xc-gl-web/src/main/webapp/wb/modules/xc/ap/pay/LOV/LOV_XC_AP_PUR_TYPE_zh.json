@@ -1,0 +1,23 @@
+{
+  queryBtn				: "查询",
+  clearBtn				: "重置",
+  commitBtn				: "确认",
+  closeBtn				: "取消",
+  
+  AP_PUR_TYPE_NAME		: "采购类型",
+  
+  PUR_OBJECT_NAME_COL	: "采购对象",
+  AP_PUR_TYPE_NAME_COL	: "财务分类",
+  BG_ITEM_NAME_COL		: "预算项目",
+  AP_ACC_NAME_INV_COL	: "存货/费用科目",
+  AP_ACC_NAME_DEBT_COL	: "应付科目",
+  AP_ACC_NAME_EST_COL	: "暂估科目",
+  AP_ACC_NAME_PRE_COL	: "预付科目",
+  PAY_AMT_COL			: "支付金额",
+  
+  qxzzsytjl				: "请选择至少一条记录！",
+  qdyxzd				: "确定要选择的",
+  tjlm					: "条记录吗？",
+  zfjeydyl				: "支付金额应大于 0 ！",
+  zfjeyxyl				: "支付金额应小于 0 ！"
+}

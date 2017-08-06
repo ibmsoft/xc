@@ -1,0 +1,1 @@
+{"inframe":false,"title":"检查调整额是否超过了应付单余额","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select * from xc_ap_inv_gl_h where AP_INV_GL_H_ID={?AP_INV_GL_H_ID?}","type":"object","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

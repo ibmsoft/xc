@@ -1,0 +1,36 @@
+{
+  cbx_ledger : 'Ledger',
+  cbx_period : 'Period',
+  cbx_entity : 'Entity',
+  cbx_currency : 'Currency',
+  btnQuery : 'Query',
+  
+  btnCollect:'Collect',
+  btnSave:'Save',
+  btnLock:'Lock',
+  btnUnLock:'Unlock',
+  btnClean:'Clean',
+  btnCleanTip:'Clean The Reprot Data',
+  btnBatchHandler:'Batching',
+  btnBatchHandlerTip:'batch processing',
+  
+  repWin:'The Batch Processing',
+  txtRepName:'Code/Name',
+  rownum:'Order',
+  SHEET_ID:'Sheet ID',
+  TAB_ID:'Tab ID',
+  TAB_CODE:'Tab Code',
+  TAB_NAME:'Tab Name',
+  APP_STATUS:'Sheet Status',
+  draft_status:'Draft',
+  locked_status:'Locked',
+  not_created:'Not Created',
+  TAB_ORDER:'Sheet Order',
+  
+  btnCleanAll:'Clean',
+  btnLockAll:'Lock',
+  btnUnlockAll:'Unlock',
+  btnCancel:'Cancel',
+  
+  rep_status:'Status'
+}

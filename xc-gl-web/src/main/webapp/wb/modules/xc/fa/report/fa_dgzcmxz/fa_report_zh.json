@@ -1,0 +1,20 @@
+{
+	LEDGER_NAME : "账簿",
+	DEPT_NAME : "成本中心",
+	FA_PROPERTY : "资产属性",
+	FA_CAT : "分类",
+	PERIOD_START : "会计期",
+	PERIOD_END : "至",
+	FA_CODE_START : "资产编号",
+	queryBtn : "查询",
+	resetBtn : "重置",
+  
+	query1 : "请选择账簿！",
+	query2 : "请选择开始会计期！",
+	query3 : "请选择结束会计期！",
+	query4 : "请选择资产编号！",
+	query5 : "请选择资产属性！",
+	ZCBM : "资产编码",
+	ZCMC : "资产名称",
+    ZCBMORZCMC : "资产编码或资产名称"
+}

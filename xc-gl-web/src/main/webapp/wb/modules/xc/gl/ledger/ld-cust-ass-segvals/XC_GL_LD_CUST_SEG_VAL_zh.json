@@ -1,0 +1,16 @@
+{
+  ledgerName:'账簿名称',
+  segName1:'自定义辅助段',
+  segName1_lw:100,
+  tree1:'目录',
+  allEditBtn:'批量修改',
+  saveBtn:'保存',
+  importBtn:'导入',
+  exportBtn:'导出',
+  rownumber:'序号',
+  LD_CUST_SEGVAL_CODE_COL:'编码',
+  LD_CUST_SEGVAL_NAME_COL:'名称',
+  START_DATE:'开始日期',
+  END_DATE:'结束日期',
+  LD_CUST_SEGVAL_DESC_COL:'说明'
+}

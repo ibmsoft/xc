@@ -1,0 +1,17 @@
+{
+  moduleTitle:"凭证来源管理",
+  addBtn:"增加",
+  editBtn:"编辑",
+  delBtn:"删除",
+  saveBtn:"保存",
+  rownum:"序号",
+  la_sourceCode:"来源编码",
+  la_sourceName:"来源名称",
+  la_sourceUrl:"来源URL",
+  la_VoucherCategory:"凭证分类",
+  la_necessaryCode:"<font color='red'>*</font>来源编码",
+  la_necessaryUrl:"<font color='red'>*</font>来源URL",
+  la_description:"来源描述",
+  confirmBtn:"确认",
+  cancelBtn:"取消"
+}

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询单位","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select DIM_ID, DIM_CODE, DIM_NAME from xc_gl_dimensions","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ap.mapper.ApContractMapper">
+    <!-- 判断操作为新增还是修改 -->
+    <select id="ifExist" parameterType="java.lang.String" resultType="java.lang.String">
+    select AUDIT_STATUS from xc_ap_contract where AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 查找合同信息-->
+    <select id="getContractInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ap.modal.ApContractBean">
+    select * from xc_ap_contract where AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 判断同账簿下是否有同编码或同合同名称的合同 -->
+    <select id="checkExistAdd" parameterType="java.util.HashMap" resultType="java.lang.String">
+    select count(*) as "NUM" from xc_ap_contract where 
+    LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR}
+    and (AP_CONTRACT_CODE = #{AP_CONTRACT_CODE,jdbcType=VARCHAR} or AP_CONTRACT_NAME = #{AP_CONTRACT_NAME,jdbcType=VARCHAR})
+    and AP_CONTRACT_ID != #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 添加合同信息 -->
+    <insert id="addContractInfo" parameterType="com.xzsoft.xc.ap.modal.ApContractBean">
+    INSERT INTO xc_ap_contract (
+      AP_CONTRACT_ID,
+      AP_CONTRACT_CODE,
+      AP_CONTRACT_NAME,
+      AP_CONTRACT_TYPE,
+      LEDGER_ID,
+      START_DATE,
+      END_DATE,
+      VENDOR_ID,
+      AMOUNT,
+      DEPT_ID,
+      PROJECT_ID,
+      CONTRACT_USER,
+      IS_CLOSE,
+      DESCRIPTION,
+      CREATION_DATE,
+      CREATED_BY,
+      LAST_UPDATE_DATE,
+      LAST_UPDATED_BY,
+      CONTRACT_CLASSIFY,
+      ORG_ID,
+      TAX_AMT,
+      INV_AMOUNT,
+      VERSION,
+      INS_CODE,
+      AUDIT_STATUS,
+      AUDIT_STATUS_DESC,
+      AUDIT_DATE,
+      SYS_AUDIT_STATUS,
+      SYS_AUDIT_STATUS_DESC
+    )
+    VALUES
+      (
+        #{AP_CONTRACT_ID,jdbcType=VARCHAR},
+        #{AP_CONTRACT_CODE,jdbcType=VARCHAR},
+        #{AP_CONTRACT_NAME,jdbcType=VARCHAR},
+        #{AP_CONTRACT_TYPE,jdbcType=VARCHAR},
+        #{LEDGER_ID,jdbcType=VARCHAR},
+        #{START_DATE,jdbcType=TIMESTAMP},
+        #{END_DATE,jdbcType=TIMESTAMP},
+        #{VENDOR_ID,jdbcType=VARCHAR},
+        #{AMOUNT,jdbcType=NUMERIC},
+        #{DEPT_ID,jdbcType=VARCHAR},
+        #{PROJECT_ID,jdbcType=VARCHAR},
+        #{CONTRACT_USER,jdbcType=VARCHAR},
+        #{IS_CLOSE,jdbcType=VARCHAR},
+        #{DESCRIPTION,jdbcType=VARCHAR},
+        #{CREATION_DATE,jdbcType=TIMESTAMP},
+        #{CREATED_BY,jdbcType=VARCHAR},
+        #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+        #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+        #{CONTRACT_CLASSIFY,jdbcType=VARCHAR},
+        #{ORG_ID,jdbcType=VARCHAR},
+        #{TAX_AMT,jdbcType=NUMERIC},
+        #{INV_AMOUNT,jdbcType=NUMERIC},
+        #{VERSION,jdbcType=NUMERIC},
+        #{INS_CODE,jdbcType=VARCHAR},
+        #{AUDIT_STATUS,jdbcType=VARCHAR},
+        #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+        #{AUDIT_DATE,jdbcType=TIMESTAMP},
+        #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+        #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+      )
+    </insert>
+    <!-- 合同变更时，添加合同信息 -->
+    <insert id="addContractHis" parameterType="com.xzsoft.xc.ap.modal.ApContractHisBean">
+    INSERT INTO xc_ap_contract_his (
+      AP_CONTRACT_HIS_ID,
+      AP_CONTRACT_ID,
+      AP_CONTRACT_CODE,
+      AP_CONTRACT_NAME,
+      AP_CONTRACT_TYPE,
+      LEDGER_ID,
+      START_DATE,
+      END_DATE,
+      VENDOR_ID,
+      AMOUNT,
+      DEPT_ID,
+      PROJECT_ID,
+      CONTRACT_USER,
+      IS_CLOSE,
+      DESCRIPTION,
+      CREATION_DATE,
+      CREATED_BY,
+      LAST_UPDATE_DATE,
+      LAST_UPDATED_BY,
+      CONTRACT_CLASSIFY,
+      ORG_ID,
+      TAX_AMT,
+      INV_AMOUNT,
+      VERSION,
+      INS_CODE,
+      AUDIT_STATUS,
+      AUDIT_STATUS_DESC,
+      AUDIT_DATE,
+      SYS_AUDIT_STATUS,
+      SYS_AUDIT_STATUS_DESC
+    )
+    VALUES
+      (
+      	#{AP_CONTRACT_HIS_ID,jdbcType=VARCHAR},
+        #{AP_CONTRACT_ID,jdbcType=VARCHAR},
+        #{AP_CONTRACT_CODE,jdbcType=VARCHAR},
+        #{AP_CONTRACT_NAME,jdbcType=VARCHAR},
+        #{AP_CONTRACT_TYPE,jdbcType=VARCHAR},
+        #{LEDGER_ID,jdbcType=VARCHAR},
+        #{START_DATE,jdbcType=TIMESTAMP},
+        #{END_DATE,jdbcType=TIMESTAMP},
+        #{VENDOR_ID,jdbcType=VARCHAR},
+        #{AMOUNT,jdbcType=NUMERIC},
+        #{DEPT_ID,jdbcType=VARCHAR},
+        #{PROJECT_ID,jdbcType=VARCHAR},
+        #{CONTRACT_USER,jdbcType=VARCHAR},
+        #{IS_CLOSE,jdbcType=VARCHAR},
+        #{DESCRIPTION,jdbcType=VARCHAR},
+        #{CREATION_DATE,jdbcType=TIMESTAMP},
+        #{CREATED_BY,jdbcType=VARCHAR},
+        #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+        #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+        #{CONTRACT_CLASSIFY,jdbcType=VARCHAR},
+        #{ORG_ID,jdbcType=VARCHAR},
+        #{TAX_AMT,jdbcType=NUMERIC},
+        #{INV_AMOUNT,jdbcType=NUMERIC},
+        #{VERSION,jdbcType=VARCHAR},
+        #{INS_CODE,jdbcType=VARCHAR},
+        #{AUDIT_STATUS,jdbcType=VARCHAR},
+        #{AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+        #{AUDIT_DATE,jdbcType=TIMESTAMP},
+        #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+        #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+      )
+    </insert>
+    <!--查看合同是否存在明细（如果存在明细，则不能删除） -->
+    <select id="checkExistDel" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT COUNT(*)  AS "NUM"   FROM  (
+    SELECT 
+    a.AP_CONTRACT_ID 
+    FROM
+      XC_AP_PAY_H a 
+    WHERE a.AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    
+    UNION    
+    SELECT 
+    a.AP_CONTRACT_ID  
+    FROM
+      xc_ap_inv_gl_h a 
+    WHERE a.AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    
+    UNION
+    SELECT 
+    a.AP_CONTRACT_ID
+    FROM
+      xc_ap_invoice_h a
+    WHERE a.AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    
+    UNION 
+    SELECT
+    a.AP_CONTRACT_ID
+    FROM
+      xc_ap_pay_req_h a
+    WHERE a.AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+      ) AS t
+    </select>
+    <!-- 删除合同信息 -->
+    <delete id="delContractInfo" parameterType="java.util.List">
+    delete from xc_ap_contract  where AP_CONTRACT_ID in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    #{item}
+    </foreach>
+    </delete>
+    <!-- 修改合同信息 -->
+    <update id="editContractInfo" parameterType="com.xzsoft.xc.ap.modal.ApContractBean">
+    UPDATE 
+      xc_ap_contract 
+    SET
+      AP_CONTRACT_CODE =  #{AP_CONTRACT_CODE,jdbcType=VARCHAR},
+      AP_CONTRACT_NAME = #{AP_CONTRACT_NAME,jdbcType=VARCHAR},
+      AP_CONTRACT_TYPE =  #{AP_CONTRACT_TYPE,jdbcType=VARCHAR},
+      LEDGER_ID =  #{LEDGER_ID,jdbcType=VARCHAR},
+      VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+      AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+      DEPT_ID =  #{DEPT_ID,jdbcType=VARCHAR},
+      PROJECT_ID =   #{PROJECT_ID,jdbcType=VARCHAR},
+      CONTRACT_USER =   #{CONTRACT_USER,jdbcType=VARCHAR},
+      DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+      START_DATE =  #{START_DATE,jdbcType=TIMESTAMP},
+      END_DATE =  #{END_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+      ORG_ID = #{ORG_ID,jdbcType=VARCHAR},
+      TAX_AMT = #{TAX_AMT,jdbcType=NUMERIC},
+      INV_AMOUNT =#{INV_AMOUNT,jdbcType=NUMERIC},
+      VERSION = #{VERSION,jdbcType=NUMERIC},
+      SYS_AUDIT_STATUS = #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+      SYS_AUDIT_STATUS_DESC = #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR}
+     where AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </update>
+    <!-- 修改合同变更历史信息 -->
+    <update id="editContractHisInfo" parameterType="com.xzsoft.xc.ap.modal.ApContractHisBean">
+    UPDATE 
+      xc_ap_contract_his 
+    SET
+      AP_CONTRACT_CODE =  #{AP_CONTRACT_CODE,jdbcType=VARCHAR},
+      AP_CONTRACT_NAME = #{AP_CONTRACT_NAME,jdbcType=VARCHAR},
+      AP_CONTRACT_TYPE =  #{AP_CONTRACT_TYPE,jdbcType=VARCHAR},
+      LEDGER_ID =  #{LEDGER_ID,jdbcType=VARCHAR},
+      VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+      AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+      DEPT_ID =  #{DEPT_ID,jdbcType=VARCHAR},
+      PROJECT_ID =   #{PROJECT_ID,jdbcType=VARCHAR},
+      CONTRACT_USER =   #{CONTRACT_USER,jdbcType=VARCHAR},
+      DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+      START_DATE =  #{START_DATE,jdbcType=TIMESTAMP},
+      END_DATE =  #{END_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+      ORG_ID = #{ORG_ID,jdbcType=VARCHAR},
+      TAX_AMT = #{TAX_AMT,jdbcType=NUMERIC},
+      INV_AMOUNT =#{INV_AMOUNT,jdbcType=NUMERIC},
+      VERSION = #{VERSION,jdbcType=NUMERIC}
+     where AP_CONTRACT_HIS_ID = #{AP_CONTRACT_HIS_ID,jdbcType=VARCHAR}
+    </update>
+    <!-- 关闭合同 -->
+    <update id="closeContract" parameterType="java.util.HashMap">
+    UPDATE 
+      xc_ap_contract 
+    SET
+      IS_CLOSE='Y',
+      LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+     where AP_CONTRACT_ID in 
+     <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+    #{item}
+    </foreach>
+    </update>
+    <!-- 打开合同 -->
+    <update id="openContract" parameterType="java.util.List">
+    UPDATE 
+      xc_ap_contract 
+    SET
+      IS_CLOSE='N',
+      LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+      LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR} 
+     where AP_CONTRACT_ID in 
+     <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+    #{item}
+    </foreach>
+    </update>
+    <!-- 查询合同变更表的信息 -->
+    <select id="getContractHisInfo" parameterType="java.lang.String" resultType="com.xzsoft.xc.ap.modal.ApContractHisBean">
+    select
+    *
+    from xc_ap_contract_his 
+    where
+    AP_CONTRACT_HIS_ID = #{AP_CONTRACT_HIS_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 判断合同是否已产生变更-->
+    <select id="ifChange" parameterType="java.lang.String" resultType="java.lang.String">
+    select
+    distinct 1
+    from xc_ap_contract_his 
+    where
+    AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </select>
+    <!-- 更改合同的业务状态 -->
+    <update id="updateSysAuditStatus" parameterType="com.xzsoft.xc.ap.modal.ApContractBean">
+        update xc_ap_contract
+            set SYS_AUDIT_STATUS = #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},
+                SYS_AUDIT_STATUS_DESC = #{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},
+                LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+            where  AP_CONTRACT_ID = #{AP_CONTRACT_ID,jdbcType=VARCHAR}
+    </update>
+</mapper>

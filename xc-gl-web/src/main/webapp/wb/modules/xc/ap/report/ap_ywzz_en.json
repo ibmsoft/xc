@@ -1,0 +1,8 @@
+{
+  LEDGER		    : "Account Book",
+  VENDOR_NAME		: "Supplier",
+  PERIOD 			: "Accounting Period",
+  TO 			    : "to",
+  queryBtn			: "Search",
+  clearBtn			: "Reset",
+}

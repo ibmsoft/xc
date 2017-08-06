@@ -1,0 +1,28 @@
+{
+  okBtn : "确定",
+  cancelBtn : "取消",
+  segWinTitle : "科目选择",
+  segAccName : "科目",
+  segAccGroup : "科目组",
+  accName : "科目",
+  cnyCode : "币种",
+  dimName : "数量单位",
+  cashItems : "现金流量项目",
+  segmentGridTitle : "辅助核算",
+  SEG_NAME : "辅助段",
+  SEG_VAL_NAME : "辅助段值",
+  balanceGridTitle : "余额信息",
+  CURRENCY : "币种",
+  BALANCE : "余额",
+  T_BALANCE : "余额(含未过账)",
+  
+  VAL_CODE : "编码",
+  VAL_NAME : "名称" ,
+  
+  bgFromTitle : "预算信息" ,
+  bgItemName : "预算项目" ,
+  projects : "项目" ,
+  depts : "成本中心" 
+  
+   
+}

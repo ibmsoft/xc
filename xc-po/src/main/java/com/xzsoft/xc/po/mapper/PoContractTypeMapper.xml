@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoContractTypeMapper">
+
+	<insert id="addContractType" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					insert into xc_po_contract_type (	
+						CONTRACT_TYPE_ID,
+						CONTRACT_TYPE_CODE,
+						CONTRACT_TYPE_NAME,
+						DESCRIPTION,
+						STATUS,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)values(
+						#{CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+						#{CONTRACT_TYPE_CODE,jdbcType=VARCHAR},
+						#{CONTRACT_TYPE_NAME,jdbcType=VARCHAR},
+						#{DESCRIPTION,jdbcType=VARCHAR},
+						#{STATUS,jdbcType=VARCHAR},
+						#{CREATION_DATE,jdbcType=TIMESTAMP},
+						#{CREATED_BY,jdbcType=VARCHAR},
+						#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" index="index" item="item" open="begin" close="end" separator=";">
+					insert into xc_po_contract_type(
+						CONTRACT_TYPE_ID,
+						CONTRACT_TYPE_CODE,
+						CONTRACT_TYPE_NAME,
+						DESCRIPTION,
+						STATUS,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)values(
+						#{CONTRACT_TYPE_ID,jdbcType=VARCHAR},
+						#{CONTRACT_TYPE_CODE,jdbcType=VARCHAR},
+						#{CONTRACT_TYPE_NAME,jdbcType=VARCHAR},
+						#{DESCRIPTION,jdbcType=VARCHAR},
+						#{STATUS,jdbcType=VARCHAR},
+						#{CREATION_DATE,jdbcType=TIMESTAMP},
+						#{CREATED_BY,jdbcType=VARCHAR},
+						#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+
+	<update id="editContractType" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				update xc_po_contract_type set 
+					CONTRACT_TYPE_CODE = #{CONTRACT_TYPE_CODE,jdbcType=VARCHAR},
+					CONTRACT_TYPE_NAME = #{CONTRACT_TYPE_NAME,jdbcType=VARCHAR},
+					DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+					STATUS = #{STATUS,jdbcType=VARCHAR},
+					LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+					LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+					when
+					CONTRACT_TYPE_ID = #{CONTRACT_TYPE_ID,jdbcType=VARCHAR}
+			</when>
+			<when test=" dbType == 'oracle' ">
+				update xc_po_contract_type set 
+					CONTRACT_TYPE_CODE = #{CONTRACT_TYPE_CODE,jdbcType=VARCHAR},
+					CONTRACT_TYPE_NAME = #{CONTRACT_TYPE_NAME,jdbcType=VARCHAR},
+					DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+					STATUS = #{STATUS,jdbcType=VARCHAR},
+					LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+					LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+					when
+					CONTRACT_TYPE_ID = #{CONTRACT_TYPE_ID,jdbcType=VARCHAR}
+			</when>
+		</choose>
+	</update>
+	
+	<delete id="deleteContractType" parameterType="java.util.List">
+		delete from xc_po_contract_type
+		where CONTRACT_TYPE_ID in
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
+</mapper>

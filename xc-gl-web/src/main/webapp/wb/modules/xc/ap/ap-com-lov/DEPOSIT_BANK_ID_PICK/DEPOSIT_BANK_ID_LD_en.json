@@ -1,0 +1,8 @@
+{
+  D_B_NAME				: "Payment Account",
+  ACCOUNT_NAME_COL		: "Account Name",
+  BANK_ACCOUNT_COL		: "Bank Account",
+  
+  MSG 					: "",
+  qxzzbxx				: "Please choose the books information!"
+}

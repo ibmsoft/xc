@@ -1,0 +1,1 @@
+{"inframe":false,"title":"删除下级资产","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"delete from xc_fa_cats \nWHERE UP_CODE = {?CAT_CODE?}","arrayName":"data","itemId":"update"},"children":[],"expanded":false,"type":"query"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

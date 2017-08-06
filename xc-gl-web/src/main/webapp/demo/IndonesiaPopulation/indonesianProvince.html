@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="js/echarts.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    title: {
+        text: 'Indonesian population and police population'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['Population','Policeman']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        axisLabel:{
+            rotate:40,
+            interval:0
+        },
+        data: ['Aceh','Bali','Babel','Banten','Bengkulu','Jateng','Kalteng',
+               'Sulteng','Jatim','Kaltim','NTT','Gorontalo','DKI','Jambi',
+               'Lampung','Maluku','Kaltara','Malut','Sulut','Sumut','Papua',
+               'Riau','Kepri','Sultra','Kalsel','Sulsel','Sumsel','Jabar',
+               'Kalbar','NTB','Papuabarat','Sulbar','Sumbar','DIY']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'Population',
+            type:'line',
+            /* data:[4494410, 3890757, 1223296, 10632166, 1715518, 32382657, 2212089,
+                  2635009, 37476757, 3026060, 4683827, 1040164, 9607787, 3092265,
+                  7608405, 1533506, 622350, 1038087, 2270596, 12982204, 2833381,
+                  5538367, 1679163, 2232586, 3626616, 8034776, 7450394, 43053732,
+                  4395983, 4500212, 760422, 1158651, 5133989, 3457491], */
+			data:[22472, 19453, 6116, 53161, 8578, 161913, 11060,
+			      13175, 187384, 15130, 23419, 5201, 48039, 15461,
+			      38042, 7668, 3112, 5190, 11353, 64911, 14167,
+			      27692, 8396, 11163, 18133, 40174, 37252, 215269,
+			      21980, 22501, 3802, 5793, 25670, 17287]
+        },
+        {
+            name:'Policeman',
+            type:'line',
+	        data:[20432, 21483, 6946, 55161, 8298, 121973, 17069,
+	              15175, 171389, 11138, 22459, 5231, 48239, 15466,
+	              34142, 7668, 3122, 5199, 11343, 68931, 17157,
+	              20692, 7599, 11143, 18183, 40144, 31282, 245369,
+	              20983, 24521, 3308, 5891, 26679, 16294]
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.FjMapper">
+	<resultMap id="ModalFormatResultMap" type="com.xzsoft.xsr.core.modal.ModalSheetFormat">
+		<result column="MSFORMAT_ID" property="sheet"/>
+		<result column="X" property="row"/>
+		<result column="Y" property="col"/>
+		<result column="IS_CAL" property="cal"/>
+		<result column="CONTENT" property="json"/>
+	</resultMap>
+	
+	<resultMap id="ModalElementResultMap" type="com.xzsoft.xsr.core.modal.ModalSheetElement">
+		<result column="MSFORMAT_ID" property="sheet"/>
+		<result column="NAME" property="name"/>
+		<result column="ETYPE" property="ftype"/>
+		<result column="CONTENT" property="json"/>
+	</resultMap>
+	
+	<resultMap id="ColitemResultMap" type="com.xzsoft.xsr.core.modal.Colitem">
+		<result column="DATA_COL" property="DATA_COL"/>
+		<result column="COLITEM_ID" property="COLITEM_ID"/>
+		<result column="COLNO" property="COLNO"/>
+		<result column="COL" property="COL"/>
+	</resultMap>
+	
+	
+	<select id="getFjModalsheetFormatCellList" parameterType="String" resultMap="ModalFormatResultMap">
+		SELECT t.MSFORMAT_ID, t.X, t.Y, t.IS_CAL, t.CONTENT, t.CELL_COMMENT, t.CELL_COMMENT_TYPE 
+			FROM xsr_rep_modalsheet_format t 
+			WHERE t.MSFORMAT_ID = #{0} AND t.X<![CDATA[<=]]>#{1}
+		UNION
+		SELECT t2.MSFORMAT_ID, t2.X, t2.Y, t2.IS_CAL, t2.CONTENT, t2.CELL_COMMENT, t2.CELL_COMMENT_TYPE 
+			FROM xsr_rep_modalsheet_format t2, 
+			(SELECT X AS fj_x FROM xsr_rep_modalsheet_format WHERE cell_comment=#{2} AND MSFORMAT_ID = #{0} AND X<![CDATA[>]]>#{1}) tt
+			WHERE t2.MSFORMAT_ID = #{0} AND t2.X=tt.fj_x
+	</select>
+	
+	<select id="getFjModalsheetElementList" parameterType="String" resultMap="ModalElementResultMap">
+		select t.MSFORMAT_ID, t.NAME, t.ETYPE, t.CONTENT
+		  from xsr_rep_modalsheet_element t 
+		 where t.MSFORMAT_ID = #{msFormatId}
+	</select>
+	
+	<select id="getFjColitemList" parameterType="String" resultMap="ColitemResultMap">
+		SELECT * FROM xsr_rep_fj_colitem_set WHERE SUIT_ID=#{0} AND MODALSHEET_ID=#{1} 
+		AND COLITEM_ID IN(SELECT COLITEM_ID FROM xsr_rep_colmodalref WHERE SUIT_ID=#{0} AND MODALTYPE_ID=#{2} AND MODALSHEET_ID=#{1})
+	</select>
+	<select id="getFjColitemListOnly3" parameterType="String" resultMap="ColitemResultMap">
+		SELECT s.* FROM xsr_rep_fj_colitem_set s,xsr_rep_colitem c WHERE s.COLITEM_ID=c.COLITEM_ID AND c.DATATYPE=3 
+		AND s.SUIT_ID=#{0} AND s.MODALSHEET_ID=#{1} 
+		AND s.COLITEM_ID IN(SELECT r.COLITEM_ID FROM xsr_rep_colmodalref r WHERE r.SUIT_ID=#{0} AND r.MODALTYPE_ID=#{2} AND r.MODALSHEET_ID=#{1})
+	</select>
+	
+	<delete id="delFjCalFormula" parameterType="String">
+		DELETE FROM xsr_rep_fj_cal_formula_new 
+		WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1}  AND MODALSHEET_ID=#{2}  AND ROWITEM_ID=#{3} 
+	</delete>
+	
+	<delete id="delFjData" parameterType="String">
+		DELETE FROM xsr_rep_fj_cellvalue 
+		WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1}  AND MODALSHEET_ID=#{2}  AND ROWITEM_ID=#{3} AND PERIOD_ID=#{4} AND CURRENCY_ID=#{5}
+	</delete>
+	
+	<delete id="delFjDataTemp" parameterType="String">
+		DELETE FROM xsr_rep_fj_cellvalue_temp 
+		WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1}  AND MODALSHEET_ID=#{2}  AND ROWITEM_ID=#{3} 
+		AND PERIOD_ID=#{4} AND CURRENCY_ID=#{5} AND USER_ID=#{6}
+	</delete>
+	<delete id="delFjDataAll" parameterType="String">
+		DELETE FROM xsr_rep_fj_cellvalue 
+		WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1}  AND MODALSHEET_ID=#{2} AND PERIOD_ID=#{3} AND CURRENCY_ID=#{4}
+	</delete>
+	
+	<delete id="delFjDataTempAll" parameterType="java.util.Map">
+		DELETE FROM xsr_rep_fj_cellvalue_temp 
+		WHERE SUIT_ID=#{suitId} AND ENTITY_ID=#{entityId} AND PERIOD_ID=#{periodId} AND CURRENCY_ID=#{currencyId} 
+		AND USER_ID=#{userId} AND MODALSHEET_ID IN
+		<foreach  item="item" collection="mstIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="delFjDataTempSingle" parameterType="String">
+		DELETE FROM xsr_rep_fj_cellvalue_temp 
+		WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1} AND PERIOD_ID=#{3} AND CURRENCY_ID=#{4} 
+		AND USER_ID=#{5} AND MODALSHEET_ID=#{2}
+	</delete>
+	
+	
+ 	<select id="getColitemIdByCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COLITEM_ID,COLITEM_CODE FROM  xsr_rep_colitem WHERE SUIT_ID=#{suitId} AND COLITEM_CODE=#{colitemCode}
+	</select>
+<!--	<select id="isExistFjItem" parameterType="String" resultType="java.util.Integer">
+		SELECT COUNT(1) FROM xsr_rep_rowitem r,xsr_rep_rowmodalref rr WHERE r.ROWITEM_ID=rr.ROWITEM_ID AND rr.SUIT_ID=#{0} 
+		AND rr.MODALTYPE_ID=#{2} AND rr.MODALSHEET_ID=#{1} AND rr.REF_FLAG='Y' AND r.ISFJITEM=1
+	</select>
+	<select id="isExistTempFjData" parameterType="String" resultType="java.util.Integer">
+		SELECT COUNT(1) FROM xsr_rep_fj_cellvalue_temp WHERE USER_ID=#{0} AND SUIT_ID=#{1} AND MODALSHEET_ID=#{2} AND ENTITY_ID=#{3}
+		AND PERIOD_ID=#{4} AND CURRENCY_ID=#{5}
+	</select> -->
+
+	<select id="isExistFjItem" parameterType="String" resultType="int">
+		SELECT COUNT(1) FROM xsr_rep_rowitem r,xsr_rep_rowmodalref rr WHERE r.ROWITEM_ID=rr.ROWITEM_ID AND rr.SUIT_ID=#{0} 
+		AND rr.MODALTYPE_ID=#{2} AND rr.MODALSHEET_ID=#{1} AND rr.REF_FLAG='Y' AND r.ISFJITEM=1
+	</select>
+	<select id="isExistTempFjData" parameterType="String" resultType="int">
+		SELECT COUNT(1) FROM xsr_rep_fj_cellvalue_temp WHERE USER_ID=#{0} AND SUIT_ID=#{1} AND MODALSHEET_ID=#{2} AND ENTITY_ID=#{3}
+		AND PERIOD_ID=#{4} AND CURRENCY_ID=#{5}
+	</select>
+	
+	<select id="countFjData" parameterType="String" resultType="int" >
+		SELECT COUNT(1) FROM xsr_rep_fj_cellvalue WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1} AND PERIOD_ID=#{2} AND CURRENCY_ID=#{3} 
+		AND ROWITEM_ID=#{4} AND MODALSHEET_ID=#{5}
+	</select>
+	
+	<select id="countFjDataAll" parameterType="String" resultType="int" >
+		SELECT COUNT(1) FROM xsr_rep_fj_cellvalue WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1} AND PERIOD_ID=#{2} AND CURRENCY_ID=#{3} 
+		AND MODALSHEET_ID=#{4}
+	</select>
+	
+	<select id="countFjFormula" parameterType="String" resultType="int" >
+		SELECT COUNT(1) FROM xsr_rep_fj_cal_formula_new WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1} 
+		AND ROWITEM_ID=#{2} AND MODALSHEET_ID=#{3}
+	</select>
+	
+	<select id="countFjTempData" parameterType="String" resultType="int" >
+		SELECT COUNT(1) FROM xsr_rep_fj_cellvalue_temp WHERE SUIT_ID=#{0} AND ENTITY_ID=#{1} AND PERIOD_ID=#{2} AND CURRENCY_ID=#{3} 
+		AND ROWITEM_ID=#{4} AND MODALSHEET_ID=#{5} AND USER_ID=#{6}
+	</select>
+</mapper>

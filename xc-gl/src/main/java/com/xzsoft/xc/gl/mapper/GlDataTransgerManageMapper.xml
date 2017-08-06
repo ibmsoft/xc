@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.GlDataTransgerManageMapper">
+<!-- 根据模板编码获取模板信息-->
+<select id="getTemplateByCode" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.AccountTemplate">
+  SELECT
+	a.TEMPLATE_CODE as "templateCode",
+    a.TEMPLATE_NAME as "templateName",
+    a.TEMPLATE_DESC as "templateDesc",
+    b.COL_CODE as "columnCode",
+    b.COL_NAME as "columnName",
+    b.COL_ALIAS as "columnAlias",
+    b.COL_TYPE  as "columnType",
+    b.CREATION_DATE as "creationDate",
+    b.CREATED_BY as "createdBy",
+    b.LAST_UPDATE_DATE as "lastUpdateDate",
+    b.LAST_UPDATED_BY  as "lastUpdatedBy"
+ FROM
+	xc_gl_template a,
+	xc_gl_template_dtl b
+ WHERE
+	a.TEMPLATE_ID = b.TEMPLATE_ID
+ AND
+  a.TEMPLATE_CODE=#{templateCode,jdbcType=VARCHAR}
+ ORDER BY b.COL_SEQ ASC
+</select>
+<!-- 根据模板编码获取导入模板的校验数据-->
+<select id="getTemplateDataByCode" parameterType="java.lang.String" resultType="java.util.HashMap">
+  <choose>
+  <!-- 供应商 -->
+    <when test="templateCode == 'XC_AP_VENDORS'">
+	SELECT
+	  t.VENDOR_CODE AS "code",
+	  t.VENDOR_NAME AS "name"
+	FROM
+	  xc_ap_vendors t
+    </when>
+    <!-- 计量单位 -->
+    <when test="templateCode == 'XC_GL_DIMENSIONS'">
+	SELECT
+	  t.DIM_CODE AS "code",
+	  t.DIM_NAME AS "name"
+	FROM
+	  xc_gl_dimensions t
+    </when>
+    <!-- 产品 -->
+    <when test="templateCode == 'XC_GL_PRODUCTS'">
+	SELECT
+	  t.PRODUCT_CODE AS "code",
+	  t.PRODUCT_NAME AS "name"
+	FROM
+	  xc_gl_products t  
+    </when>
+    <!-- 客户 -->
+    <when test="templateCode == 'XC_AR_CUSTOMERS'">
+	SELECT
+	  t.CUSTOMER_CODE AS "code",
+	  t.CUSTOMER_NAME AS "name"
+	FROM
+	  xc_ar_customers t  
+    </when>
+    <!-- 科目分组 -->
+    <when test="templateCode == 'XC_GL_ACC_GROUP'">
+	SELECT
+	  t.ACC_GROUP_CODE AS "code",
+	  t.ACC_GROUP_NAME AS "name"
+	FROM
+	  xc_gl_acc_group t  
+    </when>
+  </choose>
+  a.TEMPLATE_CODE=#{templateCode,jdbcType=VARCHAR}
+</select>
+<!-- 供应商数据校验 -->
+<update id="checkVendorDataValid" parameterType="java.lang.String">
+UPDATE xc_ap_vendors_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ap_vendors a
+			WHERE
+				a.VENDOR_CODE = t.VENDOR_CODE
+			OR a.VENDOR_NAME = t.VENDOR_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.VENDOR_CODE IS NULL
+			OR t.VENDOR_CODE = ''
+			OR t.VENDOR_NAME IS NULL
+			OR t.VENDOR_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+	  'N'
+	END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ap_vendors a
+			WHERE
+				a.VENDOR_CODE = t.VENDOR_CODE
+			OR a.VENDOR_NAME = t.VENDOR_NAME
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.VENDOR_CODE IS NULL
+			OR t.VENDOR_CODE = ''
+			OR t.VENDOR_NAME IS NULL
+			OR t.VENDOR_NAME = '' THEN
+				'供应商编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+		'供应商编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 计量单位数据校验 -->
+<update id="checkDimensionDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_dimensions_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_dimensions a
+			WHERE
+				a.DIM_CODE = t.DIM_CODE
+			OR a.DIM_NAME = t.DIM_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.DIM_CODE IS NULL
+			OR t.DIM_CODE = ''
+			OR t.DIM_NAME IS NULL
+			OR t.DIM_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+      'N'
+	END
+),
+t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_dimensions a
+			WHERE
+				a.DIM_CODE = t.DIM_CODE
+			OR a.DIM_NAME = t.DIM_NAME
+		)
+	WHEN 0 THEN
+				(
+			CASE
+			WHEN t.DIM_CODE IS NULL
+			OR t.DIM_CODE = ''
+			OR t.DIM_NAME IS NULL
+			OR t.DIM_NAME = '' THEN
+				'量纲编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+      '量纲编码或名称已存在！'
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND 
+    t.FLAG = 'N'
+</update>
+<!-- 产品数据校验 -->
+<update id="checkProductDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_products_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_products a
+			WHERE
+				 a.PRODUCT_CODE = t.PRODUCT_CODE
+			OR a.PRODUCT_NAME = t.PRODUCT_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.PRODUCT_CODE IS NULL
+			OR t.PRODUCT_CODE = ''
+			OR t.PRODUCT_NAME IS NULL
+			OR t.PRODUCT_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+      'N'
+	END
+),
+ t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_products a
+			WHERE
+				 a.PRODUCT_CODE = t.PRODUCT_CODE
+			OR a.PRODUCT_NAME = t.PRODUCT_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.PRODUCT_CODE IS NULL
+			OR t.PRODUCT_CODE = ''
+			OR t.PRODUCT_NAME IS NULL
+			OR t.PRODUCT_NAME = '' THEN
+				'产品编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+		
+	ELSE
+     '产品编码或名称已存在！'
+	END
+)
+WHERE  
+    t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND t.FLAG = 'N'
+</update>
+<!-- 客户数据校验 -->
+<update id="checkCustomerDataValid" parameterType="java.lang.String">
+UPDATE xc_ar_customers_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ar_customers a
+			WHERE
+				 a.CUSTOMER_CODE = t.CUSTOMER_CODE
+			OR a.CUSTOMER_NAME = t.CUSTOMER_NAME
+		)
+	WHEN 0 THEN
+	       (
+			CASE
+			WHEN t.CUSTOMER_CODE IS NULL
+			OR t.CUSTOMER_CODE = ''
+			OR t.CUSTOMER_NAME IS NULL
+			OR t.CUSTOMER_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+      'N'
+	END
+),
+ t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_ar_customers a
+			WHERE
+				 a.CUSTOMER_CODE = t.CUSTOMER_CODE
+			OR a.CUSTOMER_NAME = t.CUSTOMER_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.CUSTOMER_CODE IS NULL
+			OR t.CUSTOMER_CODE = ''
+			OR t.CUSTOMER_NAME IS NULL
+			OR t.CUSTOMER_NAME = '' THEN
+				'客户编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+      '客户编码或名称已存在！'
+	END
+)
+WHERE  
+    t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND t.FLAG = 'N'
+</update>
+<!-- 科目组数据校验 -->
+<update id="checkAccGroupDataValid" parameterType="java.lang.String">
+UPDATE xc_gl_acc_group_tmp t
+SET t.FLAG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_acc_group a
+			WHERE
+				 a.ACC_GROUP_CODE = t.ACC_GROUP_CODE
+			OR a.ACC_GROUP_NAME = t.ACC_GROUP_NAME
+		)
+	WHEN 0 THEN
+		   (
+			CASE
+			WHEN t.ACC_GROUP_CODE IS NULL
+			OR t.ACC_GROUP_CODE = ''
+			OR t.ACC_GROUP_NAME IS NULL
+			OR t.ACC_GROUP_NAME = '' THEN
+				'N'
+			ELSE
+				'Y'
+			END
+		)
+	ELSE
+     'N'
+	END
+),
+ t.ERROR_MSG = (
+		CASE (
+			SELECT
+				COUNT(1)
+			FROM
+				xc_gl_acc_group a
+			WHERE
+				 a.ACC_GROUP_CODE = t.ACC_GROUP_CODE
+			OR a.ACC_GROUP_NAME = t.ACC_GROUP_NAME
+		)
+	WHEN 0 THEN
+			(
+			CASE
+			WHEN t.ACC_GROUP_CODE IS NULL
+			OR t.ACC_GROUP_CODE = ''
+			OR t.ACC_GROUP_NAME IS NULL
+			OR t.ACC_GROUP_NAME = '' THEN
+				'科目组编码或名称为空！'
+			ELSE
+				''
+			END
+		)
+	ELSE
+	   '科目组编码或名称已存在！'
+	END
+)
+WHERE  
+    t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+AND t.FLAG = 'N'
+</update>
+<!-- 统计不合法的导入数据 -->
+<select id="getInvalidImportData" parameterType="java.lang.String" resultType="java.lang.Integer">
+  select count(1) from ${tableName} where SESSION_ID=#{sessionId,jdbcType=VARCHAR} and FLAG='N'
+</select>
+<!-- 将计量单位临时表中的数据插入到正式表中 -->
+<insert id="insertDimensionData">
+  INSERT INTO xc_gl_dimensions (
+	DIM_ID,
+	DIM_CODE,
+	DIM_NAME,
+	DIM_TYPE,
+	DIM_DESC,
+	CREATION_DATE,
+	LAST_UPDATE_DATE,
+    CREATED_BY,
+	LAST_UPDATED_BY
+) SELECT
+	TMP_ID,
+	DIM_CODE,
+	DIM_NAME,
+	DIM_TYPE,
+	DIM_DESC,
+	<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    NOW(),
+	    NOW(),
+	  </when>
+	  <otherwise>
+	    sysdate,
+	    sysdate,
+	  </otherwise>
+	</choose>
+	#{userId,jdbcType=VARCHAR},
+	#{userId,jdbcType=VARCHAR}
+FROM
+	xc_gl_dimensions_tmp
+WHERE
+	SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+AND FLAG = 'Y'
+</insert>
+<!-- 将供应商数据插入到正式表中 -->
+<insert id="insertVendorData">
+INSERT INTO xc_ap_vendors (
+	VENDOR_ID,
+	VENDOR_CODE,
+	VENDOR_NAME,
+	TAX_NO,
+	ADDRESS,
+	VENDOR_TYPE,
+	CONTACT,
+	TEL,
+	MOBILE,
+	QQ,
+	WECHAT,
+	EMAIL,
+	CUSTOMER_ID,
+	START_DATE,
+	END_DATE,
+	CREATION_DATE,
+	LAST_UPDATE_DATE,
+	CREATED_BY,
+	LAST_UPDATED_BY)
+SELECT
+	t.TMP_ID,
+	t.VENDOR_CODE,
+	t.VENDOR_NAME,
+	t.TAX_NO,
+	t.ADDRESS,
+	t.VENDOR_TYPE,
+	t.CONTACT,
+	t.TEL,
+	t.MOBILE,
+	t.QQ,
+	t.WECHAT,
+	t.EMAIL,
+	t.CUSTOMER_ID,
+	<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    IFNULL(t.START_DATE,NOW()),
+        IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	    NOW(),
+	    NOW(),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	    sysdate,
+	    sysdate,
+	  </otherwise>
+	</choose>
+	#{userId,jdbcType=VARCHAR},
+	#{userId,jdbcType=VARCHAR}
+FROM
+	xc_ap_vendors_tmp t
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+AND t.FLAG = 'Y'
+</insert>
+<!-- 将供产品数据插入到正式表中 -->
+<insert id="insertProductData">
+insert into xc_gl_products(
+  PRODUCT_ID,      
+  PRODUCT_CODE,    
+  PRODUCT_NAME,    
+  START_DATE,      
+  END_DATE,        
+  CREATION_DATE,         
+  LAST_UPDATE_DATE,
+  CREATED_BY,
+  LAST_UPDATED_BY 
+ )
+select 
+ t.TMP_ID,
+ t.PRODUCT_CODE,
+ t.PRODUCT_NAME,
+<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    IFNULL(t.START_DATE,NOW()),
+        IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	    NOW(),
+	    NOW(),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	    sysdate,
+	    sysdate,
+	  </otherwise>
+	</choose>
+	#{userId,jdbcType=VARCHAR},
+	#{userId,jdbcType=VARCHAR}
+FROM
+  xc_gl_products_tmp t
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+AND t.FLAG = 'Y'
+</insert>
+<!-- 将供客户数据插入到正式表中 -->
+<insert id="insertCustomerData">
+INSERT INTO xc_ar_customers (
+	CUSTOMER_ID,
+	CUSTOMER_CODE,
+	CUSTOMER_NAME,
+	START_DATE,
+	END_DATE,
+	CREATION_DATE,
+	LAST_UPDATE_DATE,
+	CREATED_BY,
+	LAST_UPDATED_BY
+) SELECT
+	t.TMP_ID,
+	t.CUSTOMER_CODE,
+	t.CUSTOMER_NAME,
+<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    IFNULL(t.START_DATE,NOW()),
+        IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	    NOW(),
+	    NOW(),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	    sysdate,
+	    sysdate,
+	  </otherwise>
+	</choose>
+	#{userId,jdbcType=VARCHAR},
+	#{userId,jdbcType=VARCHAR}
+FROM
+  xc_ar_customers_tmp t
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+AND t.FLAG = 'Y'
+</insert>
+<!-- 将供科目分组数据插入到正式表中 -->
+<insert id="insertAccGroupData">
+INSERT INTO xc_gl_acc_group (
+	ACC_GROUP_ID,
+	ACC_GROUP_CODE,
+	ACC_GROUP_NAME,
+	ACC_GROUP_DESC,
+	ORDERBY,
+	CREATION_DATE,
+	LAST_UPDATE_DATE,
+	CREATED_BY,
+	LAST_UPDATED_BY
+)
+select 
+ 	t.TMP_ID,
+	t.ACC_GROUP_CODE,
+	t.ACC_GROUP_NAME,
+	t.ACC_GROUP_DESC,
+    t.ORDERBY,
+<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    NOW(),
+	    NOW(),
+	  </when>
+	  <otherwise>
+	    sysdate,
+	    sysdate,
+	  </otherwise>
+	</choose>
+	#{userId,jdbcType=VARCHAR},
+	#{userId,jdbcType=VARCHAR}
+FROM
+  xc_gl_acc_group_tmp t
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+AND t.FLAG = 'Y'
+</insert>
+<!-- 删除临时表的数据 -->
+<delete id="delTemplateModelData">
+  delete from ${tableName} where SESSION_ID=#{sessionId,jdbcType=VARCHAR}
+</delete>
+<!-- 获取要导出的末班数据 -->
+<select id="getExportData" parameterType="java.lang.String" resultType="java.util.HashMap">
+  ${querySql}
+</select>
+</mapper>

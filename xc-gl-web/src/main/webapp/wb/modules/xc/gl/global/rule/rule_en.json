@@ -1,0 +1,20 @@
+{
+  moduleTitle:"Rule Management",
+  editBtn:"Edit",
+  saveBtn:"Save",
+  rownum:"NO",
+  la_ruleCode:"Rule Category Code",
+  la_ruleDescription:"Description",
+  la_finance:"Finance Proof",
+  la_financeLength:"Serial Number Length",
+  la_ruleTypeCode:"Rule Category Code",
+  la_prefixItem:"Prefix Item",
+  la_separator:"Separator",
+  la_orderDepency:"<font color='red'>*</font> Sort By",
+  la_digit:"<font color='red'>*</font> Digit",
+  la_tip:"Please enter a positive integer",
+  la_fixedPrefix:"Fixed Prefix",
+  la_example:"Example",
+  la_seeExample:"View The Example",
+  la_labelWidth:130
+}

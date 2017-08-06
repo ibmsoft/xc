@@ -1,0 +1,8 @@
+{
+  D_B_NAME				: "付款账户",
+  ACCOUNT_NAME_COL		: "户名",
+  BANK_ACCOUNT_COL		: "银行账号",
+  
+  MSG 					: "",
+  qxzzbxx				: "请先选择账簿信息！"
+}

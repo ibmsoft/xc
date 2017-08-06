@@ -1,0 +1,26 @@
+{
+  /* queryPanel */
+     queryLedger:'账簿',
+     queryPeriods:'会计期',
+     queryFaName:'资产名称',
+     queryBtn:'查询',
+     resetBtn:'重置',
+     selectLedgerMsgTips:'请选择账簿',
+  
+  /* grid */
+    /* tbar */
+      receiveBtn:'接收资产',
+      delBtn:'删除',
+    /* columns */
+      faNameCol:'资产名称',
+      periodsCol:'会计期',
+      vendorNameCol:'供应商',
+      cgfpCol:'采购发票',
+      slCol:'数量',
+      dwCol:'计量单位',
+      wsjeCol:'无税金额',
+      ywrqCol:'业务日期',
+      zckmCol:'资产科目',
+      cbzxCol:'成本中心'
+  
+}

@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.VoucherMapper">
+	<!-- 凭证头SQL列 -->
+	<sql id="headItemColumn">
+	   v_head_id headId,
+       ledger_id ledgerId,
+       period_code periodCode,
+       v_category_id categoryId,
+       v_src_code srcCode,
+       V_SRC_ID srcId ,
+       v_serial_num serialNum,
+       v_attch_total attchTotal,
+       verifier_id verifierId,
+       verifier verifier,
+       verfy_date verifyDate,
+       is_signed isSigned,
+       signatory_id signatoryId,
+       signatory,
+       sign_date signDate,
+       bookkeeper_id bookkeeperId,
+       bookkeeper bookkeeper,
+       book_date bookDate,
+       is_write_off isWriteOff,
+       write_off_num writeOffNum,
+       t_dr totalDR,
+       t_cr totalCR,
+       summary,
+       v_template_type templateType,
+       v_status vStatus,
+       sum_flag sumFlag,
+       created_name createdName,
+       creation_date creationDate,
+       created_by createdBy
+	</sql>
+	
+	<!-- 凭证分录行SQL列 -->
+	<sql id="lineItemColumn">
+		v_line_id lineId,
+		v_head_id headId,
+		summary,
+		ccid,
+		account_dr accountDR,
+		account_cr accountCR,
+		currency_code currencyCode,
+		exchange_rate exchageRate,
+		enter_dr enterDR,
+		enter_cr enterCR,
+		amount,
+		dim_id dimId,
+		orderby orderBy,
+		ca_id caId,
+		v_src_dtl_id srcDtlId,
+		bg_item_id bgItemId,
+		project_id projectId,
+		dept_id deptId,
+		creation_date creationDate,
+		created_by createdBy,
+		last_update_date lastUpdateDate,
+		last_updated_by lastUpdatedBy	
+	</sql>
+	
+	<!-- 创建科目的CCID -->
+	<insert id="createCCID" parameterType="com.xzsoft.xc.gl.modal.CCID">
+		insert into xc_gl_ccid
+		  (ccid,
+		   ccid_code,
+		   ccid_name,
+		   ledger_id,
+		   acc_id,
+		   acc_code,
+		   acc_name,
+		   vendor_id,
+		   vendor_code,
+		   vendor_name,
+		   customer_id,
+		   customer_code,
+		   customer_name,
+		   org_id,
+		   org_code,
+		   org_name,
+		   dept_id,
+		   dept_code,
+		   dept_name,
+		   emp_id,
+		   emp_code,
+		   emp_name,
+		   product_id,
+		   product_code,
+		   product_name,
+		   project_id,
+		   project_code,
+		   project_name,
+		   custom1_id,
+		   custom1_code,
+		   custom1_name,
+		   custom2_id,
+		   custom2_code,
+		   custom2_name,
+		   custom3_id,
+		   custom3_code,
+		   custom3_name,
+		   custom4_id,
+		   custom4_code,
+		   custom4_name,
+		   is_leaf,
+		   creation_date,
+		   created_by,
+       	   last_update_date,
+       	   last_updated_by
+       	)values(
+		   #{ccid,jdbcType=VARCHAR},
+		   #{ccidCode,jdbcType=VARCHAR},
+		   #{ccidName,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{accId,jdbcType=VARCHAR},
+		   #{accCode,jdbcType=VARCHAR},
+		   #{accName,jdbcType=VARCHAR},
+		   #{vendorId,jdbcType=VARCHAR},
+		   #{vendorCode,jdbcType=VARCHAR},
+		   #{vendorName,jdbcType=VARCHAR},
+		   #{customerId,jdbcType=VARCHAR},
+		   #{customerCode,jdbcType=VARCHAR},
+		   #{customerName,jdbcType=VARCHAR},
+		   #{orgId,jdbcType=VARCHAR},
+		   #{orgCode,jdbcType=VARCHAR},
+		   #{orgName,jdbcType=VARCHAR},
+		   #{deptId,jdbcType=VARCHAR},
+		   #{deptCode,jdbcType=VARCHAR},
+		   #{deptName,jdbcType=VARCHAR},
+		   #{empId,jdbcType=VARCHAR},
+		   #{empCode,jdbcType=VARCHAR},
+		   #{empName,jdbcType=VARCHAR},
+		   #{productId,jdbcType=VARCHAR},
+		   #{productCode,jdbcType=VARCHAR},
+		   #{productName,jdbcType=VARCHAR},
+		   #{projectId,jdbcType=VARCHAR},
+		   #{projectCode,jdbcType=VARCHAR},
+		   #{projectName,jdbcType=VARCHAR},
+		   #{custom1Id,jdbcType=VARCHAR},
+		   #{custom1Code,jdbcType=VARCHAR},
+		   #{custom1Name,jdbcType=VARCHAR},
+		   #{custom2Id,jdbcType=VARCHAR},
+		   #{custom2Code,jdbcType=VARCHAR},
+		   #{custom2Name,jdbcType=VARCHAR},
+		   #{custom3Id,jdbcType=VARCHAR},
+		   #{custom3Code,jdbcType=VARCHAR},
+		   #{custom3Name,jdbcType=VARCHAR},
+		   #{custom4Id,jdbcType=VARCHAR},
+		   #{custom4Code,jdbcType=VARCHAR},
+		   #{custom4Name,jdbcType=VARCHAR},
+		   #{isLeaf,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 批量查询凭证头信息  -->
+	<select id="getVHeads" parameterType="java.util.List" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select <include refid="headItemColumn" />
+		  from xc_gl_v_heads
+		where v_head_id in 
+			<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</select>
+	
+	<!-- 查询单张凭证头信息  -->
+	<select id="getVHead" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select <include refid="headItemColumn" />
+		  from xc_gl_v_heads
+		where v_head_id = #{headId}
+	</select>
+	
+	<!-- 查询单张凭证分录行信息  -->
+	<select id="getVLines" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VLine">
+		select <include refid="lineItemColumn" />
+		  from xc_gl_v_lines
+		where v_head_id = #{headId}	
+	</select>
+	
+	<!-- 保存单张凭证头信息  -->
+	<insert id="saveVHead" parameterType="com.xzsoft.xc.gl.modal.VHead">
+		insert into xc_gl_v_heads
+		  (v_head_id,
+		   ledger_id,
+		   period_code,
+		   v_category_id,
+		   v_src_code,
+		   v_src_id,
+		   v_serial_num,
+		   v_attch_total,
+		   is_signed,
+		   t_dr,
+		   t_cr,
+		   summary,
+		   v_template_type,
+		   v_status,
+		   sum_flag,
+		   created_name,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by)
+		values
+		  (#{headId,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{periodCode,jdbcType=VARCHAR},
+		   #{categoryId,jdbcType=VARCHAR},
+		   #{srcCode,jdbcType=VARCHAR},
+		   #{srcId,jdbcType=VARCHAR},
+		   #{serialNum,jdbcType=VARCHAR},
+		   #{attchTotal,jdbcType=NUMERIC},
+		   #{isSigned,jdbcType=VARCHAR},
+		   #{tdr,jdbcType=NUMERIC},
+		   #{tcr,jdbcType=NUMERIC},
+		   #{summary,jdbcType=VARCHAR},
+		   #{templateType,jdbcType=VARCHAR},
+		   #{vStatus,jdbcType=VARCHAR},
+		   #{sumFlag,jdbcType=VARCHAR},
+		   #{createdName,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 修改单张凭证头信息  -->
+	<update id="updateVHead" parameterType="com.xzsoft.xc.gl.modal.VHead">
+		update xc_gl_v_heads
+		   set period_code      =  #{periodCode,jdbcType=VARCHAR},
+		       v_category_id    =  #{categoryId,jdbcType=VARCHAR},
+		       v_src_code       =  #{srcCode,jdbcType=VARCHAR},
+		       v_src_id         =  #{srcId,jdbcType=VARCHAR},
+		       v_serial_num     =  #{serialNum,jdbcType=VARCHAR},
+		       v_attch_total    =  #{attchTotal,jdbcType=NUMERIC},
+		       is_signed        =  #{isSigned,jdbcType=VARCHAR},
+		       t_dr             =  #{tdr,jdbcType=NUMERIC},
+		       t_cr             =  #{tcr,jdbcType=NUMERIC},
+		       summary          =  #{summary,jdbcType=VARCHAR},
+		       v_template_type  =  #{templateType,jdbcType=VARCHAR},
+		       v_status         =  #{vStatus,jdbcType=VARCHAR},
+		       sum_flag         =  #{sumFlag,jdbcType=VARCHAR},
+		       creation_date    =  #{creationDate,jdbcType=TIMESTAMP},
+		       last_update_date =  #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by  =  #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where v_head_id = #{headId}	
+	</update>
+	
+	<!-- 删除单张凭头信息  -->
+	<delete id="delVHead" parameterType="java.lang.String">
+		delete from xc_gl_v_heads where v_head_id = #{headId}
+	</delete>
+	
+	<!-- 批量删除凭头信息  -->
+	<delete id="delVHeads" parameterType="java.util.List">
+		delete from xc_gl_v_heads where v_head_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 保存单条凭证分录行信息 -->
+	<insert id="saveVLine" parameterType="com.xzsoft.xc.gl.modal.VLine">
+		insert into xc_gl_v_lines
+		  (v_line_id,
+		   v_head_id,
+		   summary,
+		   ccid,
+		   account_dr,
+		   account_cr,
+		   currency_code,
+		   exchange_rate,
+		   enter_dr,
+		   enter_cr,
+		   amount,
+		   dim_id,
+		   orderby,
+		   ca_id,
+		   v_src_dtl_id,
+		   bg_item_id,
+		   project_id,
+		   dept_id,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+		)values(
+		   #{lineId,jdbcType=VARCHAR},
+		   #{headId,jdbcType=VARCHAR},
+		   #{summary,jdbcType=VARCHAR},
+		   #{ccid,jdbcType=VARCHAR},
+		   #{adr,jdbcType=NUMERIC},
+		   #{acr,jdbcType=NUMERIC},
+		   #{currencyCode,jdbcType=VARCHAR},
+		   #{exchangeRate,jdbcType=NUMERIC},
+		   #{edr,jdbcType=NUMERIC},
+		   #{ecr,jdbcType=NUMERIC},
+		   #{amt,jdbcType=NUMERIC},
+		   #{dimId,jdbcType=VARCHAR},
+		   #{orderBy,jdbcType=NUMERIC},
+		   #{caId,jdbcType=VARCHAR},
+		   #{srcDtlId,jdbcType=VARCHAR},
+		   #{bgItemId,jdbcType=VARCHAR},
+		   #{projectId,jdbcType=VARCHAR},
+		   #{deptId,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<!-- 批量保存凭证分录行信息  -->
+	<insert id="saveVLines" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					insert into xc_gl_v_lines
+					  (v_line_id,
+					   v_head_id,
+					   summary,
+					   ccid,
+					   account_dr,
+					   account_cr,
+					   currency_code,
+					   exchange_rate,
+					   enter_dr,
+					   enter_cr,
+					   amount,
+					   dim_id,
+					   orderby,
+					   ca_id,
+					   v_src_dtl_id,
+					   bg_item_id,
+					   project_id,
+					   dept_id,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+					)values(
+					   #{item.lineId,jdbcType=VARCHAR},
+					   #{item.headId,jdbcType=VARCHAR},
+					   #{item.summary,jdbcType=VARCHAR},
+					   #{item.ccid,jdbcType=VARCHAR},
+					   #{item.adr,jdbcType=NUMERIC},
+					   #{item.acr,jdbcType=NUMERIC},
+					   #{item.currencyCode,jdbcType=VARCHAR},
+					   #{item.exchangeRate,jdbcType=NUMERIC},
+					   #{item.edr,jdbcType=NUMERIC},
+					   #{item.ecr,jdbcType=NUMERIC},
+					   #{item.amt,jdbcType=NUMERIC},
+					   #{item.dimId,jdbcType=VARCHAR},
+					   #{item.orderBy,jdbcType=NUMERIC},
+					   #{item.caId,jdbcType=VARCHAR},
+					   #{item.srcDtlId,jdbcType=VARCHAR},
+					   #{item.bgItemId,jdbcType=VARCHAR},
+					   #{item.projectId,jdbcType=VARCHAR},
+					   #{item.deptId,jdbcType=VARCHAR},
+					   #{item.creationDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR},
+					   #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR}
+					)					
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					insert into xc_gl_v_lines
+					  (v_line_id,
+					   v_head_id,
+					   summary,
+					   ccid,
+					   account_dr,
+					   account_cr,
+					   currency_code,
+					   exchange_rate,
+					   enter_dr,
+					   enter_cr,
+					   amount,
+					   dim_id,
+					   orderby,
+					   ca_id,
+					   v_src_dtl_id,
+					   bg_item_id,
+					   project_id,
+					   dept_id,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+					)values(
+					   #{item.lineId,jdbcType=VARCHAR},
+					   #{item.headId,jdbcType=VARCHAR},
+					   #{item.summary,jdbcType=VARCHAR},
+					   #{item.ccid,jdbcType=VARCHAR},
+					   #{item.adr,jdbcType=NUMERIC},
+					   #{item.acr,jdbcType=NUMERIC},
+					   #{item.currencyCode,jdbcType=VARCHAR},
+					   #{item.exchangeRate,jdbcType=NUMERIC},
+					   #{item.edr,jdbcType=NUMERIC},
+					   #{item.ecr,jdbcType=NUMERIC},
+					   #{item.amt,jdbcType=NUMERIC},
+					   #{item.dimId,jdbcType=VARCHAR},
+					   #{item.orderBy,jdbcType=NUMERIC},
+					   #{item.caId,jdbcType=VARCHAR},
+					   #{item.srcDtlId,jdbcType=VARCHAR},
+					   #{item.bgItemId,jdbcType=VARCHAR},
+					   #{item.projectId,jdbcType=VARCHAR},
+					   #{item.deptId,jdbcType=VARCHAR},
+					   #{item.creationDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR},
+					   #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR}
+					)				
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	
+	<!-- 更新单条凭证分录行  -->
+	<update id="updateVLine" parameterType="com.xzsoft.xc.gl.modal.VLine">
+		update xc_gl_v_lines
+		   set summary          = #{summary,jdbcType=VARCHAR},
+		       ccid             = #{ccid,jdbcType=VARCHAR},
+		       account_dr       = #{adr,jdbcType=NUMERIC},
+		       account_cr       = #{acr,jdbcType=NUMERIC},
+		       currency_code    = #{currencyCode,jdbcType=VARCHAR},
+		       exchange_rate    = #{exchangeRate,jdbcType=NUMERIC},
+		       enter_dr         = #{edr,jdbcType=NUMERIC},
+		       enter_cr         = #{ecr,jdbcType=NUMERIC},
+		       amount           = #{amt,jdbcType=NUMERIC},
+		       dim_id           = #{dimId,jdbcType=VARCHAR},
+		       orderby          = #{orderBy,jdbcType=NUMERIC},
+		       ca_id            = #{caId,jdbcType=VARCHAR},
+		       v_src_dtl_id     = #{srcDtlId,jdbcType=VARCHAR},
+		       bg_item_id       = #{bgItemId,jdbcType=VARCHAR},
+		       project_id       = #{projectId,jdbcType=VARCHAR},
+		       dept_id          = #{deptId,jdbcType=VARCHAR},
+		       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where v_line_id = #{lineId}	
+	</update>
+	
+	<!-- 批量更新单条凭证分录行  -->
+	<update id="updateVLines" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType =='mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					update xc_gl_v_lines
+					   set summary          = #{item.summary,jdbcType=VARCHAR},
+					       ccid             = #{item.ccid,jdbcType=VARCHAR},
+					       account_dr       = #{item.adr,jdbcType=NUMERIC},
+					       account_cr       = #{item.acr,jdbcType=NUMERIC},
+					       currency_code    = #{item.currencyCode,jdbcType=VARCHAR},
+					       exchange_rate    = #{item.exchangeRate,jdbcType=NUMERIC},
+					       enter_dr         = #{item.edr,jdbcType=NUMERIC},
+					       enter_cr         = #{item.ecr,jdbcType=NUMERIC},
+					       amount           = #{item.amt,jdbcType=NUMERIC},
+					       dim_id           = #{item.dimId,jdbcType=VARCHAR},
+					       orderby          = #{item.orderBy,jdbcType=NUMERIC},
+					       ca_id            = #{item.caId,jdbcType=VARCHAR},
+					       v_src_dtl_id     = #{item.srcDtlId,jdbcType=VARCHAR},
+					       bg_item_id       = #{item.bgItemId,jdbcType=VARCHAR},
+					       project_id       = #{item.projectId,jdbcType=VARCHAR},
+					       dept_id          = #{item.deptId,jdbcType=VARCHAR},
+					       last_update_date = #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					       last_updated_by  = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					 where v_line_id = #{item.lineId}				
+				</foreach>			
+			</when>
+			<when test="dbType =='oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					update xc_gl_v_lines
+					   set summary          = #{item.summary,jdbcType=VARCHAR},
+					       ccid             = #{item.ccid,jdbcType=VARCHAR},
+					       account_dr       = #{item.adr,jdbcType=NUMERIC},
+					       account_cr       = #{item.acr,jdbcType=NUMERIC},
+					       currency_code    = #{item.currencyCode,jdbcType=VARCHAR},
+					       exchange_rate    = #{item.exchangeRate,jdbcType=NUMERIC},
+					       enter_dr         = #{item.edr,jdbcType=NUMERIC},
+					       enter_cr         = #{item.ecr,jdbcType=NUMERIC},
+					       amount           = #{item.amt,jdbcType=NUMERIC},
+					       dim_id           = #{item.dimId,jdbcType=VARCHAR},
+					       orderby          = #{item.orderBy,jdbcType=NUMERIC},
+					       ca_id            = #{item.caId,jdbcType=VARCHAR},
+					       v_src_dtl_id     = #{item.srcDtlId,jdbcType=VARCHAR},
+					       bg_item_id       = #{item.bgItemId,jdbcType=VARCHAR},
+					       project_id       = #{item.projectId,jdbcType=VARCHAR},
+					       dept_id          = #{item.deptId,jdbcType=VARCHAR},
+					       last_update_date = #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					       last_updated_by  = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					 where v_line_id = #{item.lineId}				
+				</foreach>
+			</when>		
+		</choose>
+	</update>
+	
+	<!-- 按分录行ID删除分录  -->
+	<delete id="delVLineByLineId" parameterType="java.util.List">
+		delete from xc_gl_v_lines where v_line_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除单张凭证分录信息  -->
+	<delete id="delVLineByHeadId" parameterType="java.lang.String">
+		delete from xc_gl_v_lines where v_head_id = #{headId}
+	</delete>
+	
+	<!-- 按凭证头ID删除分录  -->
+	<delete id="delVLineByHeadIds" parameterType="java.util.List">
+		delete from xc_gl_v_lines where v_head_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 提交凭证  -->
+	<update id="submitVouchers" parameterType="com.xzsoft.xc.gl.modal.VHead">
+		update xc_gl_v_heads t
+		   set t.v_serial_num     = #{serialNum,jdbcType=VARCHAR},
+		       t.v_status         = '2',
+		       t.last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       t.last_updated_by  = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where t.v_head_id = #{headId}
+		   and t.V_STATUS = '1'
+		   and t.verifier_id is null
+		   and t.signatory_id is null
+		   and t.bookkeeper_id is null			 
+	</update>
+	
+	<!-- 撤回凭证提交  -->
+	<update id="cancelSubmitVouchers" parameterType="java.util.HashMap">
+		UPDATE xc_gl_v_heads T
+		   SET t.V_STATUS = '1', 
+		       t.SUM_FLAG = 'N', 
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 WHERE T.V_HEAD_ID in 
+			 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+				#{item}		 
+			 </foreach>
+		   and t.V_STATUS = '2'
+		   and t.verifier_id is null
+		   and t.signatory_id is null
+		   and t.bookkeeper_id is null	
+	</update>
+	
+	<!-- 记录凭证断号信息  -->
+	<insert id="recordVJumpNum" parameterType="java.util.HashMap">
+		insert into xc_gl_v_junmp_num (ledger_id, period_code, rule_code, v_serial_num, creation_date, created_by)
+		  (select  t.LEDGER_ID, 
+		           t.period_code,
+			       'ZZ_PZ', 
+			       t.V_SERIAL_NUM, 
+			       #{cdate,jdbcType=TIMESTAMP},
+			       #{userId,jdbcType=VARCHAR}
+			  from xc_gl_v_heads t
+			 where t.V_SERIAL_NUM is not null 
+			   and t.V_SERIAL_NUM != ''
+			   and t.V_HEAD_ID in 
+				 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+					#{item}		 
+				 </foreach>	
+		   )
+	</insert>
+	
+	<!-- 删除凭证断号信息  -->
+	<delete id="deVJumpNum" parameterType="java.util.HashMap">
+		delete from xc_gl_v_junmp_num 
+		where ledger_id = #{ledgerId}
+		  and period_code = #{ldPeriod}
+		  and rule_code = 'ZZ_PZ'  
+		  and v_serial_num = #{serialNum}
+	</delete>
+	
+	<!-- 取消与被冲销凭证的关联关系  -->
+	<update id="cancelWriteOffVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.IS_WRITE_OFF     = null,
+		       t.WRITE_OFF_NUM    = null,
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where t.WRITE_OFF_NUM in 
+		 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+			#{item}		 
+		 </foreach>	
+	</update>
+	
+	<!-- 记录凭证被冲销   -->
+	<update id="recordWriteOffVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads
+		   set is_write_off     = 'Y',
+		       write_off_num    = #{headId,jdbcType=VARCHAR},
+		       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{userId,jdbcType=VARCHAR}
+		 where v_head_id = #{writeOffHeadId}
+	</update>
+	
+	<!-- 凭证审核 -->
+	<update id="checkVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.verifier_id      = #{userId,jdbcType=VARCHAR},
+		       t.verifier         = #{empName,jdbcType=VARCHAR},
+		       t.verfy_date       = #{cdate,jdbcType=TIMESTAMP},
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where t.v_head_id in 
+		 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+			#{item}		 
+		 </foreach>
+		   and t.v_status = '2'
+		   and t.verifier_id is null 
+	</update>
+	
+	<!-- 取消凭证审核 -->
+	<update id="uncheckVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.verifier_id      = null,
+		       t.verifier         = null,
+		       t.verfy_date       = null,
+		       t.sum_flag		  = 'N',
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where t.v_head_id in 
+		 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+			#{item}		 
+		 </foreach>	
+ 		   and t.v_status = '2'
+  		   and t.verifier_id is not null 
+           and t.bookkeeper_id is null
+	</update>
+	
+	<!-- 出纳签字 -->
+	<update id="signVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.signatory        = #{empName,jdbcType=VARCHAR},
+		       t.signatory_id     = #{userId,jdbcType=VARCHAR},
+		       t.sign_date        = #{cdate,jdbcType=TIMESTAMP},
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		where t.v_head_id in 
+		 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+			#{item}		 
+		 </foreach>	
+		  and t.V_STATUS = '2'
+		  and t.IS_SIGNED = 'Y'
+		  and t.signatory_id is null
+	</update>
+	
+	<!-- 取消签字 -->
+	<update id="unsignVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.signatory        = null,
+		       t.signatory_id     = null,
+		       t.sign_date        = null,
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		where t.v_head_id in 
+		 <foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+			#{item}		 
+		 </foreach>	
+		  and t.V_STATUS = '2'
+		  and t.IS_SIGNED = 'Y'
+		  and t.signatory_id is not null
+		  and t.bookkeeper_id is null	
+	</update>
+	
+	<!-- 驳回凭证  -->
+	<update id="rejectVouchers" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t
+		   set t.V_STATUS         = '1',
+		       t.VERIFIER         = null,
+		       t.VERFY_DATE       = null,
+		       t.VERIFIER_ID      = null,
+		       t.SIGNATORY        = null,
+		       t.SIGNATORY_ID     = null,
+		       t.SIGN_DATE        = null,
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where t.V_HEAD_ID in 
+			<foreach collection="list" open="(" close=")" item="item" index="index" separator=",">
+				#{item}		 
+			</foreach>	
+		   and t.V_STATUS = '2'
+		   and t.verifier_id is null 
+		   and t.signatory_id is null
+		   and t.bookkeeper_id is null	
+	</update>
+	
+	<!-- 凭证记账  -->
+	<update id="account" parameterType="java.util.HashMap">
+		update xc_gl_v_heads 
+		   set bookkeeper_id    = #{userId,jdbcType=VARCHAR},
+		       bookkeeper       = #{empName,jdbcType=VARCHAR},
+		       book_date        = #{cdate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where v_head_id in 
+		 <foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+		 	#{item}
+		 </foreach>
+		   and v_status = '2'
+		   and verifier_id is not null
+		   and ((is_signed='Y' and signatory_id is not null) or is_signed='N')
+		   and bookkeeper_id is null
+	</update>
+	
+	<!-- 凭证取消记账  -->
+	<update id="cancelAccount" parameterType="java.util.HashMap">
+		update xc_gl_v_heads
+		   set bookkeeper_id    = null,
+		       bookkeeper       = null,
+		       book_date        = null,
+		       last_updated_by  = #{userId,jdbcType=VARCHAR},
+		       last_update_date = #{cdate,jdbcType=TIMESTAMP}
+		 where v_head_id in 
+		 <foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+		 	#{item}
+		 </foreach>
+		   and bookkeeper_id is not null
+	</update>
+	
+	<!-- 凭证编号是否已经使用   -->
+	<select id="isUsedSerialNum" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select t.v_head_id headId
+		  from xc_gl_v_heads t
+		 where t.v_serial_num = #{serialNum}
+		   and t.LEDGER_ID = #{ledgerId} 
+		   and t.PERIOD_CODE = #{periodCode} 
+	</select>
+	
+	<!-- 凭证是否已冲销  -->
+	<select id="isWriteOffVoucher" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select t.v_head_id headId
+		  from xc_gl_v_heads t
+		 where t.V_HEAD_ID = #{writeOffNum}
+		   and t.IS_WRITE_OFF = 'Y'	
+	</select>
+	
+	<!-- 凭证是否已经提交 -->
+	<select id="isSubmitedVoucher" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VHead">
+		select t.v_head_id headId
+		  from xc_gl_v_heads t
+		 where t.V_HEAD_ID = #{headId}
+		   and t.V_STATUS = '2'	
+	</select>
+	
+	<!-- 获取预算检查条件信息  -->
+	<select id="getbudgetConditions" parameterType="java.lang.String" resultType="com.xzsoft.xc.bg.modal.BgFactDTO">
+		select c.ledger_id ledgerId,
+			   b.acc_id accId,
+		       b.project_id projectId,
+		       b.dept_id deptId,
+		       d.bg_item_id bgItemId,
+		       c.creation_date factDate,
+		       (a.account_dr+a.account_cr) amount,
+		       a.v_line_id srcId,
+		       'XC_GL_V_LINES' srcTab
+		  from xc_gl_v_lines     a,
+			   xc_gl_v_heads     c,
+		       xc_gl_ccid        b,
+		       xc_bg_ld_items    d,
+		       xc_gl_ld_accounts e
+		 where a.ccid = b.ccid
+		   and a.v_head_id = c.v_head_id
+		   and c.ledger_id = b.ledger_id
+		   and c.ledger_id = d.ledger_id
+		   and c.ledger_id = e.ledger_id
+		   and b.acc_id = e.acc_id
+		   and d.bg_item_id = e.bg_item_id
+		   and c.V_HEAD_ID = #{headId}
+	</select>
+	
+	<!-- 判断账簿期间是否为打开状态  -->
+	<select id="isOpenPeriod" parameterType="java.util.List" resultType="java.lang.String">
+	  select distinct xh.PERIOD_CODE 
+	  from xc_gl_v_heads xh , xc_gl_ld_period xp
+	  where xh.PERIOD_CODE = xp.PERIOD_CODE
+	    and xh.LEDGER_ID = xp.LEDGER_ID
+	    and xp.LD_PERIOD_STATUS != '1'
+	    and xh.V_HEAD_ID in 
+	    <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+	    	#{item}
+	    </foreach>
+	</select>
+	
+</mapper>

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"获取折旧方法","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"SELECT *, s.ENABLE_FLAG FROM xc_fa_depr_methods s WHERE s.ENABLE_FLAG = 'Y'","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

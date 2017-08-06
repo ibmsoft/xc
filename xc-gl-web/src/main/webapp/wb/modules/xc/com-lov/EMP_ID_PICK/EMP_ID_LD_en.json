@@ -1,0 +1,7 @@
+{
+	empName:'principal',
+  	empCode:'employee code',
+  	name:'employee name',
+  	empCodeName:'empCodeName',
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

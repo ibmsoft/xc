@@ -1,0 +1,1 @@
+{"charset":"","serialNumber":"IXEB-63UI-P1CP-1C5C","startTask":false,"log":true,"cacheEnabled":true,"initMethod":"","printError":true,"finalMethod":"","cacheGzipMinSize":6144,"respGzipMinSize":10240,"serverId":"2","cacheCheckModified":true,"dbType":"mysql","jndi":"","fileNameCharset":""}

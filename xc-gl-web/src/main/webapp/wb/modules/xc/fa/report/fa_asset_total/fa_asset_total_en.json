@@ -1,0 +1,15 @@
+{
+	ledger:'Ledger',
+  	period:'Period',
+  	to:'to',
+  	dept:'Department',
+  	type:'Classfication',
+  	typeTotal:'Classification level',
+  	query:'query',
+  	reset:'reset',
+  	msg1:'Please firstly select the ledger ',
+  	property:'property',
+    msg2:'Please firstly select the period',
+  	msg3:'Please firstly select the department',
+  	msg4:'Please firstly select the property'
+}

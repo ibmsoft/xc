@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.XCARCommonMapper">
+	<!-- 获取单据的编码规则 -->
+	<select id="getArCode" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			RULE_CODE
+		FROM
+			xc_ar_ld_doc_cat
+		WHERE
+			LEDGER_ID = #{ledgerId}
+		AND AR_DOC_CAT_CODE = #{arDocCatCode}
+	</select>
+	<!-- 销售发票主表列 -->
+	<sql id="arInvoiceHColumn">
+		AR_INV_H_ID,
+		AR_INV_H_CODE,
+		AR_DOC_CAT_CODE,
+		L_AR_INV_H_ID,
+		LEDGER_ID,
+		BIZ_DATE,
+		CUSTOMER_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AR_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		INV_NO,
+		DESCRIPTION,
+		SYS_AUDIT_STATUS,
+		SYS_AUDIT_STATUS_DESC,
+		INS_CODE,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		AUDIT_DATE,
+		FIN_USER_ID,
+		FIN_DATE,
+		PRINT_USER_ID,
+		PRINT_DATE,
+		PRINT_STATUS,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 销售发票行表列 -->
+	<sql id=""></sql>
+	
+	<!-- 应收单主表列 -->
+	<sql id="arInvGlHColumn">
+		AR_INV_GL_H_ID,
+		AR_INV_GL_H_CODE,
+		AR_INV_H_ID,
+		L_AR_INV_GL_H_ID,
+		AR_DOC_CAT_CODE,
+		LEDGER_ID,
+		GL_DATE,
+		CUSTOMER_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AR_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		PAID_AMT,
+		NO_PAY_AMT,
+		ADJ_AMT,
+		AR_ACC_ID_DEBT,
+		AR_ACC_ID_TAX,
+		AR_CCID_DEBT,
+		AR_CCID_TAX,
+		INIT,
+		SOURCE,
+		V_HEAD_ID,
+		V_STATUS,
+		VERIFIER_ID,
+		VERFY_DATE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 应收单行表列 -->
+	<sql id="arInvGlLColumn">
+		AR_INV_GL_L_ID,
+		AR_INV_GL_H_ID,
+		L_AR_INV_GL_L_ID,
+		L_AR_INV_GL_H_ID,
+		AR_SALE_TYPE_ID,
+		PRODUCT_ID,
+		ACC_ID,
+		CCID,
+		PRICE,
+		INV_PRICE,
+		AMOUNT,
+		INV_AMOUNT,
+		TAX_AMT,
+		TAX,
+		QTY,
+		DIM_CODE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 收款单主表列 -->
+	<sql id="arPayHColumn">
+		AR_PAY_H_ID,
+		AR_PAY_H_CODE,
+		AR_DOC_CAT_CODE,
+		LEDGER_ID,
+		GL_DATE,
+		CUSTOMER_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AR_CONTRACT_ID,
+		AMOUNT,
+		SOURCE,
+		DESCRIPTION,
+		PAY_TYPE,
+		PAY_NO,
+		PAY_DATE,
+		SALE_ACC_ID,
+		SALE_CCID,
+		CA_ID,
+		BANK_ACCOUNT,
+		V_HEAD_ID,
+		V_STATUS,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 收款单行表列 -->
+	<sql id="arPayLColumn">
+		AR_PAY_L_ID,
+		AR_PAY_H_ID,
+		L_AR_PAY_H_ID,
+		L_AR_PAY_L_ID,
+		AR_INV_GL_H_ID,
+		AR_SALE_TYPE_ID,
+		PRODUCT_ID,
+		BG_ITEM_ID,
+		PROJECT_ID,
+		AR_CONTRACT_ID,
+		DEPT_ID,
+		AR_DOC_CAT_CODE,
+		AMOUNT,
+		DESCRIPTION,
+		ACC_ID,
+		CCID,
+		AR_CREATED_BY_NAME,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 核销单主表列 -->
+	<sql id="arCancelHColumn">
+		AR_CANCEL_H_ID,
+		AR_CANCEL_H_CODE,
+		LEDGER_ID,
+		AR_CANCEL_TYPE,
+		GL_DATE,
+		SRC_ID,
+		SRC_AMT,
+		DESCRIPTION,
+		V_HEAD_ID,
+		V_STATUS,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 核销单行表列 -->
+	<sql id="arCancelLColumn">
+		AR_CANCEL_L_ID,
+		AR_CANCEL_H_ID,
+		AR_CANCEL_TYPE,
+		TARGET_ID,
+		TARGET_AMT,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 查询销售发票主表信息 -->
+	<select id="getArInvoiceH" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArInvoiceHBean">
+		SELECT
+			<include refid="arInvoiceHColumn"/>
+		FROM
+			xc_ar_invoice_h
+		WHERE
+			AR_INV_H_ID = #{AR_INV_H_ID}
+	</select>
+	
+	<!-- 通过销售发票ID查询应收单主表信息 -->
+	<select id="getArInvGlHByInvId" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			<include refid="arInvGlHColumn"/>
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_H_ID = #{AR_INV_H_ID}
+		AND AR_INV_H_ID != ''
+	</select>
+	
+	<!-- 通过应收单ID查询应收单主表信息 -->
+	<select id="getArInvGlH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			<include refid="arInvGlHColumn"/>
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+	
+	<!-- 通过应收单ID查询应收单行表信息 -->
+	<select id="getArInvGlL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentLBean">
+		SELECT
+			<include refid="arInvGlLColumn"/>
+		FROM
+			xc_ar_inv_gl_l
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+	
+	<!-- 通过收款单ID查询收款单主表信息 -->
+	<select id="getArPayH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			<include refid="arPayHColumn"/>
+		FROM
+			xc_ar_pay_h
+		WHERE
+			AR_PAY_H_ID = #{AR_PAY_H_ID}
+	</select>
+	
+	<!-- 通过收款单ID查询收款单行表信息 -->
+	<select id="getArPayL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentLBean">
+		SELECT
+			<include refid="arPayLColumn"/>
+		FROM
+			xc_ar_pay_l
+		WHERE
+			AR_PAY_H_ID = #{AR_PAY_H_ID}
+	</select>
+	
+	<!-- 通过核销单ID查询核销单主表信息 -->
+	<select id="getArCancelH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			<include refid="arCancelHColumn"/>
+		FROM
+			xc_ar_cancel_h
+		WHERE
+			AR_CANCEL_H_ID = #{AR_CANCEL_H_ID}
+	</select>
+	
+	<!-- 通过核销单ID查询核销单行表信息 -->
+	<select id="getArCancelL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentLBean">
+		SELECT
+			<include refid="arCancelLColumn"/>
+		FROM
+			xc_ar_cancel_l
+		WHERE
+			AR_CANCEL_H_ID = #{AR_CANCEL_H_ID}
+	</select>
+	
+	<!-- 通过余额调整单ID查询余额调整单表信息 -->
+	<select id="getArInvGlAdj" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			GL_ADJ_ID,
+			GL_ADJ_CODE,
+			LEDGER_ID,
+			CUSTOMER_ID,
+			AR_INV_GL_H_ID,
+			GL_DATE,
+			TO_CCID,
+			DR_OR_CR,
+			ADJ_AMT,
+			DESCRIPTION,
+			V_HEAD_ID,
+			V_STATUS,
+			VERIFIER_ID,
+			VERFY_DATE,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM
+			xc_ar_inv_gl_adj
+		WHERE
+			GL_ADJ_ID = #{GL_ADJ_ID}
+	</select>
+	
+	<!-- 通过科目组合ID得到科目信息 -->
+	<select id="getAccId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			ACC_ID
+		FROM
+			xc_gl_ccid
+		WHERE
+			CCID = #{ccId}
+	</select>
+	
+	<!-- 红字发票需要判断应收单的未付金额是否还够冲销当前红色发票 （通过应收单发票ID） -->
+	<select id="judgmentInvAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			AR_INV_GL_H_CODE
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_GL_H_ID = #{lArInvHId}
+		AND (NO_PAY_AMT + #{invAmount}) &lt; 0
+	</select>
+	
+	<!-- 红字发票需要判断应收单的未付金额是否还够冲销当前红色发票（通过销售发票ID） -->
+	<select id="judgmentInvoiceAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			AR_INV_GL_H_CODE
+		FROM
+			xc_ar_inv_gl_h
+		WHERE
+			AR_INV_H_ID = #{lArInvHId}
+		AND (NO_PAY_AMT + #{invAmount}) &lt; 0
+	</select>
+	
+	<!-- 通过客户ID查询客户全部信息 -->
+	<select id="getArCustomer" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArCustomerBean">
+		SELECT
+			CUSTOMER_ID,
+			CUSTOMER_CODE,
+			CUSTOMER_NAME,
+			SORT1,
+			SORT2,
+			SORT3,
+			TAX_NO,
+			ADDRESS,
+			CONTACT,
+			TEL,
+			MOBILE,
+			QQ,
+			WECHAT,
+			EMAIL,
+			VENDOR_ID,
+			START_DATE,
+			END_DATE,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM
+			xc_ar_customers
+		WHERE
+			CUSTOMER_ID = #{CUSTOMER_ID}
+	</select>
+	
+	<!-- 根据来源id、来源明细id查询交易明细表金额 -->
+	<select id="getArInvTrans" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.apar.modal.ArInvTransBean">
+		SELECT 
+			TRANS_ID,
+			SOURCE_ID,
+			SOURCE_DTL_ID,
+			AR_INV_GL_H_ID,
+			AR_PAY_H_ID,
+			GL_DATE,
+			SOURCE_TAB,
+			AR_DOC_CAT_CODE,
+			AR_CONTRACT_ID,
+			CUSTOMER_ID,
+			DR_AMT,
+			CR_AMT,
+			AMOUNT,
+			TRANS_STATUS,
+			CCID,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM 
+			xc_ar_inv_trans
+		WHERE 
+			SOURCE_ID = #{SOURCE_ID,jdbcType=VARCHAR}
+		AND SOURCE_DTL_ID = #{SOURCE_DTL_ID,jdbcType=VARCHAR}
+	</select>
+</mapper>

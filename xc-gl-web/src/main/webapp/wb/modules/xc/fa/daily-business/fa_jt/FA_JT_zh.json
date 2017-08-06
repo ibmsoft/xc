@@ -1,0 +1,10 @@
+{
+  ledger:'账簿',
+  period:'期间',
+  selectLedgerMsg:'请选择账簿',
+  selectPeriodMsg:'请选择期间',
+  ensureBtn:'计提',
+  
+  waitMsg:'正在计提,请稍后...',
+  failureMsg:'操作失败'
+}

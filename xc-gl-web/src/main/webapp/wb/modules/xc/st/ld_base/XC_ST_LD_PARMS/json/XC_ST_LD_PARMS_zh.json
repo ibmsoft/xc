@@ -1,0 +1,12 @@
+{
+    XC_ST_LD_PARMS_LEDGER_NAME				: '账簿',
+    XC_ST_LD_PARMS_ST_PERIOD_CODE			: '开始会计期',
+    XC_ST_LD_PARMS_ST_COST_METHOD_NAME		: '成本核算方法',
+    XC_ST_LD_PARMS_MAT_TYPE_SET_NAME		: '物料分类集',
+    XC_ST_LD_PARMS_ST_PROCESS_METHOD_NAME	: '移动加权平均法下的差异处理方式',
+    XC_ST_LD_PARMS_saveBtn					: '保存',
+    XC_ST_LD_PARMS_qsrsybsx					: '请输入所有必输项！',
+    XC_ST_LD_PARMS_sjbccg					: '数据保存成功！',
+    XC_ST_LD_PARMS_fieldset1				: '账簿信息',
+    XC_ST_LD_PARMS_fieldset2				: '账簿参数'
+}

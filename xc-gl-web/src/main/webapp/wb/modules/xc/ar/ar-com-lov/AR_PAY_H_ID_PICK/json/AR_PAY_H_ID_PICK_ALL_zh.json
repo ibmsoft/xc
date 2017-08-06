@@ -1,0 +1,7 @@
+{
+	accessDocument:'收款单',
+  	code:'预收款单编码',
+ 	description:'摘要',
+  	amount:'余额',
+  	codeName:'收款单编码/摘要'
+}

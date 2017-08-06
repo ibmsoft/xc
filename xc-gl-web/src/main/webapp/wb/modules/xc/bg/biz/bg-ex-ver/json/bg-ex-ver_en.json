@@ -1,0 +1,61 @@
+{
+    LEDGER_NAME : "Ledger",
+    org_com : "Organization",
+    bg_ver_period_com : "Fiscal year",
+  
+    LEDGER_NAME_EMPYT : "Please select books query",
+	
+	selBtn : "Query",
+	resetBtn : "Reset",
+    cancelsBtn : "Clear",
+  
+	addBtn : "Add",
+	editBtn : "Edit",
+	delBtn : "Delete",
+	effectButton : "Effect",
+	budgetButton : "View budget",
+	saveBtn : "Save",
+	cancelBtn : "Cancel",
+	
+    number : "NO",
+	BG_VER_CODE : "Version code",
+	BG_VER_NAME : "Version name",
+	BG_VER_DESC : "Version Description",
+	START_DATE : "Start date",
+	END_DATE : "End date",
+	IS_VALID : "Is effect",
+  
+    addRec1 : "Added cost budget version",
+  
+    editRec1 : "Please select books query!",
+    editRec2 : "Please select a record that needs to be modified!",
+    editRec3 : "Revised cost budget version",
+  
+    deleteRec1 : "Please select a record that needs to be modified!",
+    deleteRec2 : "Sure you want to delete the selected",
+    deleteRec3 : "?",
+    deleteRec4 : "Cost budget version",
+    deleteRec5 : "delete success!",
+  
+    effectRec1 : "Please select a record that needs to be effective!",
+    effectRec2 : "Cost budget version",
+    effectRec3 : "already effective!",
+  
+    seekRec1 : "Please select a record that needs to be viewed!",
+    seekRec2 : "Cost budget summary",
+  
+    saveInfo1 : "Books cannot be empty! Please re-enter!",
+    saveInfo2 : "Annual account cannot be empty! Please re-enter!",
+    saveInfo3 : "Version code cannot be empty! Please re-enter!",
+    saveInfo4 : "Version name cannot be empty! Please re-enter!",
+    saveInfo5 : "The end date cannot be less than the start date, please re-enter!",
+    saveInfo6 : "Data add success!",
+    saveInfo7 : "Data modification success!",
+  
+    BG_ITEM_NAME_COL : "Budget items",
+    DEPT_NAME_COL : "Department",
+    BG_YEAR_COL : "Year",
+    PERIOD_CODE_COL : "Month",
+    BG_AMT_COL : "Amount",
+    BG_DTL_DESC_COL : "Summary"
+}

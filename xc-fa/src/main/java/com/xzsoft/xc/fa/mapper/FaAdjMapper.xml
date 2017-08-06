@@ -1,0 +1,376 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.FaAdjMapper">
+	
+	<!-- 保存头信息 -->
+	<insert id="insertFaAdjH" parameterType="com.xzsoft.xc.fa.modal.FaAdjH">
+		insert into xc_fa_adj_h(
+		    ADJ_H_ID, LEDGER_ID, ADJ_DATE, DOC_NUM, BZSM, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY, JTZJ_TYPE, AUDIT_STATUS
+		) values (
+		    #{adjHid, jdbcType=VARCHAR}, 
+			#{ledgerId, jdbcType=VARCHAR},
+			#{adjDate, jdbcType=TIMESTAMP},
+			#{docNum, jdbcType=VARCHAR},
+			#{bzsm, jdbcType=VARCHAR},
+			#{creationDate, jdbcType=TIMESTAMP},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastUpdateDate, jdbcType=TIMESTAMP},
+			#{lastUpdatedBy, jdbcType=VARCHAR},
+			#{jtzjType, jdbcType=VARCHAR},
+			#{auditStatus, jdbcType=VARCHAR}
+		)			 
+	</insert>
+	
+	<update id="updateFaAdjH" parameterType="com.xzsoft.xc.fa.modal.FaAdjH">
+		update xc_fa_adj_h
+		   set LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP},
+		       LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR},
+		       BZSM =  #{bzsm, jdbcType=VARCHAR}
+		 where ADJ_H_ID = #{adjHid, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存行信息 -->
+	<insert id="insertFaAdjL" parameterType="java.util.List">
+		insert into xc_fa_adj_l(
+		    ADJ_D_ID, ADJ_H_ID, ASSET_ID, ADJ_TYPE, OLD_VAL, NEW_VAL, DFKM, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY, ADJ_SOURCE
+		)
+		<foreach collection="list" item="item" index="index" separator="union all">
+			(select #{item.adjDid, jdbcType=VARCHAR}, 
+					#{item.adjHid, jdbcType=VARCHAR},
+					#{item.assetId, jdbcType=VARCHAR},
+					#{item.adjType, jdbcType=VARCHAR},
+					#{item.oldVal, jdbcType=VARCHAR},
+					#{item.newVal, jdbcType=VARCHAR},
+					#{item.dfkm, jdbcType=VARCHAR},
+					#{item.creationDate, jdbcType=TIMESTAMP},
+					#{item.createdBy, jdbcType=VARCHAR},
+					#{item.lastUpdateDate, jdbcType=TIMESTAMP},
+					#{item.lastUpdatedBy, jdbcType=VARCHAR},
+					#{item.adjSource, jdbcType=VARCHAR}
+			from dual)			 
+		 </foreach>
+	</insert>
+	
+	<update id="updateFaAdjL" parameterType="com.xzsoft.xc.fa.modal.FaAdjL">
+		update xc_fa_adj_l
+		   set LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP},
+		       LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR},
+		       ADJ_TYPE = #{adjType, jdbcType=VARCHAR},
+		       OLD_VAL = #{oldVal, jdbcType=VARCHAR},
+		       NEW_VAL = #{newVal, jdbcType=VARCHAR},
+		       DFKM = #{dfkm, jdbcType=VARCHAR}
+		 where ADJ_D_ID = #{adjDid, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存修改资产信息-->
+	<update id="updateFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAdjL">
+		update xc_fa_additions
+		   set LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP},
+		       LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR},
+		       <choose>
+		           <when test="adjType!='SYNX' and adjType!='YZ' and adjType!='LJZJ_LJTX' and adjType!='JZZB' and adjType!='CZL' and adjType!='YJTJE'">
+			           ${adjType} = #{newVal, jdbcType=VARCHAR}
+			       </when>
+			       <otherwise>
+			           ${adjType} = #{newVal, jdbcType=DECIMAL}
+			       </otherwise>
+		       </choose>
+		 where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getCurrentOpenedPeriod" parameterType="java.lang.String" resultType="java.lang.String">
+	    select PERIOD_CODE
+          from xc_fa_ld_periods
+         where LEDGER_ID = #{ledgerId, jdbcType=VARCHAR}
+           and STATUS = 1
+	</select>
+	
+	<select id="getAllPeriodsByLedger" parameterType="java.lang.String" resultType="java.lang.String">
+	    select PERIOD_CODE
+          from xc_fa_ld_periods
+         where LEDGER_ID = #{ledgerId, jdbcType=VARCHAR}
+         order by PERIOD_CODE asc
+	</select>
+	
+	<select id="getAdjHById" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.FaAdjH">
+	    select ADJ_H_ID adjHid, 
+	           LEDGER_ID ledgerId, 
+	           ADJ_DATE adjDate, 
+	           DATE_FORMAT(ADJ_DATE, '%Y-%m') periodCode,
+	           DOC_NUM docNum, 
+	           BZSM bzsm, 
+	           JTZJ_TYPE jtzjType
+         from xc_fa_adj_h
+        where ADJ_H_ID = #{adjHid, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAdjLByHid" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.FaAdjL">
+	    select j.ADJ_D_ID adjDid, 
+	           j.ADJ_H_ID adjHid, 
+	           j.ASSET_ID assetId, 
+	           j.ADJ_TYPE adjType, 
+	           j.OLD_VAL oldVal, 
+	           j.NEW_VAL newVal, 
+	           j.DFKM dfkm,
+	           (select t.VOUCHER_FLAG from xc_fa_trans_type t where t.TRANS_CODE = j.ADJ_TYPE) vouCherFlag,
+	           j.ADJ_SOURCE adjSource,
+	           xfa.ZCBM assetCode,
+		       xfa.ZCMC assetName,
+		       CASE WHEN j.ADJ_TYPE = 'ZJFF' THEN (SELECT m.METHOD_NAME FROM xc_fa_depr_methods m WHERE m.METHOD_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCYT' THEN (SELECT u.USE_NAME FROM xc_fa_uses u WHERE u.USE_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'CAT_CODE' THEN (SELECT c.CAT_NAME FROM xc_fa_cats c WHERE c.CAT_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCKM' THEN (SELECT acc.ACC_NAME 
+		                                              FROM xc_gl_accounts acc 
+		                                             WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                               AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                        FROM xc_gl_ledgers l 
+		                                                                       WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                         AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'YZ' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'SYNX' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'SFZJ' THEN (CASE WHEN j.OLD_VAL = 'Y' THEN '是' ELSE '否' END)
+		            WHEN j.ADJ_TYPE = 'JZZBKM' THEN (SELECT acc.ACC_NAME 
+		                                                FROM xc_gl_accounts acc 
+		                                               WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                                 AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                          FROM xc_gl_ledgers l 
+		                                                                         WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                           AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'LJZJTXKM' THEN (SELECT acc.ACC_NAME 
+		                                               FROM xc_gl_accounts acc 
+		                                              WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                                AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+				                                                         FROM xc_gl_ledgers l 
+				                                                        WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+				                                                          AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'CZL' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'LJZJ_LJTX' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'CBZX' THEN (SELECT d.DEPT_NAME FROM xip_pub_depts d WHERE d.DEPT_ID = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'JZZB' THEN j.OLD_VAL END oldViewVal,
+		       CASE WHEN j.ADJ_TYPE = 'ZJFF' THEN (SELECT m.METHOD_NAME FROM xc_fa_depr_methods m WHERE m.METHOD_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCYT' THEN (SELECT u.USE_NAME FROM xc_fa_uses u WHERE u.USE_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'CAT_CODE' THEN (SELECT c.CAT_NAME FROM xc_fa_cats c WHERE c.CAT_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCKM' THEN (SELECT acc.ACC_NAME 
+		                                              FROM xc_gl_accounts acc 
+		                                             WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                               AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                        FROM xc_gl_ledgers l 
+		                                                                       WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                         AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'YZ' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'SYNX' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'SFZJ' THEN (CASE WHEN j.NEW_VAL = 'Y' THEN '是' ELSE '否' END)
+		            WHEN j.ADJ_TYPE = 'JZZBKM' THEN (SELECT acc.ACC_NAME 
+		                                                FROM xc_gl_accounts acc 
+		                                               WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                                 AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                          FROM xc_gl_ledgers l 
+		                                                                         WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                           AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'LJZJTXKM' THEN (SELECT acc.ACC_NAME 
+		                                               FROM xc_gl_accounts acc 
+		                                              WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                                AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+				                                                         FROM xc_gl_ledgers l 
+				                                                        WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+				                                                          AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'CZL' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'LJZJ_LJTX' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'CBZX' THEN (SELECT d.DEPT_NAME FROM xip_pub_depts d WHERE d.DEPT_ID = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'JZZB' THEN j.NEW_VAL END newViewVal,
+		       (SELECT t.TRANS_DESC 
+		          FROM xc_fa_trans_type t
+		         WHERE t.TRANS_CODE = j.ADJ_TYPE) adjViewType,
+		       (SELECT a.ACC_NAME 
+		          FROM xc_gl_accounts a 
+		         WHERE a.ACC_CODE = j.DFKM 
+		           AND a.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                  FROM xc_gl_ledgers l 
+		                                 WHERE l.ACC_HRCY_ID = a.ACC_HRCY_ID 
+		                                   AND l.LEDGER_ID = (SELECT h.LEDGER_ID 
+		                                                        FROM xc_fa_adj_h h
+		                                                        WHERE h.ADJ_H_ID = j.ADJ_H_ID))) dfkmView
+         from xc_fa_adj_l j
+         left join xc_fa_additions xfa on xfa.ASSET_ID = j.ASSET_ID
+        where ADJ_H_ID = #{adjHid, jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateAdjHStatus" parameterType="java.lang.String">
+		update xc_fa_adj_h
+		   set AUDIT_STATUS = #{1, jdbcType=VARCHAR}
+		 where ADJ_H_ID = #{0, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存修改资产信息-->
+	<update id="revokeFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAdjL">
+		update xc_fa_additions
+		   set LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP},
+		       LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR},
+		       <choose>
+		           <when test="adjType!='SYNX' and adjType!='YZ' and adjType!='LJZJ_LJTX' and adjType!='JZZB' and adjType!='CZL' and adjType!='YJTJE'">
+			           ${adjType} = #{oldVal, jdbcType=VARCHAR}
+			       </when>
+			       <otherwise>
+			           ${adjType} = #{oldVal, jdbcType=DECIMAL}
+			       </otherwise>
+		       </choose>
+		 where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="checkFaHasBeenAdj" parameterType="java.lang.String" resultType="java.lang.String">
+	    SELECT 
+		  DISTINCT(SELECT 
+		    a.ZCMC 
+		  FROM
+		    xc_fa_additions a 
+		  WHERE a.ASSET_ID = l.ASSET_ID) ZCMC
+		FROM
+		  xc_fa_adj_l l 
+		WHERE l.ADJ_H_ID IN 
+		  (SELECT 
+		    h.ADJ_H_ID 
+		  FROM
+		    xc_fa_adj_h h 
+		  WHERE DATE_FORMAT(h.ADJ_DATE, '%Y-%m') = DATE_FORMAT(#{0, jdbcType=TIMESTAMP}, '%Y-%m') 
+		    <!-- AND h.AUDIT_STATUS = #{3, jdbcType=VARCHAR} -->) 
+		    AND l.ADJ_TYPE = #{1, jdbcType=VARCHAR}
+		    AND l.ASSET_ID = #{2, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="checkFaHasBeenAdjUpdate" parameterType="java.lang.String" resultType="java.lang.String">
+	    SELECT 
+		  DISTINCT(SELECT 
+		    a.ZCMC 
+		  FROM
+		    xc_fa_additions a 
+		  WHERE a.ASSET_ID = l.ASSET_ID) ZCMC
+		FROM
+		  xc_fa_adj_l l 
+		WHERE l.ADJ_H_ID IN 
+		  (SELECT 
+		    h.ADJ_H_ID 
+		  FROM
+		    xc_fa_adj_h h 
+		  WHERE DATE_FORMAT(h.ADJ_DATE, '%Y-%m') = DATE_FORMAT(#{0, jdbcType=TIMESTAMP}, '%Y-%m') 
+		    <!-- AND h.AUDIT_STATUS = #{3, jdbcType=VARCHAR} -->) 
+		    AND l.ADJ_TYPE = #{1, jdbcType=VARCHAR}
+		    AND l.ASSET_ID = #{2, jdbcType=VARCHAR}
+		    AND l.ADJ_D_ID not in (#{3, jdbcType=VARCHAR})
+	</select>
+	
+	<delete id="delAutoCreateAdjLs" parameterType="java.lang.String">
+		delete from xc_fa_adj_l where ADJ_H_ID = #{adjHid, jdbcType=VARCHAR} and ADJ_SOURCE = 'S'
+	</delete>
+	
+	<select id="getAdjLByLid" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.FaAdjL">
+	    select j.ADJ_D_ID adjDid, 
+	           j.ADJ_H_ID adjHid, 
+	           j.ASSET_ID assetId, 
+	           j.ADJ_TYPE adjType, 
+	           j.OLD_VAL oldVal, 
+	           j.NEW_VAL newVal, 
+	           j.DFKM dfkm,
+	           (select t.VOUCHER_FLAG from xc_fa_trans_type t where t.TRANS_CODE = j.ADJ_TYPE) vouCherFlag,
+	           j.ADJ_SOURCE adjSource,
+	           xfa.ZCBM assetCode,
+		       xfa.ZCMC assetName,
+		       CASE WHEN j.ADJ_TYPE = 'ZJFF' THEN (SELECT m.METHOD_NAME FROM xc_fa_depr_methods m WHERE m.METHOD_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCYT' THEN (SELECT u.USE_NAME FROM xc_fa_uses u WHERE u.USE_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'CAT_CODE' THEN (SELECT c.CAT_NAME FROM xc_fa_cats c WHERE c.CAT_CODE = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCKM' THEN (SELECT acc.ACC_NAME 
+		                                              FROM xc_gl_accounts acc 
+		                                             WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                               AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                        FROM xc_gl_ledgers l 
+		                                                                       WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                         AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'YZ' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'SYNX' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'SFZJ' THEN (CASE WHEN j.OLD_VAL = 'Y' THEN '是' ELSE '否' END)
+		            WHEN j.ADJ_TYPE = 'JZZBKM' THEN (SELECT acc.ACC_NAME 
+		                                                FROM xc_gl_accounts acc 
+		                                               WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                                 AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                          FROM xc_gl_ledgers l 
+		                                                                         WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                           AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'LJZJTXKM' THEN (SELECT acc.ACC_NAME 
+		                                               FROM xc_gl_accounts acc 
+		                                              WHERE acc.ACC_CODE = j.OLD_VAL 
+		                                                AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+				                                                         FROM xc_gl_ledgers l 
+				                                                        WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+				                                                          AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'CZL' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'LJZJ_LJTX' THEN j.OLD_VAL
+		            WHEN j.ADJ_TYPE = 'CBZX' THEN (SELECT d.DEPT_NAME FROM xip_pub_depts d WHERE d.DEPT_ID = j.OLD_VAL)
+		            WHEN j.ADJ_TYPE = 'JZZB' THEN j.OLD_VAL END oldViewVal,
+		       CASE WHEN j.ADJ_TYPE = 'ZJFF' THEN (SELECT m.METHOD_NAME FROM xc_fa_depr_methods m WHERE m.METHOD_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCYT' THEN (SELECT u.USE_NAME FROM xc_fa_uses u WHERE u.USE_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'CAT_CODE' THEN (SELECT c.CAT_NAME FROM xc_fa_cats c WHERE c.CAT_CODE = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'ZCKM' THEN (SELECT acc.ACC_NAME 
+		                                              FROM xc_gl_accounts acc 
+		                                             WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                               AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                        FROM xc_gl_ledgers l 
+		                                                                       WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                         AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'YZ' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'SYNX' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'SFZJ' THEN (CASE WHEN j.NEW_VAL = 'Y' THEN '是' ELSE '否' END)
+		            WHEN j.ADJ_TYPE = 'JZZBKM' THEN (SELECT acc.ACC_NAME 
+		                                                FROM xc_gl_accounts acc 
+		                                               WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                                 AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                                                          FROM xc_gl_ledgers l 
+		                                                                         WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+		                                                                           AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'LJZJTXKM' THEN (SELECT acc.ACC_NAME 
+		                                               FROM xc_gl_accounts acc 
+		                                              WHERE acc.ACC_CODE = j.NEW_VAL 
+		                                                AND acc.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+				                                                         FROM xc_gl_ledgers l 
+				                                                        WHERE l.ACC_HRCY_ID = acc.ACC_HRCY_ID 
+				                                                          AND l.LEDGER_ID = xfa.LEDGER_ID))
+		            WHEN j.ADJ_TYPE = 'CZL' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'LJZJ_LJTX' THEN j.NEW_VAL
+		            WHEN j.ADJ_TYPE = 'CBZX' THEN (SELECT d.DEPT_NAME FROM xip_pub_depts d WHERE d.DEPT_ID = j.NEW_VAL)
+		            WHEN j.ADJ_TYPE = 'JZZB' THEN j.NEW_VAL END newViewVal,
+		       (SELECT t.TRANS_DESC 
+		          FROM xc_fa_trans_type t
+		         WHERE t.TRANS_CODE = j.ADJ_TYPE) adjViewType,
+		       (SELECT a.ACC_NAME 
+		          FROM xc_gl_accounts a 
+		         WHERE a.ACC_CODE = j.DFKM 
+		           AND a.ACC_HRCY_ID = (SELECT l.ACC_HRCY_ID 
+		                                  FROM xc_gl_ledgers l 
+		                                 WHERE l.ACC_HRCY_ID = a.ACC_HRCY_ID 
+		                                   AND l.LEDGER_ID = (SELECT h.LEDGER_ID 
+		                                                        FROM xc_fa_adj_h h
+		                                                        WHERE h.ADJ_H_ID = j.ADJ_H_ID))) dfkmView
+         from xc_fa_adj_l j
+         left join xc_fa_additions xfa on xfa.ASSET_ID = j.ASSET_ID
+        where ADJ_D_ID = #{adjLid, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="checkInPeriod" parameterType="java.lang.String" resultType="java.lang.Integer">
+	    SELECT COUNT(*) CNT
+  		  FROM xc_fa_adj_h h
+         WHERE DATE_FORMAT(h.ADJ_DATE, '%Y-%m') = (SELECT p.PERIOD_CODE 
+                                                     FROM xc_fa_ld_periods p
+                                                    WHERE p.LEDGER_ID = h.LEDGER_ID
+                                                      AND p.STATUS = '1')
+           AND h.ADJ_H_ID = #{adjHid, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="checkAdj4After" parameterType="java.lang.String" resultType="java.lang.Integer">
+	    SELECT COUNT(*) CNT
+  		  FROM xc_fa_adj_l l
+         WHERE l.ASSET_ID = #{1, jdbcType=VARCHAR}
+           AND l.ADJ_H_ID IN (SELECT h.ADJ_H_ID 
+		                        FROM xc_fa_adj_h h 
+		                       WHERE DATE_FORMAT(h.ADJ_DATE, '%Y-%m') = DATE_FORMAT(#{0, jdbcType=TIMESTAMP}, '%Y-%m')
+		                         AND h.JTZJ_TYPE = 'A')
+           
+	</select>
+		
+</mapper>

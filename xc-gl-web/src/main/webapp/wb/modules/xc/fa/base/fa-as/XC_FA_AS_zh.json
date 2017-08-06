@@ -1,0 +1,19 @@
+{
+  
+  query        : "查询",
+  reset        : "重置",
+  add          : "新增",
+  edit         : "编辑",
+  delete       : "删除",
+  code         : "方式编码",
+  name         : "方式名称",
+  desc         : "说明",
+  fa_property  : "资产属性",
+  import       : "导入",
+  export       : "导出",
+  please       : "请选择",
+  confirm      : "确定要删除此数据吗？",
+  selRecord    : "请选择操作的记录！",
+  checkDel     : "增加方式已经被关联，无法删除！"
+ 
+}

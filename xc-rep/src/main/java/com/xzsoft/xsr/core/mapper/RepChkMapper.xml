@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.RepChkMapper">
+
+	
+	<!-- 定义sql片段 id：sql片段的唯 一标识 经验：是基于单表来定义sql片段，这样话这个sql片段可重用性才高 在sql片段中不要包括 
+		where -->
+	<sql id="fixedFormulaColumn">
+		x.CHK_FORMULA_ID,x.suit_id,mt.modalsheet_id,mt.MODALSHEET_NAME,
+		x.f_exp,x.f_settype,x.description,x.logic_name,
+		<choose>
+	        <when test="dbType == 'mysql'">
+	            concat("[",rm.ROWITEM_NAME,"_",rf.rowno,"]") rowitem_desc,
+       			concat("[",cm.COLITEM_NAME,"_",cf.colno,"]") colitem_desc,
+	        </when>
+	        <when test="dbType == 'oracle'">
+	          	'['||rm.ROWITEM_NAME||'_'||rf.rowno||']' rowitem_desc,
+       			'['||cm.COLITEM_NAME||'_'||cf.colno||']' colitem_desc,  
+	        </when>
+         </choose> 
+	</sql>
+
+	<sql id="fixedFormulaTable">
+		xsr_rep_chk_formula x,
+		xsr_rep_colmodalref cf,
+		xsr_rep_rowmodalref rf,
+		xsr_rep_modalsheet mt,
+		xsr_rep_rowitem rm,
+		xsr_rep_colitem cm
+	</sql>
+
+	<sql id="fixedFormulaCondition">
+		and cf.lanno = rf.lanno
+		and mt.modalsheet_id = rf.modalsheet_id
+		and mt.modalsheet_id = cf.modalsheet_id
+		and rm.rowitem_id = rf.rowitem_id
+		and cm.colitem_id = cf.colitem_id
+	</sql>
+
+	<!-- 获取模板固定行的稽核公式 -->
+	<select id="getFixedFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormula">
+		select CHK_FORMULA_ID, suit_id, modalsheet_id, MODALSHEET_NAME, rowitem_id, colitem_id, f_left, f_right, f_exp, 
+		       f_settype, description, rowitem_desc, colitem_desc, logic_name 
+		  from (
+		  		select <include refid="fixedFormulaColumn"/> x.f_left,x.f_right,x.rowitem_id, x.colitem_id
+				  from <include refid="fixedFormulaTable"/>
+				 where mt.MODALSHEET_ID = #{modalsheetId}
+				   and rf.rowitem_id = x.rowitem_id
+				   and cf.colitem_id = x.colitem_id
+				   <include refid="fixedFormulaCondition"/>
+				 union
+				select <include refid="fixedFormulaColumn"/>
+					   replace(x.f_left, '&lt;$$&gt;', cf.colitem_code) f_left,
+				       replace(x.F_RIGHT, '&lt;$$&gt;', cf.colitem_code) f_right,
+				       x.rowitem_id, cf.colitem_id
+				  from <include refid="fixedFormulaTable"/>
+				 where x.colitem_id = '-1'
+				   and mt.modalsheet_id = #{modalsheetId}
+				   and rf.rowitem_id = x.rowitem_id
+				   <include refid="fixedFormulaCondition"/>
+				 union
+			    select <include refid="fixedFormulaColumn"/>
+					   replace(x.f_left, '&lt;$$&gt;', rf.rowitem_code) f_left,
+				       replace(x.F_RIGHT, '&lt;$$&gt;', rf.rowitem_code) f_right,
+				       rf.rowitem_id, x.colitem_id
+				  from <include refid="fixedFormulaTable"/>
+				 where x.rowitem_id = '-1'
+				   and mt.modalsheet_id = #{modalsheetId}
+				   	<choose>
+				        <when test="dbType == 'mysql'">
+				            and IFNULL(x.CHK_TYPE, 'Z') in ('Z', 'ZF')
+				        </when>
+				        <when test="dbType == 'oracle'">
+				          	and nvl(x.CHK_TYPE, 'Z') in ('Z', 'ZF')
+				        </when>
+			         </choose> 
+				   and cf.colitem_id = x.colitem_id
+				   <include refid="fixedFormulaCondition"/>) f_t
+		<!-- where可以自动去掉条件中的第一个and -->
+		<where>
+			<if test="verifyCaseID != 'ALL'">
+				and EXISTS (
+						SELECT 1 FROM
+							xsr_rep_chk_scheme_dtl sd
+						WHERE f_t.CHK_FORMULA_ID = sd.CHK_FORMULA_ID
+						  AND sd.CHK_SCHEME_ID = #{verifyCaseID}
+					)
+			</if>
+		</where>
+	</select>
+
+	<!-- 获取报表固定行的数据 -->
+	<select id="getFixedCellDataList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormulaCellData">
+		select cv.ENTITY_CODE,cv.PERIOD_CODE,cv.CURRENCY_CODE,cv.ROWITEM_CODE,cv.COLITEM_CODE,cv.CELLV,cv.CELLTEXTV,cm.DATATYPE 
+		  from xsr_rep_cellvalue cv,
+		       xsr_rep_rowmodalref rf,
+		       xsr_rep_colmodalref cf,
+		       xsr_rep_colitem cm
+		 where cv.SUIT_ID = #{suitId}
+		   and cv.ENTITY_ID = #{entityId}
+		   and cv.PERIOD_ID = #{periodId}
+		   and cv.ROWITEM_ID = rf.ROWITEM_ID
+		   and cv.COLITEM_ID = cf.COLITEM_ID
+		   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		   and rf.LANNO = cf.LANNO
+		   and rf.MODALSHEET_ID = #{modalsheetId}
+		   and cf.COLITEM_ID = cm.COLITEM_ID
+		   and cv.CURRENCY_ID = #{cnyId}
+	</select>
+	
+	<!-- sql中加入了suidId条件，目前不确定报表2.0中是否有此条件，报表2.0中使用了sum(cellv) -->
+	<!-- 通过公司，期间，币种，行指标，列指标code,表套id查询出一个固定行数据 -->
+	<select id="getFixedCellDataByCode" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormulaCellData">
+		select
+		 <choose>
+               <when test="dbType == 'mysql'">
+                  if(c.DATATYPE!=3,t.CELLTEXTV,t.CELLV) CELLV
+               </when>
+               <when test="dbType == 'oracle'">
+                  decode(c.DATATYPE,3,t.CELLV,t.CELLTEXTV) CELLV
+               </when>
+         </choose> 
+		  from xsr_rep_cellvalue t,xsr_rep_colitem c
+		 where t.ENTITY_CODE = #{entityCode}
+		   and t.PERIOD_CODE = #{periodCode}
+		   and t.ROWITEM_CODE = #{rowitemCode}
+		   and t.COLITEM_CODE = #{colitemCode}
+		   and t.CURRENCY_CODE = #{cnyCode}
+		   and t.SUIT_ID = #{suitId}
+		   and t.COLITEM_CODE = c.COLITEM_CODE
+	</select>
+	<!-- 通过模板id，获取该模板的所有指标（行指标编码&列指标编码） -->
+	<select id="getModalItemList" resultType="string">
+		<choose>
+	        <when test="dbType == 'mysql'">
+	            select CONCAT(rf.ROWITEM_CODE,"|",cf.COLITEM_CODE)
+	        </when>
+	        <when test="dbType == 'oracle'">
+	          	select rf.ROWITEM_CODE||'|'||cf.COLITEM_CODE 
+	        </when>
+         </choose> 
+		  from xsr_rep_rowmodalref rf,
+		       xsr_rep_colmodalref cf
+		 where rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		   and rf.LANNO = cf.LANNO
+		   and rf.MODALSHEET_ID = #{modalsheetId}
+	</select>
+	<!-- 根据行指标，列指标编码，模板集id获取稽核公式右边的中文描述 -->
+	<select id="getCheckFormulaZHDesc" parameterType="java.util.HashMap" resultType="string">
+		<choose>
+	        <when test="dbType == 'mysql'">
+	            SELECT CONCAT("【", mt.MODALSHEET_NAME, "】[", rm.ROWITEM_NAME, "_", rf.ROWNO, "][", cm.COLITEM_NAME, "_", cf.COLNO, "]") item_desc
+	        </when>
+	        <when test="dbType == 'oracle'">
+	          	SELECT '【'||mt.MODALSHEET_NAME||'】['||rm.ROWITEM_NAME||'_'||rf.ROWNO||']['||cm.COLITEM_NAME||'_'||cf.COLNO||']' item_desc 
+	        </when>
+         </choose> 
+		FROM
+			xsr_rep_rowmodalref rf,
+			xsr_rep_colmodalref cf,
+			xsr_rep_rowitem rm,
+			xsr_rep_colitem cm,
+			xsr_rep_modalsheet mt
+		WHERE rm.ROWITEM_CODE = #{rowitemCode}
+		  AND cm.COLITEM_CODE = #{colitemCode}
+		  AND rf.modaltype_id = #{modaltypeId}
+		  AND rf.modalsheet_id = cf.modalsheet_id
+		  AND rf.modaltype_id = cf.modaltype_id
+		  AND cf.lanno = rf.lanno
+		  AND rm.rowitem_id = rf.rowitem_id
+		  AND cm.colitem_id = cf.colitem_id
+		  AND rf.modalsheet_id = mt.modalsheet_id
+		  AND cf.modalsheet_id = mt.modalsheet_id
+	</select>
+	
+	<!-- 获取模板浮动行的稽核公式 -->
+	<select id="getFjFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormula">
+		select CHK_FORMULA_ID, suit_id, modalsheet_id, MODALSHEET_NAME, rowitem_id, colitem_id, f_left, f_right, f_exp, 
+		       f_settype, description, rowitem_desc, colitem_desc, logic_name 
+		  from (
+		    select <include refid="fixedFormulaColumn"/>
+				   replace(x.f_left, '&lt;$$&gt;', rf.rowitem_code) f_left,
+			       replace(x.F_RIGHT, '&lt;$$&gt;', rf.rowitem_code) f_right,
+			       rf.rowitem_id, x.colitem_id
+			  from <include refid="fixedFormulaTable"/>
+			 where x.rowitem_id = '-1'
+			   and mt.modalsheet_id = #{modalsheetId}
+	   		 <choose>
+		        <when test="dbType == 'mysql'">
+		        	and IFNULL(x.CHK_TYPE, 'F') in ('F', 'ZF')
+		        </when>
+		        <when test="dbType == 'oracle'">
+		        	and nvl(x.CHK_TYPE, 'F') in ('F', 'ZF')
+		        </when>
+	         </choose> 
+			   and cf.colitem_id = x.colitem_id
+			   <include refid="fixedFormulaCondition"/>) f_t
+		<!-- where可以自动去掉条件中的第一个and -->
+		<where>
+			<if test="verifyCaseID != 'ALL'">
+				and EXISTS (
+						SELECT 1 FROM
+							xsr_rep_chk_scheme_dtl sd
+						WHERE f_t.CHK_FORMULA_ID = sd.CHK_FORMULA_ID
+						  AND sd.CHK_SCHEME_ID = #{verifyCaseID}
+					)
+			</if>
+		</where>
+	</select>
+	<!-- 获取浮动行data列与列指标的映射关系 -->
+	<select id="getFjdataColSet" parameterType="string" resultType="java.util.HashMap">
+		SELECT cs.DATA_COL, cs.COLITEM_CODE
+		  FROM xsr_rep_fj_colitem_set cs
+		WHERE
+			EXISTS (
+				SELECT 1 FROM xsr_rep_colmodalref cf
+				WHERE cf.MODALSHEET_ID = cs.MODALSHEET_ID
+				  AND cf.colitem_id = cs.COLITEM_ID
+			)
+		  AND cs.MODALSHEET_ID = #{modalsheetId}
+	</select>
+	<!-- 获取浮动行数据 xsr_rep_fj_cellvalue-->
+	<select id="getFjCellDataList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.ROWITEM_CODE , t.ROWNUMDTL, #{fjsql}
+		 from xsr_rep_fj_cellvalue t
+		 where t.SUIT_ID = #{SUIT_ID}
+		   and t.ENTITY_ID = #{ENTITY_ID}
+		   and t.PERIOD_ID = #{PERIOD_ID}
+		   and t.CURRENCY_ID = #{CURRENCY_ID}
+		   and t.MODALSHEET_ID = #{MODALSHEET_ID}
+	</select>
+	<!-- 获取浮动行的最大行数 xsr_rep_fj_cellvalue-->
+	<select id="getFjRowNum" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormulaCellData">
+		select fj.rowitem_id ROWITEM_ID ,max(fj.rownumdtl) MAXNUM
+		  from xsr_rep_fj_cellvalue fj 
+		 where fj.entity_id = #{ENTITY_ID}
+		   and fj.period_id = #{PERIOD_ID}
+		   and fj.currency_id = #{CURRENCY_ID}
+		   and fj.modalsheet_id = #{MODALSHEET_ID}
+		group by fj.rowitem_id
+	</select>
+	
+	<delete id="deleteRedisStatus">
+		delete xsr_rep_redis_status 
+		 where modalsheet_id = #{modalsheetId}
+		   and suit_id = #{suitId}
+		   and entity_id = #{entityId}
+		   and period_id = #{periodId}
+		   and currency_id = #{cnyId}
+	</delete>
+	
+	<insert id="insertRedisStatus">
+		insert into xsr_rep_redis_status(STATUS_ID,modalsheet_id,suit_id,entity_id,period_id,currency_id,last_update_date)
+	   	<choose>
+	        <when test="dbType == 'mysql'">
+	        	values (UUID(),#{modalsheetId},#{suitId},#{entityId},#{periodId},#{cnyId},SYSDATE()) 
+	        </when>
+	        <when test="dbType == 'oracle'">
+	        	values (sys_guid(),#{modalsheetId},#{suitId},#{entityId},#{periodId},#{cnyId},sysdate) 
+	        </when>
+        </choose> 
+	</insert>
+	
+</mapper>

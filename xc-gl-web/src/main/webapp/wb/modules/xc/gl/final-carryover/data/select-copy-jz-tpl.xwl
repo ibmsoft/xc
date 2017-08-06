@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询待复制的模板明细项","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select * from xc_gl_jz_tpl_dtl where JZ_TPL_ID = {?jzTplId?}","itemId":"query"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

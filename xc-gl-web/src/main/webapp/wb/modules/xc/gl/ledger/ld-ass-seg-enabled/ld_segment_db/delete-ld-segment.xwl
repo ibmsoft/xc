@@ -1,0 +1,1 @@
+{"inframe":false,"title":"删除","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"delete from XC_GL_LD_ASS_SEGMENTS where LD_SEG_ID={?LD_SEG_ID?}","arrayName":"destroy","itemId":"query1"},"children":[],"expanded":false,"type":"query"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

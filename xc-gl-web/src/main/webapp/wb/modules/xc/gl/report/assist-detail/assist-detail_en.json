@@ -1,0 +1,17 @@
+{
+ ledger:'Ledger',
+ periodStart:'Period',
+ select:'query',
+ yes:'Y',
+ no:'N',
+ accountStart:'Account',
+ reset:'Reset',
+ segement:'Segement',
+ segementStart:'Condition',
+ all:'All',
+ selectBtnMsg1:'please select books!',
+ selectBtnMsg2:'please select the accounting period!',
+ selectBtnMsg3:'please select the segement',
+ isAccount:'Include accouting',
+ la_labelWidth:100
+}

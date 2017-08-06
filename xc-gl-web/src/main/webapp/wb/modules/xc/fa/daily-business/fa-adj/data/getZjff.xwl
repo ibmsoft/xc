@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询折旧方法","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"SELECT METHOD_CODE, METHOD_NAME FROM xc_fa_depr_methods","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

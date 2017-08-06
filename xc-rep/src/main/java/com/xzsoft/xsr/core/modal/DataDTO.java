@@ -1,0 +1,26 @@
+package com.xzsoft.xsr.core.modal;
+public class DataDTO
+{
+  private String code;
+  private String name;
+
+  public String getCode()
+  {
+    return this.code;
+  }
+  public void setCode(String code) {
+    this.code = code;
+  }
+  public String getName() {
+    return this.name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
+public DataDTO(String code, String name) {
+	super();
+	this.code = code;
+	this.name = name;
+}
+  
+}

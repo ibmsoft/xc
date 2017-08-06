@@ -1,0 +1,7 @@
+{
+	accName:'开户名',
+  	accBankName:'开户行',
+  	accountBank:'账户',
+  	accNameBankName:'开户名/行',
+    EMPTY_VENDOR_INFO : "请先选择供应商信息！"
+}

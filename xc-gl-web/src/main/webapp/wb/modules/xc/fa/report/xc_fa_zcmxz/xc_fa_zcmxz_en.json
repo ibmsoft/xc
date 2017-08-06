@@ -1,0 +1,14 @@
+{
+  LEDGER				 	: "Ledger",
+  DEPT	 					: "Departure",
+  AssetAttributes			: "Asset Attributes",
+  FA_CAT 					: "Type",
+  PERIOD		 			: "Accounting Period",
+  TO		 				: "To",
+  QUERY						: "Query",
+  RESET						: "Reset",
+
+  qxxzzb					: "Please select account first",
+  qxxzzcsx					: "Please select an asset attribute first",
+  qtxsybtx					: "Please fill in all required fields"
+}

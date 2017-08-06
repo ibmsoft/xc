@@ -1,0 +1,16 @@
+{
+  addBtn: 'Add',
+  delBtn: 'Delete',
+  saveBtn: 'Save',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  transCode: 'Trans Type',
+  moduleCol: 'Module',
+  transDescCol: 'Trans Description',
+  linkUrlCol: 'Link Url',
+  canEditColsCol:'Can Edit Column',
+  codeExistBeforeMsg: 'Code【',
+  codeExistAfterMsg: '】Exist',
+  saveWaitMsg: 'Saving,please wait...',
+  successMsg: 'Save Success'
+}

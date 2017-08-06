@@ -1,0 +1,42 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.ESTabElementMapper">
+
+	<!-- 模板元素信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabElementBean" id="tabElementResultMap">
+		<id property="elementId" column="element_id" />
+		<result property="tabId" column="tab_id" />
+		<result property="name" column="name" />
+		<result property="etype" column="etype" />
+		<result property="content" column="content" />
+		<result property="createdBy" column="created_by" />
+		<result property="creationDate" column="creation_date" />
+		<result property="lastUpdatedBy" column="last_updated_by" />
+		<result property="lastUpdateDate" column="last_update_date" />
+	</resultMap>
+
+	<!-- 删除页签对应的元素信息 -->
+	<delete id="delTabElements" parameterType="java.lang.String">
+		delete from xc_rep_tab_element where tab_id = #{tabId}
+	</delete>
+	
+	<!-- 批量插入单元格元素信息 -->
+	<insert id="batchInsertTabElements" parameterType="java.util.List">
+	
+	</insert>	
+	
+	<!-- 查询模板元素信息 -->
+	<select id="getTabElements" parameterType="java.lang.String" resultMap="tabElementResultMap">
+		SELECT element_id,
+		       tab_id,
+		       name,
+		       etype,
+		       content,
+		       creation_date,
+		       created_by,
+		       last_update_date,
+		       last_updated_by
+		  FROM xc_rep_tab_element t
+		 WHERE t.tab_id = #{tabId}
+	</select>
+	
+</mapper>

@@ -1,0 +1,42 @@
+{
+  Ledger:'Ledger',
+  Account Group:'Account Group',
+  searchsText:'Code/Name',
+  searchsButton:'Query',
+  resetsButton:'Reset',
+  
+  allRadio:'ALL',
+  zcRadio:'Asset',
+  fzRadio:'Debt',
+  gtRadio:'common',
+  qyRadio:'Owner Interests',
+  cbRadio:'Cost',
+  ryRadio:'Profit And Loss',
+  bwRadio:'Off-balance Sheet',
+  
+  syncButton:'Sync',
+  deleteButton:'Delete',
+  batchEditButton:'Batch Delete',
+  
+  rownum:'Order',
+  acc_code:'Code',
+  acc_name:'Name',
+  acc_category:'Category',
+  acc_group:'Group',
+  bal_direction:'Direction',
+  foreign_cny:'Foreign',
+  currency:'Currency',
+  Amount:'Amount',
+  Amt_Dim:'Dimension',
+  Budget_Item:'Budget Item',
+  ACC_SEG_UNION:'Segments',
+  START_DATE:'Start Date',
+  END_DATE:'End Date',
+  
+  upd_item:'Modified Items',
+  upd_content:'Modified Content',
+  is_amt:'Num Accounting',
+  amt_dim:'Dimension',
+  UPDATE_ASS:'Segments',
+  Enabled:'Enabled'
+}

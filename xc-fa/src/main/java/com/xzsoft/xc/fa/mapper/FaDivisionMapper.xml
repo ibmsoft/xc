@@ -1,0 +1,200 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.FaDivisionMapper">
+	
+	<!-- 保存头信息 -->
+	<insert id="insertfaDivision" parameterType="com.xzsoft.xc.fa.modal.FaDivisionH">
+		insert into xc_fa_division(
+		    DIVISION_ID, LEDGER_ID, DIVISION_DATE, PERIOD_CODE, BZSM,ASSET_ID,YZ,LJZJ_LJTX,JZZB,SL, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY
+		) values (
+		    #{divisionId, jdbcType=VARCHAR}, 
+			#{ledgerId, jdbcType=VARCHAR},
+			#{divisionDate, jdbcType=TIMESTAMP},
+			#{periodCode, jdbcType=VARCHAR},
+			#{bzsm, jdbcType=VARCHAR},
+			#{assetId, jdbcType=VARCHAR},
+			#{yz, jdbcType=VARCHAR},
+			#{ljzjljtx, jdbcType=VARCHAR},
+			#{jzzb, jdbcType=VARCHAR},
+			#{sl, jdbcType=VARCHAR},
+			#{creationDate, jdbcType=TIMESTAMP},
+			#{createdBy, jdbcType=VARCHAR},
+			#{lastUpdateDate, jdbcType=TIMESTAMP},
+			#{lastUpdatedBy, jdbcType=VARCHAR}
+		)			 
+	</insert>
+	
+	<!-- 保存行信息 -->
+	<insert id="insertFaDivisionL" parameterType="java.util.List">
+		insert into xc_fa_division_dtl(
+		    DIV_DTL_ID, DIVISION_ID, ASSET_ID, ZCBM, ZCMC, YZ, LJZJ_LJTX,JZZB,SL, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY
+		)
+		<foreach collection="list" item="item" index="index" separator="union all">
+			(select #{item.divDtlId, jdbcType=VARCHAR}, 
+					#{item.divisionId, jdbcType=VARCHAR},
+					#{item.assetId, jdbcType=VARCHAR},
+					#{item.zcbm, jdbcType=VARCHAR},
+					#{item.zcmc, jdbcType=VARCHAR},
+					#{item.yz, jdbcType=VARCHAR},
+					#{item.ljzjljtx, jdbcType=VARCHAR},
+					#{item.jzzb, jdbcType=VARCHAR},
+					#{item.sl, jdbcType=VARCHAR},
+					#{item.creationDate, jdbcType=TIMESTAMP},
+					#{item.createdBy, jdbcType=VARCHAR},
+					#{item.lastUpdateDate, jdbcType=TIMESTAMP},
+					#{item.lastUpdatedBy, jdbcType=VARCHAR}
+			from dual)			 
+		 </foreach>
+	</insert>
+	
+	<!-- 保存修改资产信息-->
+	<update id="updateFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAddition">
+		update xc_fa_additions
+		   set 
+		   YZ = #{yz, jdbcType=DECIMAL},
+		   LJZJ_LJTX = #{ljzjLjtx, jdbcType=DECIMAL},
+		   JZZB = #{jzzb, jdbcType=DECIMAL},
+		   SL = #{sl, jdbcType=DECIMAL},
+		   JZ = #{jz, jdbcType=DECIMAL},
+		   LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP},
+		   LAST_UPDATED_BY = #{lastUpdatedBy, jdbcType=VARCHAR}
+		 where ASSET_ID = #{assetId, jdbcType=VARCHAR}
+	</update>
+		<!-- 新增资产 -->
+	<insert id="insertFaAddition" parameterType="java.util.List">
+	INSERT INTO xc_fa_additions (
+		ASSET_ID,
+		LEDGER_ID,
+		PERIOD_CODE,
+		ZCBM,
+		ZCMC,
+		GGXH,
+		XLH,
+		ZZS,
+		FA_PROPERTY,
+		CAT_CODE,
+		QYRQ,
+		SYNX,
+		CBZX,
+		BGR,
+		ZCYT,
+		CGFP,
+		ZJFS,
+		LRFS,
+		CFDD,
+		ZCSM,
+		YZ,
+		LJZJ_LJTX,
+		SL,
+		DW,
+		JZZB,
+		CZL,
+		SFZJ,
+		ZJFF,
+		TXGZ,
+		ZCKM,
+		LJZJTXKM,
+		JZZBKM,
+		FYKM,
+		VENDOR_ID,
+		PROJECT_ID,
+		UP_ASSET_ID,
+		CREATED_BY,
+		CREATION_DATE,
+		TYQJ,
+		JTQJ,
+		KSJTQJ,
+		YJTJE,
+		JZ
+		) 
+		<foreach collection="list" item="item" index="index" separator="union all">
+		(select #{item.assetId, jdbcType=VARCHAR},
+		#{item.ledgerId, jdbcType=VARCHAR},
+		#{item.periodCode, jdbcType=VARCHAR},
+		#{item.zcbm, jdbcType=VARCHAR},
+		#{item.zcmc, jdbcType=VARCHAR},
+		#{item.ggxh, jdbcType=VARCHAR},
+		#{item.xlh, jdbcType=VARCHAR},
+		#{item.zzs, jdbcType=VARCHAR},
+		#{item.faProperty, jdbcType=VARCHAR},
+		#{item.catCode, jdbcType=VARCHAR},
+		#{item.qyrq, jdbcType=TIMESTAMP},
+		#{item.synx, jdbcType=DECIMAL},
+		#{item.cbzx, jdbcType=VARCHAR},
+		#{item.bgr, jdbcType=VARCHAR},
+		#{item.zcyt, jdbcType=VARCHAR},
+		#{item.cgfp, jdbcType=VARCHAR},
+		#{item.zjfs, jdbcType=VARCHAR},
+		#{item.lrfs, jdbcType=VARCHAR},
+		#{item.cfdd, jdbcType=VARCHAR},
+		#{item.zcsm, jdbcType=VARCHAR},
+		#{item.yz, jdbcType=DECIMAL},
+		#{item.ljzjLjtx, jdbcType=DECIMAL},
+		#{item.sl, jdbcType=DECIMAL},
+		#{item.dw, jdbcType=VARCHAR},
+		#{item.jzzb, jdbcType=DECIMAL},
+		#{item.czl, jdbcType=DECIMAL},
+		#{item.sfzj, jdbcType=VARCHAR},
+		#{item.zjff, jdbcType=VARCHAR},
+		#{item.txgz, jdbcType=VARCHAR},
+		#{item.zckm, jdbcType=VARCHAR},
+		#{item.ljzjtxkm, jdbcType=VARCHAR},
+		#{item.jzzbkm, jdbcType=VARCHAR},
+		#{item.fykm, jdbcType=VARCHAR},
+		#{item.vendorId, jdbcType=VARCHAR},
+		#{item.projectId, jdbcType=VARCHAR},
+		#{item.upAssetId, jdbcType=VARCHAR},
+		#{item.createdBy, jdbcType=VARCHAR},
+		#{item.creationDate, jdbcType=TIMESTAMP},
+		#{item.tyqj, jdbcType=VARCHAR},
+		#{item.jtqj, jdbcType=VARCHAR},
+		#{item.ksjtqj, jdbcType=VARCHAR},
+		#{item.yjtje, jdbcType=DECIMAL},
+		#{item.jz, jdbcType=DECIMAL}
+			from dual)			 
+		 </foreach>
+	
+	</insert>
+	<select id="findAssetIdByDivisonId" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.FaAddition">
+		<!--SELECT
+			a.ASSET_ID AS assetId
+
+		FROM  xc_fa_additions a, xc_fa_division_dtl b 
+		WHERE a.ZCBM=b.ZCBM and
+		b.DIVISION_ID =#{divisionId, jdbcType=VARCHAR}-->
+		SELECT b.ASSET_ID AS assetId,
+		       b.ZCBM zcbm
+		  FROM xc_fa_division_dtl b 
+		 WHERE b.DIVISION_ID = #{divisionId, jdbcType=VARCHAR}
+	</select>
+	<!-- 删除拆分资产头表信息 -->
+	<delete id="deleteFaDivistionH" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_division where DIVISION_ID=#{divisionId, jdbcType=VARCHAR}
+	</delete>
+	<!-- 删除拆分资产行表信息  -->
+	<delete id="deleteFaDivistionL" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_division_dtl where DIVISION_ID=#{divisionId, jdbcType=VARCHAR}
+	</delete>
+	<!-- 删除资产事务下资产拆分信息 -->
+	<delete id="deleteXcFaTrans" parameterType="java.lang.String">
+	    DELETE FROM xc_fa_trans where SRC_ID=#{divisionId, jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="checkSubFaDivision" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) CNT
+  		  FROM xc_fa_division d
+         WHERE d.ASSET_ID in (SELECT l.ASSET_ID 
+                                FROM xc_fa_division_dtl l
+                               WHERE l.DIVISION_ID = #{divisionId, jdbcType=VARCHAR})
+	</select>
+	
+	<select id="checkFaInPeriod" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) CNT
+  		  FROM xc_fa_division d
+         WHERE d.PERIOD_CODE = (SELECT p.PERIOD_CODE 
+                                FROM xc_fa_ld_periods p
+                               WHERE p.LEDGER_ID = d.LEDGER_ID
+                                 AND p.STATUS = '1')
+           AND d.DIVISION_ID = #{divisionId, jdbcType=VARCHAR}
+	</select>
+
+</mapper>

@@ -1,0 +1,66 @@
+{
+
+  XH:'序号',
+  CODE_COL:'编码',
+
+  NAME_COL:'名称',
+  EMP_CODE_COL:'员工编码',
+  EMP_NAME_COL:'员工名称',
+  CODE_NAME:'编码/名称',
+
+  queryBtn:'查询',
+  resetBtn:'重置',
+
+  addBtn:'新增',
+  saveBtn:'保存',
+  delBtn:'删除',
+  sysBtn:'同步',
+
+
+  LEDGER_NAME_ZH:'账簿',
+  LEDGER_ID_ZH:'账簿ID',
+  SEG_CODE_COL:'段编码',
+
+  SEG_NAME_COL:'段名称',
+  LD_SEG_ALIAS_COL:'段别名',
+  VAL_ID_COL:'值ID',
+
+  CREDIT_COL:'信用额度',
+  CREDIT_DAY_COL:'信用天数',
+
+  SAVETIP:'保存成功！',
+  SAVEERROR:'保存失败',
+  DELTIP:'请选择要删除的记录!',
+  DELOKTIP:'您确定要删除？',
+  DELTIP1:'删除成功!',
+
+
+  ADDRESS1:'地址',
+
+  CONTACT1:'联系人',
+
+  TEL1:'办公电话',
+
+  MOBILE1:'移动电话',
+
+  QQ1:'QQ号',
+  EMAIL1:'电子邮件',
+
+  SALE_USER_ID_COL:'业务员',
+  START_DATE1:'开始日期',
+  END_DATE1:'结束日期',
+
+
+  IS_ENABLED_COL:'是否启用',
+
+
+  MSG1:'请选择账簿!',
+  MSG2:'已被启用的记录不可删除!',
+  MSG3:'已被使用,不可删除',
+
+
+  TIP:'提示'
+
+
+
+}

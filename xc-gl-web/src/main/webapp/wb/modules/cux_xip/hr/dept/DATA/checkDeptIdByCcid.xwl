@@ -1,0 +1,1 @@
+{"inframe":false,"title":"校验部门ID是否已经存在","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select 1 \n  from xc_gl_ccid a \n where a.DEPT_ID={?deptId?}","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

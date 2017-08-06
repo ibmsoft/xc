@@ -1,0 +1,22 @@
+{
+  addBtn: 'Add',
+  delBtn: 'Delete',
+  saveBtn: 'Save',
+  impBtn: 'Import',
+  expBtn: 'Export',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  methodCodeName:'Method Code/Name',
+  methodCodeCol: 'Method Code',
+  methodNameCol: 'Method Name',
+  deprClassCol: 'Depr Class',
+  methodDescCol: 'Method Description',
+  enableFlagCol: 'Enable Flag',
+  methodIdCol: 'Method Id',
+  codeExistBeforeMsg: 'Method Code【',
+  codeExistAfterMsg: '】 has Exist',
+  saveWaitMsg: 'Please wait ...',
+  successMsg: 'Success',
+  enableFlag:'Yes',
+  disableFlag:'No'
+}

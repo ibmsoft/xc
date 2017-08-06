@@ -1,0 +1,32 @@
+{
+  ledger_empty_text			: "Please select account book",
+  query_is_pay_ledger		: "Ledger",
+  query_is_pay_no			: "Document Code/Description",
+  query_is_pay_create_by	: "Creator",
+  
+  queryIsPayBtn				: "Query",
+  resetIsPayBtn				: "Reset",
+  seekBtn					: "View",
+  confimBtn					: "Sign",
+  
+  row_num_col				: "No",
+  ex_pay_code_col			: "Payment Order",
+  ex_pay_desc_col			: "Description",
+  created_by_col			: "Creator",
+  bank_account_col			: "Payment Account",
+  ex_pay_date_col			: "Payment Time",
+  ex_pay_t_mat_col			: "Payment Amount",
+  pay_status_col			: "Payment Status",
+  signatory_col				: "Cashier's Signature",
+  v_head_id					: "VoucherID",
+  
+  query_no_pay_ledger		: "Ledger",
+  query_no_pay_no			: "Document Code/Description",
+  query_no_pay_create_by	: "Creator",
+  
+  queryNoPayBtn				: "Query",
+  resetNoPayBtn				: "Reset",
+  seekNoPayBtn				: "View",
+  noPayBtn					: "Cancel Sign"
+  
+}

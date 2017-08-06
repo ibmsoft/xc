@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询凭证头信息","hidden":false,"roles":{"default":1},"children":[{"configs":{"serverScript":"var headId = request.getParameter(\"headId\") ;\nvar json = com.xzsoft.xc.gl.util.XCGLWebBuilderUtil.viewVoucher(headId) ;  \napp.send(Wb.decode(json)) ;","itemId":"module"},"children":[],"expanded":false,"type":"module"}],"pageLink":"","iconCls":"seek_icon"}

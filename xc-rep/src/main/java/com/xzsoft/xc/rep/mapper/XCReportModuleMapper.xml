@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xc.rep.mapper.XCReportModuleMapper">
+	<!-- database mapping POJO -->
+	<!-- 报表模板映射 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ReportTabBean" id="mapTabBean">
+	   <result column="TAB_ID" property="tabId"/>
+	   <result column="ACC_HRCY_ID" property="accHrcyId"/>
+	   <result column="TAB_CODE" property="tabCode"/>
+	   <result column="TAB_NAME" property="name"/>
+	   <result column="TAB_ORDER" property="id"/>
+	   <result column="IS_ACTIVE" property="isActive"/>
+	   <result column="COLOR" property="color"/>
+	   <result column="CREATION_DATE" property="creationDate"/>
+	   <result column="CREATED_BY" property="createdBy"/>
+	   <result column="LAST_UPDATE_DATE" property="lastUpdateDate"/>
+	   <result column="LAST_UPDATED_BY" property="lastUpdatedBy"/>
+	</resultMap>
+  
+   	<!-- 报表模板列映射 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ReportTabCellBean" id="mapTabCellBean">
+	   <result column="CELL_ID" property="cellId"/>
+	   <result column="TAB_ID"  property="tabId"/>
+	   <result column="TAB_ORDER" property="sheet"/>
+	   <result column="X"   property="row"/>
+	   <result column="Y"   property="col"/>
+	   <result column="CONTENT"  property="json"/>
+	   <result column="IS_CAL"   property="cal"/>
+	   <result column="RAW_DATA" property="rawData"/>
+	   <result column="CELL_TYPE"  property="cellType"/>
+	   <result column="COMMENT"  property="comment"/>
+	   <result column="CREATION_DATE" property="creationDate"/>
+	   <result column="CREATED_BY" property="createdBy"/>
+	   <result column="LAST_UPDATE_DATE" property="lastUpdateDate"/>
+	   <result column="LAST_UPDATED_BY" property="lastUpdatedBy"/>
+	</resultMap>
+  
+  	<!-- 报表模板列格式映射 -->
+  	<resultMap type="com.xzsoft.xc.rep.modal.ReportTabElementBean" id="mapTabElementBean">
+		<result column="ELEMENT_ID" property="elementId"/>
+		<result column="TAB_ID" property="tabId"/>
+		<result column="TAB_ORDER" property="sheet"/>
+		<result column="NAME" property="name"/>
+		<result column="ETYPE" property="ftype"/>
+		<result column="CONTENT" property="json"/>
+		<result column="CREATION_DATE" property="creationDate"/>
+		<result column="CREATED_BY" property="createdBy"/>
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate"/>
+		<result column="LAST_UPDATED_BY" property="lastUpdatedBy"/>
+  	</resultMap>
+  	<!-- 报表单元格公式映射 -->
+ 	<resultMap id="cellFormulaBean" type="com.xzsoft.xc.rep.modal.ReportCellFormula">
+		<result column="TAB_ORDER" property="sheet"/>
+		<result column="X" property="row"/>
+		<result column="Y" property="col"/>
+		<result column="FORMULA" property="json"/>
+		<result column="APPLY_WAY" property="applyWay"/>
+	</resultMap>
+	
+	<!-- 通过科目体系查找报表模板 -->
+	<select id="getTabByAccHrcyId" resultMap="mapTabBean">
+	   select * from xc_rep_tab where ACC_HRCY_ID = #{accHrcyId,jdbcType=VARCHAR} order by TAB_ORDER ASC
+	</select>
+  <!-- search report module cells by tabId -->
+  <select id="getCellByTabId"  resultMap="mapTabCellBean">
+	SELECT
+		l.*, 
+		#{tabNo} AS TAB_ORDER
+	FROM
+		xc_rep_tab_cell l,
+		xc_rep_tab h
+	WHERE
+		l.TAB_ID = h.TAB_ID
+	AND
+	  l.TAB_ID = #{tabId,jdbcType=VARCHAR}
+  </select>
+  <!-- search report module elements by tabId -->
+  <select id="getElementByTabId"  resultMap="mapTabElementBean">
+	SELECT
+		l.*, 
+		#{tabNo} AS TAB_ORDER
+	FROM
+		xc_rep_tab_element l,
+		xc_rep_tab h
+	WHERE
+		l.TAB_ID = h.TAB_ID
+	AND
+	  l.TAB_ID = #{tabId,jdbcType=VARCHAR}
+  </select>
+  <select id="getFormulaByTabId" parameterType="java.util.HashMap" resultMap="cellFormulaBean">
+		select #{sheet} AS "TAB_ORDER",
+		       f.X,
+		       f.Y,
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     concat("{data:'",t.FORMULA,"'}") FORMULA, 
+                 </when>
+                 <when test="dbType == 'oracle'">
+                     '{data:'''||t.FORMULA||'''}' FORMULA,
+                 </when>
+         </choose> 
+		'apply' APPLY_WAY
+		from
+		  xc_rep_formulas t,xc_rep_tab_cell f
+		where
+		  f.TAB_ID=#{tabId,jdbcType=VARCHAR}
+		and
+		  t.ACC_HRCY_ID = #{accHrcyId,jdbcType=VARCHAR}
+		and
+		  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+		and	
+		  f.COMMENT=
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     concat(t.ROWITEM_ID,'/',t.COLITEM_ID)
+                 </when>
+                 <when test="dbType == 'oracle'">
+                     t.ROWITEM_ID||'/'||t.COLITEM_ID
+                 </when>
+         </choose>
+	</select>
+	<!-- 指标间公式取数 -->
+	<select id="getRepValue" parameterType="java.util.Map" resultType="java.lang.String">
+		select t.CELLV repValue from xc_rep_cellvalues t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.PERIOD_CODE = #{periodCode}
+		   and t.ROWITEM_ID=#{rowCode}
+		   and t.COLITEM_ID=#{colCode}
+	</select>
+	<!-- 自定义取数函数解析 -->
+	<select id="getCellFunction" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select a.FUNC_TYPE,a.FUNC_CALTYPE,a.FUNC from xc_rep_func a where a.FUNC_CODE = #{funcCode}
+	</select>
+	<!-- 执行存储过程 -->
+	<select id="excuteProcedure" statementType="CALLABLE" parameterType="java.util.HashMap" resultType="String">
+       <![CDATA[
+           {call  DB_Test(
+              #{funName,mode=IN,jdbcType=VARCHAR},
+              #{params,mode=IN,jdbcType=VARCHAR},
+              #{o_result,mode=OUT,jdbcType=VARCHAR}
+           )}    
+       ]]>
+    </select>
+    <!-- 根据id查询已生成的报表 -->
+   	<select id="getSheetById" parameterType="java.util.List" resultType="com.xzsoft.xc.rep.modal.ReportSheetBean">
+	   	SELECT
+	   	  p.TAB_ORDER as id,
+		  p.TAB_NAME as name,
+		  a.SHEET_ID as sheetId,
+		  a.TAB_ID as tabId,
+		  a.LEDGER_ID as ledgerId,
+		  (select l.LEDGER_NAME from xc_gl_ledgers l where l.LEDGER_ID = a.LEDGER_ID) as ledgerName,
+		  a.ORG_ID as orgId,
+		  a.PERIOD_CODE as periodCode,
+		  a.CNY_CODE as cnyCode,
+		  a.SHEET_DESC as sheetDesc,
+		  a.APP_STATUS as appStatus,
+		  a.AUDIT_STATUS as auditStatus,
+		  a.AUDIT_STATUS_DESC as auditStatusDesc,
+		  t.ORG_NAME as orgName,
+		  p.TAB_NAME as tabName
+	FROM
+		xc_rep_sheets a
+	LEFT JOIN xip_pub_orgs t ON a.ORG_ID = t.ORG_ID,
+	   xc_rep_tab p
+	WHERE
+		a.TAB_ID = p.TAB_ID
+    AND
+        a.SHEET_ID IN
+	<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		#{item}
+	</foreach>
+</select>
+
+<select id="getCellValByTabId" parameterType="java.util.HashMap" resultMap="cellFormulaBean">
+		select #{sheet} AS TAB_ORDER,
+		       f.X,
+		       f.Y,
+		<choose>
+                 <when test="dbType == 'mysql'">
+                   case  c.DATATYPE when '3' then concat("{data:'",t.CELLV,"'}") else concat("{data:'",t.CELLTEXTV,"'}") end as FORMULA, 
+                 </when>
+                 <when test="dbType == 'oracle'">
+                   case  c.DATATYPE when '3' then '{data:'''||t.CELLV||'''}' else '{data:'''||t.CELLTEXTV||'''}' end as FORMULA,
+                 </when>
+         </choose> 
+		'apply' APPLY_WAY
+		from
+		  xc_rep_cellvalues t,xc_rep_tab_cell f,xc_rep_colitems c
+		where
+		   t.COLITEM_ID = c.COLITEM_ID
+		and
+		  f.TAB_ID=#{tabId,jdbcType=VARCHAR}
+		and
+		  t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+		and
+		  t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+		and
+		  t.ORG_ID = #{orgId,jdbcType=VARCHAR}
+		and
+		  t.CNY_CODE = #{cnyCode,jdbcType=VARCHAR}
+		and	
+		  f.COMMENT=
+		<choose>
+                 <when test="dbType == 'mysql'">
+                     concat(t.ROWITEM_ID,'/',t.COLITEM_ID)
+                 </when>
+                 <when test="dbType == 'oracle'">
+                     t.ROWITEM_ID||'/'||t.COLITEM_ID
+                 </when>
+         </choose>
+        and t.ROWITEM_ID in (select x.ROWITEM_ID from xc_rep_rm_ref x where x.TAB_ID = #{tabId,jdbcType=VARCHAR})
+        and t.COLITEM_ID in (select x.COLITEM_ID from xc_rep_cm_ref x where x.TAB_ID = #{tabId,jdbcType=VARCHAR})
+       UNION
+       	SELECT
+		    #{sheet} AS TAB_ORDER,
+			a.X,
+			a.Y,
+			<choose>
+	              <when test="dbType == 'mysql'">
+	                  concat("{data:'编制单位：",(SELECT t.ORG_NAME FROM xip_pub_orgs t WHERE t.ORG_ID = #{orgId,jdbcType=VARCHAR}),"'}") AS FORMULA,
+	              </when>
+	              <when test="dbType == 'oracle'">
+	                  '{data:'''||'编制单位：'||(SELECT t.ORG_NAME FROM xip_pub_orgs t WHERE t.ORG_ID = #{orgId,jdbcType=VARCHAR})||'''}'  AS FORMULA,
+	              </when>
+	      </choose>
+			'apply' APPLY_WAY
+		FROM
+			xc_rep_tab_cell a
+		WHERE
+			a.CELL_TYPE = 'fixed'
+		AND a.COMMENT = 'getcorp'
+		AND a.TAB_ID = #{tabId,jdbcType=VARCHAR}
+	UNION
+		SELECT
+			#{sheet} AS TAB_ORDER,
+			a.X,
+			a.Y,
+			<choose>
+              <when test="dbType == 'mysql'">
+                  concat("{data:'",#{periodCode,jdbcType=VARCHAR},"'}") AS FORMULA,
+              </when>
+              <when test="dbType == 'oracle'">
+                  '{data:'''||#{periodCode,jdbcType=VARCHAR}||'''}'  AS FORMULA,
+              </when>
+	      </choose>
+			'apply' APPLY_WAY
+		FROM
+			xc_rep_tab_cell a
+		WHERE
+			a.CELL_TYPE = 'fixed'
+		AND a.COMMENT = 'getperiod'
+		AND a.TAB_ID = #{tabId,jdbcType=VARCHAR}
+</select>
+
+	<!-- 查询报表取数公式信息 -->
+	<select id="getCellFormulas" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.rep.modal.CellFormula">
+		select t.formula_id    formulaId,
+		       t.acc_hrcy_id   accHrcyId,
+		       t.rowitem_id    rowitemId,
+		       t.colitem_id    colitemId,
+		       t.ledger_id     ledgerId,
+		       t.formula       formula,
+		       t.formula_desc  formulaDesc,
+		       t.formula_type  formulaType,
+		       t.orderby       orderBy,
+		       t.formula_level formulaLevel
+		  from xc_rep_formulas t
+		where t.acc_hrcy_id = #{accHrcyId}
+		  and t.ledger_id = #{ledgerId}
+		  and exists (select 1 from xc_rep_rm_ref rr where t.rowitem_id = rr.rowitem_id and rr.tab_id = #{tabId})
+		  and exists (select 1 from xc_rep_cm_ref rc where t.colitem_id = rc.colitem_id and rc.tab_id = #{tabId})
+	</select>
+
+</mapper>

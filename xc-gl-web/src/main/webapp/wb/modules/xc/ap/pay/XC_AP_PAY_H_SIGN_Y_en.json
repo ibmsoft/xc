@@ -1,0 +1,40 @@
+{
+
+  queryBtn				: "Search",
+  clearBtn				: "Reset",
+  seekBtn				: "Seek",
+  cancelSignBtn			: "Cancel Sign",
+  
+  LEDGER_NAME			: "Account Book",
+  AP_PAY_H_CODE 		: "Document Type",
+  VENDOR_NAME			: "Supplier",
+  PROJECT_NAME			: "Project",
+  GL_DATE_START			: "Business Date",
+  V_STATUS_YES			: "",
+  GL_DATE_END			: "",
+    FKD_CGJS				: "Settlement Payment",
+    FKD_CGJS-H				: "Settlement Payment-Red",
+    FKD_YUFK				: "Advance Payment",
+    FKD_YUFK-H				: "Advance Payment-Red",
+    FKD_QTFK				: "Other Payment",
+    FKD_QTFK-H				: "Other Payment-Red",
+  
+  AP_PAY_H_CODE_COL		: "Document Code",
+  AP_DOC_CAT_NAME_COL	: "Payment Type",
+  GL_DATE_COL			: "Billing Date",
+  DESCRIPTION_COL		: "Description",
+  VENDOR_NAME_COL		: "Supplier",
+  AP_CONTRACT_NAME_COL	: "Contract",
+  AMOUNT_COL			: "Amount",
+  DEPT_NAME_COL			: "Cost Center",
+  PROJECT_NAME_COL		: "Project",
+  CREATED_BY_NAME_COL	: "DocumentMaker",
+  SIGN_USER_NAME_COL	: "Signatory",
+  SIGN_STATUS_COL		: "Sign Status",
+  V_STATUS_NAME_COL		: "Status",
+  VERFY_STATUS_COL		: "Whether Verfy",
+  V_HEAD_ID_COL			: "V_HEAD_ID",
+  AP_PAY_H_ID_COL		: "AP_PAY_H_ID"
+  
+  
+}

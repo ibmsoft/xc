@@ -1,0 +1,20 @@
+{
+	LEDGER_NAME : "Ledger",
+	DEPT_NAME : "Department",
+	FA_PROPERTY : "Asset Property",
+	FA_CAT : "Asset Classification",
+	PERIOD_START : "Period",
+	PERIOD_END : "To",
+	FA_CODE_START : "Asset Code",
+	queryBtn : "Query",
+	resetBtn : "Reset",
+  
+	query1 : "Please select ledger!",
+	query2 : "Please select accounting period!",
+	query3 : "Please select end accounting period!",
+	query4 : "Please select asset code!",
+	query5 : "Please select asset property!",
+	ZCBM : "Asset Code",
+	ZCMC : "Asset Name",
+    ZCBMORZCMC : "Asset Code Or Asset Name"
+}

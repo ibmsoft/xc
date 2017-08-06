@@ -1,0 +1,11 @@
+{
+  LEDGER			: "账簿",
+  VENDOR_NAME		: "供应商",
+  PERIOD 			: "会计期",
+  TO 			    : "至",
+  PROJECT_NAME		: "项目",
+  DEPT_NAME			: "成本中心",
+  AP_CONTRACT_DATE  : "合同日期",
+  queryBtn			: "查询",
+  clearBtn			: "重置"
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.AssetCcfMapper">
+
+    <!-- 新增资产分类 -->
+    <insert id="saveAssetCcf" parameterType="java.util.HashMap">
+       insert into XC_FA_CATS(
+          CAT_ID,
+          CAT_CODE,
+          CAT_NAME,
+          UP_CODE,
+          FA_PROPERTY,
+          IS_LEAF,
+          CREATION_DATE,
+          CREATED_BY,
+          LAST_UPDATE_DATE,
+          LAST_UPDATED_BY
+       )values(
+          #{CAT_ID,jdbcType=VARCHAR},
+          #{CAT_CODE},
+          #{CAT_NAME},
+          #{UP_CODE},
+          #{FA_PROPERTY},
+          #{IS_LEAF,jdbcType = INTEGER},
+          #{CREATION_DATE},
+          #{CREATED_BY},
+          #{LAST_UPDATE_DATE},
+          #{LAST_UPDATED_BY}
+       
+       )
+       
+    </insert>
+    <!-- 新增资产分类 ,如果存在上级,上级资产的IS_LEAF变成0-->
+    <update id="updateIsLeafByUpcode" parameterType="java.util.HashMap">
+       update xc_fa_cats
+       set IS_LEAF = '0',
+           LAST_UPDATE_DATE = #{LAST_UPDATE_DATE},
+           LAST_UPDATED_BY = #{LAST_UPDATED_BY}
+       where CAT_CODE = #{CAT_CODE}
+    </update>
+     <!-- 更新资产分类-->
+    <update id="updateAssetCcf" parameterType="java.util.HashMap">
+       update xc_fa_cats
+       set 
+           CAT_CODE = #{CAT_CODE},
+           CAT_NAME = #{CAT_NAME},
+           UP_CODE = #{UP_CODE},
+           FA_PROPERTY = #{FA_PROPERTY},
+           LAST_UPDATE_DATE = #{LAST_UPDATE_DATE},
+           LAST_UPDATED_BY = #{LAST_UPDATED_BY}
+       where CAT_ID = #{CAT_ID}
+    </update>
+    <!-- 更新资产分类,如果存在下级，改变下级资产的资产编码和上级编码-->
+    <update id="updateDownAssetCcf" parameterType="java.util.HashMap">
+       update xc_fa_cats
+       set 
+           CAT_CODE = #{CAT_CODE},
+           UP_CODE = #{UP_CODE},
+           LAST_UPDATE_DATE = #{LAST_UPDATE_DATE},
+           LAST_UPDATED_BY = #{LAST_UPDATED_BY}
+       where CAT_ID = #{CAT_ID}
+    </update>
+    <!-- 获取一级最大资产编码 -->
+    <select id="getOneAssetMaxCode" parameterType="java.lang.String" resultType="java.lang.String">
+       select case when MAX(substring(cat_code,3,3))=0 OR COUNT(cat_code) =0 
+              then "0" else MAX(substring(cat_code,3,3)) 
+              end  AS CODENUM
+        from xc_fa_cats where cat_code like #{property}
+    </select>
+    <!-- 获取二级最大资产编码 -->
+    <select id="getTwoAssetMaxCode" parameterType="java.lang.String" resultType="java.lang.String">
+       select case when MAX(substring(cat_code,7,3))=0 OR COUNT(cat_code) =0 
+              then "0" else MAX(substring(cat_code,7,3)) 
+              end  AS CODENUM
+        from xc_fa_cats where cat_code like #{property}
+    </select>
+    <!-- 获取三级最大资产编码 -->
+    <select id="getThreeAssetMaxCode" parameterType="java.lang.String" resultType="java.lang.String">
+       select case when MAX(substring(cat_code,11,3))=0 OR COUNT(cat_code) =0 
+              then "0" else MAX(substring(cat_code,11,3)) 
+              end  AS CODENUM
+        from xc_fa_cats where cat_code like #{property}
+    </select>
+     <!-- 根据资产编码获取上级编码 -->
+    <select id="getUpCodeByCatCode" parameterType="java.lang.String" resultType="java.lang.String">
+       select UP_CODE
+        from xc_fa_cats where cat_code =#{cat_code}
+    </select>
+    <!-- 根据资产ID获取资产信息 -->
+    <select id="getAssetInfoByCatId" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.XcAsset">
+       select CAT_CODE AS catCode,
+              UP_CODE AS upCode,
+              FA_PROPERTY AS faProperty
+        from xc_fa_cats where cat_id =#{cat_id}
+    </select>
+    <!-- 根据资产编码获取下级资产 -->
+    <select id="getDownAssetByCode" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.XcAsset">
+       select CAT_ID AS catId,
+              CAT_CODE AS catCode
+        from xc_fa_cats where UP_CODE =#{cat_code}
+    </select>
+     <!-- 根据资产属性名称获取编码 -->
+    <select id="getCodeByPropertyName" parameterType="java.lang.String" resultType="java.lang.String">
+       select t.VAL_CODE 
+        from xip_pub_val_set_dtl t 
+        where t.VAL_NAME = #{fa_property} 
+        and t.VAL_SET_CODE = 'XC_FA_PROPERTY'
+    </select>
+        <!-- 根据资产名称获取资产 -->
+    <select id="getAssetByCatName" parameterType="java.lang.String" resultType="com.xzsoft.xc.fa.modal.XcAsset">
+       select CAT_CODE AS catCode,
+              UP_CODE AS upCode,
+              FA_PROPERTY AS faProperty
+        from xc_fa_cats where cat_name =#{cat_name}
+    </select>
+</mapper>

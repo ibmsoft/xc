@@ -1,0 +1,66 @@
+{
+
+  XH:'num',
+
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+
+
+  syncBtn:'synchronous',
+  exportBtn:'export',
+  selBtn:'query',
+  clearBtn:'clear',
+  emptyText:'Input sales type or object query',
+  LEDGER_ID_COL:'book ID',
+  AR_SALE_TYPE_ID_COL:'sale tyepe ID',
+  AR_SALE_TYPE_NAME_COL:'sale type',
+
+  SALE_OBJECT_COL:'sale object',
+
+  BG_ITEM_ID_COL:'budget items',
+  AR_ACC_ID_INV_COL:'sales revenue account',
+
+  QUERY_CODE_NAME:'code/name',
+
+
+  DESCRIPTION_COL:'description',
+
+  AR_ACC_ID_DEBT_COL:'receivable account',
+
+  AR_ACC_ID_PRE_NAME_COL:'subjects in advance',
+  AR_ACC_ID_TAX_COL:'output tax subject',
+
+  PRODUCT_NAME:'product',
+  PRODUCT_ID:'product ID',
+  TIP:'tip',
+
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete?',
+  DELTIP1:'Delete success!',
+  EDITETIP:'Modify  success！',
+
+   MSG1:' Has been associated cannot be deleted!',
+  MSG2:'Sale object  cat not repeatable!',
+  MSG3:'Please select one record!',
+    MSG4:'synchronous ',
+  MSG5:' records!',
+  message:'saving...',
+  SAVETIP:'save success！'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+

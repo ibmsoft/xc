@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select * from xc_fa_ld_cat_settings where cat_code in ({#cat_code#})","itemId":"dataprovider1"},"children":[],"type":"dataprovider","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询全局编码","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select t.SEG_CODE from xc_gl_ass_segments t","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

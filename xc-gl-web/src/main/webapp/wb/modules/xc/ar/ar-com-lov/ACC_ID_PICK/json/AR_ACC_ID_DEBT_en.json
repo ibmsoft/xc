@@ -1,0 +1,7 @@
+{
+    AR_ACC_NAME_DEBT : "Pay Acc",
+    ACC_CODE_COL : "Acc Code",
+    ACC_NAME_COL : "Acc Name",
+    ACC_CODE_NAME : "Acc Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

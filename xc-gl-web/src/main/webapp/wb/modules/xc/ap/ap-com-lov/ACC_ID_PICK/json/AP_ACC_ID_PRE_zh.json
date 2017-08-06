@@ -1,0 +1,7 @@
+{
+	acc:'预付账款科目',
+  	accCode:'科目编码',
+  	accName:'科目名称',
+  	accCodeName:'科目编码/名称',
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

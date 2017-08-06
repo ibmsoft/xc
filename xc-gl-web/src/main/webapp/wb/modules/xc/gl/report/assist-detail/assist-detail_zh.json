@@ -1,0 +1,17 @@
+{
+ ledger:'账簿',
+ periodStart:'会计期',
+ select:'查询',
+ yes:'是',
+ no:'否',
+ accountStart:'科目范围',
+ reset:'重置',
+ segement:'辅助项',
+ segementStart:'条件',
+ all:'全部',
+ selectBtnMsg1:'请先选择账簿！',
+ selectBtnMsg2:'请先选择会计期！',
+ selectBtnMsg3:'请选择辅助段！',
+ isAccount:'含未记账',
+ la_labelWidth:90
+}

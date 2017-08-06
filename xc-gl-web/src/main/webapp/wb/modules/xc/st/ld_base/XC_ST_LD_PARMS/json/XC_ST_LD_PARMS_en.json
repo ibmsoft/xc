@@ -1,0 +1,12 @@
+{
+    XC_ST_LD_PARMS_LEDGER_NAME				: 'Ledger',
+    XC_ST_LD_PARMS_ST_PERIOD_CODE			: 'Start Period',
+    XC_ST_LD_PARMS_ST_COST_METHOD_NAME		: 'Cost Accounting Method',
+    XC_ST_LD_PARMS_MAT_TYPE_SET_NAME		: 'Material Type Set',
+    XC_ST_LD_PARMS_ST_PROCESS_METHOD_NAME	: 'Differential processing under moving weighted average',
+    XC_ST_LD_PARMS_saveBtn					: 'Save',
+    XC_ST_LD_PARMS_qsrsybsx					: 'Please enter all items!',
+    XC_ST_LD_PARMS_sjbccg					: 'Data saved successfully!',
+    XC_ST_LD_PARMS_fieldset1				: 'Ledger Information',
+    XC_ST_LD_PARMS_fieldset2				: 'Ledger Parameters'
+}

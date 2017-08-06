@@ -1,0 +1,7 @@
+{
+    AR_ACC_NAME_TAX : "销项税科目",
+    ACC_CODE_COL : "销项税科目编码",
+    ACC_NAME_COL : "销项税科目名称",
+    ACC_CODE_NAME : "销项税科目编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

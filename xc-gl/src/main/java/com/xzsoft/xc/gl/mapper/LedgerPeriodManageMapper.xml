@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.LedgerPeriodManageMapper">
+<!-- 追加账簿开始期间的余额情况 -->
+<insert id="appendPeriodByStartPeriod" parameterType="java.util.HashMap">
+	<choose>
+	 <when test="dbType == 'oracle'.toString()">
+	 insert into xc_gl_balance(
+	ledger_id,
+	ccid,
+	period_code,
+	currency_code,
+	<!-- 期初 -->
+	b_dr,
+	b_cr,
+	<!-- 年初 -->
+	y_dr,
+	y_cr,
+	<!-- 期末 -->
+	pjtd_dr,
+	pjtd_cr,
+	<!-- 期初 未过账-->
+	t_b_dr,
+	t_b_cr,
+	<!-- 年初 未过账-->
+	t_y_dr,
+	t_y_cr,
+	<!-- 期末 未过账-->
+	t_pjtd_dr,
+	t_pjtd_cr,
+	<!-- 期初 数量-->
+	amt_b_dr,
+	amt_b_cr,
+	<!-- 年初 数量-->
+	amt_y_dr,
+	amt_y_cr,
+	<!-- 期末 数量-->
+	amt_pjtd_dr,
+	amt_pjtd_cr,
+	<!-- 期初 数量 未过账-->
+	amt_t_b_dr,
+	amt_t_b_cr,
+	<!-- 年初 数量 未过账-->
+	amt_t_y_dr,
+	amt_t_y_cr,
+	<!-- 期末  数量 未过账-->
+	amt_t_pjtd_dr,
+	amt_t_pjtd_cr,
+	creation_date,
+	created_by,
+	last_update_date,
+	last_updated_by
+	)
+select 
+    t.ledger_id,
+    t.ccid,
+    #{periodCode,jdbcType=VARCHAR}, 
+    t.currency_code,
+	t.pjtd_dr,
+	t.pjtd_cr,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.y_dr else t.pjtd_dr end,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.y_cr else t.pjtd_cr end,
+	t.pjtd_dr,
+	t.pjtd_cr,
+	t.t_pjtd_dr,
+	t.t_pjtd_cr,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.t_y_dr else t.t_pjtd_dr end,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.t_y_cr else t.t_pjtd_cr end,
+	t.t_pjtd_dr,
+	t.t_pjtd_cr,
+	<!-- 数量 -->
+	t.amt_pjtd_dr,
+	t.amt_pjtd_cr,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_y_dr else t.amt_pjtd_dr end,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_y_cr else t.amt_pjtd_cr end,
+    t.amt_pjtd_dr,
+	t.amt_pjtd_cr,
+	t.amt_t_pjtd_dr,
+	t.amt_t_pjtd_cr,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_t_y_dr else t.amt_t_pjtd_dr end,
+	case when SUBSTR(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_t_y_cr else t.amt_t_pjtd_cr end,
+	t.amt_t_pjtd_dr,
+	t.amt_t_pjtd_cr,
+	sysdate,
+	#{userId,jdbcType=VARCHAR},
+	sysdate,
+	#{userId,jdbcType=VARCHAR}
+ from  xc_gl_balance t 
+where t.ledger_id = #{ledgerId,jdbcType=VARCHAR}
+	 </when>
+	 <otherwise>
+	 insert into xc_gl_balance(
+	ledger_id,
+	ccid,
+	period_code,
+	currency_code,
+	<!-- 期初 -->
+	b_dr,
+	b_cr,
+	<!-- 年初 -->
+	y_dr,
+	y_cr,
+	<!-- 期末 -->
+	pjtd_dr,
+	pjtd_cr,
+	<!-- 期初 未过账-->
+	t_b_dr,
+	t_b_cr,
+	<!-- 年初 未过账-->
+	t_y_dr,
+	t_y_cr,
+	<!-- 期末 未过账-->
+	t_pjtd_dr,
+	t_pjtd_cr,
+	<!-- 期初 数量-->
+	amt_b_dr,
+	amt_b_cr,
+	<!-- 年初 数量-->
+	amt_y_dr,
+	amt_y_cr,
+	<!-- 期末 数量-->
+	amt_pjtd_dr,
+	amt_pjtd_cr,
+	<!-- 期初 数量 未过账-->
+	amt_t_b_dr,
+	amt_t_b_cr,
+	<!-- 年初 数量 未过账-->
+	amt_t_y_dr,
+	amt_t_y_cr,
+	<!-- 期末  数量 未过账-->
+	amt_t_pjtd_dr,
+	amt_t_pjtd_cr,
+	creation_date,
+	created_by,
+	last_update_date,
+	last_updated_by
+	)
+select 
+    t.ledger_id,
+    t.ccid,
+    #{periodCode,jdbcType=VARCHAR}, 
+    t.currency_code,
+	t.pjtd_dr,
+	t.pjtd_cr,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.y_dr else t.pjtd_dr end,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.y_cr else t.pjtd_cr end,
+	t.pjtd_dr,
+	t.pjtd_cr,
+	t.t_pjtd_dr,
+	t.t_pjtd_cr,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.t_y_dr else t.t_pjtd_dr end,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.t_y_cr else t.t_pjtd_cr end,
+	t.t_pjtd_dr,
+	t.t_pjtd_cr,
+	<!-- 数量 -->
+	t.amt_pjtd_dr,
+	t.amt_pjtd_cr,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_y_dr else t.amt_pjtd_dr end,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_y_cr else t.amt_pjtd_cr end,
+    t.amt_pjtd_dr,
+	t.amt_pjtd_cr,
+	t.amt_t_pjtd_dr,
+	t.amt_t_pjtd_cr,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_t_y_dr else t.amt_t_pjtd_dr end,
+	case when SUBSTRING(t.PERIOD_CODE,1,4)=#{yearCode,jdbcType=VARCHAR} then t.amt_t_y_cr else t.amt_t_pjtd_cr end,
+    t.amt_t_pjtd_dr,
+	t.amt_t_pjtd_cr,
+	NOW(),
+	#{userId,jdbcType=VARCHAR},
+	NOW(),
+	#{userId,jdbcType=VARCHAR}
+ from  xc_gl_balance t 
+where t.ledger_id = #{ledgerId,jdbcType=VARCHAR}
+	 </otherwise>
+	</choose>
+</insert>
+<!-- 追加期间到账簿 -->
+<insert id="appendPeriodToLedger" parameterType="java.util.HashMap">
+<choose>
+  <when test="dbType =='oracle'.toString()">
+    insert into xc_gl_ld_period(
+     ledger_id,       
+     period_code,     
+     ld_period_status,
+     creation_date,   
+     created_by,      
+     last_update_date,
+     last_updated_by 
+  )values(
+     #{ledgerId,jdbcType=VARCHAR}, 
+     #{periodCode,jdbcType=VARCHAR}, 
+     '1',
+     sysdate,
+     #{userId,jdbcType=VARCHAR}, 
+     sysdate,
+     #{userId,jdbcType=VARCHAR}
+  )
+  </when>
+  <otherwise>
+    insert into xc_gl_ld_period(
+     ledger_id,       
+     period_code,     
+     ld_period_status,
+     creation_date,   
+     created_by,      
+     last_update_date,
+     last_updated_by 
+  )values(
+     #{ledgerId,jdbcType=VARCHAR}, 
+     #{periodCode,jdbcType=VARCHAR}, 
+     '1',
+     NOW(),
+     #{userId,jdbcType=VARCHAR}, 
+     NOW(),
+     #{userId,jdbcType=VARCHAR}
+  )
+  </otherwise>
+</choose>
+</insert>
+<!-- 获取期间 -->
+<select id="getPeriodByCode" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Period">
+  select t.PERIOD_CODE as "periodCode",
+       t.YEAR  as "year",
+       t.QUARTER as "quarter",
+       t.START_DATE as "startDate",
+       t.END_DATE as "endDate",
+       t.IS_ENABLED as "isEnabled",
+       t.IS_ADJ_PERIOD as "isAdjPeriod",
+       '' as "ledgerId",
+       '1' as "periodStatus"        
+ from xc_gl_period t 
+ where t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+</select>
+<select id="getLedgerBalances" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Balances">
+   select t.* from xc_gl_balance t 
+            where t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+              and t.PERIOD_CODE =#{periodCode,jdbcType=VARCHAR}
+</select>
+<insert id="insertLedgerBalances" parameterType="java.util.List">
+	insert into xc_gl_balance
+	(ledger_id,
+	ccid,
+	period_code,
+	currency_code,
+	b_dr,
+	b_cr,
+	y_dr,
+	y_cr,
+	pjtd_dr,
+	pjtd_cr,
+	t_b_dr,
+	t_b_cr,
+	t_y_dr,
+	t_y_cr,
+	t_pjtd_dr,
+	t_pjtd_cr,
+	amt_b_dr,
+	amt_b_cr,
+	amt_y_dr,
+	amt_y_cr,
+	amt_pjtd_dr,
+	amt_pjtd_cr,
+	amt_t_b_dr,
+	amt_t_b_cr,
+	amt_t_y_dr,
+	amt_t_y_cr,
+	amt_t_pjtd_dr,
+	amt_t_pjtd_cr,
+	creation_date,
+	created_by,
+	last_update_date,
+	last_updated_by
+	)
+    <foreach collection="list" item="item" index="index"  separator="union all">
+	(select #{item.LEDGER_ID,jdbcType=VARCHAR},
+	        #{item.CCID,jdbcType=VARCHAR},
+	        #{item.PERIOD_CODE,jdbcType=VARCHAR},
+	        #{item.CURRENCY_CODE,jdbcType=VARCHAR},
+	        #{item.B_DR,jdbcType=DOUBLE},
+	        #{item.B_CR,jdbcType=DOUBLE},
+	        #{item.Y_DR,jdbcType=DOUBLE},
+	        #{item.Y_CR,jdbcType=DOUBLE},
+	        #{item.PJTD_DR,jdbcType=DOUBLE},
+	        #{item.PJTD_CR,jdbcType=DOUBLE},
+	        #{item.T_B_DR,jdbcType=DOUBLE},
+	        #{item.T_B_CR,jdbcType=DOUBLE},
+	        #{item.T_Y_DR,jdbcType=DOUBLE},
+	        #{item.T_Y_CR,jdbcType=DOUBLE},
+	        #{item.T_PJTD_DR,jdbcType=DOUBLE},
+	        #{item.T_PJTD_CR,jdbcType=DOUBLE},
+	        #{item.AMT_B_DR,jdbcType=DOUBLE},
+	        #{item.AMT_B_CR,jdbcType=DOUBLE},
+	        #{item.AMT_Y_DR,jdbcType=DOUBLE},
+	        #{item.AMT_Y_CR,jdbcType=DOUBLE},
+	        #{item.AMT_PJTD_DR,jdbcType=DOUBLE},
+	        #{item.AMT_PJTD_CR,jdbcType=DOUBLE},
+	        #{item.AMT_T_B_DR,jdbcType=DOUBLE},
+	        #{item.AMT_T_B_CR,jdbcType=DOUBLE},
+	        #{item.AMT_T_Y_DR,jdbcType=DOUBLE},
+	        #{item.AMT_T_Y_CR,jdbcType=DOUBLE},
+	        #{item.AMT_T_PJTD_DR,jdbcType=DOUBLE},
+	        #{item.AMT_T_PJTD_CR,jdbcType=DOUBLE},
+	        #{item.CREATION_DATE,jdbcType=DATE},
+	        #{item.CREATED_BY,jdbcType=VARCHAR},
+	        #{item.LAST_UPDATE_DATE,jdbcType=DATE},
+	        #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+	from wb_dual)
+    </foreach>
+</insert>
+<select id="getLedgerMaxPeriodCode" parameterType="java.lang.String"  resultType="java.lang.String">
+ <choose>
+ <when test="dbType =='oracle'.toString()">
+ select PERIOD_CODE from  (
+    select a.PERIOD_CODE from 
+    xc_gl_ld_period  a,
+    xc_gl_period b 
+  where a.PERIOD_CODE = b.PERIOD_CODE
+  and a.LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} 
+  order by b.START_DATE DESC
+ ) where rownum = 1 
+ </when>
+ <otherwise>
+  select a.PERIOD_CODE from 
+    xc_gl_ld_period  a,
+    xc_gl_period b 
+  where a.PERIOD_CODE = b.PERIOD_CODE
+  and a.LEDGER_ID=#{ledgerId,jdbcType=VARCHAR} 
+  order by b.START_DATE DESC limit 1
+ </otherwise>
+</choose>
+</select>
+<!-- 获取结转模板信息 -->
+<select id="getGlJzTplById" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.GlJzTpl">
+ SELECT
+	t.JZ_TPL_ID AS jzTplId,
+	t.JZ_TPL_CODE AS jzTplCode,
+	t.JZ_TPL_NAME AS jzTplName,
+	t.LEDGER_ID AS ledgerId,
+	l.LEDGER_CODE AS ledgerCode,
+	t.V_CATEGORY_ID AS vCategoryId,
+	(select p.V_CATEGORY_CODE  from xc_gl_v_category p WHERE p.V_CATEGORY_ID = t.V_CATEGORY_ID) AS categoryCode,
+	t.ZR_ACC_ID AS zrAccId,
+    (select p.ACC_CODE from xc_gl_accounts p where p.ACC_HRCY_ID = l.ACC_HRCY_ID AND p.ACC_ID = t.ZR_ACC_ID) AS zrAccCode,
+	t.ACC_SEGMENTS AS accSegment,
+	t.ZR_ACC_DR AS zrAccDirection,
+	t.SUMMARY AS summary,
+	t.CREATED_BY AS createdBy,
+	t.CREATION_DATE AS creationDate,
+	t.LAST_UPDATED_BY AS lastUpdatedBy,
+	t.LAST_UPDATE_DATE AS lastUpdateDate
+FROM
+	xc_gl_jz_tpl t,
+    xc_gl_ledgers l
+WHERE
+    t.LEDGER_ID = l.LEDGER_ID
+AND
+	t.JZ_TPL_ID =#{jzTplId,jdbcType=VARCHAR} 
+</select>
+<!-- 获取结转模板明细信息 -->
+<select id="getJzDtlByTplId" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.GlJzTplDtl">
+SELECT
+	t.JZ_TPL_ID AS jzTplId,
+    t.TPL_DTL_ID AS tplDtlId,
+	t.ZC_ACC_ID AS zcAccId,
+	t.SUM_ACC_ID AS sumAccId,
+    t.BAL_RULE AS balRule,
+    t.BAL_DR AS balDirection,
+	t.ACC_SEGMENTS AS accSegment,
+	t.SUMMARY AS summary,
+	t.CREATED_BY AS createdBy,
+	t.CREATION_DATE AS creationDate,
+	t.LAST_UPDATED_BY AS lastUpdatedBy,
+	t.LAST_UPDATE_DATE AS lastUpdateDate
+FROM
+	xc_gl_jz_tpl_dtl t
+WHERE
+	t.JZ_TPL_ID =#{jzTplId,jdbcType=VARCHAR} 
+ORDER BY
+    t.BAL_DR DESC
+</select>
+<!-- 获取科目辅助启用短 -->
+<select id="getAccSegmentCode" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT
+		l.SEG_CODE
+	FROM
+		xc_gl_jz_tpl t,
+		xc_gl_ld_accounts a,
+		xc_gl_ld_acc_ass_seg b,
+		xc_gl_ld_ass_segments l
+	WHERE
+		t.LEDGER_ID = a.LEDGER_ID
+	AND  
+	    t.ZR_ACC_ID = a.ACC_ID
+	AND 
+	    a.LD_ACC_ID = b.LD_ACC_ID
+	AND 
+	    b.LD_SEG_ID = l.LD_SEG_ID
+    AND  
+        t.JZ_TPL_ID = #{jzTplId,jdbcType=VARCHAR} 
+</select>
+<!-- 获取要结转的科目期末已过账余额 -->
+<select id="queryConvertAmount"  resultType="java.util.HashMap">
+	SELECT
+	  t.PJTD_DR,
+	  t.PJTD_CR,
+	  t.PTD_DR,
+	  t.PTD_CR,
+	  c.CCID,
+      c.ACC_CODE,
+      c.CCID_CODE
+	FROM
+	  xc_gl_balance t,
+	  xc_gl_ccid c,
+	  xc_gl_ledgers l
+	WHERE
+	  t.LEDGER_ID = c.LEDGER_ID
+	AND
+	  t.LEDGER_ID = l.LEDGER_ID
+	AND
+	  t.CURRENCY_CODE = l.CURRENCY_CODE
+	AND
+	  t.CCID = c.CCID
+	AND
+	  c.ACC_ID = #{accId,jdbcType=VARCHAR} 
+	AND
+	  t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+	AND
+      t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+</select>
+<!-- 获取要结转的科目期末已过汇总账余额 -->
+<select id="querySumConvertAmount"  resultType="java.util.HashMap">
+	SELECT
+	  sum(t.PJTD_DR) AS PJTD_DR,
+	  sum(t.PJTD_CR) AS PJTD_CR,
+	  sum(t.PTD_DR) AS PTD_DR,
+	  sum(t.PTD_CR) AS PTD_CR,
+      c.ACC_CODE
+	FROM
+	  xc_gl_balance t,
+	  xc_gl_ccid c,
+	  xc_gl_ledgers l
+	WHERE
+	  t.LEDGER_ID = c.LEDGER_ID
+	AND
+	  t.LEDGER_ID = l.LEDGER_ID
+	AND
+	  t.CURRENCY_CODE = l.CURRENCY_CODE
+	AND
+	  t.CCID = c.CCID
+	AND
+	  c.ACC_ID = #{accId,jdbcType=VARCHAR} 
+	AND
+	  t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+	AND
+      t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+    GROUP BY c.ACC_CODE
+</select>
+<insert id="insertCarryoverLog" parameterType="java.util.HashMap">
+   <choose>
+     <when test="dbType == 'mysql'.toString()"> 
+          insert into xc_gl_jz_logs(
+			JZ_LOG_ID,       
+			JZ_TPL_ID,       
+			JZ_LOG_DESC,     
+			CREATION_DATE,   
+			CREATED_BY,      
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		  )values(
+		    #{JZ_LOG_ID,jdbcType=VARCHAR}, 
+		    #{JZ_TPL_ID,jdbcType=VARCHAR}, 
+		    #{JZ_LOG_DESC,jdbcType=VARCHAR}, 
+		    NOW(), 
+		    #{CREATED_BY,jdbcType=VARCHAR}, 
+		    NOW(),
+		    #{CREATED_BY,jdbcType=VARCHAR}
+		  )
+     </when>
+     <otherwise>
+      insert into xc_gl_jz_logs(
+			JZ_LOG_ID,       
+			JZ_TPL_ID,       
+			JZ_LOG_DESC,     
+			CREATION_DATE,   
+			CREATED_BY,      
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		  )values(
+		    #{JZ_LOG_ID,jdbcType=VARCHAR}, 
+		    #{JZ_TPL_ID,jdbcType=VARCHAR}, 
+		    #{JZ_LOG_DESC,jdbcType=VARCHAR}, 
+		    sysdate, 
+		    #{CREATED_BY,jdbcType=VARCHAR}, 
+		    sysdate,
+		    #{CREATED_BY,jdbcType=VARCHAR}
+		  )
+     </otherwise>
+   </choose>
+</insert>
+</mapper>

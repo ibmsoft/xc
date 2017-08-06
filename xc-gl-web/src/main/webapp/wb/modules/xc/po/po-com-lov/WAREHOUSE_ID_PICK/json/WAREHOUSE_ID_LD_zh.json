@@ -1,0 +1,6 @@
+{
+	po_pur_po_com_lov_warehouse:'仓库',
+  	po_pur_po_com_lov_warehouse_code:'仓库编号',
+  	po_pur_po_com_lov_warehouse_name:'仓库名称',
+  	po_pur_po_com_lov_warehouse_code_name:'仓库编号/名称'
+}

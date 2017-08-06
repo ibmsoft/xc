@@ -1,0 +1,14 @@
+{
+  LEDGER_CODE : 'Ledger Name',
+  queryBtn : 'Query',
+  addBtn : 'Add',
+  delBtn : 'Delete',
+  syncBtn : 'Sync',
+  saveBtn : 'Save',
+  ROW_NUMBER_COL : 'Order',
+  V_SUMMARY_ID_COL : 'ID',
+  LEDGER_ID_COL : 'Ledger ID',
+  LEDGER_NAME_COL : 'Ledger Name',
+  V_SUMMARY_COL : 'Summary',
+  ASS_KEY_COL : 'Ass Key'
+}

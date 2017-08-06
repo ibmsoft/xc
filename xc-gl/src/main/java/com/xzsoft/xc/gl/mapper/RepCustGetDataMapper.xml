@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.RepCustGetDataMapper">
+
+	<!-- 查询总账余额表数据 -->
+	<select id="getBalance" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select sum(tmp.val) VAL from (
+		  select (case #{BAL_TYPE}
+		           when 'B_DR' then xb.b_dr
+		           when 'B_CR' then xb.b_cr
+		           when 'B_JE' then
+		            (case ga.balance_direction
+		              when '1' then
+		               xb.b_dr - xb.b_cr
+		              else
+		               xb.b_cr - xb.b_dr
+		            end)
+		           when 'PTD_DR' then xb.ptd_dr
+	             when 'PTD_CR' then xb.ptd_cr
+	             when 'PTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.ptd_dr - xb.ptd_cr
+	                else
+	                 xb.ptd_cr - xb.ptd_dr
+	              end)    
+	             when 'Y_DR' then xb.y_dr
+	             when 'Y_CR' then xb.y_cr
+	             when 'Y_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.y_dr - xb.y_cr
+	                else
+	                 xb.y_cr - xb.y_dr
+	              end)    
+	             when 'YTD_DR' then xb.ytd_dr
+	             when 'YTD_CR' then xb.ytd_cr
+	             when 'YTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.ytd_dr - xb.ytd_cr
+	                else
+	                 xb.ytd_cr - xb.ytd_dr
+	              end)  
+	             when 'PJTD_DR' then xb.pjtd_dr
+	             when 'PJTD_CR' then xb.pjtd_cr
+	             when 'PJTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.pjtd_dr - xb.pjtd_cr
+	                else
+	                 xb.pjtd_cr - xb.pjtd_dr
+	              end)  
+	              
+		         when 'T_B_DR' then xb.t_b_dr
+		         when 'T_B_CR' then xb.t_b_cr
+		         when 'T_B_JE' then
+		            (case ga.balance_direction
+		              when '1' then
+		               xb.t_b_dr - xb.t_b_cr
+		              else
+		               xb.t_b_cr - xb.t_b_dr
+		            end)
+		         when 'T_PTD_DR' then xb.t_ptd_dr
+	             when 'T_PTD_CR' then xb.t_ptd_cr
+	             when 'T_PTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.t_ptd_dr - xb.t_ptd_cr
+	                else
+	                 xb.t_ptd_cr - xb.t_ptd_dr
+	              end)    
+	             when 'T_Y_DR' then xb.t_y_dr
+	             when 'T_Y_CR' then xb.t_y_cr
+	             when 'T_Y_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.t_y_dr - xb.t_y_cr
+	                else
+	                 xb.t_y_cr - xb.t_y_dr
+	              end)    
+	             when 'T_YTD_DR' then xb.t_ytd_dr
+	             when 'T_YTD_CR' then xb.t_ytd_cr
+	             when 'T_YTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.t_ytd_dr - xb.t_ytd_cr
+	                else
+	                 xb.t_ytd_cr - xb.t_ytd_dr
+	              end)  
+	             when 'T_PJTD_DR' then xb.t_pjtd_dr
+	             when 'T_PJTD_CR' then xb.t_pjtd_cr
+	             when 'T_PJTD_JE' then
+	              (case ga.balance_direction
+	                when '1' then
+	                 xb.t_pjtd_dr - xb.t_pjtd_cr
+	                else
+	                 xb.t_pjtd_cr - xb.t_pjtd_dr
+	              end)                
+	              
+	             else
+	              0
+	           end) val
+	      from xc_gl_balance xb, xc_gl_ccid gc, xc_gl_accounts ga
+	     where xb.ccid = gc.ccid
+	      and ga.acc_id = gc.acc_id
+	      and xb.LEDGER_ID = #{ledgerId}
+	      and xb.PERIOD_CODE = #{periodCode}
+	      and xb.CURRENCY_CODE = #{cnyCode}
+	      and gc.acc_id = #{accId}
+	      <choose>
+	      	<when test="dbType=='mysql' ">
+	 	      and gc.vendor_id = if(#{vendorId}='00',gc.vendor_id,#{vendorId}) 
+		      and gc.customer_id = if(#{customerId}='00',gc.customer_id,#{customerId}) 
+		      and gc.product_id = if(#{prodId}='00',gc.product_id,#{prodId})
+		      and gc.org_id = if(#{orgId}='00',gc.org_id,#{orgId})
+		      and gc.emp_id = if(#{empId}='00',gc.emp_id,#{empId})
+		      and gc.project_id = if(#{prjId}='00',gc.project_id,#{prjId})
+		      and gc.dept_id = if(#{deptId}='00',gc.dept_id,#{deptId})
+		      and gc.custom1_id = if(#{cust1Id}='00',gc.custom1_id,#{cust1Id})
+		      and gc.custom2_id = if(#{cust2Id}='00',gc.custom2_id,#{cust2Id})
+		      and gc.custom3_id = if(#{cust3Id}='00',gc.custom3_id,#{cust3Id})
+		      and gc.custom4_id = if(#{cust4Id}='00',gc.custom4_id,#{cust4Id})      	
+	      	</when>
+	      	<when test="dbType=='oracle' ">
+		      and gc.vendor_id = decode(#{vendorId},'00',gc.vendor_id,#{vendorId}) 
+		      and gc.customer_id = decode(#{customerId},'00',gc.customer_id,#{customerId}) 
+		      and gc.product_id = decode(#{prodId},'00',gc.product_id,#{prodId})
+		      and gc.org_id = decode(#{orgId},'00',gc.org_id,#{orgId})
+		      and gc.emp_id = decode(#{empId},'00',gc.emp_id,#{empId})
+		      and gc.project_id = decode(#{prjId},'00',gc.project_id,#{prjId})
+		      and gc.dept_id = decode(#{deptId},'00',gc.dept_id,#{deptId})
+		      and gc.custom1_id = decode(#{cust1Id},'00',gc.custom1_id,#{cust1Id})
+		      and gc.custom2_id = decode(#{cust2Id},'00',gc.custom2_id,#{cust2Id})
+		      and gc.custom3_id = decode(#{cust3Id},'00',gc.custom3_id,#{cust3Id})
+		      and gc.custom4_id = decode(#{cust4Id},'00',gc.custom4_id,#{cust4Id})     	
+	      	</when>
+	      </choose>
+		) tmp
+	</select>
+	
+	<!-- 获取总账现金流量项本期汇总数  -->	
+	<select id="getCashPTD" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select sum(VAL) VAL
+		  from (SELECT t.LEDGER_ID,
+		               t.PERIOD_CODE,
+		               t.CA_ID,
+		               (CASE #{CA_TYPE}
+		                 WHEN 'CA_SUM_PTD' THEN
+		                  t.CA_SUM
+		                 WHEN 'T_CA_SUM_PTD' THEN
+		                  t.T_CA_SUM
+		                 ELSE
+		                  0
+		               END) VAL
+		          FROM xc_gl_cash_sum t
+		         WHERE t.LEDGER_ID = #{ledgerId}
+		           AND t.PERIOD_CODE = #{periodCode}
+		           AND t.CA_ID = #{caId}
+		        ) tmp
+		 GROUP BY LEDGER_ID, PERIOD_CODE, CA_ID
+	</select>
+	
+	<!-- 获取总账现金流量项本年汇总数  -->
+	<select id="getCashYTD" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select sum(VAL) VAL
+			from (SELECT
+					t.LEDGER_ID,
+					t.PERIOD_CODE,
+					t.CA_ID,
+					(CASE #{CA_TYPE}
+					 WHEN 'CA_SUM_YTD' THEN
+						t.CA_SUM
+					 WHEN 'T_CA_SUM_YTD' THEN
+						t.T_CA_SUM
+					 ELSE
+						0
+					END) VAL
+				FROM
+					xc_gl_cash_sum t
+				WHERE t.LEDGER_ID = #{ledgerId}
+			      and t.PERIOD_CODE >= #{startPeriod}
+				  <![CDATA[
+				  	and t.PERIOD_CODE <= #{periodCode}
+				  ]]>
+				AND t.CA_ID = #{caId}
+			) tmp
+		GROUP BY LEDGER_ID,CA_ID
+	</select>
+
+</mapper>

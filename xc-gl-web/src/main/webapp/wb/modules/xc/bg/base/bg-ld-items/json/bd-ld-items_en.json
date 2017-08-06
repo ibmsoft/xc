@@ -1,0 +1,95 @@
+{
+    LEDGER_NAME : "Ledger",
+    BG_ITEM_NAME : "Budget items",
+  
+    BG_ITEM_NAME_EMPTY : "Please enter a code or name",
+    BG_ITEM_NAME_EMPTY1 : "Enter a budget code or name query",
+	
+	selBtn : "Query",
+	resetBtn : "Reset",
+    cancelsBtn : "Clear",
+  
+	addBtn : "Add",
+	editBtn : "Edit",
+	delBtn : "Delete",
+	blockBtn : "Disable",
+	openBtn : "Enable",
+	syncBtn : "Synchronization",
+	importBtn : "Import",
+	exportBtn : "Export",
+	batchModify : "Batch modify",
+	saveBtn : "Save",
+	cancelBtn : "Cancel",
+    okBtn : "OK",
+	
+    number : "NO",
+	BG_ITEM_CODE_COL : "Budget item code",
+	BG_ITEM_NAME_COL : "Budget item name",
+	BG_ITEM_DESC_COL : "Budget item description",
+	BG_ITEM_UP_NAME_COL : "Superior project budget",
+	BG_CTRL_DIM_COL : "Control dimension",
+	BG_CTRL_MODE_COL : "Control mode",
+	BG_ITEM_ID_COL : "Budget item ID",
+	BG_LD_ITEM_ID_COL : "Ledger Budget item ID",
+	IS_ENABLED_COL : "Is enabled",
+	EX_ITEM_NAME_COL : "Cost items",
+	EX_ITEM_CODE_COL : "Cost items code",
+	ACC_CODE_COL : "Accounting code",
+	ACC_NAME_COL : "Accounting",
+	ACC_HRCY_NAME_COL : "Accounting system",
+	BG_HRCY_NAME_COL : "Budget system",
+  
+  
+    addRec1 : "Please select books!",
+    addRec2 : "Add",
+    addRec3 : "Please select the budget items you need to add!",
+    addRec4 : "article budget item!",
+    addRec5 : "Add failed!",
+  
+    editRec1 : "Please select a row of data!",
+    editRec2 : "Edit",
+    editRec3 : "Control dimension or control mode can not be empty!",
+    editRec4 : "Save success!",
+  
+    deleteRec1 : "Please select the record to delete!",
+    deleteRec2 : "Sure to delete",
+    deleteRec3 : "records?",
+  
+    blockRec1 : "Please select a budget item to be deactivated!",
+    blockRec2 : "Disable failed!",
+  
+    openRec1 : "Select the budget item to be enabled!",
+    openRec2 : "Enable failed!",
+  
+    syncRec1 : "The book under no budget, not synchronized!",
+    syncRec2 : "synchronization",
+    syncRec3 : "Please select the records you need to synchronize!",
+    syncRec4 : "Synchronized success:",
+    syncRec5 : "a book!",
+    syncRec6 : "Synchronous failure!",
+  
+    batchModifyRec1 : "Please select a record to be modified!",
+    batchModifyRec2 : "Batch modify",
+  
+    fieldset1Title : "Essential information",
+    fieldset2Title : "Cost budget control",
+    fieldset3Title : "Cost items and accounting subjects",
+  
+  	importDataWinTitle : "Batch setting of budget items",
+  
+    selectFileRec1 : "Please select Excel file",
+    selectFileRec2 : "Select file",
+    importFileButton : "Import",
+    importFileRec1 : "Please select the file you want to upload!",
+    importFileRec2 : "Please select the Excel Office document at the end of xls!",
+    importFileRec3 : "Prompt",
+    importFileRec4 : "Import, please wait...",
+    importFileRec5 : "Import data is not valid!",
+  
+    importLogGridTitle : "Import information",
+    ROW_NUM : "Error line",
+    E_MSG : "Error message",
+  
+    updateEnableLock : "     Whether to modify the item",
+    updateContent : "Modify content"
+}

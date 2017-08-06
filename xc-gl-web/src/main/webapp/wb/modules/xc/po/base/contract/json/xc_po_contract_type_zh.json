@@ -1,0 +1,19 @@
+{
+	base_contract_type_code:'合同类型编码',
+  	base_contract_type_name:'合同类型名称',
+  	base_contract_query:'查询',
+  	base_contract_reset:'重置',
+  	base_contract_add:'新增',
+  	base_contract_save:'保存',
+  	base_contract_delete:'删除',
+  	base_contract_type_id:'合同类型ID',
+  	base_contract_description:'说明',
+  	base_contract_status:'状态',
+  	base_contract_rowNum:'序号',
+  	base_contract_enable:'启用',
+  	base_contract_unable:'不启用',
+  	base_contract_save_success:'保存成功',
+  	base_contract_exist_same_type_code:'存在相同的合同类型编码',
+  	base_contract_exist_same_type_name:'存在相同的合同类型名称',
+  	base_contract_exist_illegal:'表格中存在非法数据'
+}

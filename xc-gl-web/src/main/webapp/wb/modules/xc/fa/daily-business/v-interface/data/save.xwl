@@ -1,0 +1,1 @@
+{"inframe":false,"title":"保存","hidden":false,"roles":{"default":1},"children":[{"configs":{"serverScript":"var  recs = Wb.decode(request.getParameter('create'));\n\nrequest.setAttribute('create', Wb.encode(recs)); //重置create记录\napp.update({\n  tableName: 'xc_gl_v_interface'\n});\n","itemId":"module"},"children":[],"expanded":false,"type":"module"}],"pageLink":"","iconCls":""}

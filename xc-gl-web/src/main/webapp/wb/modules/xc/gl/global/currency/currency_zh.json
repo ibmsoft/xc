@@ -1,0 +1,8 @@
+{
+  symbol : "标准符号",
+  rownum : "序号",
+  currencyName:"货币名称",
+  nation:"国家",
+  precision:"小数位",
+  isEnabled:"启用"
+}

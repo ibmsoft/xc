@@ -1,0 +1,6 @@
+{
+	po_pur_po_com_lov_entry_code:'入库单编号',
+  	po_pur_po_com_lov_entry_name:'入库单名称',
+  	po_pur_po_com_lov_entry_code_name:'入库单编号/名称',
+  	po_pur_po_com_lov_entry_org_null:'请先选择组织'
+}

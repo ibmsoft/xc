@@ -1,0 +1,37 @@
+ {
+   XH:'序号',
+	CSTM_TYPE_CODE_COL:'客户大类',
+  	CSTM_TYPE_NAME_COL:'别名',
+  	IS_USE_COL:'启用',
+  	addBtn:'增加',
+  	saveBtn:'保存',
+  	delBtn:'删除',
+  
+  	importBtn:'导入',
+  	exportBtn:'导出',
+   
+  	 CODEMSG:'编码重复！',
+  	 message:'正在保存中...',
+      
+  	SAVETIP:'保存成功！',
+  	DELTIP:'请选择要删除的记录!',
+  	DELOKTIP:'您确定要删除？',
+    DELTIP1:'删除成功!',
+    EDITETIP:'修改成功！',
+  
+  	OPTYPE_COL:'操作类型',
+  
+  	CSTM_SORT_CODE_COL:'分类编码',
+  
+  	CSTM_SORT_NAME_COL:'分类名称',
+  	CSTM_TYPE_NAME_COL1:'客户大类',
+  
+  	MSG1:'请选择客户分类数据!',
+   MSG2:'客户分类已经被关联不可删除',
+
+  	TIP:'提示'
+  
+  
+  
+  
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.AttachmentMapper">
+	<resultMap type="com.xzsoft.xsr.core.modal.Attachment" id="attachmentMapper_resultMap">
+		<id property="ATTACH_ID" column="ATTACH_ID" javaType="String" jdbcType="VARCHAR" />
+		<result property="ATTACH_NAME" column="ATTACH_NAME" javaType="String" jdbcType="VARCHAR" />
+		<result property="ATTACH_NUM" column="ATTACH_NUM" javaType="String" jdbcType="VARCHAR" />
+		<result property="ATTACH_STREAM" column="ATTACH_STREAM" javaType="byte[]"
+			jdbcType="BLOB" typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
+		<result property="ATTACH_FILETYPE" column="ATTACH_FILETYPE" javaType="String" jdbcType="VARCHAR" />
+		<result property="ATTACH_STATUS" column="ATTACH_STATUS" javaType="String" jdbcType="VARCHAR" />
+	</resultMap>  
+	
+	<insert id="saveAttachment" parameterType="java.util.Map">
+		insert into
+		xsr_rep_attachment(
+		ATTACH_ID,
+		ATTACH_NAME,
+		ATTACH_NUM,
+		ATTACH_STREAM,
+		ATTACH_FILETYPE,
+		ATTACH_STATUS,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY)
+		VALUES
+		(
+		#{ATTACH_ID},
+		#{ATTACH_NAME},
+		CONCAT('ATT',uuid_short()),
+		#{ATTACH_STREAM,javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler},
+		#{ATTACH_FILETYPE},
+		#{ATTACH_STATUS},
+		#{SUIT_ID},
+		#{ENTITY_ID},
+		#{PERIOD_ID},
+		#{CURRENCY_ID},
+		#{MODALTYPE_ID},
+		#{MODALSHEET_ID},
+		#{ROWITEM_ID},
+		#{COLITEM_ID},
+		#{LAST_UPDATE_DATE},
+		#{LAST_UPDATED_BY},
+		#{CREATION_DATE},
+		#{CREATED_BY}
+		)
+	</insert>
+
+	<select id="getAttachmentById" resultMap="attachmentMapper_resultMap">
+		SELECT ATTACH_ID,
+		ATTACH_STREAM,
+		ATTACH_NAME
+		FROM xsr_rep_attachment
+		WHERE ATTACH_ID = #{ATTACH_ID, jdbcType=VARCHAR}
+	</select>  
+	
+</mapper>

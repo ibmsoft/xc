@@ -1,0 +1,1 @@
+{"inframe":false,"title":"账簿模板明细数据查询","hidden":true,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"queryModel"},"children":[{"configs":{"sql":"select * from xc_gl_jz_tpl_dtl where JZ_TPL_ID={?JZ_TPL_ID?}","itemId":"query"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

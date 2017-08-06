@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebApp_ID" version="2.5">
+  <display-name>xcgl</display-name>
+    
+    <welcome-file-list>
+        <welcome-file>xipIndex.jsp</welcome-file>
+    </welcome-file-list> 
+    
+    <context-param>  
+        <param-name>contextConfigLocation</param-name>  
+        <!-- <param-value>classpath*:/spring/spring-*.xml</param-value> -->
+        <param-value>/WEB-INF/spring/spring-*.xml</param-value>  
+    </context-param>  
+  	
+
+	<!-- cas config begin add by gongbinglai 2014.05.08 -->
+	<filter>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	</filter>
+ 	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+  	<filter>
+		<filter-name>CAS Validation Filter</filter-name>
+		<filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+		<init-param>
+			<param-name>casServerUrlPrefix</param-name>
+			<param-value>${cas.casServerUrl}</param-value>
+		</init-param>
+		<init-param>
+			<param-name>serverName</param-name>
+			<param-value>${cas.serverName}</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>  
+	    <filter-name>CAS Validation Filter</filter-name>  
+	    <url-pattern>*.jsp</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Validation Filter</filter-name>  
+	    <url-pattern>*.html</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Validation Filter</filter-name>  
+	    <url-pattern>*.htm</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Validation Filter</filter-name>  
+	    <url-pattern>/main</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Validation Filter</filter-name>  
+	    <url-pattern>*.do</url-pattern>  
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+		<init-param>
+			<param-name>casServerLoginUrl</param-name>
+			<param-value>${cas.casServerUrl}</param-value>
+		</init-param>
+		<init-param>
+			<param-name>serverName</param-name>
+			<param-value>${cas.serverName}</param-value>
+		</init-param>
+		<init-param>
+			<param-name>renew</param-name>
+			<param-value>${cas.renew}</param-value>
+		</init-param>
+		<init-param>
+			<param-name>gateway</param-name>
+			<param-value>${cas.gateway}</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>  
+	    <filter-name>CAS Authentication Filter</filter-name>  
+	    <url-pattern>*.jsp</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Authentication Filter</filter-name>  
+	    <url-pattern>*.html</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Authentication Filter</filter-name>  
+	    <url-pattern>*.htm</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>CAS Authentication Filter</filter-name>  
+	    <url-pattern>/main</url-pattern>  
+	</filter-mapping>	
+	<filter-mapping>  
+	    <filter-name>CAS Authentication Filter</filter-name>  
+	    <url-pattern>*.do</url-pattern>  
+	</filter-mapping>	
+	<filter>  
+	    <filter-name>ReceiveServerSessionFilter</filter-name>  
+	    <filter-class>com.xzsoft.xip.cas.client.filter.ReceiveServerSessionFilter</filter-class>  
+	</filter>  
+	<filter-mapping>  
+	    <filter-name>ReceiveServerSessionFilter</filter-name>  
+	    <url-pattern>/cas/shareSession.do</url-pattern>  
+	</filter-mapping>
+	<!-- cas config end add by gongbinglai 2014.05.08 -->
+	<filter>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <filter-class>com.xzsoft.xip.platform.filter.LoginValidationFilter</filter-class>  
+	</filter>  
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>/*</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>*.html</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>*.htm</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>/main</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>/m</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>*.do</url-pattern>  
+	</filter-mapping>
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>*.endpoint</url-pattern>  
+	</filter-mapping>		
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	    <url-pattern>/messagebroker/*</url-pattern>  
+	</filter-mapping>		
+	<filter-mapping>  
+	    <filter-name>LoginValiationFilter</filter-name>  
+	   <url-pattern>/services/*</url-pattern> 
+	</filter-mapping>	
+	
+ 	
+    <listener>  
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+    </listener>  
+    
+    <listener>
+    	<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  	</listener>
+  	
+    <filter>  
+	    <filter-name>CharacterEncodingFilter</filter-name>  
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+	    <init-param>  
+	        <param-name>encoding</param-name>  
+	        <param-value>utf-8</param-value>  
+	    </init-param>   
+	</filter>  
+	<filter-mapping>  
+	    <filter-name>CharacterEncodingFilter</filter-name>  
+	    <url-pattern>/*</url-pattern>  
+	</filter-mapping>
+	
+	<filter>
+		<description>WebBuilder Filter</description>
+		<display-name>WBbase</display-name>
+		<filter-name>WBbase</filter-name>
+		<filter-class>com.wb.common.Base</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>WBbase</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+    <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class> 
+        <init-param>
+        	<param-name>contextConfigLocation</param-name>
+        	<!-- <param-value>classpath*:/spring/spring-null.xml</param-value>-->
+        	<param-value>/WEB-INF/spring/spring-null.xml</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping> 
+    
+    <servlet>
+      <servlet-name>DruidStatView</servlet-name>
+      <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+      	<servlet-name>DruidStatView</servlet-name>
+      	<url-pattern>/druid/*</url-pattern>
+  	</servlet-mapping>
+  
+	<servlet>
+		<servlet-name>FlexDispatcher</servlet-name>
+		<servlet-class>com.xzsoft.xip.wf.service.designer.FlexDispatcher</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>FlexDispatcher</servlet-name>
+    	<url-pattern>*.endpoint</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+		<servlet-name>MessageBrokerServlet</servlet-name>
+		<servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
+		<init-param>
+	    	<param-name>services.configuration.file</param-name>
+	    	<param-value>/WEB-INF/flex/services-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessageBrokerServlet</servlet-name>
+		<url-pattern>/messagebroker/*</url-pattern>
+	</servlet-mapping>
+  
+  	<servlet>
+        <servlet-name>CXFServlet</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>  
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CXFServlet</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+    
+    <!-- web builder begin -->
+	<servlet>
+		<description>WebBuilder Core Service</description>
+		<display-name>main</display-name>
+		<servlet-name>main</servlet-name>
+		<servlet-class>com.webbuilder.common.Main</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>main</servlet-name>
+		<url-pattern>/main</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>WebBuilder Resource Cache</description>
+		<display-name>wbcache</display-name>
+		<servlet-name>wbcache</servlet-name>
+		<servlet-class>com.webbuilder.common.WbCache</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>wbcache</servlet-name>
+		<url-pattern>/webbuilder/*</url-pattern>
+	</servlet-mapping>
+	<!-- web builder end -->
+
+  	<!-- FineReprot begin -->
+	<servlet>
+		<servlet-name>ReportServer</servlet-name>
+		<servlet-class>com.fr.web.ReportServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReportServer</servlet-name>
+		<url-pattern>/ReportServer</url-pattern>
+	</servlet-mapping>
+ 	<!-- FineReprot end --> 
+  	
+  	<servlet>
+  		<servlet-name>uploadXmlFile</servlet-name>
+		<servlet-class>com.xzsoft.xip.wf.service.interaction.WorkflowXmlFileUpload</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	  	<servlet-name>uploadXmlFile</servlet-name>
+	    <url-pattern>/uploadXmlFile</url-pattern>
+	</servlet-mapping>
+	<!-- data download servlet -->
+	<servlet>
+		<servlet-name>downloadServlet</servlet-name>
+		<servlet-class>com.xzsoft.xip.wf.common.util.DownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadServlet</servlet-name>
+		<url-pattern>/down</url-pattern>
+	</servlet-mapping>
+	<!-- XCGL Data Initial -->
+	<servlet>
+		<servlet-name>XCGLInitServlet</servlet-name>
+		<servlet-class>com.xzsoft.xc.gl.servlets.XCGLInitServlet</servlet-class>
+		<init-param>
+			<param-name>isCacheRedis</param-name>
+			<param-value>N</param-value>
+		</init-param>		
+		<init-param>
+			<param-name>isCreateThreadPool</param-name>
+			<param-value>N</param-value>
+		</init-param>
+		<load-on-startup>4</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XCGLInitServlet</servlet-name>
+		<url-pattern>/xcglInitServlet</url-pattern>
+	</servlet-mapping>	
+	
+	<listener>
+	   	<listener-class>com.xzsoft.xip.platform.listener.PlatformServletContextListener</listener-class>
+	</listener>
+  	<session-config>
+    	<session-timeout>10</session-timeout>
+  	</session-config>
+</web-app>

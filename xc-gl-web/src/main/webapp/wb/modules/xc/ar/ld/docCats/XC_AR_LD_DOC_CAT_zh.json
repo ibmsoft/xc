@@ -1,0 +1,41 @@
+{
+  XH:'序号',
+ 
+  saveBtn:'保存',
+ 
+
+  VAL_CODE_COL:'单据大类',
+  VAL_NAME_COL:'单据大类描述',
+
+  AR_CAT_CODE_COL:'单据类型编码',
+  AR_CAT_NAME_COL:'单据类型名称',
+  PROCESS_NAME_COL:'审批流程',
+  QUERY_CODE_NAME:'编码/名称',
+PROCESS_CODE_COL:'流程编码',
+  PROCESS_NAME_COL1:'流程名称',
+
+  IS_PRINT_COL:'税控开票',
+  
+  RULE_DESC_COL:'编码规则',
+
+  ATT_CAT_NAME_COL:'附件分类',
+
+  PC_W_FORM_NAME_COL:'电脑端填报表单',
+  PC_A_FORM_NAME_COL:'电脑端审批表单',
+  PC_P_FORM_NAME_COL:'电脑端打印表单',
+  M_W_FORM_NAME_COL:'移动端填报表单',
+
+
+  M_A_FORM_NAME_COL:'移动端审批表单',
+  DESCRIPTION_COL:'说明',
+  
+ message:'正在保存中...',
+
+  SAVETIP:'保存成功！'
+  
+
+
+
+
+
+}

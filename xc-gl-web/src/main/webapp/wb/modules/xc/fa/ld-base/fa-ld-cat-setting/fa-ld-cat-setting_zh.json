@@ -1,0 +1,71 @@
+{
+  /* 查询条件 */
+  ledgerCombox:'账簿',
+  catName:'分类名称',
+  faProperty:'资产属性',
+  faProperty4CatWin:'资产属性',
+  queryBtn: '查询',
+  resetBtn: '重置',
+  
+  /* 查询列表 */
+  syncBtn: '同步',
+      syncCheckMsg:'请选择账簿',
+      syncWaitMsg:'正在同步，请稍后...',
+      syncSuccessMsg:'同步成功',
+      syncErrorMsg:'同步失败',
+      syncFailureMsg:'同步失败,服务器没有响应',
+  editBtn: '修改',
+      editCheckMsg:'请选择修改的记录',
+  delBtn: '删除',
+      delCheckMsg:'请选择需要删除的记录',
+      delMsg:'确定要删除选择的记录?',
+      delSeccessMsg:'删除成功',
+      delFailureMsg:'删除失败',
+  impBtn: '导入',
+  expBtn: '导出',
+      expFileName:'资产分类账簿设置',
+  
+  rowCol:'序号',
+  catNameCol: '分类名称',
+  upCatNameCol: '上级分类名称',
+  faPropertyCol: '资产属性',
+  synxCol: '使用年限(月)',
+  czlCol:'残值率(%)',
+  yzkmCol:'原值科目',
+  ljzktxkmCol:'累计折旧/摊销科目',
+  jzzbkmCol:'减值准备科目',
+  qlkmCol:'清理科目',
+  fykmCol:'费用科目',
+  jzsskmCol:'减值损失科目',
+  
+  /* 表单 */
+  upcatName:'上级分类',
+  sfzj:'是否折旧',
+  zjff:'折旧方法',
+  txgz:'摊销规则',
+  synx:'使用年限',
+  synxN:'年',
+  synxY:'月',
+  
+  saveBtn:'保存',
+      saveCheckMsg:'信息不完整，请确认',
+      zjAndJzffNotNull:'折旧时，折旧方法不能为空',
+      zjAndTxgzNotNull:'折旧时，摊销规则不能为空',
+      saveWaitMsg:'正在保存,请稍后...',
+      saveSuccessMsg:'保存成功',
+      saveFailureMsg:'保存失败',
+  cancelBtn:'取消',
+  
+  /* faCatsWin */
+  faCatsWinTitle:'请选择资产分类',
+  ensureBtn:'确定',
+      ensureCheckMsg:'请选择用同步的记录',
+  
+  /* faCatsGrid */
+  catCodeCol:'分类编码',
+  
+  /* 其他 */
+  errorMsgLeft: ',详细信息【',
+  errorMsgRight: '】',
+  hasRefAsset:'已经关联资产，无法删除'
+}

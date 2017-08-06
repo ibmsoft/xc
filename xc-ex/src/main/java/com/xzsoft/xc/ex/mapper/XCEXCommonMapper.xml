@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.XCEXCommonMapper">
+	<!-- 报销单信息  -->
+	<sql id="exdDocItemColumns">
+		EX_DOC_ID docId,
+		EX_DOC_CODE docCode,
+		EX_CAT_CODE docCatCode,
+		LEDGER_ID ledgerId,
+		ORG_ID orgId,
+		BIZ_DATE bizDate,
+		DEPT_ID deptId,
+		PROJECT_ID projectId,
+		EX_REASON exReason,
+		EX_ITEM_ID exItemId,
+		BG_ITEM_ID bgItemId,
+		AMOUNT amount,
+		APPLY_EX_DOC_ID applyDocId,
+		CANCEL_AMT cancelAmt,
+		V_HEAD_ID headId,
+		INS_CODE insCode,
+		AUDIT_STATUS auditStatus,
+		AUDIT_STATUS_DESC auditStatusDesc,
+		AUDIT_DATE auditStatusDate,
+		ADUIT_USERS auditUsers,
+		V_STATUS vstatus,
+		FIN_USER_ID finUserId,
+		FIN_DATE finDate,
+		VERIFIER_ID verifierId,
+		VERFY_DATE verifierDate,
+		SIGN_STATUS signStatus,
+		SIGN_USER_ID signUserId,
+		SIGN_DATE signDate,
+		PAY_METHOD payMethod,
+		EX_PAY_ID exPayId,
+       	creation_date creationDate,
+       	created_by createdBy,
+       	last_update_date lastUpdateDate,
+       	last_updated_by lastUpdatedBy	
+	</sql>
+	
+	<!-- 报销单基础信息查询  -->
+	<select id="getEXDoc" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.EXDocBean">
+		select <include refid="exdDocItemColumns" /> 
+		from XC_EX_DOCS 
+		where EX_DOC_ID = #{exDocId}	
+	</select>
+	<!-- 批量查询报销单据信息  -->
+	<select id="getEXDocs" parameterType="java.util.List" resultType="com.xzsoft.xc.ex.modal.EXDocBean">
+		select <include refid="exdDocItemColumns" /> 
+		from XC_EX_DOCS 
+		where EX_DOC_ID in
+		<foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 报销单明细信息查询  -->
+	<select id="getEXDocDtls" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.EXDocDtlBean">
+		select e.EX_DTL_ID        dtlId,
+		       e.EX_DOC_ID        docId,
+		       e.EX_ITEM_ID       exItemId,
+		       d.ex_item_code     exItemCode,
+		       d.ex_item_name     exItemName,
+		       e.BG_ITEM_ID       bgItemId,
+		       e.EX_DTL_AMT       dtlAmt,
+		       e.EX_DTL_DESC      dtlDesc,
+		       e.DOC_NUM          docNum,
+		       e.START_DATE       startDate,
+		       e.START_POS        startPos,
+		       e.END_DATE         endDate,
+		       e.END_POS          endPos,
+		       e.CREATION_DATE    creationDate,
+		       e.CREATED_BY       createdBy,
+		       e.LAST_UPDATE_DATE lastUpdateDate,
+		       e.LAST_UPDATED_BY  lastUpdatedBy
+		  from XC_EX_DOC_DTL e , xc_ex_items d
+		 where e.ex_item_id = d.ex_item_id
+		   and e.EX_DOC_ID = #{exDocId}
+	</select>
+	
+	
+	<!-- 支付单基础信息查询   -->
+	<select id="getPayDoc" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.PayDocBean">
+		select a.ex_pay_id        exPayId,
+		       a.ledger_id        ledgerId,
+		       a.ex_pay_code      exPayCode,
+		       a.ex_pay_desc      exPayDesc,
+		       a.deposit_bank_id  depositBankId,
+		       a.ex_pay_date      exPayDate,
+		       a.ex_pay_t_amt     exPayTAmt,
+		       a.v_head_id        vHeadId,
+		       a.v_status         vStatus,
+		       a.pay_status       payStatus,
+		       a.pay_type         payType,
+		       a.ca_id            caId,
+		       a.fin_user_id      finUserId,
+		       c.emp_name         finUserName,
+		       a.fin_date         finDate,
+		       a.verifier_id      verifierId,
+		       a.verfy_date       verfyDate,
+		       a.signatory_id     signatoryId,
+		       a.signatory,
+		       a.sign_date        signDate,
+		       a.creation_date    creationDate,
+		       a.created_by       createdBy,
+		       a.last_update_date lastUpdateDate,
+		       a.last_updated_by  lastUpdatedBy
+		  from xc_ex_pay a, xip_pub_users b, xip_pub_emps c
+		 where a.fin_user_id = b.user_id
+		   and b.emp_id = c.emp_id
+		   and ex_pay_id = #{docId}
+	</select>
+	<!-- 批量查询支付单信息  -->
+	<select id="getPayDocs" parameterType="java.util.List" resultType="com.xzsoft.xc.ex.modal.PayDocBean">
+		select a.ex_pay_id        exPayId,
+		       a.ledger_id        ledgerId,
+		       a.ex_pay_code      exPayCode,
+		       a.ex_pay_desc      exPayDesc,
+		       a.deposit_bank_id  depositBankId,
+		       a.ex_pay_date      exPayDate,
+		       a.ex_pay_t_amt     exPayTAmt,
+		       a.v_head_id        vHeadId,
+		       a.v_status         vStatus,
+		       a.pay_status       payStatus,
+		       a.pay_type         payType,
+		       a.ca_id            caId,
+		       a.fin_user_id      finUserId,
+		       c.emp_name         finUserName,
+		       a.fin_date         finDate,
+		       a.verifier_id      verifierId,
+		       a.verfy_date       verfyDate,
+		       a.signatory_id     signatoryId,
+		       a.signatory,
+		       a.sign_date        signDate,
+		       a.creation_date    creationDate,
+		       a.created_by       createdBy,
+		       a.last_update_date lastUpdateDate,
+		       a.last_updated_by  lastUpdatedBy
+		from xc_ex_pay a, xip_pub_users b, xip_pub_emps c 
+		where a.fin_user_id = b.user_id
+		  and b.emp_id = c.emp_id
+		  and ex_pay_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 支付单明细信息查询  -->
+	<select id="getPayDocDtls" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.PayDocDtlBean">
+		select ex_pay_dtl_id exPayDtlId,
+		       ex_pay_id exPayId,
+		       ex_doc_id exDocId,
+		       pay_amt payAmt,
+		       creation_date creationDate,
+		       created_by createdBy,
+		       last_update_date lastUpdateDate,
+		       last_updated_by lastUpdatedBy
+		  from xc_ex_pay_dtl
+		where ex_pay_id = #{docId}	
+	</select>
+	<!-- 费用报销单信息查询 -->
+	<select id="getAccDoc" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.ACCDocBean">
+	  SELECT 
+		a.EX_DOC_ID exDocId ,
+		a.EX_DOC_CODE exDocCode ,
+		a.EX_CAT_CODE exCatCode ,
+		a.LEDGER_ID ledgerId ,
+		l.LEDGER_NAME ledgerName ,
+		a.ORG_ID orgId ,
+		o.ORG_NAME orgName ,
+		a.BIZ_DATE bizDate ,
+		a.DEPT_ID deptId ,
+		d.DEPT_NAME deptName ,
+		a.PROJECT_ID projectId ,
+		p.PROJECT_NAME projectName ,
+		a.EX_REASON exReason,
+		a.AMOUNT amount ,
+		a.APPLY_EX_DOC_ID applyExDocId ,
+		a2.EX_DOC_CODE applyExDocCode,
+		a.CANCEL_AMT cancelAmt,
+		a.CREATED_BY createdBy,
+        e.EMP_NAME empName,
+        a.CREATION_DATE creationDate
+	  FROM xc_ex_docs a LEFT JOIN xc_pm_projects p on a.PROJECT_ID = p.PROJECT_ID
+		                LEFT JOIN xc_ex_docs a2 on a2.EX_DOC_ID = a.APPLY_EX_DOC_ID,
+		xc_gl_ledgers l,xip_pub_orgs o,xip_pub_depts d,xip_pub_users u,xip_pub_emps e
+		
+	  WHERE a.LEDGER_ID = l.LEDGER_ID
+		AND a.ORG_ID = o.ORG_ID
+		AND a.DEPT_ID = d.DEPT_ID
+		AND a.CREATED_BY = u.USER_ID
+        AND u.EMP_ID = e.EMP_ID
+		AND a.EX_DOC_ID = #{docId}
+	</select>
+	<!-- 报销单信息查询 -->
+	<select id="getExDocV" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.EXDocBean">
+		select  A.LEDGER_ID ledgerId,
+		        A.ORG_ID orgId,
+		        A.BIZ_DATE bizDate,
+		        A.EX_DOC_CODE docCode,
+		        XE.EMP_NAME empName,
+		        XD.DEPT_NAME deptName,
+		        XP.PROJECT_NAME projectName,
+		        A.EX_REASON exReason,
+		        XI.EX_ITEM_NAME exItemName,
+		        XB.BG_ITEM_NAME bgItemName,
+		        A.AMOUNT amount,
+		        A.CANCEL_AMT cancelAmt ,
+		        A.EX_CAT_CODE docCatCode,
+		        A.EX_DOC_ID docId,
+		        A.INS_CODE insCode,
+		        A.AUDIT_STATUS auditStatus,
+		        A.CREATED_BY createdBy,
+		        A.DEPT_ID deptId,
+		        A.PROJECT_ID projectId,
+		        A.EX_ITEM_ID exItemId,  
+		        A.BG_ITEM_ID bgItemId,  
+		        XL.LEDGER_NAME ledgerName,
+		        xo.org_name orgName,
+				A.APPLY_EX_DOC_ID applyDocId,
+    			xed.EX_DOC_CODE applyDocCode
+		  from xc_gl_ledgers xl,
+		       xip_pub_orgs xo,
+		       xip_pub_depts xd,
+		       xip_pub_users xu,
+		       xip_pub_emps  xe,
+		       xc_ex_docs    a
+			  left join xc_ex_items xi on xi.ex_item_id = a.ex_item_id
+			  left join xc_bg_items xb on a.bg_item_id = xb.bg_item_id
+			  left join xc_pm_projects xp on a.project_id = xp.project_id
+			  LEFT JOIN xc_ex_docs xed ON a.APPLY_EX_DOC_ID = xed.EX_DOC_ID
+		where xl.ledger_id = a.ledger_id
+		  and xl.org_id = xo.org_id
+		  and xd.dept_id = a.dept_id
+		  and xu.emp_id = xe.emp_id
+		  and xu.user_id = a.created_by
+		  and a.ex_doc_id = #{docId}
+	</select>
+	
+	<!-- 获取PA项目的预算控制维度 -->
+	<select id="getBgCtrlDim4Prj" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select t.PRJ_CTRL_DIM 
+		from xc_pm_projects t 
+		where t.LEDGER_ID = #{ledgerId} 
+		  and t.PROJECT_ID = #{projectId}	
+	</select>
+	
+	<!-- 获取预算项目的预算控制维度 -->
+	<select id="getBgCtrlDim4BgItem" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select t.BG_CTRL_DIM 
+		from xc_bg_ld_items t 
+		where t.LEDGER_ID = #{ledgerId} 
+		  and t.BG_ITEM_ID = #{bgItemId}	
+	</select>
+	
+</mapper> 

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStWhDeleveredMapper">
+	<!-- 出库及退库主表 -->
+	<sql id="xcStWhDeleveredHColumn">
+		DELEVERED_H_ID,
+		ORG_ID,
+		LEDGER_ID,
+		DELEVERED_H_CODE,
+		DELEVERED_H_NAME,
+		BUSINESS_TYPE_ID,
+		DOC_CAT_CODE,
+		NOTICE_H_ID,
+		SALE_ORDER_H_ID,
+		RE_DELEVERED_H_ID,
+		WH_KEEPER_ID,
+		WAREHOUSE_ID,
+		STATUS,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		AMOUNT,
+		DEPT_ID,
+		AR_CONTRACT_ID,
+		CUSTOMER_ID,
+		BUYER_ID,
+		PROJECT_ID,
+		BIZ_DATE,
+		RECEIVER_ID
+	</sql>
+	<!-- 出库及退库明细列 -->
+	<sql id="xcStWhDeleveredLColumn">
+		DELEVERED_L_ID,
+		DELEVERED_H_ID,
+		ORG_ID,
+		LEDGER_ID,
+		BUSINESS_TYPE_ID,
+		DOC_CAT_CODE,
+		DELEVERED_L_CODE,
+		MATERIAL_ID,
+		SALE_ORDER_L_ID,
+		NOTICE_L_ID,
+		ENTRY_H_ID,
+		ENTRY_L_ID,
+		RE_DELEVERED_H_ID,
+		RE_DELEVERED_L_ID,
+		COEFFICIENT,
+		QTY,
+		PRICE,
+		AMOUNT,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		DIM_ID,
+		LOCATION_ID,
+		SERIAL_BATCH_NUM,
+		B_SERIAL_ID
+	</sql>
+	<!-- 根据出库及退库主键ID得到相应数据信息 -->
+	<select id="selectXcStWhDeleveredH" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStWhDeleveredHColumn"/>
+		FROM xc_st_wh_delevered_h
+		WHERE DELEVERED_H_ID = #{DELEVERED_H_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据出库及退库行ID得到相应数据信息 -->
+	<select id="selectXcStWhDeleveredL" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStWhDeleveredLColumn"/>
+		FROM xc_st_wh_delevered_l
+		WHERE DELEVERED_L_ID = #{DELEVERED_L_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据出库及退库主ID得到行表相应数据信息 -->
+	<select id="selectXcStWhDeleveredLByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStWhDeleveredLColumn"/>
+		FROM xc_st_wh_delevered_l
+		WHERE DELEVERED_H_ID = #{DELEVERED_H_ID,jdbcType=VARCHAR}
+		ORDER BY DELEVERED_L_CODE DESC
+	</select>
+    <!-- 插入出库及退库主表 -->
+    <insert id="insertXcStWhDeleveredH" parameterType="java.util.Map">
+    	INSERT INTO xc_st_wh_delevered_h (
+			<include refid="xcStWhDeleveredHColumn"/>
+    	)
+		VALUES (
+		   #{DELEVERED_H_ID,jdbcType=VARCHAR},
+		   #{ORG_ID,jdbcType=VARCHAR},
+		   #{LEDGER_ID,jdbcType=VARCHAR},
+		   #{DELEVERED_H_CODE,jdbcType=VARCHAR},
+		   #{DELEVERED_H_NAME,jdbcType=VARCHAR},
+		   #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+		   #{DOC_CAT_CODE,jdbcType=VARCHAR},
+		   #{NOTICE_H_ID,jdbcType=VARCHAR},
+		   #{SALE_ORDER_H_ID,jdbcType=VARCHAR},
+		   #{RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+		   #{WH_KEEPER_ID,jdbcType=VARCHAR},
+		   #{WAREHOUSE_ID,jdbcType=VARCHAR},
+		   #{STATUS,jdbcType=VARCHAR},
+		   #{CREATION_DATE,jdbcType=TIMESTAMP},
+		   #{CREATED_BY,jdbcType=VARCHAR},
+		   #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		   #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		   #{AMOUNT,jdbcType=NUMERIC},
+		   #{DEPT_ID,jdbcType=VARCHAR},
+		   #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+		   #{CUSTOMER_ID,jdbcType=VARCHAR},
+		   #{BUYER_ID,jdbcType=VARCHAR},
+		   #{PROJECT_ID,jdbcType=VARCHAR},
+		   #{BIZ_DATE,jdbcType=TIMESTAMP},
+		   #{RECEIVER_ID,jdbcType=VARCHAR}
+		)
+    </insert>
+    <!-- 更新出库及退库主表 -->
+    <update id="updateXcStWhDeleveredH" parameterType="java.util.Map">
+    	UPDATE xc_st_wh_delevered_h SET
+			DELEVERED_H_NAME	= #{DELEVERED_H_NAME,jdbcType=VARCHAR},
+			BUSINESS_TYPE_ID	= #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+			DOC_CAT_CODE		= #{DOC_CAT_CODE,jdbcType=VARCHAR},
+			NOTICE_H_ID			= #{NOTICE_H_ID,jdbcType=VARCHAR},
+			SALE_ORDER_H_ID		= #{SALE_ORDER_H_ID,jdbcType=VARCHAR},
+			RE_DELEVERED_H_ID	= #{RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+			WH_KEEPER_ID		= #{WH_KEEPER_ID,jdbcType=VARCHAR},
+			WAREHOUSE_ID		= #{WAREHOUSE_ID,jdbcType=VARCHAR},
+			STATUS				= #{STATUS,jdbcType=VARCHAR},
+			AMOUNT				= #{AMOUNT,jdbcType=NUMERIC},
+			DEPT_ID				= #{DEPT_ID,jdbcType=VARCHAR},
+			PROJECT_ID			= #{PROJECT_ID,jdbcType=VARCHAR},
+			AR_CONTRACT_ID		= #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+			CUSTOMER_ID			= #{CUSTOMER_ID,jdbcType=VARCHAR},
+			BUYER_ID			= #{BUYER_ID,jdbcType=VARCHAR},
+			RECEIVER_ID			= #{RECEIVER_ID,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE	= #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY		= #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+			BIZ_DATE			= #{BIZ_DATE,jdbcType=TIMESTAMP}
+		WHERE
+			DELEVERED_H_ID 		= #{DELEVERED_H_ID,jdbcType=VARCHAR}
+    </update>
+	
+	<!-- 保存出库及退库明细 -->
+	<insert id="insertXcStWhDeleveredL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_wh_delevered_l (
+						<include refid="xcStWhDeleveredLColumn"/>
+					)
+					VALUES (
+						#{item.DELEVERED_L_ID,jdbcType=VARCHAR},
+						#{item.DELEVERED_H_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.DELEVERED_L_CODE,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.SALE_ORDER_L_ID,jdbcType=VARCHAR},
+						#{item.NOTICE_L_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+						#{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						IFNULL(#{item.COEFFICIENT},-1),
+						#{item.QTY,jdbcType=NUMERIC},
+						IFNULL(#{item.PRICE,jdbcType=NUMERIC},0),
+						IFNULL(#{item.AMOUNT,jdbcType=NUMERIC},0),
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},
+						#{item.B_SERIAL_ID,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_wh_delevered_l (
+						<include refid="xcStWhDeleveredLColumn"/>
+					)
+					VALUES (
+						#{item.DELEVERED_L_ID,jdbcType=VARCHAR},
+						#{item.DELEVERED_H_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.DELEVERED_L_CODE,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.SALE_ORDER_L_ID,jdbcType=VARCHAR},
+						#{item.NOTICE_L_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+						#{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						NVL(#{item.COEFFICIENT},-1),
+						#{item.QTY,jdbcType=NUMERIC},
+						NVL(#{item.PRICE,jdbcType=NUMERIC},0),
+						NVL(#{item.AMOUNT,jdbcType=NUMERIC},0),
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},
+						#{item.B_SERIAL_ID,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+
+	<!-- 更新出库及退库明细  -->
+	<update id="updateXcStWhDeleveredL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_delevered_l SET
+						BUSINESS_TYPE_ID	= #{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						DOC_CAT_CODE		= #{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						DELEVERED_L_CODE	= #{item.DELEVERED_L_CODE,jdbcType=VARCHAR},
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						SALE_ORDER_L_ID		= #{item.SALE_ORDER_L_ID,jdbcType=VARCHAR},
+						NOTICE_L_ID			= #{item.NOTICE_L_ID,jdbcType=VARCHAR},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						RE_DELEVERED_H_ID	= #{item.RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+						RE_DELEVERED_L_ID	= #{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						COEFFICIENT			= #{item.COEFFICIENT,jdbcType=NUMERIC},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						PRICE				= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT				= #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR}
+					WHERE
+						DELEVERED_L_ID		= #{item.DELEVERED_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_delevered_l SET
+						BUSINESS_TYPE_ID	= #{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						DOC_CAT_CODE		= #{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						DELEVERED_L_CODE	= #{item.DELEVERED_L_CODE,jdbcType=VARCHAR},
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						SALE_ORDER_L_ID		= #{item.SALE_ORDER_L_ID,jdbcType=VARCHAR},
+						NOTICE_L_ID			= #{item.NOTICE_L_ID,jdbcType=VARCHAR},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						RE_DELEVERED_H_ID	= #{item.RE_DELEVERED_H_ID,jdbcType=VARCHAR},
+						RE_DELEVERED_L_ID	= #{item.RE_DELEVERED_L_ID,jdbcType=VARCHAR},
+						COEFFICIENT			= #{item.COEFFICIENT,jdbcType=NUMERIC},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						PRICE				= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT				= #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR}
+					WHERE
+						DELEVERED_L_ID		= #{item.DELEVERED_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 批量删除出库及退库主表  -->
+	<delete id="deleteXcStWhDeleveredH" parameterType="java.util.List">
+		DELETE FROM xc_st_wh_delevered_h WHERE DELEVERED_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据出库及退库主表ID批量删除出库及退库行表信息 -->
+	<delete id="deleteXcStWhDeleveredLByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_wh_delevered_l WHERE DELEVERED_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据出库及退库行表ID批量删除出库及退库行表信息 -->
+	<delete id="deleteXcStWhDeleveredLByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_wh_delevered_l WHERE DELEVERED_L_ID = #{item.DELEVERED_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_wh_delevered_l WHERE DELEVERED_L_ID = #{item.DELEVERED_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+</mapper>

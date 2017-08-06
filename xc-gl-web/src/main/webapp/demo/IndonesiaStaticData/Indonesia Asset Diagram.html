@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+   <div id="container" style="height: 100%"> </div>
+   <script type="text/javascript" src="js/echarts.js"></script>
+   <script type="text/javascript" src="thema/macarons.js"></script>
+   <script type="text/javascript" src="thema/dark.js"></script>
+   <script type="text/javascript" src="thema/vintage.js"></script>
+   <script type="text/javascript" src="thema/shine.js"></script>
+   <script type="text/javascript" src="js/jquery.min.js"></script>
+   <script type="text/javascript">
+	var dom = document.getElementById("container");
+	var myChart = echarts.init(dom);
+	 	option = null;
+		option = {
+			color:['#009966','#999999','#0066CC','#999999','#CC3333','#999999','#9933CC','#999999','#FF9900','#999999','#339999','#999999'],
+		    toolbox: {
+	            show: true,
+	            //orient: 'vertical',
+	            left: 'left',
+	            top: 'top',
+			    feature: {
+	                restore: {},
+	                saveAsImage: {}
+	            }
+	        },
+			title:{
+				text: 'The assets location of Indonesia',
+		        left: 'center',
+				link:'http://localhost/demo/m?xwl=xc/demo/property-view/property_view'
+				},
+		    tooltip : {
+		        trigger: 'axis',
+		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		        }
+		    },
+		    legend: {
+		    	show:false,
+		        data:['Land-OV',
+		              'Land-ADV',
+		              'Building-OV',
+		              'Building-ADV',
+		              'Guns and instruments-OV',
+		              'Guns and instruments-ADV',
+		              'Police special equipment-OV',
+		              'Police special equipment-ADV',
+		              'Transportation equipment-OV',
+		              'Transportation equipment-ADV',
+		              'Electronic products and communication equipment-OV',
+		              'Electronic products and communication equipment-ADV']
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data : ['Province Ⅰ','Province Ⅱ','Province Ⅲ']
+		        }
+		    ],
+		    yAxis : [
+		        {
+		            type : 'value'
+		        }
+		    ],
+		    series : [
+		        {
+		            name:'Land-OV',
+		            type:'bar',
+		            stack: 'land',
+		            itemStyle: {
+		                normal: {
+		                    barBorderWidth: 1,
+		                    barBorderRadius:0,
+		                    label : {
+		                        show: true, position: 'insideTop'
+		                    }
+		                }
+		            },
+		            data:[15445077, 16034852, 14034562]
+		        },
+		        {
+		            name:'Land-ADV',
+		            type:'bar',
+		            stack: 'land',
+		            itemStyle: {
+		                normal: {
+		                    barBorderWidth: 1,
+		                    barBorderRadius:0,
+		                    label : {
+		                        show: true, position: 'top'
+		                    }
+		                }
+		            },
+		            data:[0, 0, 0]
+		        },
+		        {
+		            name:'Building-OV',
+		            type:'bar',
+		            stack: 'building',
+		            itemStyle: {
+			            normal: {
+			                barBorderWidth: 1,
+			                barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'insideTop'
+			                }
+		            	}
+		        	},
+		           data:[15034852, 20333593.72, 20333593.72]
+		        },
+		        {
+		            name:'Building-ADV',
+		            type:'bar',
+		            stack: 'building',
+		            itemStyle: {
+		                normal: {
+		                    barBorderWidth: 1,
+		                    barBorderRadius:0,
+		                    label : {
+		                        show: true, position: 'top'
+		                    }
+		                }
+		            },
+		            data:[7432667.67, 9832075.71, 11432667.67]
+		        },       
+		        {
+		            name:'Guns and instruments-OV',
+		            type:'bar',
+		            stack: 'guns',
+		            itemStyle: {
+			            normal: {
+			                barBorderWidth: 1,
+			                barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'insideTop'
+			                }
+		            	}
+		        	},
+		            data:[23945882.4, 28020967.63, 25832075.71]
+		        },
+		        {
+		            name:'Guns and instruments-ADV',
+		            type:'bar',
+		            stack: 'guns',
+		            itemStyle: {
+		                normal: {
+		                    barBorderWidth: 1,
+		                    barBorderRadius:0,
+		                    label : {
+		                        show: true, position: 'top'
+		                    }
+		                }
+		            },
+		            data:[10652763.06, 14652763.06, 12020967.63]
+		        }, 
+		        {
+		            name:'Police special equipment-OV',
+		            type:'bar',
+		            stack: 'police',
+		            itemStyle: {
+			            normal: {
+			                barBorderWidth: 1,
+			                barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'insideTop'
+			                }
+		            	}
+		        	},
+		            data:[23335932, 13432667.67, 12945882.4]
+		        },
+		        
+		        {
+		            name:'Police special equipment-ADV',
+		            type:'bar',
+		            stack: 'police',
+		            itemStyle: {
+		                normal: {
+		                    barBorderWidth: 1,
+		                    barBorderRadius:0,
+		                    label : {
+		                        show: true, position: 'top'
+		                    }
+		                }
+		            },
+		            data:[9832075.71,6333593.72,7832075.71]
+		        }, 
+		        {
+		            name:'Transportation equipment-OV',
+		            type:'bar',
+		            stack: 'transport',
+		            	itemStyle: {
+			            	normal: {
+			                	barBorderWidth: 1,
+			                	barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'insideTop'
+			                }
+		            	}
+		        	},
+		            data:[8191003, 12945882.4, 10652763.06]
+		        },
+		        {
+		            name:'Transportation equipment-ADV',
+		            type:'bar',
+		            stack: 'transport',
+		            	itemStyle: {
+			            	normal: {
+			                	barBorderWidth: 1,
+			                	barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'top'
+			                }
+		            	}
+		        	},
+		            data:[4853898.17,6652763.06,5945882.4]
+		        },
+		        {
+		            name:'Electronic products and communication equipment-OV',
+		            type:'bar',
+		            stack: 'electronic',
+		            	itemStyle: {
+			            	normal: {
+			                	barBorderWidth: 1,
+			                	barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'insideTop'
+			                }
+		            	}
+		        	},
+		            data:[1020967, 2333593.72, 3191003.06]
+		        },
+		       {
+		            name:'Electronic products and communication equipment-ADV',
+		            type:'bar',
+		            stack: 'electronic',
+		            	itemStyle: {
+			            	normal: {
+			                	barBorderWidth: 1,
+			                	barBorderRadius:0,
+			                label : {
+			                    show: true, position: 'top'
+			                }
+		            	}
+		        	},
+		            data:[528019.91,1032075.71,1553898.17]
+		        }
+		    ]
+		};
+		;
+		if (option && typeof option === "object") {
+		    myChart.setOption(option, true);
+		}
+		 $(window).resize(function () {
+    		myChart.resize();
+		});
+     </script>
+   </body>
+</html>

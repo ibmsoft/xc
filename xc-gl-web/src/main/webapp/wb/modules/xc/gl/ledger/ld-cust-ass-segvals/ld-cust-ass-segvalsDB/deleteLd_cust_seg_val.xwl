@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"delete from xc_gl_ld_cust_ass_segvals\nwhere LD_CUST_SEGVAL_ID={?LD_CUST_SEGVAL_ID?}","itemId":"query1"},"children":[],"type":"query","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

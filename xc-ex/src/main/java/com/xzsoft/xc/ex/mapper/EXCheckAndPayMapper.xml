@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.EXCheckAndPayMapper">
+
+	<!-- 生成付款单头信息   -->
+	<insert id="savePayDoc" parameterType="com.xzsoft.xc.ex.modal.PayDocBean">
+		insert into xc_ex_pay
+		  (ex_pay_id,
+		   ledger_id,
+		   ex_pay_code,
+		   ex_pay_desc,
+		   deposit_bank_id,
+		   ex_pay_date,
+		   ex_pay_t_amt,
+		   v_head_id,
+		   v_status,
+		   pay_status,
+		   pay_cat,
+		   pay_type,
+		   ca_id,
+		   fin_user_id,
+		   fin_date,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+		)values(
+		   #{exPayId,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{exPayCode,jdbcType=VARCHAR},
+		   #{exPayDesc,jdbcType=VARCHAR},
+		   #{depositBankId,jdbcType=VARCHAR},
+		   #{exPayDate,jdbcType=TIMESTAMP},
+		   #{exPayTAmt,jdbcType=FLOAT},
+		   #{vHeadId,jdbcType=VARCHAR},
+		   #{vStatus,jdbcType=VARCHAR},
+		   #{payStatus,jdbcType=VARCHAR},
+		   #{payCat,jdbcType=VARCHAR},
+		   #{payType,jdbcType=VARCHAR},
+		   #{caId,jdbcType=VARCHAR},
+		   #{finUserId,jdbcType=VARCHAR},
+		   #{finDate,jdbcType=TIMESTAMP},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<!-- 更新付款单信息  -->
+	<update id="updPayDoc" parameterType="com.xzsoft.xc.ex.modal.PayDocBean">
+		update xc_ex_pay set 
+		       ex_pay_desc      = #{exPayDesc,jdbcType=VARCHAR},
+		       deposit_bank_id  = #{depositBankId,jdbcType=VARCHAR},
+		       ex_pay_date      = #{exPayDate,jdbcType=TIMESTAMP},
+		       ex_pay_t_amt     = #{exPayTAmt,jdbcType=FLOAT},
+		       v_head_id        = #{vHeadId,jdbcType=VARCHAR},
+		       v_status         = #{vStatus,jdbcType=VARCHAR},
+		       pay_status       = #{payStatus,jdbcType=VARCHAR},
+		       pay_cat       	= #{payCat,jdbcType=VARCHAR},
+		       pay_type         = #{payType,jdbcType=VARCHAR},
+		       ca_id            = #{caId,jdbcType=VARCHAR},
+		       fin_user_id      = #{finUserId,jdbcType=VARCHAR},
+		       fin_date         = #{finDate,jdbcType=TIMESTAMP},
+		       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_pay_id = #{exPayId}
+	</update>
+	
+	<!-- 生成付款单明细信息  -->
+	<insert id="savePayDocDtl" parameterType="com.xzsoft.xc.ex.modal.PayDocDtlBean">
+		insert into xc_ex_pay_dtl
+		  (ex_pay_dtl_id,
+		   ex_pay_id,
+		   ex_doc_id,
+		   pay_amt,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+		)values(
+		   #{exPayDtlId,jdbcType=VARCHAR},
+		   #{exPayId,jdbcType=VARCHAR},
+		   #{exDocId,jdbcType=VARCHAR},
+		   #{payAmt,jdbcType=FLOAT},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 按付款单ID, 删除付款单明细  -->
+	<delete id="delPayDocDtl" parameterType="java.lang.String">
+		delete from xc_ex_pay_dtl where ex_pay_dtl_id = #{payId}
+	</delete>
+	
+	<!-- 批量删除付款单信息  -->
+	<delete id="delPayDocs" parameterType="java.util.List">
+		delete from xc_ex_pay_dtl where ex_pay_dtl_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 按付款单ID, 删除付款单头信息  -->
+	<delete id="delPayDoc" parameterType="java.lang.String">
+		delete from xc_ex_pay where ex_pay_id = #{payId}
+	</delete>
+	
+	<!-- 批量删除付款单明细  -->
+	<delete id="batchDelPayDocDtl" parameterType="java.util.List">
+		delete from xc_ex_pay_dtl where ex_pay_id in 
+		<foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除付款头信息  -->
+	<delete id="batchDelPayDoc" parameterType="java.util.List">
+		delete from xc_ex_pay where ex_pay_id in 
+		<foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 获取单据类型的编码规则  -->
+	<select id="getRuleCode" parameterType="java.util.HashMap" resultType="java.lang.String">
+		  select t.rule_code from xc_ex_ld_cat t where t.ledger_id = #{ledgerId} and t.ex_cat_code = #{docCat}
+	</select>
+	
+	<!-- 更新费用报销单信息  -->
+	<update id="updEXDoc" parameterType="com.xzsoft.xc.ex.modal.EXDocBean">
+		<choose>
+			<!-- 立即支付：付款单ID、支付方式和核销金额	 -->
+			<when test="updateMode == 'once' ">
+				update xc_ex_docs set 
+				   	   amount            = #{amount,jdbcType=FLOAT},
+				   	   cancel_amt        = #{cancelAmt,jdbcType=FLOAT},
+				       pay_method        = #{payMethod,jdbcType=VARCHAR},
+				       ex_pay_id         = #{exPayId,jdbcType=VARCHAR},
+				       v_head_id         = #{headId,jdbcType=VARCHAR},
+				       v_status          = #{vstatus,jdbcType=VARCHAR},
+				       fin_user_id       = #{finUserId,jdbcType=VARCHAR},
+				       fin_date          = #{finDate,jdbcType=TIMESTAMP},
+				       last_update_date  = #{lastUpdateDate,jdbcType=TIMESTAMP},
+				       last_updated_by   = #{lastUpdatedBy,jdbcType=VARCHAR}
+				 where ex_doc_id = #{docId}			
+			</when>
+			<!-- 挂账支付 : 凭证头ID、凭证状态、复核人（凭证制单人）、复核日期（凭证制制单日期）和支付方式 -->
+			<when test="updateMode == 'credit' ">
+				update xc_ex_docs set 
+					   cancel_amt        = #{cancelAmt,jdbcType=FLOAT},
+					   pay_method        = #{payMethod,jdbcType=VARCHAR},
+				       v_head_id         = #{headId,jdbcType=VARCHAR},
+				       v_status          = #{vstatus,jdbcType=VARCHAR},
+				       fin_user_id       = #{finUserId,jdbcType=VARCHAR},
+				       fin_date          = #{finDate,jdbcType=TIMESTAMP},
+				       last_update_date  = #{lastUpdateDate,jdbcType=TIMESTAMP},
+				       last_updated_by   = #{lastUpdatedBy,jdbcType=VARCHAR}
+				 where ex_doc_id = #{docId}					
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 批量更新费用报销单与支付单的对应关系  -->
+	<update id="batchUpdEXDocs" parameterType="java.util.HashMap">
+		update xc_ex_docs set 
+			<choose>
+				<when test="updMode == 'add' ">
+					ex_pay_id = #{bean.exPayId,jdbcType=VARCHAR},
+				</when>
+				<when test="updMode == 'cancel' ">
+					ex_pay_id = null,
+				</when>
+			</choose>
+		       last_update_date = #{bean.lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by = #{bean.lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_doc_id in 
+		 <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		 	#{item}
+		 </foreach>		
+	</update>
+	
+	<!-- 批量清除费用报销单与凭证和支付方式的对应关系：(凭证头ID、凭证状态、复核人（凭证制单人）、复核日期（凭证制制单日期）和支付方式)  -->
+	<update id="batchClearEXDocs" parameterType="java.util.HashMap">
+		<!-- 挂账支付 : 凭证头ID、凭证状态、复核人（凭证制单人）、复核日期（凭证制制单日期）和支付方式 -->
+		update xc_ex_docs set 
+		       cancel_amt        = null,
+		       v_head_id         = null,
+		       v_status          = null,
+		       fin_user_id       = null,
+		       fin_date          = null,
+		       verifier_id       = null,
+		       verfy_date        = null,
+		       pay_method        = null,
+		       ex_pay_id 		 = null,
+		       last_update_date  = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by   = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_doc_id in 
+		 <foreach collection="list" index="index" open="(" close=")" item="item" separator=",">
+		 	#{item}
+		 </foreach>	
+	</update>
+	
+	<!-- 更新报销单凭证审核信息  -->
+	<update id="updEXDocVoucher" parameterType="com.xzsoft.xc.ex.modal.EXDocBean">
+		update xc_ex_docs
+		   set v_status          = #{vstatus,jdbcType=VARCHAR},
+		       verifier_id       = #{verifierId,jdbcType=VARCHAR},
+		       verfy_date        = #{verifierDate,jdbcType=TIMESTAMP},
+		       last_update_date  = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by   = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_doc_id = #{docId}
+	</update>
+	
+	<!-- 更新付款单凭证审核信息  -->
+	<update id="updPayDocVoucher" parameterType="com.xzsoft.xc.ex.modal.PayDocBean">
+		update xc_ex_pay
+		   set v_status         = #{vStatus,jdbcType=VARCHAR},
+		   	   pay_status       = #{payStatus,jdbcType=VARCHAR},
+		       verifier_id      = #{verifierId,jdbcType=VARCHAR},
+		       verfy_date       = #{verfyDate,jdbcType=TIMESTAMP},
+		       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_pay_id = #{exPayId}	
+	</update>
+	
+	<!-- 修改业务单据审批信息 -->
+	<update id="upEXDocAuditInfo" parameterType="com.xzsoft.xc.ex.modal.EXDocBean">
+		update xc_ex_docs
+		   set audit_status      = #{auditStatus,jdbcType=VARCHAR},
+		       audit_status_desc = #{auditStatusDesc,jdbcType=VARCHAR},
+		       audit_date        = #{auditStatusDate,jdbcType=VARCHAR},
+		       aduit_users       = #{auditUsers,jdbcType=VARCHAR},
+		       v_head_id         = #{headId,jdbcType=VARCHAR},
+		       v_status          = #{vstatus,jdbcType=VARCHAR},
+		       sign_status		 = #{signStatus,jdbcType=VARCHAR},
+		       sign_user_id		 = #{signUserId,jdbcType=VARCHAR},
+		       sign_date		 = #{signDate,jdbcType=TIMESTAMP},
+		       last_update_date  = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by   = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_doc_id = #{docId}
+	</update>
+
+</mapper>

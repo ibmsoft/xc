@@ -1,0 +1,21 @@
+{
+	LEDGER : "账簿",
+	VENDOR : "供应商编码/名称",
+	
+	ptfp : "普通发票",
+	zzszyfp : "增值税专用发票",
+	
+	AP_DOC_CAT_NAME : "单据类型",
+	AP_INV_H_CODE : "编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号",
+	VENDOR_NAME : "供&nbsp;&nbsp;应&nbsp;&nbsp;商",
+	INV_AMOUNT : "价税合计",
+	DESCRIPTION : "摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要",
+	SYS_AUDIT_STATUS_DESC : "状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态",
+	AP_INV_H_ID : "ID",
+  
+    confirm : "提示",
+    confirm1 : "确定要删除选择的",
+    confirm2 : "吗？",
+  
+    successDelete : "采购发票删除成功！"
+}

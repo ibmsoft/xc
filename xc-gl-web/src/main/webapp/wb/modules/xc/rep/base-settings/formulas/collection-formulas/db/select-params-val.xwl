@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"{#sql#}","itemId":"getParamValue"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

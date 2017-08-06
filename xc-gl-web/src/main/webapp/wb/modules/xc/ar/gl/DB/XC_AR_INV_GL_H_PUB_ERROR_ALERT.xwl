@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"serverScript":"app.run(app.get('sql'),{ \n   errorText:app.get('errorMsg')\n});\n    ","itemId":"module"},"children":[],"type":"module","expanded":false}],"iconCls":""}

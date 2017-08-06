@@ -1,0 +1,16 @@
+{
+	ledger:'ledger',
+  	ccid:'ccid',
+  	query:'query',
+  	reset:'reset',
+  	ok:'ok',
+  	okMsg1:'Please select the data you want to synchronize the beginning',
+  	okMsg2:'Are you sure to select',
+  	okMsg3:'record',
+  	cancel:'cancel',
+  	account:'account',
+  	accountCombination:'account combination',
+  	direction:'direction',
+  	balance:'balance',
+  	period:'period'
+}

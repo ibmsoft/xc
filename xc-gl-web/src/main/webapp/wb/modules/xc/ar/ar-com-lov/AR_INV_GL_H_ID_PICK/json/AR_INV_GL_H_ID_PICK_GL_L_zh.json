@@ -1,0 +1,9 @@
+{
+    L_AR_INV_GL_H_CODE : "蓝字应收单",
+    AR_INV_GL_H_CODE : "应收单编码",
+    DESCRIPTION : "摘要",
+    AR_DOC_CAT_NAME : "单据类型",
+    NO_PAY_AMT : "余额",
+    AR_INV_GL_H_CODE_NAME : "应收单编码/摘要",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

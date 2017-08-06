@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询期间","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select PERIOD_CODE \n  from xc_fa_ld_periods p \n where p.LEDGER_ID = {?ledger?}","itemId":"dataprovider"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.SumReportMapper">
+	<resultMap id="CellDataMap" type="com.xzsoft.xsr.core.modal.CellData">
+		<!-- <id column="FORMAT_ID" property="formatId"/> -->
+		<result column="MSFORMAT_ID" property="sheet" />
+		<result column="X" property="row" />
+		<result column="Y" property="col" />
+		<result column="CELLV" property="json" />
+		<result column="APPLYWAY" property="applyWay" />
+	</resultMap>
+	<!-- 判断报表是否存在 -->
+	<select id="isReportExist" parameterType="java.util.HashMap"
+		resultType="int">
+		SELECT COUNT(1)
+		FROM
+		xsr_rep_sheets T
+		WHERE T.SUIT_ID =
+		#{SUIT_ID}
+		AND T.MODALSHEET_ID = #{MODALSHEET_ID}
+		AND
+		T.MODALTYPE_ID
+		=#{MODALTYPE_ID}
+		AND T.ENTITY_ID = #{ENTITY_ID}
+		AND T.PERIOD_ID =
+		#{PERIOD_ID}
+		AND
+		T.CURRENCY_ID = #{CURRENCY_ID}
+	</select>
+	<!-- 查询报表状态 -->
+	<select id="queryReportStatus" parameterType="java.util.HashMap"
+		resultType="String">
+		SELECT T.APP_STATUS
+		FROM xsr_rep_sheets T
+		WHERE T.SUIT_ID =
+		#{SUIT_ID}
+		AND T.MODALSHEET_ID = #{MODALSHEET_ID}
+		AND T.MODALTYPE_ID
+		=#{MODALTYPE_ID}
+		AND T.ENTITY_ID = #{ENTITY_ID}
+		AND T.PERIOD_ID =
+		#{PERIOD_ID}
+		AND T.CURRENCY_ID = #{CURRENCY_ID}
+	</select>
+	<!-- 修改报表信息 -->
+	<update id="updateReportD" parameterType="java.util.HashMap">
+		UPDATE XSR_REP_SHEETS T
+		SET T.APP_STATUS = 'A',
+		T.DESCRIPTION = #{DESCRIPTION},
+		T.SUB_ENTITY_ID
+		= #{SUB_ENTITY_ID},
+		T.LAST_UPDATED_BY = #{LAST_UPDATED_BY},
+		T.LAST_UPDATE_LOGIN = SYSDATE(),
+		T.LAST_UPDATE_DATE = SYSDATE()
+		WHERE
+		T.SUIT_ID = #{SUIT_ID}
+		AND T.MODALSHEET_ID = #{MODALSHEET_ID}
+		AND
+		T.ENTITY_ID = #{ENTITY_ID}
+		AND
+		T.PERIOD_ID = #{PERIOD_ID}
+		AND
+		T.CURRENCY_ID = #{CURRENCY_ID}
+	</update>
+	<!-- 查询报表名称 -->
+	<select id="queryEntityName" parameterType="com.xzsoft.xsr.core.modal.RepSheet"
+		resultType="String">
+		select r.ORG_NAME
+		from
+		xip_pub_orgs r
+		where
+		instr(#{ENTITY_ID},r.ORG_ID)>0
+	</select>
+	<!-- 查询公司级别公式 -->
+	<select id="queryCorpFormula" parameterType="java.util.HashMap"
+		resultType="com.xzsoft.xsr.core.modal.CellFormula">
+		select t.SUIT_ID, t.ROWITEM_ID, rf.ROWITEM_CODE,
+		t.COLITEM_ID,
+		cf.COLITEM_CODE, t.DATAFORMULA, t.FORMULA_DESC,
+		t.F_CALTYPE,
+		t.ORDERBY_FLAG
+		from xsr_rep_cal_formula t,
+		xsr_rep_rowmodalref rf,
+		xsr_rep_colmodalref cf
+		where t.ROWITEM_ID =
+		rf.ROWITEM_ID
+		and t.COLITEM_ID = cf.COLITEM_ID
+		and rf.MODALSHEET_ID =
+		cf.MODALSHEET_ID
+		and rf.LANNO = cf.LANNO
+		and rf.MODALSHEET_ID =
+		#{MODALSHEET_ID}
+		and t.ENTITY_ID =#{ENTITY_ID}
+		and t.SUIT_ID =
+		#{SUIT_ID}
+		and t.F_CALTYPE &lt;&gt;'XLS'
+	</select>
+	<!-- 删除旧汇总指标值 -->
+	<delete id="deleteSumItemValue" parameterType="java.util.HashMap">
+		DELETE
+		FROM
+		XSR_REP_CELLVALUE
+		WHERE
+		SUIT_ID =#{SUIT_ID}
+		AND ENTITY_ID = #{ENTITY_ID}
+		AND PERIOD_ID = #{PERIOD_ID}
+		AND CURRENCY_ID = #{CURRENCY_ID}
+		AND
+		ROWITEM_ID IN (
+		SELECT
+		rf.rowitem_id
+		FROM
+		xsr_rep_rowmodalref rf
+		WHERE
+		rf.modaltype_id = #{MODALTYPE_ID}
+		AND rf.modalsheet_id =
+		#{MODALSHEET_ID}
+		)
+	</delete>
+	<!-- 插入新汇总指标值 -->
+	<insert id="insertSumCellValue" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_CELLVALUE
+		(CELLV_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		CURRENCY_ID,
+		CELLV,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		COLITEM_CODE,
+		ROWITEM_CODE,
+		CURRENCY_CODE)
+		select
+		UUID(),
+		rv.SUIT_ID,
+		#{ENTITY_ID},
+		#{PERIOD_ID},
+		rv.ROWITEM_ID,
+		rv.COLITEM_ID,
+		#{CURRENCY_ID},
+		rv.CELLV,
+		#{ENTITY_CODE},
+		rv.PERIOD_CODE,
+		rv.COLITEM_CODE,
+		rv.ROWITEM_CODE,
+		rv.CURRENCY_CODE
+		from (
+		select
+		r.SUIT_ID,
+		#{ENTITY_ID},
+		#{PERIOD_ID},
+		r.ROWITEM_ID,
+		r.COLITEM_ID,
+		#{CURRENCY_ID},
+		<if test="adjId==null">
+			IFNULL(sum(r.cellv), 0) CELLV,
+		</if>
+		<if test="adjId!=null">
+			sum(r.cellv*if(r.entity_id=#{S_ENTITY_ID}, 1,-1)) CELLV,
+		</if>
+		#{ENTITY_CODE},
+		r.PERIOD_CODE,
+		r.COLITEM_CODE,
+		r.ROWITEM_CODE,
+		r.CURRENCY_CODE
+		from
+		xsr_rep_cellvalue r
+		where r.suit_id=#{SUIT_ID}
+		AND
+		r.PERIOD_ID =
+		#{PERIOD_ID}
+		AND
+		r.CURRENCY_ID =#{CURRENCY_ID}
+		AND
+		r.rowitem_id in (select
+		rf.rowitem_id
+		from xsr_rep_rowmodalref rf
+		where
+		rf.modaltype_id=#{MODALTYPE_ID}
+		and
+		rf.modalsheet_id=#{MODALSHEET_ID})
+		and r.entity_id in(SELECT
+				R.ORG_ID
+			FROM
+				xip_pub_orgs R
+			WHERE
+				INSTR(
+					#{SCOPE_LIST},
+					R.ORG_ID
+				) &gt; 0
+           )
+		group by
+		r.suit_id,r.rowitem_id,r.colitem_id,r.rowitem_code,r.colitem_code,
+		r.period_code,r.currency_code
+		HAVING CELLV&lt;&gt;0) rv
+	</insert>
+	<!-- 插入新汇总报表 -->
+	<insert id="insertSumSheet" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_SHEETS
+		(SHEET_ID,
+		SUIT_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_CODE,
+		MODALSHEET_CODE,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		CURRENCY_CODE,
+		APP_STATUS,
+		ITEM_KEY,
+		DESCRIPTION,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN,
+		SUB_ENTITY_ID)
+		VALUES
+		(#{SHEET_ID},
+		#{SUIT_ID},
+		#{MODALTYPE_ID},
+		#{MODALSHEET_ID},
+		#{ENTITY_ID},
+		#{PERIOD_ID},
+		#{CURRENCY_ID},
+		#{MODALTYPE_CODE},
+		#{MODALSHEET_CODE},
+		#{ENTITY_CODE},
+		#{PERIOD_CODE},
+		#{CURRENCY_CODE},
+		'A',
+		'',
+		#{DESCRIPTION},
+		SYSDATE(),
+		"",
+		SYSDATE(),
+		"",
+		"",
+		#{SUB_ENTITY_ID})
+	</insert>
+	<!-- 删除旧浮动行数据 -->
+	<delete id="deleteFJCellValue" parameterType="java.util.HashMap">
+		DELETE FROM
+		XSR_REP_FJ_CELLVALUE
+		WHERE SUIT_ID =#{SUIT_ID}
+		AND ENTITY_ID =
+		#{ENTITY_ID}
+		AND PERIOD_ID = #{PERIOD_ID}
+		AND CURRENCY_ID =
+		#{CURRENCY_ID}
+		AND MODALSHEET_ID =#{MODALSHEET_ID}
+	</delete>
+	<!-- 插入新浮动行数据 -->
+	<insert id="insertFJCellValue" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_FJ_CELLVALUE
+		SELECT uuid_short(),
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		ROWITEM_ID,
+		MODALSHEET_ID,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		CURRENCY_CODE,
+		ROWITEM_CODE,
+		ROWNUMDTL,
+		SAVEFLAG,
+		SUBENTITY_ID,
+		DATA_ITEM,
+		DATA1,
+		DATA2,
+		DATA3,
+		DATA4,
+		DATA5,
+		DATA6,
+		DATA7,
+		DATA8,
+		DATA9,
+		DATA10,
+		DATA11,
+		DATA12,
+		DATA13,
+		DATA14,
+		DATA15,
+		DATA16,
+		DATA17,
+		DATA18,
+		DATA19,
+		DATA20,
+		DATA21,
+		DATA22,
+		DATA23,
+		DATA24,
+		DATA25,
+		DATA26,
+		DATA27,
+		DATA28,
+		DATA29,
+		DATA30,
+		DATA31,
+		DATA32,
+		DATA33,
+		DATA34,
+		DATA35,
+		DATA36,
+		DATA37,
+		DATA38,
+		DATA39,
+		DATA40,
+		DATA41,
+		DATA42,
+		DATA43,
+		DATA44,
+		DATA45,
+		DATA46,
+		DATA47,
+		DATA48,
+		DATA49,
+		DATA50,
+		DATA51,
+		DATA52,
+		DATA53,
+		DATA54,
+		DATA55,
+		DATA56,
+		DATA57,
+		DATA58,
+		DATA59,
+		DATA60,
+		DATA61,
+		DATA62,
+		DATA63,
+		DATA64,
+		DATA65,
+		DATA66,
+		DATA67,
+		DATA68,
+		DATA69,
+		DATA70,
+		DATA71,
+		DATA72,
+		DATA73,
+		DATA74,
+		DATA75,
+		DATA76,
+		DATA77,
+		DATA78,
+		DATA79,
+		DATA80,
+		DATA81,
+		DATA82,
+		DATA83,
+		DATA84,
+		DATA85,
+		DATA86,
+		DATA87,
+		DATA88,
+		DATA89,
+		DATA90,
+		DATA91,
+		DATA92,
+		DATA93,
+		DATA94,
+		DATA95,
+		DATA96,
+		DATA97,
+		DATA98,
+		DATA99,
+		DATA100,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		FROM
+		XSR_REP_FJ_CELLVALUE T
+		WHERE PERIOD_ID =
+		#{PERIOD_ID}
+		AND CURRENCY_ID =
+		#{CURRENCY_ID}
+		AND T.MODALSHEET_ID
+		=#{MODALSHEET_ID}
+		AND
+		INSTR(#{SUB_ENTITY_ID}, ',' || T.ENTITY_ID || ',')
+		> 0;
+	</insert>
+	<!-- 加载汇总数据 -->
+	<select id="getModalName" parameterType="String" resultType="String">
+		SELECT
+		t.MODALSHEET_NAME
+		FROM
+		xsr_rep_modalsheet t
+		WHERE
+		t.MODALSHEET_ID
+		=#{modalSheetId}
+	</select>
+</mapper>

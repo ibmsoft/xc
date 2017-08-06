@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.BorrowMoneyMapper">
+	
+	<!-- 查询个人账簿备用金 -->
+	<select id="queryUserImprest" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.ex.modal.IAFactBean">
+	SELECT
+	  a.EX_IA_FACT_ID as "iaFactId",
+	  a.LEDGER_ID as "ledgerId",
+	  a.EX_USER_ID as "exUserId",
+	  a.EX_DOC_ID as "docId",
+	  a.EX_IA_TYPE as "exIAType",
+	  a.EX_IA_FACT_AMT as "IAFactAmt",
+	  a.IA_BAL as "IABal",
+	  a.CREATION_DATE as "creationDate",
+	  a.CREATED_BY as "createdBy",
+	  a.LAST_UPDATE_DATE as "lastUpdateDate",
+	  a.LAST_UPDATED_BY as "lastUpdatedBy",
+	  a.ORDERBY as "orderBy"
+	from xc_ex_ia_fact a
+	WHERE a.LEDGER_ID = #{ledgerId}
+	  and a.EX_USER_ID = #{userId}
+	  and a.ORDERBY =(select max(b.ORDERBY) from xc_ex_ia_fact b
+				         where a.ledger_id = b.ledger_id  
+				           and a.ex_user_id = b.ex_user_id
+				           and b.LEDGER_ID = #{ledgerId}
+				           and b.EX_USER_ID = #{userId})
+	</select>
+	
+	<!-- 添加个人账簿备用金记录 -->
+	<insert id="addUserImprestMySQL" parameterType="com.xzsoft.xc.ex.modal.IAFactBean">
+		insert into xc_ex_ia_fact
+		  (ex_ia_fact_id,
+		   ledger_id,
+		   ex_user_id,
+		   ex_doc_id,
+		   ex_ia_type,
+		   ex_ia_fact_amt,
+		   ia_bal,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by,
+		   orderby
+		   )
+		values
+		  (#{iaFactId,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{exUserId,jdbcType=VARCHAR},
+		   #{docId,jdbcType=VARCHAR},
+		   #{exIAType,jdbcType=VARCHAR},
+		   #{IAFactAmt,jdbcType=NUMERIC},
+		   #{IABal,jdbcType=NUMERIC},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR},
+		   (IFNULL((select max(a.orderby) from xc_ex_ia_fact a), 0)+1)
+		   )	 
+	</insert>
+	
+	<!-- 添加个人账簿备用金记录 -->
+	<insert id="addUserImprestOracle" parameterType="com.xzsoft.xc.ex.modal.IAFactBean">
+		insert into xc_ex_ia_fact
+		  (ex_ia_fact_id,
+		   ledger_id,
+		   ex_user_id,
+		   ex_doc_id,
+		   ex_ia_type,
+		   ex_ia_fact_amt,
+		   ia_bal,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by,
+		   orderby
+		   )
+		values
+		  (#{iaFactId,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{exUserId,jdbcType=VARCHAR},
+		   #{docId,jdbcType=VARCHAR},
+		   #{exIAType,jdbcType=VARCHAR},
+		   #{IAFactAmt,jdbcType=NUMERIC},
+		   #{IABal,jdbcType=NUMERIC},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR},
+		   (NVL((select max(a.orderby)from xc_ex_ia_fact a),0)+1)
+		   )	 
+	</insert>
+	
+	<!-- 查询当前备用金明细行以后的备用金明细记录,不包含当前备用金 -->
+	<select id="getImprestByUpdateDate" parameterType="com.xzsoft.xc.ex.modal.IAFactBean" resultType="com.xzsoft.xc.ex.modal.IAFactBean">
+	SELECT
+	  a.EX_IA_FACT_ID as "iaFactId",
+	  a.LEDGER_ID as "ledgerId",
+	  a.EX_USER_ID as "exUserId",
+	  a.EX_DOC_ID as "docId",
+	  a.EX_IA_TYPE as "exIAType",
+	  a.EX_IA_FACT_AMT as "IAFactAmt",
+	  a.IA_BAL as "IABal",
+	  a.CREATION_DATE as "creationDate",
+	  a.CREATED_BY as "createdBy",
+	  a.LAST_UPDATE_DATE as "lastUpdateDate",
+	  a.LAST_UPDATED_BY as "lastUpdatedBy",
+	  a.ORDERBY as "orderBy"
+	  from xc_ex_ia_fact a
+	WHERE a.LEDGER_ID  = #{ledgerId,jdbcType=VARCHAR}
+	  and a.EX_USER_ID = #{exUserId,jdbcType=VARCHAR}
+	<![CDATA[ and a.ORDERBY > #{orderBy,jdbcType=INTEGER}]]>
+	order by a.ORDERBY ASC
+	</select>
+	
+	<!-- 根据单据id查询备用金信息-->
+	<select id="getImprestByDocId" parameterType="com.xzsoft.xc.ex.modal.IAFactBean" resultType="com.xzsoft.xc.ex.modal.IAFactBean">
+	SELECT
+	  a.EX_IA_FACT_ID as "iaFactId",
+	  a.LEDGER_ID as "ledgerId",
+	  a.EX_USER_ID as "exUserId",
+	  a.EX_DOC_ID as "docId",
+	  a.EX_IA_TYPE as "exIAType",
+	  a.EX_IA_FACT_AMT as "IAFactAmt",
+	  a.IA_BAL as "IABal",
+	  a.CREATION_DATE as "creationDate",
+	  a.CREATED_BY as "createdBy",
+	  a.LAST_UPDATE_DATE as "lastUpdateDate",
+	  a.LAST_UPDATED_BY as "lastUpdatedBy",
+	  a.ORDERBY as "orderBy"
+	  from xc_ex_ia_fact a
+	WHERE a.LEDGER_ID  = #{ledgerId,jdbcType=VARCHAR}
+	  and a.EX_USER_ID = #{exUserId,jdbcType=VARCHAR}
+	  and a.EX_DOC_ID =  #{docId,jdbcType=VARCHAR}
+	order by a.ORDERBY ASC
+	</select>
+	
+	<!-- 删除个人账簿备用金记录 -->
+	<delete id="deleteImprest" parameterType="com.xzsoft.xc.ex.modal.IAFactBean">
+	   delete from  XC_EX_IA_FACT where EX_IA_FACT_ID = #{iaFactId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 批量更新个人账簿备用金 -->
+	<update id="batchUpdateImprestMysql" parameterType="java.util.List">
+	  <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	     update xc_ex_ia_fact t 
+	         set t.IA_BAL = #{item.IABal,jdbcType=NUMERIC},
+	             t.LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR},
+		         t.LAST_UPDATE_DATE = #{item.lastUpdateDate,jdbcType=TIMESTAMP}
+		      where t.EX_IA_FACT_ID = #{item.iaFactId,jdbcType=VARCHAR}
+	  </foreach>
+	</update>
+	
+	<update id="batchUpdateImprestOracle" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+		     update xc_ex_ia_fact t 
+		         set t.IA_BAL = #{item.IABal,jdbcType=NUMERIC},
+		             t.LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR},
+			         t.LAST_UPDATE_DATE = #{item.lastUpdateDate,jdbcType=TIMESTAMP}
+			      where t.EX_IA_FACT_ID = #{item.iaFactId,jdbcType=VARCHAR}
+	  	</foreach>
+	</update>
+</mapper>

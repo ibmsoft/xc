@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.AuditMapper">
+	
+	<!-- 更新审批流程实例编码 -->
+	<update id="updateInsCode" parameterType="java.util.HashMap">
+		update xc_ex_docs t
+		   set t.ins_code = #{insCode,jdbcType=VARCHAR},
+		       t.last_update_date = #{cdate,jdbcType=TIMESTAMP},
+		       t.last_updated_by  = #{userId,jdbcType=VARCHAR}
+		 where t.ex_doc_id = #{bizId}
+	</update>
+	
+	<!-- 更新审批流程审批状态  -->
+	<update id="updateAuditStatus" parameterType="java.util.HashMap">
+        update xc_ex_docs
+           set audit_status      = #{bizStatusCat,jdbcType=VARCHAR},
+               audit_status_desc = #{bizStatusCatDesc,jdbcType=VARCHAR},
+		       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{userId,jdbcType=VARCHAR}
+         where ex_doc_id = #{bizId}
+	</update>
+	
+	<!-- 更新流程审批通过日期 -->
+	<update id="updateAuditDate" parameterType="java.util.HashMap">
+        update xc_ex_docs
+          <if test="dbType == 'mysql' " >
+            	set audit_date = CURRENT_TIMESTAMP() ,
+          </if>
+          <if test="dbType == 'oracle' " >
+				set audit_date = sysdate ,
+		  </if>
+	       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+	       last_updated_by  = #{userId,jdbcType=VARCHAR}
+		where ex_doc_id = #{bizId}   
+	</update>
+	
+	<!-- 更新当前审批人信息   -->
+	<update id="updateAuditUsers" parameterType="java.util.HashMap">
+		update xc_ex_docs
+		   set aduit_users = #{nodeApprovers,jdbcType=VARCHAR},
+	   	       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+	       	   last_updated_by  = #{userId,jdbcType=VARCHAR}
+		 where ex_doc_id = #{bizId}
+	</update>
+
+</mapper>

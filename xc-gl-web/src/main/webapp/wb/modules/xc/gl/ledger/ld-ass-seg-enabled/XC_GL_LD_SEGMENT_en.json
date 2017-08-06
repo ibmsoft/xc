@@ -1,0 +1,13 @@
+{
+  Ledger:'Ledger',
+  syncBtn:'Sync',
+  delBtn:'Delete',
+  saveBtn:'Save',
+  defendBtn:'Segment Manage',
+  rownum:'Order',
+  SEG_NAME_COL:'Segment Name',
+  SEG_TYPE_COL:'Segment Type',
+  LD_SEG_ALIAS_COL:'Alias',
+  IS_ENABLED_COL:'Enable',
+  LD_SEG_DESC_COL:'Description'
+}

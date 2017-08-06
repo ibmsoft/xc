@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.apar.mapper.ApArTransMapper">
+
+	<!-- 查询应付模块交易明细表（根据应付单ID） -->
+	<select id="getApInvTransByGlId" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApInvTransBean">
+		SELECT
+			t.SOURCE_ID,
+			t.AP_INV_GL_H_ID,
+			t.AP_PAY_H_ID,
+			t.GL_DATE,
+			t.SOURCE_TAB,
+			t.AP_DOC_CAT_CODE,
+			t.AP_DOC_CODE,
+			t.DESCRIPTION,
+			t.DR_AMT,
+			t.CR_AMT,
+			t.REQ_AMT
+		FROM
+			xc_ap_inv_trans t
+		WHERE
+			t.AP_INV_GL_H_ID = #{AP_INV_GL_H_ID}
+	</select>
+	
+	<!-- 批量新增交易明细-应付 -->
+	<insert id="insertApTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO XC_AP_INV_TRANS(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AP_INV_GL_H_ID,
+						AP_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AP_DOC_CAT_CODE,
+						AP_DOC_CODE,
+						DESCRIPTION,
+						AP_CONTRACT_ID,
+						VENDOR_ID,
+						DR_AMT,
+						CR_AMT,
+						REQ_AMT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AP_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AP_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AP_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.VENDOR_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.REQ_AMT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)	
+				</foreach>
+			</when>
+			<when test="dbType=='oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO XC_AP_INV_TRANS(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AP_INV_GL_H_ID,
+						AP_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AP_DOC_CAT_CODE,
+						AP_DOC_CODE,
+						DESCRIPTION,
+						AP_CONTRACT_ID,
+						VENDOR_ID,
+						DR_AMT,
+						CR_AMT,
+						REQ_AMT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AP_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AP_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AP_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.VENDOR_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.REQ_AMT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>		
+	</insert>
+	
+	<!-- 批量修改交易明细-应付 -->
+	<update id="updateApTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ap_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						AP_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						VENDOR_ID = #{item.VENDOR_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						REQ_AMT = #{item.REQ_AMT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND IF(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR} IS NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AP_DOC_CAT_CODE = #{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ap_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						AP_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						VENDOR_ID = #{item.VENDOR_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						REQ_AMT = #{item.REQ_AMT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+					AND DECODE(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AP_DOC_CAT_CODE = #{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 批量删除交易明细-应付  -->
+	<delete id="deleteApTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM XC_AP_INV_TRANS 
+					WHERE	SOURCE_ID	= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND 	IF(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR} IS NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND    	AP_DOC_CAT_CODE = #{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM XC_AP_INV_TRANS 
+					WHERE	SOURCE_ID	= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND DECODE(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND    	AP_DOC_CAT_CODE = #{item.AP_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</delete>
+	<!-- 批量删除交易明细-应付  -->
+	<delete id="deleteApTrans2" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM XC_AP_INV_TRANS 
+					WHERE	SOURCE_ID	= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND 	#{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+					AND    	TRANS_STATUS = #{item.TRANS_STATUS,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM XC_AP_INV_TRANS 
+					WHERE	SOURCE_ID	= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND 	#{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+					AND    	TRANS_STATUS = #{item.TRANS_STATUS,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</delete>
+	<!-- 查询交易明细表（根据应收单ID）-应收 -->
+	<select id="getArInvTransByGlId" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArInvTransBean">
+		SELECT
+			t.SOURCE_ID,
+			t.AR_INV_GL_H_ID,
+			t.AR_PAY_H_ID,
+			t.GL_DATE,
+			t.SOURCE_TAB,
+			t.AR_DOC_CAT_CODE,
+			t.AR_DOC_CODE,
+			t.DESCRIPTION,
+			t.DR_AMT,
+			t.CR_AMT
+		FROM
+			xc_ar_inv_trans t
+		WHERE
+			t.AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+	
+	<!-- 新增交易明细-应收 -->
+	<insert id="insertArTrans" parameterType="java.util.HashMap">
+	    <choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					INSERT INTO xc_ar_inv_trans(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AR_INV_GL_H_ID,
+						AR_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AR_DOC_CAT_CODE,
+						AR_DOC_CODE,
+						DESCRIPTION,
+						AR_CONTRACT_ID,
+						CUSTOMER_ID,
+						DR_AMT,
+						CR_AMT,
+						AMOUNT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AR_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection=""  index="index" item="item" open="begin" close="end;" separator=";">
+					INSERT INTO xc_ar_inv_trans(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AR_INV_GL_H_ID,
+						AR_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AR_DOC_CAT_CODE,
+						AR_DOC_CODE,
+						DESCRIPTION,
+						AR_CONTRACT_ID,
+						CUSTOMER_ID,
+						DR_AMT,
+						CR_AMT,
+						AMOUNT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AR_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	
+	<!-- 修改交易明细-应收 -->
+	<update id="updateArTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						Ar_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						CUSTOMER_ID = #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						AMOUNT = #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND IF(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR} IS NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						AR_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						CUSTOMER_ID = #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						AMOUNT = #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND DECODE(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 删除交易明细-应收 -->
+	<delete id="deleteArTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					DELETE FROM xc_ar_inv_trans 
+					WHERE 
+						SOURCE_ID 		= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND IF(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR} IS NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR} 
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" index="index" item="item" open="begin" close="end;" separator=";">
+					DELETE FROM xc_ar_inv_trans 
+					WHERE 
+						SOURCE_ID 		= #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND DECODE(#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},NULL,1=1,SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR})
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>		
+		</choose>
+	</delete>
+
+	<!-- 修改交易明细-应收(核销单) -->
+	<update id="updateArTransByCancel" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						AR_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						CUSTOMER_ID = #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						AMOUNT = #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+					<choose>
+					  <when test="SOURCE_DTL_ID != null and SOURCE_DTL_ID != ''">
+					    AND SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+					  </when>
+					  <otherwise>
+					    AND (SOURCE_DTL_ID is null or SOURCE_DTL_ID = '')
+					  </otherwise>
+					</choose>
+					<if test="AR_INV_GL_H_ID != null and AR_INV_GL_H_ID != ''">
+					 	AND AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+					</if>
+					<if test="AR_PAY_H_ID != null and AR_PAY_H_ID != ''">
+					 	AND AR_PAY_H_ID = #{item.AR_PAY_H_ID,jdbcType=VARCHAR}
+					</if>
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE = #{item.GL_DATE,jdbcType=TIMESTAMP},
+						DESCRIPTION = #{item.DESCRIPTION,jdbcType=VARCHAR},
+						AR_CONTRACT_ID = #{item.AP_CONTRACT_ID,jdbcType=VARCHAR},
+						CUSTOMER_ID = #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						DR_AMT = #{item.DR_AMT,jdbcType=NUMERIC},
+						CR_AMT = #{item.CR_AMT,jdbcType=NUMERIC},
+						AMOUNT = #{item.AMOUNT,jdbcType=NUMERIC},
+						LAST_UPDATED_BY = #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+					<choose>
+					  <when test="SOURCE_DTL_ID != null and SOURCE_DTL_ID != ''">
+					    AND SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+					  </when>
+					  <otherwise>
+					    AND (SOURCE_DTL_ID is null or SOURCE_DTL_ID = '')
+					  </otherwise>
+					</choose>
+					<if test="AR_INV_GL_H_ID != null and AR_INV_GL_H_ID != ''">
+					 	AND AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+					</if>
+					<if test="AR_PAY_H_ID != null and AR_PAY_H_ID != ''">
+					 	AND AR_PAY_H_ID = #{item.AR_PAY_H_ID,jdbcType=VARCHAR}
+					</if>
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 修改应收交易明细（当单据主信息发生修改而行信息没有发生修改时，也可以修改交易明细的业务日期和摘要）  -->
+	<update id="updateArTransByDocH" parameterType="com.xzsoft.xc.apar.modal.ArInvTransBean">
+	  	UPDATE xc_ar_inv_trans 
+		SET 
+  			GL_DATE = #{GL_DATE,jdbcType=TIMESTAMP},
+  			DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR}
+		WHERE 
+			SOURCE_ID =  #{SOURCE_ID,jdbcType=VARCHAR}
+		AND AR_DOC_CAT_CODE =  #{AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,23 @@
+{
+  query_ledger:'账簿',
+  query_ld_period_year:'年度',
+  queryBtn:'查询',
+  resetBtn:'重置',
+  add_next_ld_period:'打开下一个会计期间',
+  addAdjustPeriod:'追加调整期',
+  period_row:'序号',
+  ledger_id_col:'账薄ID',
+  period_code_col:'会计期',
+  year_col:'年度',
+  quarter_col:'季度',
+  start_date_col:'开始日期',
+  end_date_col:'结束日期',
+  is_adj_period_col:'调整期',
+  ld_period_status_col:'状态',
+  addAdjustWindow:'追加调整期',
+  queryPeriodCode:'会计期',
+  addBtn:'追加',
+  cancelBtn:'取消'
+}
+
+

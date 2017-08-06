@@ -1,0 +1,20 @@
+{
+    order : "NO",
+    AP_CONTRACT_NAME : "Contract Code/Name",
+	AP_PAY_H_CODE : "Doc Code",
+	CREATED_BY_NAME : "Creator",
+	queryBtn : "Query",
+	clearBtn : "Reset",
+	commitBtn : "Commit",
+	closeBtn : "Cancel",
+	GL_DATE : "Posting Date",
+    AP_DOC_CAT_NAME : "Doc Type",
+    AP_INV_GL_H_CODE : "Doc Num",
+    DESCRIPTION : "Summary",
+    NO_REQ_AMT : "Can Pay Amt",
+	PAY_AMT : "Pay Amt",
+    AP_CONTRACT_NAME_COL : "Contract",
+	DEPT_NAME : "Dept",
+	PROJECT_NAME : "Project",
+    AP_ACC_NAME_DEBT : "Subject Auxiliary Item"
+}

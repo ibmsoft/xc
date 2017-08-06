@@ -1,0 +1,22 @@
+{
+  queryCombo:'账簿名称',
+  rownumber:'序号',
+  show_ACCOUNT_NAME:'账户名称',
+  show_BANK_NAME:'所属银行名称',
+  show_DEPOSIT_BANK_NAME:'开户银行',
+  show_BANK_ACCOUNT:'银行账号',
+  show_CORRESPONDENT:'联行号',
+  show_CURRENCY_NAME:'币种',
+  show_ACC_NAME:'会计科目',
+  show_START_DATE:'开始日期',
+  show_END_DATE:'结束日期',
+  show_DEPOSIT_BANK_DESC:'说明',
+  add_btn:'增加',
+  edit_btn:'修改',
+  del_btn:'删除',
+  rownum : '序号',
+  MODE_TYPE : '收付款方式分类',
+  MODE_NAME : '收付款方式名称',
+  MODE_DESC : '收付款方式描述'
+
+}

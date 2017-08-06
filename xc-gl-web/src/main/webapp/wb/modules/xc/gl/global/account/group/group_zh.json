@@ -1,0 +1,22 @@
+{
+  moduleTitle:"会计科目组",
+  codeName:"编码/名称",
+  enterTip:"按回车键查询",
+  addBtn:"增加",
+  delBtn:"删除",
+  saveBtn:"保存",
+  importBtn:"导入",
+  exprotBtn:"导出",
+  rownum:"序号",
+  accCode:"编码",
+  accGroupName:"名称",
+  accGroupDesc:"描述",
+  
+  importTitle:"科目组数据导入",
+  fileTip:"请选择Excel文件",
+  fileName:"<font color='red'>*</font>选择文件",
+  importLogs:"导入日志信息",
+  incorrectColumn:"错误行",
+  errorInformation:"错误信息",
+  labelWidth:80
+}

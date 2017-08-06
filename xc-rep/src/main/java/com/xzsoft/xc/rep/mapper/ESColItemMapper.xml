@@ -1,0 +1,191 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.ESColItemMapper">
+	
+	<!-- 列指标信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESColItemBean" id="colitemResultMap">
+		<id property="colitemId" column="COLITEM_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="colitemCode" column="COLITEM_CODE" />
+		<result property="colitemName" column="COLITEM_NAME" />
+		<result property="colitemDesc" column="COLITEM_DESC" />
+		<result property="colitemAlias" column="COLITEM_ALIAS" />
+		<result property="upcode" column="UPCODE" />
+		<result property="datatype" column="DATATYPE" />
+		<result property="orderby" column="ORDERBY" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	
+	<!-- 列指标引用关系信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESColItemRefBean" id="colitemRefResultMap">
+		<id property="colRefId" column="COL_REF_ID" />
+		<result property="tabId" column="TAB_ID" />
+		<result property="colitemId" column="COLITEM_ID" />
+		<result property="colno" column="COLNO" />
+		<result property="lanno" column="LANNO" />
+		<result property="enabled" column="ENABLED" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	
+	<!-- 模板列指标和引用关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabBean" id="colItemsAndRefResultMap">
+		<id property="tabId" column="TAB_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="tabCode" column="TAB_CODE" />
+		<result property="tabName" column="TAB_NAME" />
+		<result property="tabOrder" column="TAB_ORDER" />
+		<result property="isActive" column="IS_ACTIVE" />
+		<result property="color" column="COLOR" />
+		<collection property="colitems" ofType="com.xzsoft.xc.rep.modal.ESColItemBean">
+			<id property="colitemId" column="COLITEM_ID" />
+			<result property="accHrcyId" column="ACC_HRCY_ID" />
+			<result property="colitemCode" column="COLITEM_CODE" />
+			<result property="colitemName" column="COLITEM_NAME" />
+			<result property="colitemDesc" column="COLITEM_DESC" />
+			<result property="colitemAlias" column="COLITEM_ALIAS" />
+			<result property="upcode" column="UPCODE" />
+			<result property="datatype" column="DATATYPE" />
+			<result property="orderby" column="ORDERBY" />
+		</collection>
+		<collection property="colItemsRef" ofType="com.xzsoft.xc.rep.modal.ESColItemRefBean">
+			<id property="colRefId" column="COL_REF_ID" />
+			<result property="tabId" column="TAB_ID" />
+			<result property="colitemId" column="COLITEM_ID" />
+			<result property="colitemCode" column="COLITEM_CODE" />
+			<result property="colno" column="COLNO" />
+			<result property="lanno" column="LANNO" />
+			<result property="enabled" column="ENABLED" />
+		</collection>
+	</resultMap>
+	
+	<!-- 根据模板ID删除模板列指标引用关系 -->
+	<delete id="delColItemRef" parameterType="java.lang.String">
+		delete from xc_rep_cm_ref where tab_id = #{tabId} 
+	</delete>
+	
+	<!-- 查询科目体系下所有的列指标信息 -->
+	<select id="getColItemsByHrcyId" parameterType="java.lang.String" resultMap="colitemResultMap">
+		SELECT
+			t.ACC_HRCY_ID,
+		  	t.COLITEM_ID,
+			t.COLITEM_CODE,
+			t.COLITEM_NAME,
+			t.COLITEM_DESC,
+			t.COLITEM_ALIAS,
+			t.UPCODE,
+			t.DATATYPE,
+			t.ORDERBY,
+			t.CREATION_DATE,
+			t.CREATED_BY,
+			t.LAST_UPDATE_DATE,
+			t.LAST_UPDATED_BY
+		FROM
+			xc_rep_colitems t
+		WHERE
+			t.ACC_HRCY_ID = #{accHrcyId}	
+	</select>
+	
+	<!-- 查询模板列指标和引用关系  -->
+	<select id="getColItemsAndRefByTab" parameterType="java.lang.String" resultMap="colItemsAndRefResultMap">
+		select T.TAB_ID,
+		       T.ACC_HRCY_ID,
+		       T.TAB_CODE,
+		       T.TAB_NAME,
+		       T.TAB_ORDER,
+		       T.IS_ACTIVE,
+		       T.COLOR,
+		       C.COLITEM_ID,
+		       C.COLITEM_CODE,
+		       C.COLITEM_NAME,
+		       C.COLITEM_DESC,
+		       C.COLITEM_ALIAS,
+		       C.UPCODE,
+		       C.DATATYPE,
+		       C.ORDERBY,
+		       RC.COL_REF_ID,
+		       RC.COLNO,
+		       RC.LANNO,
+		       RC.ENABLED
+		  from xc_rep_colitems c, xc_rep_cm_ref rc, xc_rep_tab t
+		 where c.colitem_id = rc.colitem_id
+		   and rc.tab_id = t.tab_id
+		   and c.acc_hrcy_id = t.acc_hrcy_id
+		   and rc.tab_id = #{tabId}
+		ORDER BY rc.lanno,rc.colno	
+	</select>
+	
+	<!-- 查询模板列指标信息 -->
+	<select id="getTabColitems" parameterType="java.lang.String" resultMap="colitemResultMap">
+		SELECT rc.COLITEM_ID,
+		       rc.ACC_HRCY_ID,
+		       rc.COLITEM_CODE,
+		       rc.COLITEM_NAME,
+		       rc.COLITEM_DESC,
+		       rc.COLITEM_ALIAS,
+		       rc.UPCODE,
+		       rc.DATATYPE,
+		       rc.ORDERBY,
+		       rc.CREATION_DATE,
+		       rc.CREATED_BY,
+		       rc.LAST_UPDATE_DATE,
+		       rc.LAST_UPDATED_BY
+		  FROM XC_REP_COLITEMS RC, XC_REP_CM_REF CR
+		 WHERE RC.COLITEM_ID = CR.COLITEM_ID
+		   AND CR.TAB_ID = #{tabId}
+	</select>
+	
+	<!-- 查询列指标引用关系 -->
+	<select id="getTabColitemsRef" parameterType="java.lang.String" resultMap="colitemRefResultMap">
+		SELECT COL_REF_ID,
+		       TAB_ID,
+		       COLITEM_ID,
+		       COLNO,
+		       LANNO,
+		       ENABLED,
+		       CREATION_DATE,
+		       CREATED_BY,
+		       LAST_UPDATE_DATE,
+		       LAST_UPDATED_BY
+		  FROM XC_REP_CM_REF T
+		 WHERE T.TAB_ID = #{tabId}
+		 ORDER BY T.LANNO, T.COLNO
+	</select>
+	
+	<!-- 批量查询模板列指标和引用关系  -->
+	<select id="getColItemsAndRefByTabs" parameterType="java.lang.String" resultMap="colItemsAndRefResultMap">
+		select T.TAB_ID,
+		       T.ACC_HRCY_ID,
+		       T.TAB_CODE,
+		       T.TAB_NAME,
+		       T.TAB_ORDER,
+		       T.IS_ACTIVE,
+		       T.COLOR,
+		       C.COLITEM_ID,
+		       C.COLITEM_CODE,
+		       C.COLITEM_NAME,
+		       C.COLITEM_DESC,
+		       C.COLITEM_ALIAS,
+		       C.UPCODE,
+		       C.DATATYPE,
+		       C.ORDERBY,
+		       RC.COL_REF_ID,
+		       RC.COLNO,
+		       RC.LANNO,
+		       RC.ENABLED
+		  from xc_rep_colitems c, xc_rep_cm_ref rc, xc_rep_tab t
+		 where c.colitem_id = rc.colitem_id
+		   and rc.tab_id = t.tab_id
+		   and c.acc_hrcy_id = t.acc_hrcy_id
+		   and rc.tab_id in 
+		   <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		   		#{item}
+		   </foreach>
+		ORDER BY t.TAB_ID,rc.lanno,rc.colno	
+	</select>
+	
+</mapper>

@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select a.ACC_HRCY_NAME,a.ACC_HRCY_ID  from xc_gl_acc_hrcy a ","itemId":"getAccHrcy"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.apar.mapper.ApArMapper">
+<!-- 应付单主表列 -->
+	<sql id="apInvGlHColumn">
+		AP_INV_GL_H_ID,
+		AP_INV_GL_H_CODE,
+		AP_DOC_CAT_CODE,
+		LEDGER_ID,
+		L_AP_INV_GL_H_ID,
+		AP_INV_H_ID,
+		GL_DATE,
+		VENDOR_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AP_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		PAID_AMT,
+		NO_PAY_AMT,
+		OCCUPY_AMT,
+		ADJ_AMT,
+		REQ_AMT,
+		NO_REQ_AMT,
+		AP_ACC_ID_DEBT,
+		AP_ACC_ID_TAX,
+		AP_CCID_DEBT,
+		AP_CCID_TAX,
+		INIT,
+		SOURCE,
+		V_HEAD_ID,
+		V_STATUS,
+		DESCRIPTION,
+		VERIFIER_ID,
+		VERFY_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 应付单行表列 -->
+	<sql id="apInvGlLColumn">
+		AP_INV_GL_L_ID,
+		AP_INV_GL_H_ID,
+		L_AP_INV_GL_L_ID,
+		L_AP_INV_GL_H_ID,
+		AP_PUR_TYPE_ID,
+		ACC_ID,
+		CCID,
+		BG_ITEM_ID,
+		AMOUNT,
+		QTY,
+		DIM_CODE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 应收单主表列 -->
+	<sql id="arInvGlHColumn">
+		AR_INV_GL_H_ID,
+		AR_INV_GL_H_CODE,
+		AR_INV_H_ID,
+		L_AR_INV_GL_H_ID,
+		AR_DOC_CAT_CODE,
+		LEDGER_ID,
+		GL_DATE,
+		CUSTOMER_ID,
+		PROJECT_ID,
+		DEPT_ID,
+		AR_CONTRACT_ID,
+		AMOUNT,
+		TAX_AMT,
+		TAX_RATE,
+		INV_AMOUNT,
+		CANCEL_AMT,
+		PAID_AMT,
+		NO_PAY_AMT,
+		ADJ_AMT,
+		AR_ACC_ID_DEBT,
+		AR_ACC_ID_TAX,
+		AR_CCID_DEBT,
+		AR_CCID_TAX,
+		INIT,
+		SOURCE,
+		V_HEAD_ID,
+		V_STATUS,
+		VERIFIER_ID,
+		VERFY_DATE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	
+	<!-- 应收单行表列 -->
+	<sql id="arInvGlLColumn">
+		AR_INV_GL_L_ID,
+		AR_INV_GL_H_ID,
+		L_AR_INV_GL_L_ID,
+		L_AR_INV_GL_H_ID,
+		AR_SALE_TYPE_ID,
+		PRODUCT_ID,
+		ACC_ID,
+		CCID,
+		PRICE,
+		INV_PRICE,
+		AMOUNT,
+		INV_AMOUNT,
+		TAX_AMT,
+		TAX,
+		QTY,
+		DIM_CODE,
+		DESCRIPTION,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 查询应付单主表信息 -->
+	<select id="getApInvGlH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentHBean">
+		SELECT
+			<include refid="apInvGlHColumn"/>
+		FROM
+			xc_ap_inv_gl_h
+		where AP_INV_GL_H_ID = #{AP_INV_GL_H_ID}
+	</select>
+	<!-- 查询应付单行表信息 -->
+	<select id="getApInvGlL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ApDocumentLBean">
+		SELECT
+			<include refid="apInvGlLColumn"/>
+		FROM
+			xc_ap_inv_gl_l
+		WHERE
+			AP_INV_GL_H_ID = #{AP_INV_GL_H_ID}
+	</select>
+	<!-- 查询应收单主表信息 -->
+	<select id="getArInvGlH" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentHBean">
+		SELECT
+			<include refid="arInvGlHColumn"/>
+		FROM
+			xc_ar_inv_gl_h
+		where AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+	<!-- 查询应付单行表信息 -->
+	<select id="getArInvGlL" parameterType="java.lang.String" resultType="com.xzsoft.xc.apar.modal.ArDocumentLBean">
+		SELECT
+			<include refid="arInvGlLColumn"/>
+		FROM
+			xc_ar_inv_gl_l
+		WHERE
+			AR_INV_GL_H_ID = #{AR_INV_GL_H_ID}
+	</select>
+</mapper>

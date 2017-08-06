@@ -1,0 +1,553 @@
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl5","VAL_NAME":"http://pan.baidu.com/s/1pJ89llL/Chrome#path=/Chrome","DESCRIPTION":"Chrome下载"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl4","VAL_NAME":"http://www.xz-soft.com","DESCRIPTION":"公司门户"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl3","VAL_NAME":"http://wb.xzsoft.cc/main?xwl=23XJXR79URRQ","DESCRIPTION":"问题反馈"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl2","VAL_NAME":"http://wb.xzsoft.cc/main?xwl=bbs","DESCRIPTION":"开发论坛"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl1","VAL_NAME":"http://xip.xzsoft.cc","DESCRIPTION":"平台网站"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl2","VAL_NAME":"http://xzsoft.cc:8000/xip/main?xwl=bbs","DESCRIPTION":"Development Forum"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl3","VAL_NAME":"http://xzsoft.cc/xip/main?xwl=23XJXR79URRQ","DESCRIPTION":"Problem Feedback"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl5","VAL_NAME":"http://pan.baidu.com/s/1pJ89llL/Chrome#path=/Chrome","DESCRIPTION":"Chrome Download"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl4","VAL_NAME":"http://www.xz-soft.com","DESCRIPTION":"Company Portal"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"FRIEND_LINK","VAL_CODE":"fl1","VAL_NAME":"http://xzsoft.cc:90","DESCRIPTION":"Platform Website"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"color","VAL_NAME":"颜色","DESCRIPTION":"颜色"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"number","VAL_NAME":"数字型","DESCRIPTION":"数字型"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"string","VAL_NAME":"字符型","DESCRIPTION":"字符串"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"array","VAL_NAME":"数组型","DESCRIPTION":"数组型"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"color_array","VAL_NAME":"颜色集","DESCRIPTION":"颜色集"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"object","VAL_NAME":"对象","DESCRIPTION":"对象类型数据"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"boolean","VAL_NAME":"布尔型","DESCRIPTION":"布尔型"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"AXIS","VAL_NAME":"坐标轴","DESCRIPTION":"坐标轴"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"AXIS","VAL_NAME":"Coordinate Axes","DESCRIPTION":"Coordinate Axes"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"GENERAL","VAL_NAME":"通用","DESCRIPTION":"通用"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"GENERAL","VAL_NAME":"Currency","DESCRIPTION":"Currency"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"GRID","VAL_NAME":"坐标系","DESCRIPTION":"坐标系"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"GRID","VAL_NAME":"Coordinate System","DESCRIPTION":"Coordinate System"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"LEGEND","VAL_NAME":"图例","DESCRIPTION":"图例"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"LEGEND","VAL_NAME":"Legend","DESCRIPTION":"Legend"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"POLAR","VAL_NAME":"极坐标","DESCRIPTION":"极坐标"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"POLAR","VAL_NAME":"Polar Coordinates","DESCRIPTION":"Polar Coordinates"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"SERIES","VAL_NAME":"图表系列","DESCRIPTION":"图表系列"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"SERIES","VAL_NAME":"Chart Series","DESCRIPTION":"Chart Series"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TIMELINE","VAL_NAME":"时间轴","DESCRIPTION":"时间轴"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TIMELINE","VAL_NAME":"Time Axis","DESCRIPTION":"Time Axis"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TITLE","VAL_NAME":"标题","DESCRIPTION":"标题"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TITLE","VAL_NAME":"Title","DESCRIPTION":"Title"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TOOLBOX","VAL_NAME":"工具箱","DESCRIPTION":"工具箱"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TOOLBOX","VAL_NAME":"Tool Kit","DESCRIPTION":"Tool Kit"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TOOLTIP","VAL_NAME":"提示","DESCRIPTION":"提示"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_GROUP_VS","VAL_CODE":"TOOLTIP","VAL_NAME":"Alert","DESCRIPTION":"Alert"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_code","VAL_NAME":"业务编码","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_id","VAL_NAME":"业务ID","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_name","VAL_NAME":"业务名称","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_approver ","VAL_NAME":"当前登录用户ID","DESCRIPTION":"流程引擎执行赋值（实时获取）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status","VAL_NAME":"当前业务状态ID","DESCRIPTION":"流程引擎执行赋值（实时获取）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status_cat","VAL_NAME":"当前业务状态分类编码","DESCRIPTION":"业务系统执行赋值（实时获取，A-起草，R-撤回、C-运行中、D-驳回、E-结束）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status_desc","VAL_NAME":"当前业务状态分类描述","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node","VAL_NAME":"当前节点编码","DESCRIPTION":"流程引擎执行赋值（当前正执行处理节点）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_sysdate","VAL_NAME":"系统当前时间","DESCRIPTION":"流程引擎执行赋值（格式为：yyyy-MM-dd HH:mm:ss）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_dept","VAL_NAME":"部门ID","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_instance_code","VAL_NAME":"实例编码","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_org","VAL_NAME":"组织ID","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_process_name","VAL_NAME":"流程名称","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_process_title","VAL_NAME":"标题（流程摘要）","DESCRIPTION":"业务系统执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter","VAL_NAME":"提交人","DESCRIPTION":"流程引擎执行赋值（提交人ID）"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter_comment","VAL_NAME":"提交人待办审批意见","DESCRIPTION":"提交人待办审批意见"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter_name","VAL_NAME":"提交人名称","DESCRIPTION":"流程引擎执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submit_date","VAL_NAME":"提交时间","DESCRIPTION":"流程引擎执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"YN","VAL_CODE":"N","VAL_NAME":"否","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"YN","VAL_CODE":"Y","VAL_NAME":"是","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_LANG","VAL_CODE":"zh","VAL_NAME":"Chinese","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_LANG","VAL_CODE":"zh","VAL_NAME":"中文","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_LANG","VAL_CODE":"en","VAL_NAME":"English","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_LANG","VAL_CODE":"en","VAL_NAME":"英文","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"analysis","VAL_NAME":"Analysis","DESCRIPTION":"Analysis"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"analysis","VAL_NAME":"分析","DESCRIPTION":"分析"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"deploy","VAL_NAME":"Deploy","DESCRIPTION":"Deploy"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"deploy","VAL_NAME":"发布","DESCRIPTION":"发布"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"design","VAL_NAME":"Design","DESCRIPTION":"Design"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"design","VAL_NAME":"设计","DESCRIPTION":"设计"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"develop","VAL_NAME":"Develop","DESCRIPTION":"Develop"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"develop","VAL_NAME":"开发","DESCRIPTION":"开发"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"record","VAL_NAME":"Record","DESCRIPTION":"Record"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"record","VAL_NAME":"记录","DESCRIPTION":"记录"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"test","VAL_NAME":"Test","DESCRIPTION":"Test"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_PROC_PHASES","VAL_CODE":"test","VAL_NAME":"测试","DESCRIPTION":"测试"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"FTP","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerFtp","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"FTP","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerFtp","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"HDFS","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerHdfs","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"HDFS","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerHdfs","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"HTTP","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerHttp","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"HTTP","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerHttp","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"OSS","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerOss","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ATT_SERV_TYPE","VAL_CODE":"OSS","VAL_NAME":"com.xzsoft.xip.platform.attachment.impl.XipAttchmentServerOss","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_CODE":"ROLE","VAL_NAME":"User Role Authorization","DESCRIPTION":"User Role Authorization"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_CODE":"ROLE","VAL_NAME":"用户角色授权","DESCRIPTION":"用户角色授权"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_CODE":"USER","VAL_NAME":"User Authorization","DESCRIPTION":"User Authorization"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"AUTH_MODAL_VS","VAL_CODE":"USER","VAL_NAME":"用户功能授权","DESCRIPTION":"用户功能授权"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"BLOB","VAL_NAME":"BLOB","DESCRIPTION":"Binary Large Object Type"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"BLOB","VAL_NAME":"BLOB","DESCRIPTION":"二进制大对象类型"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"CLOB","VAL_NAME":"CLOB","DESCRIPTION":"Character Large Object Type"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"CLOB","VAL_NAME":"CLOB","DESCRIPTION":"字符大对象类型"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"DATETIME","VAL_NAME":"DATETIME","DESCRIPTION":"Date Type"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"DATETIME","VAL_NAME":"DATETIME","DESCRIPTION":"日期类型"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"DECIMAL","VAL_NAME":"DECIMAL","DESCRIPTION":"Decimal"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"DECIMAL","VAL_NAME":"DECIMAL","DESCRIPTION":"十进制小数"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NCLOB","VAL_NAME":"NCLOB","DESCRIPTION":"Large data blocks of fixed width single byte or multi byte characters in a storage database"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NCLOB","VAL_NAME":"NCLOB","DESCRIPTION":"存储数据库中的固定宽度单字节或多字节字符的大型数据块"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NUMERIC","VAL_NAME":"NUMERIC","DESCRIPTION":"The default value of the is that the default value of the P is: 38 S the default value is: -84~127"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NUMERIC","VAL_NAME":"NUMERIC","DESCRIPTION":"存储数字，P的默认值是：38 S的默认值是：-84~127"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NVARCHAR","VAL_NAME":"NVARCHAR","DESCRIPTION":"Processing Unicode data type, the character storage unit is two times of 1~4000, VARCHAR"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"NVARCHAR","VAL_NAME":"NVARCHAR","DESCRIPTION":"处理unicode数据类型，字符存储单位为VARCHAR的两倍，1~4000"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"VARCHAR","VAL_NAME":"VARCHAR","DESCRIPTION":"Variable length character type, 1~8000"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_COLUMN_TYPE","VAL_CODE":"VARCHAR","VAL_NAME":"VARCHAR","DESCRIPTION":"变长字符类型，1~8000"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"FKEY","VAL_NAME":"The Foreign Key Constraint","DESCRIPTION":"The Foreign Key Constraint"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"FKEY","VAL_NAME":"外键约束","DESCRIPTION":"外键约束"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"NINDEX","VAL_NAME":"Common Index","DESCRIPTION":"Common Index"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"NINDEX","VAL_NAME":"普通索引","DESCRIPTION":"普通索引"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"PKEY","VAL_NAME":"Primary Key Constraint","DESCRIPTION":"Primary Key Constraint"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"PKEY","VAL_NAME":"主键约束","DESCRIPTION":"主键约束"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"UINDEX","VAL_NAME":"Unique Index","DESCRIPTION":"Unique Index"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_CONS_TYPE","VAL_CODE":"UINDEX","VAL_NAME":"唯一索引","DESCRIPTION":"唯一索引"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"MSSQL","VAL_NAME":"SQL Server DataBase","DESCRIPTION":"SQL Server Data Base"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"MSSQL","VAL_NAME":"SQL Server数据库","DESCRIPTION":"SQL Server数据库"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"MYSQL","VAL_NAME":"MYSQL DataBase","DESCRIPTION":"MYSQL DataBase"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"MYSQL","VAL_NAME":"MYSQL数据库","DESCRIPTION":"MYSQL数据库"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"ORA","VAL_NAME":"ORACLE DataBase","DESCRIPTION":"ORACLE DataBase"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"DB_TYPE","VAL_CODE":"ORA","VAL_NAME":"ORACLE数据库 ","DESCRIPTION":"ORACLE数据库 "}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_CODE":"MENU","VAL_NAME":"Menu Mode","DESCRIPTION":"Menu Navigation Mode"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_CODE":"TREE","VAL_NAME":"Tree Navigation","DESCRIPTION":"Tree Navigation Mode"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_CODE":"detail","VAL_NAME":"Instant Reminder","DESCRIPTION":"Instant Reminder"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_CODE":"detail","VAL_NAME":"即时提醒","DESCRIPTION":"即时提醒"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_CODE":"total","VAL_NAME":"Summary Reminder","DESCRIPTION":"Summary Reminder"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"NOTICE_MODE_VS","VAL_CODE":"total","VAL_NAME":"汇总提醒","DESCRIPTION":"汇总提醒"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"001","VAL_NAME":"/ide","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"002","VAL_NAME":"/ghost","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"003","VAL_NAME":"/m?xwl=dev/ide","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"004","VAL_NAME":"/m?xwl=sys/portal/home","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"005","VAL_NAME":"/home","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"006","VAL_NAME":"/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"007","VAL_NAME":"/m?xwl=admin/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"008","VAL_NAME":"/m?xwl=xip/tools/tenant/tenant","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"009","VAL_NAME":"/m?xwl=xip/pub/usertable/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"010","VAL_NAME":"/thome","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"011","VAL_NAME":"/m?xwl=sys/portal/thome","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"SKIN","VAL_CODE":"1","VAL_NAME":"Neptune","DESCRIPTION":"Neptune"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"SKIN","VAL_CODE":"1","VAL_NAME":"海王星","DESCRIPTION":"海王星"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"SKIN","VAL_CODE":"2","VAL_NAME":"Classic","DESCRIPTION":"Classic"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"SKIN","VAL_CODE":"2","VAL_NAME":"经典","DESCRIPTION":"经典"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"SKIN","VAL_CODE":"3","VAL_NAME":"Default","DESCRIPTION":"Default"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"SKIN","VAL_CODE":"3","VAL_NAME":"默认","DESCRIPTION":"默认"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_API_FOLDER","VAL_CODE":"001","VAL_NAME":"xip/api/","DESCRIPTION":"API Provided by Platform"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_API_FOLDER","VAL_CODE":"001","VAL_NAME":"xip/api/","DESCRIPTION":"平台对外提供API"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"BAR","VAL_NAME":"Column Chart","DESCRIPTION":"Column Chart"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"BAR","VAL_NAME":"柱形图","DESCRIPTION":"柱形图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"GUAGE","VAL_NAME":"Instrument Chart","DESCRIPTION":"Instrument Chart"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"GUAGE","VAL_NAME":"仪表图","DESCRIPTION":"仪表图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"LINE","VAL_NAME":"Line Graph","DESCRIPTION":"Line Graph"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"LINE","VAL_NAME":"线形图","DESCRIPTION":"线形图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"MAP","VAL_NAME":"Map","DESCRIPTION":"Map"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"MAP","VAL_NAME":"地图","DESCRIPTION":"地图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"PIE","VAL_NAME":"Pie Chart","DESCRIPTION":"Pie Chart"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"PIE","VAL_NAME":"饼形图","DESCRIPTION":"饼形图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"RADAR","VAL_NAME":"Lei Datu","DESCRIPTION":"Lei Datu"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"RADAR","VAL_NAME":"雷达图","DESCRIPTION":"雷达图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"RECYCLE","VAL_NAME":"Circular Graph","DESCRIPTION":"Circular Graph"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_CHART_TYPE_VS","VAL_CODE":"RECYCLE","VAL_NAME":"环形图","DESCRIPTION":"环形图"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"advice","VAL_NAME":"Advice","DESCRIPTION":"Advice"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"advice","VAL_NAME":"意见建议","DESCRIPTION":"意见建议"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"bug","VAL_NAME":"Bug","DESCRIPTION":"Bug"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"bug","VAL_NAME":"功能缺陷","DESCRIPTION":"功能缺陷"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"change","VAL_NAME":"Change Request","DESCRIPTION":"Change Request"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"change","VAL_NAME":"需求变更","DESCRIPTION":"需求变更"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"require","VAL_NAME":"Require","DESCRIPTION":"Require"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"require","VAL_NAME":"新需求","DESCRIPTION":"新需求"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"todo","VAL_NAME":"Personal to-do","DESCRIPTION":"Personal to-do"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_CATEGORY","VAL_CODE":"todo","VAL_NAME":"个人待办","DESCRIPTION":"个人待办"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"A","VAL_NAME":"Serious","DESCRIPTION":"Serious"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"C","VAL_NAME":"Commonly","DESCRIPTION":"Commonly"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"D","VAL_NAME":"Non Fault","DESCRIPTION":"Non Fault"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"B","VAL_NAME":"Secondary","DESCRIPTION":"Secondary"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"C","VAL_NAME":"一般","DESCRIPTION":"一般"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"A","VAL_NAME":"严重","DESCRIPTION":"严重"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"B","VAL_NAME":"中等","DESCRIPTION":"中等"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_LEVEL","VAL_CODE":"D","VAL_NAME":"非错","DESCRIPTION":"非错"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"completed","VAL_NAME":"Completed","DESCRIPTION":"Completed"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"completed","VAL_NAME":"已完成","DESCRIPTION":"已完成"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"new","VAL_NAME":"New","DESCRIPTION":"New"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"new","VAL_NAME":"新建","DESCRIPTION":"新建"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"processing","VAL_NAME":"Processing","DESCRIPTION":"Processing"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"processing","VAL_NAME":"处理中","DESCRIPTION":"处理中"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"supplement","VAL_NAME":"Supplement","DESCRIPTION":"Supplement"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_REC_STATUS","VAL_CODE":"supplement","VAL_NAME":"待补充","DESCRIPTION":"待补充"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"array","VAL_NAME":"Array Type","DESCRIPTION":"Array Type"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"boolean","VAL_NAME":"Boolean Type","DESCRIPTION":"Boolean Type"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"color","VAL_NAME":"Color","DESCRIPTION":"Color"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"color_array","VAL_NAME":"Color Set","DESCRIPTION":"Color Set"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"number","VAL_NAME":"Digital Type","DESCRIPTION":"Digital Type"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"object","VAL_NAME":"Object","DESCRIPTION":"Object Type Data"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_CHART_ATTR_TYPE_VS","VAL_CODE":"string","VAL_NAME":"Character","DESCRIPTION":"Character String"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"YN","VAL_CODE":"Y","VAL_NAME":"Yes","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"YN","VAL_CODE":"N","VAL_NAME":"No","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_CODE":"ACCORDION","VAL_NAME":"抽屉导航","DESCRIPTION":"抽屉导航"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_approver ","VAL_NAME":"Current Logged In User ID","DESCRIPTION":"Process Engine Execution Assignment (Real Time Acquisition)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status","VAL_NAME":"Current Business Status ID","DESCRIPTION":"Process Engine Execution Assignment (Real Time Acquisition)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node_approver_id","VAL_NAME":"Current Node Approver ID","DESCRIPTION":"Process Engine Execution Assignment "}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status_desc","VAL_NAME":"Description Of Current Business Status","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter","VAL_NAME":"Submitter","DESCRIPTION":"Process Engine Execution Assignment (ID)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter_comment","VAL_NAME":"Submit The Examination Opinions To Do","DESCRIPTION":"Submit The Examination Opinions To Do"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_process_title","VAL_NAME":"Title (Process Summary)","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_name","VAL_NAME":"Business Name","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_process_name","VAL_NAME":"Process Name","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_code","VAL_NAME":"Business Code","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_business_id","VAL_NAME":"Business ID","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node_approver","VAL_NAME":"Current Node Approver Name","DESCRIPTION":"Process Engine Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_org","VAL_NAME":"Organization ID","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_instance_code","VAL_NAME":"Instance Code","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_dept","VAL_NAME":"Department ID","DESCRIPTION":"Business System Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submit_date","VAL_NAME":"Submit Date","DESCRIPTION":"Process Engine Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_sysdate","VAL_NAME":"Current System Time","DESCRIPTION":"Process Engine Execution Assignment (Format: HH:mm:ss yyyy-MM-dd)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_submitter_name","VAL_NAME":"Submitter Name","DESCRIPTION":"Process Engine Execution Assignment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node","VAL_NAME":"Current Node Coding","DESCRIPTION":"Process Engine Execution Assignment (Currently Executing Processing Node)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_biz_status_cat","VAL_NAME":"Current Business Status Classification Code","DESCRIPTION":"Business System Implementation Assignment (Real Time Acquisition, A- Drafting, R- Withdrawal, C- Operation, D- Rejection, E- End)"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"14","VAL_NAME":"/platformAction.do?method=personalLogin","DESCRIPTION":"Validate Logon"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"19","VAL_NAME":"/platformAction.do?method=appLogin","DESCRIPTION":"Mobile APP Login Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"03","VAL_NAME":"/main?xwl=xwlfist","DESCRIPTION":"WB Installation Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"13","VAL_NAME":"/main?xwl=23WNUSJRZOSI","DESCRIPTION":"No Check Password Modification"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"35","VAL_NAME":"/platformAction.do?method=sendUserMail","DESCRIPTION":"External Employee Registration Approval Email"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"34","VAL_NAME":"/platformAction.do?method=empCodeValidation","DESCRIPTION":"Asynchronous Validation Internal Employee Number"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"32","VAL_NAME":"/platformAction.do?method=outEmpCodeValidation","DESCRIPTION":"Asynchronously Verify External Employee Number"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"05","VAL_NAME":"/main?xwl=23VVWZNQT0YA","DESCRIPTION":"Modify The Password Page To Be Reset"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"02","VAL_NAME":"/main?xwl=instal","DESCRIPTION":"System Installation Initialization Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"12","VAL_NAME":"/main?xwl=23WKZXTVZS94","DESCRIPTION":"Mobile Terminal To Modify The Password Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"01","VAL_NAME":"/concAction.do","DESCRIPTION":"Platform Concurrent Action"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"33","VAL_NAME":"/platformAction.do?method=emailValidation","DESCRIPTION":"Asynchronous Verify External Employee Mailbox"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"25","VAL_NAME":"/main?xwl=23XNAZFYVW80","DESCRIPTION":"User Login Page Jump"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"30","VAL_NAME":"/platformAction.do?method=regist","DESCRIPTION":"User Registration"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"31","VAL_NAME":"/platformAction.do?method=userNameValidation","DESCRIPTION":"Asynchronous Authentication User Login Name"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"11","VAL_NAME":"/main?xwl=23WKZXTVZRYH","DESCRIPTION":"Mobile Terminal To Modify The Password Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"29","VAL_NAME":"/platformAction.do?method=updateUserPassword","DESCRIPTION":"Retrieve Password To Change The Password After The Action"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"24","VAL_NAME":"/main?xwl=23XNAZFYVW4T","DESCRIPTION":"Password Retrieve Login Page Jump"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"28","VAL_NAME":"/main?xwl=23XSVUS9VH4U","DESCRIPTION":"Modify Password Failed Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"40","VAL_NAME":"/m?xwl=xip/login/userRegistered","DESCRIPTION":"W7 User Login Jump"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"10","VAL_NAME":"/main?xwl=tlogin","DESCRIPTION":"WB Login Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"18","VAL_NAME":"/platformAction.do?method=mobileLogin","DESCRIPTION":"Mobile Terminal Login Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"27","VAL_NAME":"/main?xwl=23XNWM94045J","DESCRIPTION":"Modify Password Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"23","VAL_NAME":"/platformAction.do?method=emailUpdatePss","DESCRIPTION":"Modify Password"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"39","VAL_NAME":"/m?xwl=xip/login/forgetPwd","DESCRIPTION":"W7 Forget Password"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"22","VAL_NAME":"/config.jsp","DESCRIPTION":"Modify The Platform Configuration File"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"09","VAL_NAME":"/main?xwl=23W0CDJH1JO6","DESCRIPTION":"Mobile Terminal Landing Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"08","VAL_NAME":"/frameAction.do?method=saveDefaultRole","DESCRIPTION":"Save The Default Role"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"26","VAL_NAME":"/platformAction.do?method=resetPassword","DESCRIPTION":"Modify Password Action"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"38","VAL_NAME":"/m?xwl=xip/login/modifyPwd","DESCRIPTION":"W7 Modify Password"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"17","VAL_NAME":"/frameAction.do?method=modifyUserPassword","DESCRIPTION":"Modify Password Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"16","VAL_NAME":"/xipAttMrgAction.do","DESCRIPTION":"Attachment Request"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"15","VAL_NAME":"/platformAction.do?method=loginInit","DESCRIPTION":"Login Initialization"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"21","VAL_NAME":"/coreJoin.do","DESCRIPTION":"WeChat Certified"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"07","VAL_NAME":"/main?xwl=23VRZHIK91WZ","DESCRIPTION":"Get The Character"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"37","VAL_NAME":"/platformAction.do?method=defaultUserRoleFun","DESCRIPTION":"User Management New User Default Permissions"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"20","VAL_NAME":"/platformAction.do?method=remoteLogin","DESCRIPTION":"Remote Login"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"41","VAL_NAME":"/m?xwl=xc_erp/userLogin","DESCRIPTION":"Talent Register"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"36","VAL_NAME":"/platformAction.do?method=updateStatus","DESCRIPTION":"Click On The Mailbox To Jump To The Landing Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"06","VAL_NAME":"/main?xwl=23VVNO0XHLZ5","DESCRIPTION":"Select Default Responsibility Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"04","VAL_NAME":"/frame/modifyConfigs.jsp","DESCRIPTION":"Modify The Platform Configuration File"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_CODE":"MENU","VAL_NAME":"菜单模式","DESCRIPTION":"菜单导航模式"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"NAVIGATOR_MODEL_VS","VAL_CODE":"TREE","VAL_NAME":"树形导航","DESCRIPTION":"树形导航模式"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"004","VAL_NAME":"/m?xwl=sys/portal/home","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"001","VAL_NAME":"/ide","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"002","VAL_NAME":"/ghost","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"003","VAL_NAME":"/m?xwl=dev/ide","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"005","VAL_NAME":"/home","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"006","VAL_NAME":"/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"008","VAL_NAME":"/m?xwl=xip/tools/tenant/tenant","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"007","VAL_NAME":"/m?xwl=admin/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"009","VAL_NAME":"/m?xwl=xip/pub/usertable/dbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"011","VAL_NAME":"/m?xwl=sys/portal/thome","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"010","VAL_NAME":"/thome","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"012","VAL_NAME":"/m?xwl=apps/sys/tools/tfile","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"013","VAL_NAME":"/tfile","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"014","VAL_NAME":"/m?xwl=apps/sys/tools/tdbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"ONLY_XIP_USE_URL","VAL_CODE":"015","VAL_NAME":"/tdbe","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PUR_OBJECT","VAL_CODE":"WZ","VAL_NAME":"物资","DESCRIPTION":"物资"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PUR_OBJECT","VAL_CODE":"FW","VAL_NAME":"服务","DESCRIPTION":"服务"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PUR_OBJECT","VAL_CODE":"QT","VAL_NAME":"其它","DESCRIPTION":"其它"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PUR_OBJECT","VAL_CODE":"GDZC","VAL_NAME":"资产","DESCRIPTION":"固定资产、无形资产、生物性资产"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"PROC","VAL_NAME":"存储过程","DESCRIPTION":"存储过程"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"JAVA","VAL_NAME":"JAVA方法","DESCRIPTION":"JAVA方法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"WEB","VAL_NAME":"WEB服务","DESCRIPTION":"WEB服务"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"05","VAL_NAME":"/main?xwl=23VVWZNQT0YA","DESCRIPTION":"修改被重置后密码页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"04","VAL_NAME":"/frame/modifyConfigs.jsp","DESCRIPTION":"修改平台配置文件"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"03","VAL_NAME":"/main?xwl=xwlfist","DESCRIPTION":"WB安装请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"02","VAL_NAME":"/main?xwl=instal","DESCRIPTION":"系统安装初始化页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"01","VAL_NAME":"/concAction.do","DESCRIPTION":"平台并发Action"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"06","VAL_NAME":"/main?xwl=23VVNO0XHLZ5","DESCRIPTION":"选择默认职责页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"07","VAL_NAME":"/main?xwl=23VRZHIK91WZ","DESCRIPTION":"获取角色"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"08","VAL_NAME":"/frameAction.do?method=saveDefaultRole","DESCRIPTION":"保存默认角色"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"09","VAL_NAME":"/main?xwl=23W0CDJH1JO6","DESCRIPTION":"移动端登陆页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"10","VAL_NAME":"/main?xwl=tlogin","DESCRIPTION":"WB登陆请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"11","VAL_NAME":"/main?xwl=23WKZXTVZRYH","DESCRIPTION":"移动端修改密码页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"12","VAL_NAME":"/main?xwl=23WKZXTVZS94","DESCRIPTION":"移动端修改密码请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"13","VAL_NAME":"/main?xwl=23WNUSJRZOSI","DESCRIPTION":"无校验的密码修改"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"14","VAL_NAME":"/platformAction.do?method=personalLogin","DESCRIPTION":"登录验证"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"15","VAL_NAME":"/platformAction.do?method=loginInit","DESCRIPTION":"登录初始化"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"16","VAL_NAME":"/xipAttMrgAction.do","DESCRIPTION":"附件请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"17","VAL_NAME":"/frameAction.do?method=modifyUserPassword","DESCRIPTION":"修改口令请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"18","VAL_NAME":"/platformAction.do?method=mobileLogin","DESCRIPTION":"移动端登陆请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"19","VAL_NAME":"/platformAction.do?method=appLogin","DESCRIPTION":"移动APP登陆请求"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"20","VAL_NAME":"/platformAction.do?method=remoteLogin","DESCRIPTION":"Remote Login"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"21","VAL_NAME":"/coreJoin.do","DESCRIPTION":"微信认证"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"22","VAL_NAME":"/config.jsp","DESCRIPTION":"修改平台配置文件"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"23","VAL_NAME":"/platformAction.do?method=emailUpdatePss","DESCRIPTION":"修改密码"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"24","VAL_NAME":"/main?xwl=23XNAZFYVW4T","DESCRIPTION":"密码找回登录页跳转"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"25","VAL_NAME":"/main?xwl=23XNAZFYVW80","DESCRIPTION":"用户注册登录页跳转"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"26","VAL_NAME":"/platformAction.do?method=resetPassword","DESCRIPTION":"修改密码action"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"27","VAL_NAME":"/main?xwl=23XNWM94045J","DESCRIPTION":"修改密码页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"28","VAL_NAME":"/main?xwl=23XSVUS9VH4U","DESCRIPTION":"修改密码失效页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"29","VAL_NAME":"/platformAction.do?method=updateUserPassword","DESCRIPTION":"找回密码后修改密码的action"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"30","VAL_NAME":"/platformAction.do?method=regist","DESCRIPTION":"用户注册"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"31","VAL_NAME":"/platformAction.do?method=userNameValidation","DESCRIPTION":"异步验证用户登录名"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"32","VAL_NAME":"/platformAction.do?method=outEmpCodeValidation","DESCRIPTION":"异步验证外部员工编号"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"33","VAL_NAME":"/platformAction.do?method=emailValidation","DESCRIPTION":"异步验证外部员工邮箱"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"34","VAL_NAME":"/platformAction.do?method=empCodeValidation","DESCRIPTION":"异步验证内部员工编号"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"35","VAL_NAME":"/platformAction.do?method=sendUserMail","DESCRIPTION":"外部员工注册审批邮箱"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"36","VAL_NAME":"/platformAction.do?method=updateStatus","DESCRIPTION":"点击邮箱跳转登陆页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"37","VAL_NAME":"/platformAction.do?method=defaultUserRoleFun","DESCRIPTION":"用户管理新增用户默认权限"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"38","VAL_NAME":"/m?xwl=xip/login/modifyPwd","DESCRIPTION":"w7修改密码"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"42","VAL_NAME":"/m?xwl=xip/login/registSuccess","DESCRIPTION":"平台注册成功跳转页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"39","VAL_NAME":"/m?xwl=xip/login/forgetPwd","DESCRIPTION":"w7忘记密码"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"40","VAL_NAME":"/m?xwl=xip/login/userRegistered","DESCRIPTION":"w7用户注册跳转"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"41","VAL_NAME":"/m?xwl=xip/login/registSuccess","DESCRIPTION":"平台注册成功跳转页面"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"FA","VAL_NAME":"固定资产","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"IA","VAL_NAME":"无形资产","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"BA","VAL_NAME":"生物性资产","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"LV","VAL_NAME":"低值易耗品","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"SSFP","VAL_NAME":"销售发票","DESCRIPTION":"销售发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SALE_OBJECT","VAL_CODE":"GDZC","VAL_NAME":"资产","DESCRIPTION":"资产"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SALE_OBJECT","VAL_CODE":"FW","VAL_NAME":"服务","DESCRIPTION":"服务"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SALE_OBJECT","VAL_CODE":"WZ","VAL_NAME":"物资","DESCRIPTION":"物资"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SALE_OBJECT","VAL_CODE":"QT","VAL_NAME":"其它","DESCRIPTION":"其它"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"A","VAL_NAME":"草稿","DESCRIPTION":"草稿"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"C","VAL_NAME":"审批中","DESCRIPTION":"审批中"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"F","VAL_NAME":"已复核","DESCRIPTION":"已复核"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"审批通过","DESCRIPTION":"审批通过"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"TZ","VAL_NAME":"调整","DESCRIPTION":"调整"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"YS","VAL_NAME":"应收","DESCRIPTION":"应收"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"SK","VAL_NAME":"结算收款","DESCRIPTION":"结算收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"HX","VAL_NAME":"核销","DESCRIPTION":"核销"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"YUSK","VAL_NAME":"预收款","DESCRIPTION":"预收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CT_TYPE","VAL_CODE":"KKHT","VAL_NAME":"开口合同","DESCRIPTION":"开口合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CT_TYPE","VAL_CODE":"BKHT","VAL_NAME":"闭口合同","DESCRIPTION":"闭口合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHLDC","VAL_NAME":"应收红蓝对冲","DESCRIPTION":"应收红蓝对冲"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHYUS","VAL_NAME":"应收核预收","DESCRIPTION":"应收核预收"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YUSHLDC","VAL_NAME":"预收红蓝对冲","DESCRIPTION":"预收红蓝对冲"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHYF","VAL_NAME":"应收核应付","DESCRIPTION":"应收核应付"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XIP_FILTER_EXCLUSION","VAL_CODE":"42","VAL_NAME":"/m?xwl=xip/login/registSuccess","DESCRIPTION":"User Registration Success Info Page"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"JAVA","VAL_NAME":"Java Method","DESCRIPTION":"Java Method"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"PROC","VAL_NAME":"Procedure","DESCRIPTION":"Procedure "}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"WF_FUNC_TYPE_VS","VAL_CODE":"WEB","VAL_NAME":"WEB Service","DESCRIPTION":"WEB Service"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node_approver_id","VAL_NAME":"当前节点审批人用户ID","DESCRIPTION":"流程引擎执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"WF_INNER_ATTR_VS","VAL_CODE":"e_current_node_approver","VAL_NAME":"当前节点审批人","DESCRIPTION":"流程引擎执行赋值"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_AR_INVOICE","VAL_NAME":"采购发票表","DESCRIPTION":"采购发票表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_DIMENSIONS","VAL_NAME":"计量单位表","DESCRIPTION":"计量单位表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_CASH_ITEMS","VAL_NAME":"现金流项目表","DESCRIPTION":"现金流项目表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_ACCOUNTS","VAL_NAME":"会计科目表","DESCRIPTION":"会计科目表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_LD_CUST_ASS_SEGVALS","VAL_NAME":"账簿辅助段表","DESCRIPTION":"账簿辅助段表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_AP_VENDORS","VAL_NAME":"供应商信息表","DESCRIPTION":"供应商信息表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_BG_ITEMS","VAL_NAME":"预算项目表","DESCRIPTION":"预算项目表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_PM_PROJECTS","VAL_NAME":"账簿项目表","DESCRIPTION":"账簿项目表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_PRODUCTS","VAL_NAME":"产品信息表","DESCRIPTION":"产品信息表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_AR_INVOICE_H","VAL_NAME":"采购发票表","DESCRIPTION":"采购发票表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_AR_CUSTOMERS","VAL_NAME":"客户信息表","DESCRIPTION":"客户信息表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_EX_ITEMS","VAL_NAME":"费用项目表","DESCRIPTION":"费用项目表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_DATA_MODEL","VAL_CODE":"XC_GL_ACC_GROUP","VAL_NAME":"科目分组表","DESCRIPTION":"科目分组表"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"审批通过","DESCRIPTION":"审批通过"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"F","VAL_NAME":"已复核","DESCRIPTION":"已复核"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"C","VAL_NAME":"审批中","DESCRIPTION":"审批中"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"A","VAL_NAME":"草稿","DESCRIPTION":"草稿"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_AMORTIZATION_RULE","VAL_CODE":"DYXZDYJT","VAL_NAME":"当月新增当月计提折旧，当月减少当月不提折旧","DESCRIPTION":"当月新增当月计提折旧，当月减少当月不提折旧"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_FA_AMORTIZATION_RULE","VAL_CODE":"DYXZBJT","VAL_NAME":"当月新增当月不提折旧，当月减少当月计提折旧","DESCRIPTION":"当月新增当月不提折旧，当月减少当月计提折旧"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_FECTH_DATA_TYPE","VAL_CODE":"EXP","VAL_NAME":"自定义取数","DESCRIPTION":"自定义取数"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"F","VAL_NAME":"Have review","DESCRIPTION":"Have review"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"Approval","DESCRIPTION":"Approval"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"A","VAL_NAME":"Draft","DESCRIPTION":"Draft"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_SYS_AUDIT_STATUS","VAL_CODE":"C","VAL_NAME":"Approvaling","DESCRIPTION":"Approvaling"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_GL_V_STATUS","VAL_CODE":"1","VAL_NAME":"Draft","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_V_STATUS","VAL_CODE":"1","VAL_NAME":"草稿","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_GL_V_STATUS","VAL_CODE":"3","VAL_NAME":"Approved","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_GL_V_STATUS","VAL_CODE":"3","VAL_NAME":"审核通过","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_REP_FORMULA_LEVEL","VAL_CODE":"LEDGER","VAL_NAME":"账簿级","DESCRIPTION":"账簿级"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_REP_FORMULA_LEVEL","VAL_CODE":"COMMON","VAL_NAME":"公共级","DESCRIPTION":"公共级"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"SYBN","VAL_NAME":"上月同期数-年内","DESCRIPTION":"上月同期数-年内"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"XZRQ","VAL_NAME":"当前报表日期","DESCRIPTION":"当前报表日期"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"SYTQ","VAL_NAME":"上月同期数","DESCRIPTION":"上月同期数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"SNTQ","VAL_NAME":"上年同期数","DESCRIPTION":"上年同期数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"SNQM","VAL_NAME":"上年期末数","DESCRIPTION":"上年期末数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"SNNQM","VAL_NAME":"上年期末(年期间)","DESCRIPTION":"上年期末(年期间)"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_PERIOD_DIM","VAL_CODE":"BNQC","VAL_NAME":"本年年初数","DESCRIPTION":"本年年初数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_FECTH_DATA_TYPE","VAL_CODE":"REP","VAL_NAME":"指标间运算","DESCRIPTION":"指标间运算"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_FECTH_DATA_TYPE","VAL_CODE":"APP","VAL_NAME":"余额表取数","DESCRIPTION":"余额表取数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"2","VAL_NAME":"已签字","DESCRIPTION":"已签字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"3","VAL_NAME":"拒签","DESCRIPTION":"拒签"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"1","VAL_NAME":"待签字","DESCRIPTION":"待签字"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_CODE":"BKHT","VAL_NAME":"Silent contract","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_CODE":"KKHT","VAL_NAME":"Open-end contract","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_CODE":"BKHT","VAL_NAME":"开口合同","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CT_TYPE","VAL_CODE":"KKHT","VAL_NAME":"闭口合同","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_QTSK-H","VAL_NAME":"其他收款-红字","DESCRIPTION":"其他收款-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_QTSK","VAL_NAME":"其他收款","DESCRIPTION":"其他收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_JSK-H","VAL_NAME":"结算款-红字","DESCRIPTION":"结算款-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_JSK","VAL_NAME":"结算款","DESCRIPTION":"结算款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_YUSK","VAL_NAME":"预收款","DESCRIPTION":"预收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_SMALL_CLASS","VAL_CODE":"SKD_YUSK-H","VAL_NAME":"预收款-红字","DESCRIPTION":"预收款-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZS","VAL_NAME":"增值税专用发票","DESCRIPTION":"增值税专用发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZS-HZ","VAL_NAME":"增值税专用发票-红字","DESCRIPTION":"增值税专用发票-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZSPT","VAL_NAME":"增值税普通发票","DESCRIPTION":"增值税普通发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZSPT-HZ","VAL_NAME":"增值税普通发票-红字","DESCRIPTION":"增值税普通发票-红字"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZS","VAL_NAME":"Special VAT Invoice","DESCRIPTION":"Special VAT Invoice"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZS-HZ","VAL_NAME":"增值税专用发票-红字","DESCRIPTION":"增值税专用发票-红字"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZSPT","VAL_NAME":"Ordinary Invoice","DESCRIPTION":"Ordinary Invoice"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SMALL_CLASS","VAL_CODE":"ZZSPT-HZ","VAL_NAME":"增值税普通发票-红字","DESCRIPTION":"增值税普通发票-红字"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZS","VAL_NAME":"Special VAT Invoice","DESCRIPTION":"Special VAT Invoice"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZS-HZ","VAL_NAME":"Special VAT Invoice-Letter","DESCRIPTION":"Special VAT Invoice-Letter"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZSPT","VAL_NAME":"Ordinary Invoice","DESCRIPTION":"Ordinary Invoice"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZSPT-HZ","VAL_NAME":"Ordinary Invoice-Letter","DESCRIPTION":"Ordinary Invoice-Letter"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_JSK","VAL_NAME":"Settlement Funds","DESCRIPTION":"Settlement Funds"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_JSK-H","VAL_NAME":"Settlement Funds-Red","DESCRIPTION":"Settlement Funds-Red"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_QTSK","VAL_NAME":"Other Receipts","DESCRIPTION":"Other Receipts"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_QTSK-H","VAL_NAME":"Other Receipts-Red","DESCRIPTION":"Other Receipts-Red"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_YUSK","VAL_NAME":"Pre Payment","DESCRIPTION":"Pre Payment"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_YUSK-H","VAL_NAME":"Pre Payment-Red","DESCRIPTION":"Pre Payment-Red"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"YSD","VAL_NAME":"Receivable Doc","DESCRIPTION":"Receivable Doc"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"YSD-HZ","VAL_NAME":"Receivable Doc-Letter","DESCRIPTION":"Receivable Doc-Letter"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"All","VAL_NAME":"All","DESCRIPTION":"All"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ALL","VAL_NAME":"All","DESCRIPTION":"All"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_YUSK-H","VAL_NAME":"预收款-红","DESCRIPTION":"预收款-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_JSK-H","VAL_NAME":"结算款-红","DESCRIPTION":"结算款-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_QTSK","VAL_NAME":"其它收款","DESCRIPTION":"其它收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_QTSK-H","VAL_NAME":"其它收款-红","DESCRIPTION":"其它收款-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_JSK","VAL_NAME":"结算款","DESCRIPTION":"结算款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_PAY_TYPE","VAL_CODE":"SKD_YUSK","VAL_NAME":"预收款","DESCRIPTION":"预收款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"YSD","VAL_NAME":"应收单","DESCRIPTION":"应收单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"All","VAL_NAME":"全部","DESCRIPTION":"全部"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_YSD_CLASS","VAL_CODE":"YSD-HZ","VAL_NAME":"应收单-红字","DESCRIPTION":"应收单-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZSPT-HZ","VAL_NAME":"增值税普通发票-红字","DESCRIPTION":"增值税普通发票-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZS","VAL_NAME":"增值税专用发票","DESCRIPTION":"增值税专用发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZSPT","VAL_NAME":"增值税普通发票","DESCRIPTION":"增值税普通发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"All","VAL_NAME":"全部","DESCRIPTION":"全部"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_XSFP_CLASS","VAL_CODE":"ZZS-HZ","VAL_NAME":"增值税专用发票-红字","DESCRIPTION":"增值税专用发票-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"CGFP","VAL_NAME":"采购发票","DESCRIPTION":"采购发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"CGFP-H","VAL_NAME":"采购发票-红字","DESCRIPTION":"采购发票-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"All","VAL_NAME":"全部","DESCRIPTION":"全部"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"All","VAL_NAME":"All","DESCRIPTION":"All"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"CGFP","VAL_NAME":"Purchase invoice","DESCRIPTION":"Purchase invoice"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CGFP_CLASS","VAL_CODE":"CGFP-H","VAL_NAME":"Purchase invoice-Letter","DESCRIPTION":"Purchase invoice-Letter"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"All","VAL_NAME":"全部","DESCRIPTION":"全部"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"YFD-H","VAL_NAME":"应付单-红字","DESCRIPTION":"应付单-红字"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"YFD","VAL_NAME":"应付单","DESCRIPTION":"应付单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"All","VAL_NAME":"All","DESCRIPTION":"All"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"YFD","VAL_NAME":"Pay Doc","DESCRIPTION":"Pay Doc"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_YFD_CLASS","VAL_CODE":"YFD-H","VAL_NAME":"Pay Doc-Letter","DESCRIPTION":"Pay Doc-Letter"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_CGJS","VAL_NAME":"采购结算","DESCRIPTION":"采购结算"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_CGJS-H","VAL_NAME":"采购结算-红","DESCRIPTION":"采购结算-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_YUFK","VAL_NAME":"预付款","DESCRIPTION":"预付款-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_QTFK-H","VAL_NAME":"其它付款-红","DESCRIPTION":"其它付款-红"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_QTFK","VAL_NAME":"其它付款","DESCRIPTION":"其它付款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_PAY_TYPE","VAL_CODE":"FKD_YUFK-H","VAL_NAME":"预付款-红","DESCRIPTION":"预付款-红"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"1","VAL_NAME":"No signature","DESCRIPTION":"No signature"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"2","VAL_NAME":"Already signed","DESCRIPTION":"Already signed"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_EX_SIGN_STATUS","VAL_CODE":"3","VAL_NAME":"Refuse to sign","DESCRIPTION":"Refuse to sign"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"CGJS","VAL_NAME":"采购结算","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"YUFK","VAL_NAME":"预付款","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"QTFK","VAL_NAME":"其他付款","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"CGJS","VAL_NAME":"Procurement settlement","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"QTFK","VAL_NAME":"Other payment","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_REQ_TYPE","VAL_CODE":"YUFK","VAL_NAME":"Advance charge","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CT_TYPE","VAL_CODE":"BKHT","VAL_NAME":"Silent contract","DESCRIPTION":"闭口合同"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CT_TYPE","VAL_CODE":"KKHT","VAL_NAME":"Open-end contract","DESCRIPTION":"开口合同"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"HXD","VAL_NAME":"Verification form","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"TZD","VAL_NAME":"Adjustment form","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"YSD","VAL_NAME":"Accounts receivable","DESCRIPTION":"应收单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"TZD","VAL_NAME":"Adjustment form","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"FK","VAL_NAME":"Payment form","DESCRIPTION":"付款单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"HX","VAL_NAME":"Verification form","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"SQ","VAL_NAME":"Payment application form","DESCRIPTION":"付款申请单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"TZ","VAL_NAME":"Adjustment form","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"YF","VAL_NAME":"Payable form","DESCRIPTION":"应付单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"YUFK","VAL_NAME":"Advance charge","DESCRIPTION":"预付款"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"FK","VAL_NAME":"付款单","DESCRIPTION":"付款单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"HX","VAL_NAME":"核销单","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"SQ","VAL_NAME":"付款申请单","DESCRIPTION":"付款申请单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"TZ","VAL_NAME":"调整单","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"YF","VAL_NAME":"应付单","DESCRIPTION":"应付单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_INV_TRANS_SOURCE","VAL_CODE":"YUFK","VAL_NAME":"预付款","DESCRIPTION":"预付款"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHLDC","VAL_NAME":"Receivable red and blue hedge","DESCRIPTION":"应收红蓝对冲"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHYF","VAL_NAME":"Receivable and payable","DESCRIPTION":"应收核应付"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YSHYUS","VAL_NAME":"Receivables and advances","DESCRIPTION":"应收核预收"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_CANCEL_TYPE","VAL_CODE":"YUSHLDC","VAL_NAME":"Pre-received red and blue hedge","DESCRIPTION":"预收红蓝对冲"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"SKD","VAL_NAME":"receipt","DESCRIPTION":"收款单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"HX","VAL_NAME":"Verification form","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"SK","VAL_NAME":"receipt","DESCRIPTION":"收款单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"TZ","VAL_NAME":"Adjustment form","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"YS","VAL_NAME":"Accounts receivable","DESCRIPTION":"应收单"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_INV_TRANS_SOURCE","VAL_CODE":"YUSK","VAL_NAME":"Pre payment","DESCRIPTION":"预收款"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"A","VAL_NAME":"draft","DESCRIPTION":"草稿"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"C","VAL_NAME":"Examination and approval","DESCRIPTION":"审批中"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"Approval","DESCRIPTION":"审批通过"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AR_SYS_AUDIT_STATUS","VAL_CODE":"F","VAL_NAME":"reviewed","DESCRIPTION":"已复核"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"BA","VAL_NAME":"Biological assets","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"FA","VAL_NAME":"Fixed assets","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"IA","VAL_NAME":"intangible assets","DESCRIPTION":null}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_FA_PROPERTY","VAL_CODE":"LV","VAL_NAME":"Low-value consumable","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_DOC_CLASS","VAL_CODE":"CGDD","VAL_NAME":"采购订单","DESCRIPTION":"采购订单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_DOC_CLASS","VAL_CODE":"CGSQ","VAL_NAME":"采购申请","DESCRIPTION":"采购申请"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_DOC_CLASS","VAL_CODE":"THD","VAL_NAME":"退货单","DESCRIPTION":"退货单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_DOC_CLASS","VAL_CODE":"DHD","VAL_NAME":"到货单","DESCRIPTION":"到货单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"TBD","VAL_NAME":"调拨单","DESCRIPTION":"调拨单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_CONTRACT_TYPE","VAL_CODE":"FWHT","VAL_NAME":"服务合同","DESCRIPTION":"服务合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_CONTRACT_TYPE","VAL_CODE":"WZHT","VAL_NAME":"物资合同","DESCRIPTION":"物资合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"审批通过","DESCRIPTION":"审批通过"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_CODE":"B","VAL_NAME":"变更中","DESCRIPTION":"变更中"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_CODE":"C","VAL_NAME":"审批中","DESCRIPTION":"审批中"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_CODE":"A","VAL_NAME":"草稿","DESCRIPTION":"草稿"}
+{"VAL_SET_LANG":"en","VAL_SET_CODE":"XC_AP_CONTRACT_SYS_AUDIT_STATUS","VAL_CODE":"E","VAL_NAME":"333","DESCRIPTION":null}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_PRICE_METHOD","VAL_CODE":"XJXCF","VAL_NAME":"先进先出法","DESCRIPTION":"先进先出法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_PRICE_METHOD","VAL_CODE":"YDJQPJF","VAL_NAME":"移动加权平均法","DESCRIPTION":"移动加权平均法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_PRICE_METHOD","VAL_CODE":"GBJJF","VAL_NAME":"个别计价法","DESCRIPTION":"个别计价法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_CA_TYPE","VAL_CODE":"T_CA_SUM_PTD","VAL_NAME":"现金流量项本期汇总数(含未过账)","DESCRIPTION":"现金流量项本期汇总数(含未过账)"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_CA_TYPE","VAL_CODE":"CA_SUM_YTD","VAL_NAME":"现金流量项本年汇总数","DESCRIPTION":"现金流量项本年汇总数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_CA_TYPE","VAL_CODE":"CA_SUM_PTD","VAL_NAME":"现金流量项本期汇总数","DESCRIPTION":"现金流量项本期汇总数"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_REP_CA_TYPE","VAL_CODE":"T_CA_SUM_YTD","VAL_NAME":"现金流量项本年汇总数(含未过账)","DESCRIPTION":"现金流量项本年汇总数(含未过账)"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_EX","VAL_NAME":"费用报销","DESCRIPTION":"费用报销"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_AR","VAL_NAME":"应收管理","DESCRIPTION":"应收管理"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_PO","VAL_NAME":"采购管理","DESCRIPTION":"采购管理"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_AP","VAL_NAME":"应付管理","DESCRIPTION":"应付管理"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_BG","VAL_NAME":"预算管理","DESCRIPTION":"预算管理"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_WF_MODULE","VAL_CODE":"XC_ST","VAL_NAME":"库存管理","DESCRIPTION":"库存管理"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"HXD","VAL_NAME":"核销单","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"YFD","VAL_NAME":"应付单","DESCRIPTION":"应付单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"CGFP","VAL_NAME":"采购发票","DESCRIPTION":"采购发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"FKD","VAL_NAME":"付款单","DESCRIPTION":"付款单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"CGHT","VAL_NAME":"采购合同","DESCRIPTION":"采购合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"TZD","VAL_NAME":"调整单","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AP_DOC_CLASS","VAL_CODE":"FKSQD","VAL_NAME":"付款申请单","DESCRIPTION":"付款申请单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_CODE":"FBF","VAL_NAME":"分步法","DESCRIPTION":"分步法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_CODE":"PZF","VAL_NAME":"品种法","DESCRIPTION":"品种法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_CODE":"FPF","VAL_NAME":"分批法","DESCRIPTION":"分批法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_CODE":"FLF","VAL_NAME":"分类法","DESCRIPTION":"分类法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_COST_METHOD","VAL_CODE":"ABCCBF","VAL_NAME":"ABC成本法","DESCRIPTION":"ABC成本法"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_ORDER_TYPE","VAL_CODE":"ORDER_FW","VAL_NAME":"服务订单","DESCRIPTION":"服务订单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_PO_ORDER_TYPE","VAL_CODE":"ORDER_WZ","VAL_NAME":"物资订单","DESCRIPTION":"物资订单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"HXD","VAL_NAME":"核销单","DESCRIPTION":"核销单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"TZD","VAL_NAME":"调整单","DESCRIPTION":"调整单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"SKD","VAL_NAME":"收款单","DESCRIPTION":"收款单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"YSD","VAL_NAME":"应收单","DESCRIPTION":"应收单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"XSFP","VAL_NAME":"销售发票","DESCRIPTION":"销售发票"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_AR_DOC_CLASS","VAL_CODE":"XSHT","VAL_NAME":"销售合同","DESCRIPTION":"销售合同"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"LYSQD","VAL_NAME":"领用申请单","DESCRIPTION":"领用申请单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"CKD","VAL_NAME":"出库单","DESCRIPTION":"出库单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"HWTZD","VAL_NAME":"货位调整单","DESCRIPTION":"货位调整单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"DBD","VAL_NAME":"调拨单","DESCRIPTION":"调拨单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"CBTZD","VAL_NAME":"成本调整单","DESCRIPTION":"成本调整单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"LLSQD","VAL_NAME":"领用申请单","DESCRIPTION":"领用申请单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_DOC_CLASS","VAL_CODE":"RKD","VAL_NAME":"入库单","DESCRIPTION":"入库单"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_MATERIAL_PROPERTY","VAL_CODE":"ST_ZC","VAL_NAME":"固定资产","DESCRIPTION":"固定资产"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_MATERIAL_PROPERTY","VAL_CODE":"ST_WZ","VAL_NAME":"物资","DESCRIPTION":"物资"}
+{"VAL_SET_LANG":"zh","VAL_SET_CODE":"XC_ST_MATERIAL_PROPERTY","VAL_CODE":"ST_FW","VAL_NAME":"服务","DESCRIPTION":"服务"}

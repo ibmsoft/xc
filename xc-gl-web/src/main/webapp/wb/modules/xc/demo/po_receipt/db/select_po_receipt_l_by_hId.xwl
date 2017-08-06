@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"SELECT \n\tl.* ,\n\t0 MAX_Quantity\nFROM \n\tdemo_po_receipt_l l\nWHERE \n\tl.H_ID = {?H_ID?}","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

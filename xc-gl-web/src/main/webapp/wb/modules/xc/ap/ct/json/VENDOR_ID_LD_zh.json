@@ -1,0 +1,6 @@
+{
+	vendor:'供应商',
+  	vendorCode:'供应商编码',
+  	vendorName:'供应商名称',
+  	condition:'供应商编码/名称'
+}

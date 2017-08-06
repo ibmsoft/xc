@@ -1,0 +1,9 @@
+{
+    L_AR_INV_H_CODE : "Blue Invoice",
+    AR_INV_H_CODE : "Doc Num",
+    DESCRIPTION : "Summary",
+    AR_DOC_CAT_NAME : "Doc Type",
+    NO_PAY_AMT : "Pay Amount",
+    AR_INV_H_CODE_NAME : "Doc Num/Summary",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

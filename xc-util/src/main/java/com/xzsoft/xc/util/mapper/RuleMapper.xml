@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.util.mapper.RuleMapper">
+
+	<!-- 获取规则基础信息 -->
+	<select id="getRule" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Rule">
+		select t.RULE_CODE       ruleCode,
+		       t.RULE_DESC       ruleDesc,
+		       t.FIXED_PREFIX    fixedPrefix,
+		       t.SERIAL_LENGTH   serialLength,
+		       t.SERIAL_CATEGORY serialCategory
+		  from xc_gl_rules t
+		where t.RULE_CODE = #{ruleCode}	
+	</select>
+
+	<!-- 获取规则明细信息 -->
+	<select id="getRuleDtl" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.RuleDtl">
+		select t.DTL_ID        dtlId,
+		       t.RULE_CODE     ruleCode,
+		       t.DTL_CODE      dtlCode,
+		       t.DTL_SEPARATOR dtlSeparator,
+		       t.ORDERBY       orderby
+		  from xc_gl_rule_dtl t
+		 where t.RULE_CODE = #{ruleCode}
+		order by t.ORDERBY	
+	</select>
+	
+	<!-- 获取当前规则的最大流水号 -->
+	<select id="getRuleMaxNum" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.util.modal.RuleMaxNum">
+		select t.MAX_NUM_ID       maxNumId,
+		       t.LEDGER_ID        ledgerId,
+		       t.RULE_CODE        ruleCode,
+		       t.FIXED_PREFIX 	  fixedPrefix,
+		       t.DTL_PREFIX_UNION dtlPrefixUnion,
+		       t.YEAR             year,
+		       t.MONTH            month,
+		       t.MAX_NUM          maxNum
+		  from xc_gl_rule_max_num t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.RULE_CODE = #{ruleCode}
+		   and t.DTL_PREFIX_UNION = #{dtlPrefixUnion}
+		 <choose>
+		 	<when test="flag == 'NE'.toString() " >
+		 		and t.FIXED_PREFIX IS NULL 
+		 	</when>
+		 	<when test="flag == 'E'.toString() ">
+		   		and t.FIXED_PREFIX = #{fixedPrefix}
+		 	</when>		 
+		 </choose>
+		 <choose>
+		 	<when test="serialCategory == 'LD_YYYY_MM'.toString() " >
+		 		and t.year = #{year}
+		   		and t.month = #{month}
+		 	</when>
+		 	<when test="serialCategory == 'LD_YYYY'.toString() ">
+		   		and t.year = #{year}
+		   		and t.month is null	
+		 	</when>
+		 	<otherwise>
+		   		and t.year is null
+		   		and t.month is null			 	
+		 	</otherwise>
+		 </choose>
+	</select>
+	
+	<!--  更新最大流水号 -->
+	<update id="updateRuleMaxNum" parameterType="com.xzsoft.xc.util.modal.RuleMaxNum">
+		update xc_gl_rule_max_num t
+		   set t.MAX_NUM = #{maxNum,jdbcType=INTEGER}, 
+		       t.LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}, 
+		       t.LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP}
+		 where t.MAX_NUM_ID = #{maxNumId}
+	</update>
+	
+	<!-- 插入最大流水号  -->
+	<insert id="insertRuleMaxNum" parameterType="com.xzsoft.xc.util.modal.RuleMaxNum">
+		insert into xc_gl_rule_max_num
+		  (max_num_id,
+		   ledger_id,
+		   rule_code,
+		   fixed_prefix,
+		   dtl_prefix_union,
+		   year,
+		   month,
+		   max_num,
+		   creation_date,
+		   created_by)
+		values
+		  (#{maxNumId,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{ruleCode,jdbcType=VARCHAR},
+		   #{fixedPrefix,jdbcType=VARCHAR},
+		   #{dtlPrefixUnion,jdbcType=VARCHAR},
+		   #{year,jdbcType=VARCHAR},
+		   #{month,jdbcType=VARCHAR},
+		   #{maxNum,jdbcType=INTEGER},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 查询账簿信息 -->
+	<select id="getLegerById" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Ledger">
+		select t.LEDGER_ID         ledgerId,
+		       t.LEDGER_CODE       ledgerCode,
+		       t.LEDGER_NAME       ledgerName,
+		       t.ACC_HRCY_ID       accHrcyId,
+		       t.START_PERIOD_CODE startPeriodCode,
+		       t.CURRENCY_CODE     cnyCode,
+		       t.ORG_ID            orgId,
+		       t.RETAINED_ACC_ID   retainedAccId,
+		       t.EXCHANGE_ACC_ID   exchangeAccId,
+		       t.LEDGER_ACC_DESC   ledgerDesc,
+		       t.is_valid	isValid,
+		       t.bg_hrcy_id	bgHrcyId,
+		       t.bg_is_chk	bgIsChk,
+		       t.bg_ex_period	bgExPeriod,
+		       t.bg_is_special	bgIsSpecial,
+		       t.bg_is_cash	bgIsCash,
+		       t.ex_hrcy_id	exHrcyId,
+		       t.ex_ia_acc_id	exIaAccId,
+		       t.ex_cr_acc_id	exCrAccId,
+		       t.is_cr_pay	isCrPay
+		  from xc_gl_ledgers t
+		 where t.LEDGER_ID = #{ledgerId}	
+	</select>	
+	
+	<!-- 根据凭证分录ID查询凭证分类信息  -->
+	<select id="getCatInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select t.V_CATEGORY_ID CAT_ID ,t.V_CATEGORY_CODE CAT_CODE,t.V_CATEGORY_NAME CAT_NAME 
+		from xc_gl_v_category t 
+		where t.v_category_id = #{catId}
+	</select>
+	
+</mapper>

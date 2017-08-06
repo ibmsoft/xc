@@ -1,0 +1,44 @@
+{
+  XH:'序号',
+ 
+  saveBtn:'保存',
+ 
+
+  VAL_NAME_COL:'单据大类',
+  VAL_CODE_COL:'值编码',
+
+  AR_CAT_CODE_COL:'单据类型编码',
+  AR_CAT_NAME_COL:'单据类型名称',
+  PROCESS_NAME_COL:'审批流程',
+  PROCESS_ID_COL:'流程ID',
+  PROCESS_CODE_COL:'流程编码',
+  PROCESS_NAME_COL1:'流程名称',
+  QUERY_CODE_NAME:'编码/名称',
+  CODE_COL:'编码',
+  NAME_COL:'名称',
+
+  IS_SIGN_COL:'是否签收',
+
+  ATT_CAT_NAME_COL:'附件分类',
+
+  PC_W_FORM_NAME_COL:'电脑端填报表单',
+  PC_A_FORM_NAME_COL:'电脑端审批表单',
+  PC_P_FORM_NAME_COL:'电脑端打印表单',
+  M_W_FORM_NAME_COL:'移动端填报表单',
+
+
+  M_A_FORM_NAME_COL:'移动端审批表单',
+  FORM_DESC_COL:'表单',
+  FORM_URL_COL:'表单URL',
+  DESCRIPTION_COL:'说明',
+  
+ message:'正在保存中...',
+
+  SAVETIP:'保存成功！'
+  
+
+
+
+
+
+}

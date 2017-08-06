@@ -1,0 +1,1 @@
+{"title":"预算版本查询","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"SELECT\n\tBG_VER_ID,\n\tBG_VER_NAME\nFROM\n\txc_bg_cost_ver","itemId":"dataprovider1"},"children":[],"type":"dataprovider","expanded":false}],"type":"module","expanded":true}],"iconCls":"seek_icon"}

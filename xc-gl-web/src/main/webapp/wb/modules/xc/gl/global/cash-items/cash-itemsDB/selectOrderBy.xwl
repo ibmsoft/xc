@@ -1,0 +1,1 @@
+{"hidden":false,"children":[{"configs":{"itemId":"module","loginRequired":"false"},"expanded":true,"children":[{"configs":{"itemId":"dataprovider1","sql":"select max(ORDERBY) max_num from xc_gl_cash_items"},"expanded":false,"children":[],"type":"dataprovider"}],"type":"module"}],"roles":{"default":1},"title":"","iconCls":"","inframe":false,"pageLink":""}

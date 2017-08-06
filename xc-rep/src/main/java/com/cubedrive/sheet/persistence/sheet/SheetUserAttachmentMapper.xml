@@ -1,0 +1,62 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetUserAttachmentMapper">
+
+	<resultMap id="userAttachmentMap" type="com.cubedrive.sheet.domain.sheet.SheetUserAttachment" >
+		<id column="user_attachment_id" property="id" jdbcType="INTEGER" />
+		<result column="user_attachment_user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_attachment_document_id" property="documentId" jdbcType="INTEGER" />
+		<result column="user_attachment_file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="user_attachment_file_path" property="filePath" jdbcType="VARCHAR" />
+		<result column="user_attachment_mime_type" property="mimeType" jdbcType="VARCHAR" />
+		<result column="user_attachment_create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="user_attachment_column_list">
+		user_attachment.id as user_attachment_id,
+		user_attachment.user_id as user_attachment_user_id,
+		user_attachment.document_id as user_attachment_document_id,
+		user_attachment.file_name as user_attachment_file_name,
+		user_attachment.file_path as user_attachment_file_path,
+		user_attachment.mime_type as user_attachment_mime_type,
+		user_attachment.create_time as user_attachment_create_time
+	</sql>
+	
+	<select id="getById" parameterType="java.lang.Integer" resultMap="userAttachmentMap">
+		select <include refid="user_attachment_column_list" /> from user_attachment where user_attachment.id=#{attachmentId}
+	</select>
+	
+	<insert id="insert" parameterType="com.cubedrive.sheet.domain.sheet.SheetUserAttachment">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"	order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into user_attachment(user_id,document_id,file_name,file_path,mime_type,create_time) values
+		(#{userId,jdbcType=INTEGER}, #{documentId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{mimeType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateDocument">
+		update user_attachment set document_id=#{documentId,jdbcType=INTEGER} where user_attachment.id=#{attachmentId}
+	</update>
+	
+	<select id="findByUser" parameterType="java.lang.Integer" resultMap="userAttachmentMap">
+		select <include refid="user_attachment_column_list" /> from user_attachment where user_attachment.user_id=#{userId}
+	</select>
+	
+	<select id="findByDocument" parameterType="java.lang.Integer" resultMap="userAttachmentMap">
+		select <include refid="user_attachment_column_list" /> from user_attachment where user_attachment.document_id=#{documentId}
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from user_attachment where user_attachment.id=#{attachmentId}
+	</delete>
+	
+	<delete id="deleteByUser" parameterType="java.lang.Integer">
+		delete from user_attachment where user_attachment.user_id=#{userId}
+	</delete>
+	
+	<delete id="deleteByDocument" parameterType="java.lang.Integer">
+		delete from user_attachment where user_attachment.document_id=#{documentId}
+	</delete>
+	
+</mapper>

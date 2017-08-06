@@ -1,0 +1,7 @@
+{
+    AP_CONTRACT_NAME : "合同",
+    AP_CONTRACT_CODE_COL : "合同编码",
+    AP_CONTRACT_NAME_COL : "合同名称",
+    AP_CONTRACT_CODE_NAME : "合同编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

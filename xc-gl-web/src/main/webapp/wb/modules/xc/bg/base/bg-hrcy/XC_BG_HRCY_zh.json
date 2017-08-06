@@ -1,0 +1,41 @@
+{
+  addBtn				: "新增",
+  editBtn				: "编辑",
+  delBtn				: "删除",
+  copyBtn				: "复制",
+  stopBtn				: "停用",
+  queryBtn				: "查询",
+  ROW_NUM_COL			: "序号",
+  BG_HRCY_ID_COL		: "体系ID",
+  BG_HRCY_CODE_COL		: "编码",
+  BG_HRCY_NAME_COL		: "名称",
+  BG_HRCY_DESC_COL		: "说明",
+  IS_ENABLED_COL		: "是否启用",
+  
+  win					: "",
+  BG_HRCY_CODE			: "编码",
+  BG_HRCY_NAME			: "名称",
+  IS_ENABLED			: "是否启用",
+  BG_HRCY_DESC			: "说明",
+  
+  win1					: "",
+  sourceCombo			: "来源",
+  code					: "编码",
+  name					: "名称",
+  desc					: "说明",
+  
+  MSG 					: "",
+  xz					: "新增",
+  qxzytxuxgdsj			: "请选择 1 条需要修改的数据！",
+  bj					: "编辑",
+  qxzxyscdsj			: "请选择需要删除的数据！",
+  qdyscxzd				: "确定要删除选择的 ",
+  tsjm					: " 条数据吗？",
+  sccg					: "删除成功！",
+  qxzytxyfzdsj			: "请选择 1 条需要复制的数据！",
+  fz					: "复制",
+  fzcg					: "复制成功！",
+  qxzxytzdsj			: "请选择需要停止的数据！",
+  qdytyxzd				: "确定要停用选择的 "
+  
+}

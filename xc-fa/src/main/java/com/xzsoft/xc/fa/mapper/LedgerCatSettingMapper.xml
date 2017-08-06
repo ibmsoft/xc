@@ -1,0 +1,29 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.LedgerCatSettingMapper">
+	
+	<!-- 获取未同步的资产分类 -->
+	<select id="getNotSyncFaCats"  resultType="java.util.HashMap">
+		select c.CAT_CODE, c.FA_PROPERTY 
+		  from xc_fa_cats c 
+		 where c.CAT_CODE not in (select s.CAT_CODE 
+		                            from xc_fa_ld_cat_settings s)
+	</select>
+	
+	<!-- 保存资产分类到资产分类账簿设置表 -->
+	<insert id="saveLedgerCatSetting" parameterType="java.util.List">
+		insert into xc_fa_ld_cat_settings(
+		    SETTING_ID, LEDGER_ID, CAT_CODE, CREATION_DATE, CREATED_BY, LAST_UPDATE_DATE, LAST_UPDATED_BY
+		)
+		<foreach collection="list" item="item" index="index" separator="union all">
+			(select #{item.SETTING_ID, jdbcType=VARCHAR}, 
+					#{item.LEDGER_ID, jdbcType=VARCHAR},
+					#{item.CAT_CODE, jdbcType=VARCHAR},
+					#{item.CREATION_DATE, jdbcType=TIMESTAMP},
+					#{item.CREATED_BY, jdbcType=VARCHAR},
+					#{item.LAST_UPDATE_DATE, jdbcType=TIMESTAMP},
+					#{item.LAST_UPDATED_BY, jdbcType=VARCHAR}
+			from dual)			 
+		 </foreach>
+	</insert>
+		
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.po.mapper.PoReturnMapper">
+
+    <!-- 判断退货单主信息新增或修改 -->
+    <select id="ifExistH" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoReturnHBean">
+        select * from xc_po_return_h where RETURN_H_ID = #{RETURN_H_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增退货单主信息 -->
+    <insert id="addReturnHData" parameterType="com.xzsoft.xc.po.modal.PoReturnHBean">
+        insert into xc_po_return_h(RETURN_H_ID,RETURN_H_CODE,RETURN_H_NAME,
+                                   PO_DOC_CAT_CODE,ENTRY_H_ID,ORDER_H_ID,
+                                   CONTRACT_ID,VENDOR_ID,DEPT_ID,
+                                   ARRIVAL_DATE,DOCUMENT_DATE,PURCHASE_PERSON,
+                                   WAREHOUSE_ID,AMOUNT,INV_AMOUNT,
+                                   ORG_ID,LEDGER_ID,INS_CODE,
+                                   AUDIT_STATUS,AUDIT_STATUS_DESC,AUDIT_DATE,
+                                   SYS_AUDIT_STATUS,SYS_AUDIT_STATUS_DESC,CREATION_DATE,
+                                   CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY,
+                                   PROJECT_ID)
+                             values(#{RETURN_H_ID,jdbcType=VARCHAR},#{RETURN_H_CODE,jdbcType=VARCHAR},#{RETURN_H_NAME,jdbcType=VARCHAR},
+                                    #{PO_DOC_CAT_CODE,jdbcType=VARCHAR},#{ENTRY_H_ID,jdbcType=VARCHAR},#{ORDER_H_ID,jdbcType=VARCHAR},
+                                    #{CONTRACT_ID,jdbcType=VARCHAR}, #{VENDOR_ID,jdbcType=VARCHAR},#{DEPT_ID,jdbcType=VARCHAR},
+                                    #{ARRIVAL_DATE,jdbcType=TIMESTAMP},#{DOCUMENT_DATE,jdbcType=TIMESTAMP},#{PURCHASE_PERSON,jdbcType=VARCHAR},
+                                    #{WAREHOUSE_ID,jdbcType=VARCHAR},#{AMOUNT,jdbcType=NUMERIC},#{INV_AMOUNT,jdbcType=NUMERIC},
+                                    #{ORG_ID,jdbcType=VARCHAR},#{LEDGER_ID,jdbcType=VARCHAR},#{INS_CODE,jdbcType=VARCHAR},
+                                    #{AUDIT_STATUS,jdbcType=VARCHAR},#{AUDIT_STATUS_DESC,jdbcType=VARCHAR},#{AUDIT_DATE,jdbcType=TIMESTAMP},
+                                    #{SYS_AUDIT_STATUS,jdbcType=VARCHAR},#{SYS_AUDIT_STATUS_DESC,jdbcType=VARCHAR},#{CREATION_DATE,jdbcType=TIMESTAMP},
+                                    #{CREATED_BY,jdbcType=VARCHAR},#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},#{LAST_UPDATED_BY,jdbcType=VARCHAR},
+                                    #{PROJECT_ID,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改退货单主信息 -->
+    <update id="editReturnHData" parameterType="com.xzsoft.xc.po.modal.PoReturnHBean">
+        update xc_po_return_h set RETURN_H_NAME = #{RETURN_H_NAME,jdbcType=VARCHAR},
+                                  ORDER_H_ID = #{ORDER_H_ID,jdbcType=VARCHAR},
+                                  CONTRACT_ID = #{CONTRACT_ID,jdbcType=VARCHAR},
+                                  VENDOR_ID = #{VENDOR_ID,jdbcType=VARCHAR},
+                                  DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+                                  ARRIVAL_DATE =  #{ARRIVAL_DATE,jdbcType=TIMESTAMP},
+                                  DOCUMENT_DATE =  #{DOCUMENT_DATE,jdbcType=TIMESTAMP},
+                                  PURCHASE_PERSON = #{PURCHASE_PERSON,jdbcType=VARCHAR},
+                                  WAREHOUSE_ID = #{WAREHOUSE_ID,jdbcType=VARCHAR},
+                                  AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                                  INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+                                  PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR}
+                               where RETURN_H_ID = #{RETURN_H_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 删除退货单主信息 -->
+    <delete id="delReturnHData" parameterType="java.util.List">
+    delete from xc_po_return_h where RETURN_H_ID in
+        <foreach collection="list" index="index" item="item" open="("
+            close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    
+    <!-- 判断退货单行信息新增或删除 -->
+    <select id="ifExistL" parameterType="java.lang.String" resultType="com.xzsoft.xc.po.modal.PoReturnLBean">
+        select * from xc_po_return_l where RETURN_L_ID = #{RETURN_L_ID,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增退货单行信息 -->
+    <insert id="addReturnLData" parameterType="com.xzsoft.xc.po.modal.PoReturnLBean">
+        insert into xc_po_return_l(RETURN_L_ID,RETURN_H_ID,RETURN_L_NUM,
+                                    MATERIAL_ID,ORDER_L_ID,ENTRY_L_ID,
+                                    DIM_ID,QTY,ARRIVAL_QTY,
+                                    RETURN_QTY,TAX,PRICE,
+                                    INV_PRICE,AMOUNT,INV_AMOUNT,
+                                    ORG_ID,LEDGER_ID,CREATION_DATE,
+                                    CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY)
+                              values(#{RETURN_L_ID,jdbcType=VARCHAR},#{RETURN_H_ID,jdbcType=VARCHAR},#{RETURN_L_NUM,jdbcType=NUMERIC},
+                                      #{MATERIAL_ID,jdbcType=VARCHAR},#{ORDER_L_ID,jdbcType=VARCHAR},#{ENTRY_L_ID,jdbcType=VARCHAR},
+                                      #{DIM_ID,jdbcType=VARCHAR},#{QTY,jdbcType=NUMERIC}, #{ARRIVAL_QTY,jdbcType=NUMERIC},
+                                      #{RETURN_QTY,jdbcType=NUMERIC},#{TAX,jdbcType=NUMERIC},#{PRICE,jdbcType=NUMERIC},
+                                      #{INV_PRICE,jdbcType=NUMERIC},#{AMOUNT,jdbcType=NUMERIC},#{INV_AMOUNT,jdbcType=NUMERIC},
+                                      #{ORG_ID,jdbcType=VARCHAR},#{LEDGER_ID,jdbcType=VARCHAR},#{CREATION_DATE,jdbcType=TIMESTAMP},
+                                      #{CREATED_BY,jdbcType=VARCHAR},#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},#{LAST_UPDATED_BY,jdbcType=VARCHAR})
+    </insert>
+    
+    <!-- 修改退货单行信息 -->
+    <update id="editReturnLData" parameterType="com.xzsoft.xc.po.modal.PoReturnLBean">
+        update xc_po_return_l set RETURN_L_NUM = #{RETURN_L_NUM,jdbcType=NUMERIC},
+                                  MATERIAL_ID = #{MATERIAL_ID,jdbcType=VARCHAR},
+                                  ORDER_L_ID = #{ORDER_L_ID,jdbcType=VARCHAR},
+                                  ENTRY_L_ID = #{ENTRY_L_ID,jdbcType=VARCHAR},
+                                  DIM_ID = #{DIM_ID,jdbcType=VARCHAR},
+                                  QTY = #{QTY,jdbcType=NUMERIC},
+                                  ARRIVAL_QTY = #{ARRIVAL_QTY,jdbcType=NUMERIC},
+                                  RETURN_QTY = #{RETURN_QTY,jdbcType=NUMERIC},
+                                  TAX = #{TAX,jdbcType=NUMERIC},
+                                  PRICE = #{PRICE,jdbcType=NUMERIC},
+                                  INV_PRICE = #{INV_PRICE,jdbcType=NUMERIC},
+                                  AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+                                  INV_AMOUNT = #{INV_AMOUNT,jdbcType=NUMERIC},
+                                  LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+                                  LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+                              where RETURN_L_ID = #{RETURN_L_ID,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 删除退货单行信息 -->
+    <delete id="delReturnLData" parameterType="java.util.List">
+        delete from xc_po_return_l where RETURN_L_ID in
+            <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+    </delete>
+    
+    <!-- 删除退货单行信息(通过退货单主ID) -->
+    <delete id="delReturnLDataByHId" parameterType="java.util.List">
+        delete from xc_po_return_l where RETURN_H_ID in
+            <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+    </delete>
+</mapper>

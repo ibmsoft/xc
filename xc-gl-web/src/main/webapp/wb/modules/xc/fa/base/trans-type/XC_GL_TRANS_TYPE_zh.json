@@ -1,0 +1,16 @@
+{
+  addBtn: '新增',
+  delBtn: '删除',
+  saveBtn: '保存',
+  queryBtn:'查询',
+  resetBtn:'重置',
+  transCode: '事务类型编码',
+  moduleCol: '所属模块',
+  transDescCol: '事务说明',
+  linkUrlCol: '数据追述URL',
+  canEditColsCol:'可修改列',
+  codeExistBeforeMsg: '编码【',
+  codeExistAfterMsg: '】已存在',
+  saveWaitMsg: '正在保存中...',
+  successMsg: '保存成功'
+}

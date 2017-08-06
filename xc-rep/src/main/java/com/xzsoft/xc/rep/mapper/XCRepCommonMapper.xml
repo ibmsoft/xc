@@ -1,0 +1,590 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.XCRepCommonMapper">
+	
+	<!-- 操作日志映射关系 -->
+	<resultMap id="setWhoMap" type="com.xzsoft.xc.rep.modal.RepSheetBean">
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />		
+	</resultMap>
+	<!-- 期间映射关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.RepPeriodBean" id="periodMap" extends="setWhoMap">
+		<id property="periodCode" column="PERIOD_CODE" />
+		<result property="year" column="YEAR" />
+		<result property="quarter" column="QUARTER" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="isEnabled" column="IS_ENABLED" />
+		<result property="isAdjPeriod" column="IS_ADJ_PERIOD" />
+	</resultMap>
+	<!-- 币种映射关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.RepCurrencyBean" id="currencyMap" extends="setWhoMap">
+		<id property="cnyCode" column="CURRENCY_CODE" />
+		<result property="cnyName" column="CURRENCY_NAME" />
+		<result property="nation" column="NATION" />
+		<result property="isEnabled" column="IS_ENABLED" />
+		<result property="pericison" column="PERICISON" />
+	</resultMap>
+	<!-- 行指标映射关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESRowItemBean" id="rowItemMap" extends="setWhoMap">
+		<id property="rowitemId" column="ROWITEM_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="rowitemCode" column="ROWITEM_CODE" />
+		<result property="rowitemName" column="ROWITEM_NAME" />
+		<result property="rowitemDesc" column="ROWITEM_DESC" />
+		<result property="rowitemAlias" column="ROWITEM_ALIAS" />
+		<result property="upcode" column="UPCODE" />
+	</resultMap>
+	<!-- 列指标映射关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESColItemBean" id="colItemMap" extends="setWhoMap">
+		<id property="colitemId" column="COLITEM_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="colitemCode" column="COLITEM_CODE" />
+		<result property="colitemName" column="COLITEM_NAME" />
+		<result property="colitemDesc" column="COLITEM_DESC" />
+		<result property="colitemAlias" column="COLITEM_ALIAS" />
+		<result property="upcode" column="UPCODE" />
+		<result property="datatype" column="DATATYPE" />
+		<result property="orderby" column="ORDERBY" />
+	</resultMap>
+	<!-- 自定义函数信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.FuncBean" id="funcBeanMap" extends="setWhoMap">
+		<id property="funId" column="FUNC_ID" />
+		<result property="funType" column="FUNC_TYPE" />
+		<result property="funCode" column="FUNC_CODE" />
+		<result property="funName" column="FUNC_NAME" />
+		<result property="func" column="FUNC" />
+		<result property="funDesc" column="FUNC_DESC" />
+		<result property="funCalType" column="FUNC_CALTYPE" />
+		<result property="enabeld" column="ENABLED" />
+		<result property="httpLink" column="HTTPLINK" />
+		<collection property="params" ofType="com.xzsoft.xc.rep.modal.FuncParamsBean" select="getFunParams" column="FUNC_ID">
+		</collection>
+	</resultMap>
+	<!-- 自定义函数参数信息  -->
+	<resultMap type="com.xzsoft.xc.rep.modal.FuncParamsBean" id="funcParamsBeanMap" extends="setWhoMap">
+		<id property="paramId" column="PARAM_ID" />
+		<result property="funId" column="FUNC_ID" />
+		<result property="paramCode" column="PARAM_CODE" />
+		<result property="paramName" column="PARAM_NAME" />
+		<result property="paramDesc" column="PARAM_DESC" />
+		<result property="paramOrder" column="PARAM_ORDER" />
+		<result property="paramLov" column="PARAM_LOV" />
+		<result property="enabled" column="ENABLED" />
+		<result property="mandatory" column="MANDATORY" />
+	</resultMap>
+	
+	<!-- 自定义函数和参数信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.FuncBean" id="funcAndParamsResultMap" extends="setWhoMap">
+		<id property="funId" column="FUNC_ID" />
+		<result property="funType" column="FUNC_TYPE" />
+		<result property="funCode" column="FUNC_CODE" />
+		<result property="funName" column="FUNC_NAME" />
+		<result property="func" column="FUNC" />
+		<result property="funDesc" column="FUNC_DESC" />
+		<result property="funCalType" column="FUNC_CALTYPE" />
+		<result property="enabeld" column="ENABLED" />
+		<result property="httpLink" column="HTTPLINK" />
+		<collection property="params" ofType="com.xzsoft.xc.rep.modal.FuncParamsBean">
+			<id property="paramId" column="PARAM_ID" />
+			<result property="funId" column="FUNC_ID" />
+			<result property="funCode" column="FUNC_CODE" />
+			<result property="paramCode" column="PARAM_CODE" />
+			<result property="paramName" column="PARAM_NAME" />
+			<result property="paramDesc" column="PARAM_DESC" />
+			<result property="paramOrder" column="PARAM_ORDER" />
+			<result property="paramLov" column="PARAM_LOV" />
+			<result property="enabled" column="ENABLED" />
+			<result property="mandatory" column="MANDATORY" />
+		</collection>
+	</resultMap>
+	
+	<!-- 公式信息映射关系 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.CalFormulaBean" id="calFormulaMap" extends="setWhoMap">
+		<id property="formulaId" column="FORMULA_ID" />
+		<result property="ledgerId" column="LEDGER_ID" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="rowItemId" column="ROWITEM_ID" />
+		<result property="colItemId" column="COLITEM_ID" />
+		<result property="rowItemCode" column="ROWITEM_CODE" />
+		<result property="colItemCode" column="COLITEM_CODE" />
+		<result property="formula" column="FORMULA" />
+		<result property="formulaDesc" column="FORMULA_DESC" />
+		<result property="formulaType" column="FORMULA_TYPE" />
+		<result property="orderby" column="ORDERBY" />
+		<result property="formulaLevel" column="FORMULA_LEVEL" />
+		
+		<collection property="preFormulaBeans" ofType="com.xzsoft.xc.rep.modal.PreFormulaBean">
+			<id property="preFormulaId" column="PRE_FORMULA_ID" />
+			<result property="formulaCat" column="FORMULA_CAT" />
+			<result property="chkFormulaType" column="CHK_F_EXP_CAT" />
+			<result property="formulaStr" column="FORMULA_STR" />
+			<result property="formulaJson" column="FORMULA_JSON" />
+			<result property="formulaType" column="PRE_FORMULA_TYPE" />
+			<result property="orderby" column="PRE_ORDER" />		
+		</collection>
+	</resultMap>
+	
+	
+	<!-- 行指标共用SQL片段 -->
+	<sql id="rowItemSql">
+		t.ROWITEM_ID,
+		t.ACC_HRCY_ID,
+		t.ROWITEM_CODE,
+		t.ROWITEM_NAME,
+		t.ROWITEM_DESC,
+		t.ROWITEM_ALIAS,
+		t.UPCODE,
+		t.CREATED_BY,
+		t.CREATION_DATE,
+		t.LAST_UPDATED_BY,
+		t.LAST_UPDATE_DATE	
+	</sql>
+	<!-- 列指标共用SQL片段 -->
+	<sql id="colItemSql">
+		t.COLITEM_ID,
+		t.ACC_HRCY_ID,
+		t.COLITEM_CODE,
+		t.COLITEM_NAME,
+		t.COLITEM_DESC,
+		t.COLITEM_ALIAS,
+		t.UPCODE,
+		t.DATATYPE,
+		t.ORDERBY,
+		t.CREATED_BY,
+		t.CREATION_DATE,
+		t.LAST_UPDATED_BY,
+		t.LAST_UPDATE_DATE
+	</sql>
+	<!-- 自定义函数SQL片段 -->
+	<sql id="funcItemSql">
+		t.FUNC_ID,
+		t.FUNC_TYPE,
+		t.FUNC_CODE,
+		t.FUNC_NAME,
+		t.FUNC,
+		t.FUNC_DESC,
+		t.FUNC_CALTYPE,
+		t.ENABLED,
+		t.HTTPLINK,
+		t.CREATED_BY,
+		t.CREATION_DATE,
+		t.LAST_UPDATED_BY,
+		t.LAST_UPDATE_DATE	
+	</sql>
+	<!-- 公式信息SQL片段 -->
+	<sql id="formulaSql">
+		rf.FORMULA_ID,
+		rf.LEDGER_ID,
+		rf.ACC_HRCY_ID,
+		rf.ROWITEM_ID,
+		rf.COLITEM_ID,
+		rf.FORMULA,
+		rf.FORMULA_DESC,
+		rf.FORMULA_TYPE,
+		rf.ORDERBY,
+		rf.FORMULA_LEVEL,
+		pf.PRE_FORMULA_ID,
+		pf.FORMULA_CAT,
+		pf.CHK_F_EXP_CAT,
+		pf.FORMULA_STR,
+		pf.FORMULA_JSON,
+		pf.FORMULA_TYPE PRE_FORMULA_TYPE,
+		pf.ORDERBY PRE_ORDER	
+	</sql>
+	<sql id="formulaConditionSql">
+		AND EXISTS (SELECT 1 FROM xc_rep_rm_ref rr where rf.ROWITEM_ID = rr.ROWITEM_ID and rr.TAB_ID = #{tabId} and rr.ENABLED = 'Y')
+		AND EXISTS (select 1 from xc_rep_cm_ref rc where rf.COLITEM_ID = rc.COLITEM_ID and rc.TAB_ID = #{tabId} and rc.ENABLED = 'Y')
+	</sql>
+	
+	
+	
+	<!-- 按期间编码查询期间信息 -->
+	<select id="getPeriodByCode" parameterType="java.lang.String" resultMap="periodMap">
+		SELECT
+			t.PERIOD_CODE,
+			t.YEAR,
+			t.QUARTER,
+			t.START_DATE,
+			t.END_DATE,
+			t.IS_ENABLED,
+			t.IS_ADJ_PERIOD,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE
+		FROM
+			xc_gl_period t
+		where t.PERIOD_CODE = #{periodCode}	
+	</select>
+	<!-- 按币种ID查询币种信息 -->
+	<select id="getRepCurrencyByCode" parameterType="java.lang.String" resultMap="currencyMap">
+		SELECT
+			t.CURRENCY_CODE,
+			t.CURRENCY_NAME,
+			t.NATION,
+			t.IS_ENABLED,
+			t.PERICISON,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE
+		FROM
+			xc_gl_currencies t
+		where t.CURRENCY_CODE = #{cnyCode}	
+	</select>
+
+
+
+	<!-- 按行指标ID查询行指标信息 -->
+	<select id="getRowItemById" parameterType="java.lang.String" resultMap="rowItemMap">
+		SELECT
+			<include refid="rowItemSql"/>
+		FROM
+			xc_rep_rowitems t
+		where t.ROWITEM_ID = #{rowItemId}	
+	</select>
+	<!-- 按行指标编码查询行指标信息 -->
+	<select id="getRowItemByCode" parameterType="java.util.HashMap" resultMap="rowItemMap">
+		SELECT
+			<include refid="rowItemSql"/>
+		FROM
+			xc_rep_rowitems t
+		where t.ROWITEM_CODE = #{rowItemCode}	
+		  and t.ACC_HRCY_ID = #{accHrcyId}
+	</select>
+	<!-- 查询模板下的行指标信息 -->
+	<select id="getRowItemsByTab" parameterType="java.lang.String" resultMap="rowItemMap">
+		SELECT
+			<include refid="rowItemSql"/>
+		FROM
+			xc_rep_rowitems t, xc_rep_rm_ref r
+		where t.ROWITEM_ID = r.ROWITEM_ID
+		  and r.TAB_ID = #{tabId}
+		  and r.ENABLED = 'Y'
+		order by r.LANNO,r.ROWNO
+	</select>
+	<!-- 查询指定模板下的所有行指标信息 -->
+	<select id="getRowItemsByTabs" parameterType="java.util.List" resultMap="rowItemMap">
+		SELECT distinct
+			t.ROWITEM_ID,
+			t.ACC_HRCY_ID,
+			t.ROWITEM_CODE,
+			t.ROWITEM_NAME,
+			t.ROWITEM_DESC,
+			t.ROWITEM_ALIAS,
+			t.UPCODE,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE	
+		FROM
+			xc_rep_rowitems t, xc_rep_rm_ref r
+		where t.ROWITEM_ID = r.ROWITEM_ID
+		  and r.TAB_ID in 
+		  <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		  	#{item}
+		  </foreach>
+		  and r.ENABLED = 'Y'
+		order by r.LANNO,r.ROWNO	
+	</select>
+	<!-- 查询表套下所有的行指标信息 -->
+	<select id="getAllRowItems" parameterType="java.lang.String" resultMap="rowItemMap">
+		SELECT
+			<include refid="rowItemSql"/>
+		FROM
+			xc_rep_rowitems t
+		where t.ACC_HRCY_ID = #{accHrcyId}		
+	</select>
+	<!-- 查询表套下所有的行指标信息 -->
+	<select id="getAllRowItems4Cache" parameterType="java.lang.String" resultMap="rowItemMap">
+		SELECT
+			<include refid="rowItemSql"/>
+		FROM
+			xc_rep_rowitems t
+		where t.ACC_HRCY_ID = #{accHrcyId}		
+	</select>
+	
+	
+	<!-- 按列指标ID查询列指标信息 -->
+	<select id="getColItemById" parameterType="java.lang.String" resultMap="colItemMap">
+		SELECT
+			<include refid="colItemSql"/>
+		FROM
+			xc_rep_colitems t
+		where t.COLITEM_ID = #{colItemId}
+	</select>
+	<!-- 按列指标编码查询列指标信息 -->
+	<select id="getColItemByCode" parameterType="java.util.HashMap" resultMap="colItemMap">
+		SELECT
+			<include refid="colItemSql"/>
+		FROM
+			xc_rep_colitems t
+		where t.COLITEM_CODE = #{colItemCode}
+		  and t.ACC_HRCY_ID = #{accHrcyId}
+	</select>
+	<!-- 查询模板下的列指标信息  -->
+	<select id="getColItemsByTab" parameterType="java.lang.String" resultMap="colItemMap">
+		SELECT
+			<include refid="colItemSql"/>
+		FROM
+			xc_rep_colitems t, xc_rep_cm_ref r
+		where t.COLITEM_ID = r.COLITEM_ID
+		  and r.TAB_ID = #{tabId}
+		  and r.ENABLED = 'Y'
+		  order by r.LANNO,r.COLNO
+	</select>
+	<!-- 查询指定模板下的所有列指标信息 -->
+	<select id="getColItemsByTabs" parameterType="java.util.List" resultMap="colItemMap">
+		SELECT distinct
+			t.COLITEM_ID,
+			t.ACC_HRCY_ID,
+			t.COLITEM_CODE,
+			t.COLITEM_NAME,
+			t.COLITEM_DESC,
+			t.COLITEM_ALIAS,
+			t.UPCODE,
+			t.DATATYPE,
+			t.ORDERBY,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE
+		FROM
+			xc_rep_colitems t, xc_rep_cm_ref r
+		where t.COLITEM_ID = r.COLITEM_ID
+		  and r.TAB_ID in 
+		  <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		  	#{item}
+		  </foreach>
+		  and r.ENABLED = 'Y'
+		  order by r.LANNO,r.COLNO	
+	</select>
+	<!-- 查询表套下的列表指标信息 -->
+	<select id="getAllColItems" parameterType="java.lang.String" resultMap="colItemMap">
+		SELECT
+			<include refid="colItemSql"/>
+		FROM
+			xc_rep_colitems t
+		where t.ACC_HRCY_ID = #{accHrcyId}		
+	</select>
+	
+	<!-- 查询表套下的列表指标信息 -->
+	<select id="getAllColItems4Cache" parameterType="java.lang.String" resultMap="colItemMap">
+		SELECT
+			<include refid="colItemSql"/>
+		FROM
+			xc_rep_colitems t
+		where t.ACC_HRCY_ID = #{accHrcyId}		
+	</select>
+	
+	<!-- 查询某科目体系下所有计算公式 -->
+	<select id="getRepAllCalFormulas" parameterType="java.lang.String" resultMap="calFormulaMap">
+		SELECT
+			<include refid="formulaSql"/>
+		FROM
+			xc_rep_formulas rf,
+			left join xc_rep_pre_formulas pf on rf.FORMULA_ID = pf.FORMULA_ID
+		WHERE rf.ACC_HRCY_ID = #{accHrcyId}
+		  <include refid="formulaConditionSql" />	
+	</select>
+	
+	<!-- 按模板查询指标取数公式 -->
+	<select id="getRepCalFormulasByTab" parameterType="com.xzsoft.xc.rep.modal.RepSheetBean" resultMap="calFormulaMap">
+		select * from (
+			SELECT
+				<include refid="formulaSql"/>
+			FROM
+				xc_rep_formulas rf
+				left join xc_rep_pre_formulas pf on rf.FORMULA_ID = pf.FORMULA_ID
+			WHERE rf.ACC_HRCY_ID = #{accHrcyId}
+			  AND rf.LEDGER_ID = '-1'
+			  <include refid="formulaConditionSql" />
+			  AND NOT EXISTS (SELECT 1 FROM xc_rep_formulas xrf 
+									where rf.ACC_HRCY_ID = xrf.ACC_HRCY_ID
+			                          and rf.ROWITEM_ID = xrf.ROWITEM_ID
+			                          and rf.COLITEM_ID = xrf.COLITEM_ID
+			                          and xrf.LEDGER_ID = #{ledgerId})
+		   UNION
+			SELECT
+				<include refid="formulaSql"/>
+			FROM
+				xc_rep_formulas rf
+				left join xc_rep_pre_formulas pf on rf.FORMULA_ID = pf.FORMULA_ID
+			WHERE rf.ACC_HRCY_ID = #{accHrcyId}
+			  AND rf.LEDGER_ID = #{ledgerId}
+			  <include refid="formulaConditionSql" />
+		) tab	  
+	</select>
+	<!-- 按取数公式类别查询公式信息(公共级和账簿级) -->
+	<select id="getRepCalFormulasByLevel" parameterType="java.util.HashMap" resultMap="calFormulaMap">
+		<choose>
+			<when test="formulaLevel == 'common' ">
+				SELECT
+					<include refid="formulaSql"/>
+				FROM
+					xc_rep_formulas rf,
+					left join xc_rep_pre_formulas pf on rf.FORMULA_ID = pf.FORMULA_ID
+				WHERE rf.ACC_HRCY_ID = #{accHrcyId}
+				  AND rf.LEDGER_ID = '-1'
+				  AND rf.ACC_HRCY_ID = #{accHrcyId}
+				  <include refid="formulaConditionSql" />
+			</when>
+			<when test="formulaLevel == 'ledger' ">
+				SELECT
+					<include refid="formulaSql"/>
+				FROM
+					xc_rep_formulas rf,
+					left join xc_rep_pre_formulas pf on rf.FORMULA_ID = pf.FORMULA_ID
+				WHERE rf.ACC_HRCY_ID = #{accHrcyId}
+				  AND rf.LEDGER_ID = #{ledgerId}
+				  AND rf.ACC_HRCY_ID = #{accHrcyId}
+				  <include refid="formulaConditionSql" /> 
+			</when>
+		</choose>	
+	</select>
+	
+	<!-- 按模板查询公共级公式信息 -->
+	<select id="getCommonFormulasByTab" parameterType="java.util.HashMap" resultMap="calFormulaMap">
+		SELECT f.FORMULA_ID,
+		       f.ACC_HRCY_ID,
+		       f.ROWITEM_ID,
+		       f.COLITEM_ID,
+		       f.LEDGER_ID,
+		       f.FORMULA,
+		       f.FORMULA_DESC,
+		       f.FORMULA_TYPE,
+		       f.ORDERBY,
+		       f.FORMULA_LEVEL,
+		       rr.ROWITEM_CODE,
+	       	   rc.COLITEM_CODE,
+		       p.PRE_FORMULA_ID,
+		       p.FORMULA_CAT,
+		       p.CHK_F_EXP_CAT,
+		       p.FORMULA_STR,
+		       p.FORMULA_JSON,
+		       p.FORMULA_TYPE PRE_FORMULA_TYPE,
+		       p.ORDERBY
+		  FROM XC_REP_FORMULAS f 
+		  	left join XC_REP_PRE_FORMULAS p on f.FORMULA_ID = p.FORMULA_ID , 
+		  	   xc_rep_rowitems rr, xc_rep_colitems rc
+		WHERE f.rowitem_id = rr.rowitem_id
+		  and f.colitem_id = rc.colitem_id
+		  and exists (select 1 from xc_rep_rm_ref rm where f.rowitem_id = rm.rowitem_id and rm.tab_id in 
+		  	<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		  		#{item}
+		  	</foreach>
+		  )
+		  and exists (select 1 from xc_rep_cm_ref cm where f.colitem_id = cm.colitem_id and cm.tab_id in 
+		  	<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		  		#{item}
+		  	</foreach>
+		  )
+		  and rr.acc_hrcy_id = #{hrcyId}
+		  and rc.acc_hrcy_id = #{hrcyId}
+		  and f.acc_hrcy_id = #{hrcyId}
+		  and f.ledger_id = '-1'	
+	</select>
+	
+	<!-- 查询科目体系下所有的公共级公式 -->
+	<select id="getCommonFormulas4Map" parameterType="java.lang.String" resultMap="calFormulaMap">
+		SELECT f.FORMULA_ID,
+		       f.ACC_HRCY_ID,
+		       f.ROWITEM_ID,
+		       f.COLITEM_ID,
+		       f.LEDGER_ID,
+		       f.FORMULA,
+		       f.FORMULA_DESC,
+		       f.FORMULA_TYPE,
+		       f.ORDERBY,
+		       f.FORMULA_LEVEL,
+		       rr.ROWITEM_CODE,
+	       	   rc.COLITEM_CODE,
+		       p.PRE_FORMULA_ID,
+		       p.FORMULA_CAT,
+		       p.CHK_F_EXP_CAT,
+		       p.FORMULA_STR,
+		       p.FORMULA_JSON,
+		       p.FORMULA_TYPE PRE_FORMULA_TYPE,
+		       p.ORDERBY
+		FROM XC_REP_FORMULAS f
+           	left join XC_REP_PRE_FORMULAS p on f.FORMULA_ID = p.FORMULA_ID , 
+           	  xc_rep_rowitems rr, xc_rep_colitems rc
+		WHERE f.rowitem_id = rr.rowitem_id
+	      and f.colitem_id = rc.colitem_id
+	      and rr.acc_hrcy_id = #{hrcyId}
+	      and rc.acc_hrcy_id = #{hrcyId}
+	      and f.acc_hrcy_id = #{hrcyId}
+	      and f.ledger_id = '-1'  	
+	</select>
+	
+	<!-- 根据函数ID查询自定义函数信息  -->
+	<select id="getFunBeanById" parameterType="java.lang.String" resultMap="funcBeanMap">
+		SELECT
+			<include refid="funcItemSql"/>
+		FROM
+			xc_rep_func t
+		where t.FUNC_ID = #{funcId}	
+	</select>
+	<!-- 根据函数编码查询自定义函数信息 -->
+	<select id="getFunBeanByCode" parameterType="java.lang.String" resultMap="funcBeanMap">
+		SELECT
+			<include refid="funcItemSql"/>
+		FROM
+			xc_rep_func t
+		where t.FUNC_CODE = #{funCode}			
+	</select>
+	<!-- 根据函数ID查询自定义函数参数信息 -->
+	<select id="getFunParams" parameterType="java.lang.String" resultMap="funcParamsBeanMap">
+		SELECT
+			t.PARAM_ID,
+			t.FUNC_ID,
+			t.PARAM_CODE,
+			t.PARAM_NAME,
+			t.PARAM_DESC,
+			t.PARAM_ORDER,
+			t.PARAM_LOV,
+			t.ENABLED,
+			t.MANDATORY,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE
+		FROM
+			xc_rep_func_params t
+		where t.FUNC_ID = #{funcId}
+		order by t.PARAM_ORDER 
+	</select>
+	<!-- 查询所有自定义函数信息 -->
+	<select id="getAllFuncBean" resultMap="funcAndParamsResultMap">
+		SELECT
+			t.FUNC_ID,
+			t.FUNC_TYPE,
+			t.FUNC_CODE,
+			t.FUNC_NAME,
+			t.FUNC,
+			t.FUNC_DESC,
+			t.FUNC_CALTYPE,
+			t.ENABLED,
+			t.HTTPLINK,
+			t.CREATED_BY,
+			t.CREATION_DATE,
+			t.LAST_UPDATED_BY,
+			t.LAST_UPDATE_DATE,
+			p.PARAM_ID,
+			p.PARAM_CODE,
+			p.PARAM_NAME,
+			p.PARAM_DESC,
+			p.PARAM_ORDER,
+			p.PARAM_LOV,
+			p.ENABLED,
+			p.MANDATORY
+		FROM
+			xc_rep_func t,
+			xc_rep_func_params p
+		WHERE
+			t.FUNC_ID = p.FUNC_ID
+	</select>
+		
+</mapper>

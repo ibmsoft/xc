@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.SessionInitMapper">
+
+	<select id="getSuitByUserId" parameterType="String" resultType="java.util.HashMap">
+		 select t.SUIT_ID,rs.SUIT_CODE,rs.SUIT_NAME, rs.PERIOD_TYPE
+		  from xsr_rep_suit_pri t,xsr_rep_suit rs 
+		 where t.SUIT_ID=rs.SUIT_ID
+		   and t.TYPE = 'U' 
+		   and t.TARGET_ID = #{userId} 
+	</select>
+	
+	<select id="getSuitByRoleId" parameterType="String" resultType="java.util.HashMap">
+		select t.SUIT_ID,rs.SUIT_CODE,rs.SUIT_NAME, rs.PERIOD_TYPE
+		  from xsr_rep_suit_pri t,xsr_rep_suit rs 
+		 where t.SUIT_ID=rs.SUIT_ID
+		   and t.TYPE = 'R' 
+		   and t.TARGET_ID = #{roleId} 
+	</select>
+	
+	<select id="getDefauleDcBySuitId" parameterType="String" resultType="com.xzsoft.xsr.core.modal.DataCenter">
+		select d.DC_ID, d.DC_CODE, d.DC_NAME 
+		  from xsr_dc d, xsr_rep_suit_src t 
+		 where d.DC_ID = t.DC_ID 
+          and t.SUIT_ID = #{suitId} 
+		  and t.TYPE = 'S' 
+		  and t.ENTITY_ID = -1
+	</select>	
+	
+	<!-- added on 2015-12-14 -->
+	<select id="getPeriodInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select r.PERIOD_ID,r.PERIOD_CODE,r.PERIOD_NAME from xsr_rep_period r
+		 where r.SUIT_ID=#{suitId} 
+		   and r.PERIOD_CODE = #{periodCode}
+	</select>
+	<select id="getCurrencyInfo" parameterType="String" resultType="java.util.HashMap">
+		select r.CURRENCY_ID,r.CURRENCY_CODE,r.CURRENCY_NAME from xsr_rep_currency r 
+		 where r.SUIT_ID=#{suitId} 
+		   and r.ISDEFAULT='Y'
+	</select>
+	<select id="getEntityInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select r.TARGET_ID,rf.ORG_CODE,rf.ORG_NAME from xsr_rep_param_def r ,xip_pub_orgs rf 
+		 where r.TYPE='ORG' 
+		  and r.TARGET_ID=rf.ORG_ID 
+		  and r.SUIT_ID=#{suitId} 
+		  and r.USER_ID=#{userId}
+		  and r.ROLE_ID=#{roleId}
+	</select>
+	<select id="getModalTypeInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select r.TARGET_ID,rf.MODALTYPE_CODE,rf.MODALTYPE_NAME from xsr_rep_param_def r ,xsr_rep_modaltype rf 
+		 where r.TYPE=#{mType} 
+		  and r.TARGET_ID=rf.MODALTYPE_ID 
+		  and r.SUIT_ID=#{suitId}
+		  and r.USER_ID=#{userId} 
+		  and r.ROLE_ID=#{roleId} 
+	</select>
+</mapper>

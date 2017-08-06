@@ -1,0 +1,23 @@
+{
+  la_userTitle:"用户角色授权",
+  la_ledgerTitle:"账簿授权",
+  la_querySet:"查询条件",
+  la_ledgerName:"账簿",
+  la_userName:"用户名",
+  la_empName:"员工姓名",
+  la_roleName:"角色",
+  la_codeName:"用户/员工",
+  
+  queryBtn:"查询",
+  resetBtn:"重置",
+  authorizeBtn:"添加授权",
+  delBtn:"删除",
+  cancelAuthBtn:"取消授权",
+  cancelBtn:"取消",
+  editBtn:"修改",
+  saveBtn:"保存",
+  
+  rownum:"序号",
+  la_winTitle:"授权处理",
+  la_labelWidth:80
+}

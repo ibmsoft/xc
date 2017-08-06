@@ -1,0 +1,63 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetCustomMapper">
+
+	<resultMap id="sheetCustomMap" type="com.cubedrive.sheet.domain.sheet.SheetCustom">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<association property="user" column="user_id" select="com.cubedrive.base.persistence.account.UserMapper.getById" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		sheet_custom.id, sheet_custom.category, sheet_custom.content, sheet_custom.user_id
+	</sql>
+
+	<select id="getById" parameterType="java.lang.Integer" resultMap="sheetCustomMap">
+		select <include refid="base_column_list" />
+		 from sheet_custom 
+		where id = #{id}
+	</select>
+
+	<insert id="insert" parameterType="com.cubedrive.sheet.domain.sheet.SheetCustom">
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into 
+		       sheet_custom(user_id, category, content)
+		values(#{sheetCustom.user.id,jdbcType=INTEGER},
+		       #{sheetCustom.category,jdbcType=VARCHAR},
+		       #{sheetCustom.content,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="findByUserId" resultMap="sheetCustomMap">
+	   select <include refid="base_column_list" />
+	     from sheet_custom
+	    where user_id = #{userId} 
+	</select>
+	
+	<select id="findByNameAndUser" resultMap="sheetCustomMap">
+	   select <include refid="base_column_list" />
+	     from sheet_custom
+	    where user_id = #{sheetCustom.user.id} 
+	      and content = #{sheetCustom.content} limit 1
+	      
+	</select>
+	
+	<update id="update"
+		parameterType="com.cubedrive.sheet.domain.sheet.SheetCustom">
+		update sheet_custom
+		   set content = #{sheetCustom.content}
+		where id = #{sheetCustom.id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from sheet_custom where id=#{id}
+	</delete>
+	
+	<delete id="deleteByUserId">
+		delete from sheet_custom where user_id=#{userId}
+	</delete>
+
+
+</mapper>

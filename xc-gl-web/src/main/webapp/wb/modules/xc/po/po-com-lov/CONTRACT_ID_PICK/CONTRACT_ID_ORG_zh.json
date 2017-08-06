@@ -1,0 +1,8 @@
+{
+    CONTRACT_NAME : "合同",
+    DEPT_NAME_COL : "部门",
+    CONTRACT_CODE_COL : "合同编码",
+    CONTRACT_NAME_COL : "合同名称",
+    CONTRACT_CODE_NAME : "编码/名称",
+    EMPTY_ORG_INFO : "请先选择组织信息！"
+}

@@ -1,0 +1,7 @@
+{
+	accessDocument:'accessDocument',
+  	code:'code',
+ 	description:'description',
+  	amount:'amount',
+  	codeName:'code/name'
+}

@@ -1,0 +1,8 @@
+{
+    PROJECT_NAME : "Project",
+    DEPT_NAME_COL : "Dept Name",
+    PROJECT_CODE_COL : "Project Code",
+    PROJECT_NAME_COL : "Project Name",
+    PROJECT_CODE_NAME : "Project Code/Name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

@@ -1,0 +1,18 @@
+{
+	emptyText1:'请选择账簿进行查询',
+  	ledger:'账簿',
+  	dept:'成本中心',
+  	pro:'项目',
+  	bgYear:'预算年度',
+  	query:'查询',
+  	orderBy:'序号',
+  	ledgerId:'账簿ID',
+  	proId:'项目ID',
+ 	bgAmt:'预算金额',
+  	factAmt:'实际发生',
+  	factRate:'实际发生占比',
+  	occupyAmt:'预算占用',
+  	occupyRate:'预算占用比',
+  	remainAmt:'剩余金额',
+  	remainRate:'剩余占比',
+}

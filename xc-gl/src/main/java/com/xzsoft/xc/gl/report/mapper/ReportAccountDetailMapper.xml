@@ -1,0 +1,1169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.report.mapper.ReportAccountDetailMapper">	
+<!-- 现金流量报表，分现金流量统计表和现金流量明细统计表 -->
+    <select id="getCashFlowReportData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.CashFlowReport">
+    <choose>
+      <when test="dbType == 'mysql'.toString()">
+               SELECT  b.CA_CODE,
+                       case b.IS_LEAF when 'N' then CONCAT(b.CA_NAME,'(小计)') else b.CA_NAME  end as "CA_NAME",
+                       b.CA_DIRECTION,
+                       case b.CA_DIRECTION when '1' then '流入' else  '流出' end as "CA_DIRECTION_NAME",
+                       sum(a.CA_SUM) as "CA_SUM",
+                       sum(a.T_CA_SUM) as "T_CA_SUM"
+                FROM
+	               xc_gl_cash_sum a,
+	               xc_gl_cash_items b
+               where a.CA_ID = b.CA_ID
+                   and a.LEDGER_ID=#{LEDGER_ID,jdbcType=VARCHAR}
+                   <![CDATA[ and (case #{PERIOD_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else a.PERIOD_CODE >=#{PERIOD_CODE_START,jdbcType=VARCHAR} end) ]]>
+                   <![CDATA[ and (case #{PERIOD_CODE_END,jdbcType=VARCHAR} when '0' then 1=1 else a.PERIOD_CODE <=#{PERIOD_CODE_END,jdbcType=VARCHAR} end) ]]>
+                   <![CDATA[ and (case #{CA_CODE_START,jdbcType=VARCHAR} when '0' then 1=1 else b.CA_CODE >=#{CA_CODE_START,jdbcType=VARCHAR} end)]]>
+                   <![CDATA[ and (case #{CA_CODE_END,jdbcType=VARCHAR} when '0' then 1=1 else b.CA_CODE <= #{CA_CODE_END,jdbcType=VARCHAR} end)]]>
+                   group by b.CA_CODE,b.CA_DIRECTION,b.CA_NAME
+                   order by SUBSTR(b.CA_CODE,1,3) ASC,b.CA_CODE DESC
+              </when>
+      <otherwise>
+          select tmp.CA_CODE,
+               tmp.CA_NAME,
+               tmp.CA_DIRECTION,
+               tmp.CA_DIRECTION_NAME, 
+               sum(tmp.CA_SUM) as    "CA_SUM",
+               sum(T_CA_SUM)   as  "T_CA_SUM"
+               from(
+               SELECT  b.CA_CODE,
+                       case b.IS_LEAF when 'N' then b.CA_NAME||'(小计)' else b.CA_NAME end as "CA_NAME",
+                       b.CA_DIRECTION,
+                       case b.CA_DIRECTION when '1' then '流入' else  '流出' end as "CA_DIRECTION_NAME",
+                       a.CA_SUM  as    "CA_SUM",
+                       a.T_CA_SUM as  "T_CA_SUM"
+                FROM
+	               xc_gl_cash_sum a,
+	               xc_gl_cash_items b
+               where a.CA_ID = b.CA_ID
+                   and a.LEDGER_ID=#{LEDGER_ID,jdbcType=VARCHAR}
+                   <![CDATA[ and (case #{PERIOD_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else a.PERIOD_CODE >=#{PERIOD_CODE_START,jdbcType=VARCHAR} end) ]]>
+                   <![CDATA[ and (case #{PERIOD_CODE_END,jdbcType=VARCHAR} when '0' then 1=1 else a.PERIOD_CODE <=#{PERIOD_CODE_END,jdbcType=VARCHAR} end) ]]>
+                   <![CDATA[ and (case #{CA_CODE_START,jdbcType=VARCHAR} when '0' then 1=1 else b.CA_CODE >=#{CA_CODE_START,jdbcType=VARCHAR} end)]]>
+                   <![CDATA[ and (case #{CA_CODE_END,jdbcType=VARCHAR} when '0' then 1=1 else b.CA_CODE <= #{CA_CODE_END,jdbcType=VARCHAR} end)]]>
+                   ) tmp   group by tmp.CA_CODE,tmp.CA_NAME,tmp.CA_DIRECTION,tmp.CA_DIRECTION_NAME
+                     order by SUBSTR(tmp.CA_CODE,1,3) ASC,tmp.CA_CODE DESC
+      </otherwise>
+    </choose>
+    </select>	
+<!--现金流量明细统计表 -->
+    <select id="getCashFlowReportDetailData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.CashFlowReport">
+    <choose>
+      <when test="dbType == 'mysql'.toString()">
+               SELECT
+	            CONCAT(h.PERIOD_CODE,t.CA_ID) as "GROUP_FLAG",
+	            h.V_HEAD_ID,
+	            h.V_TEMPLATE_TYPE,
+	            h.LEDGER_ID,
+	            h.PERIOD_CODE,
+	            DATE_FORMAT(h.CREATION_DATE,'%Y-%m-%d') AS "CREATION_DATE",
+	            h.V_SERIAL_NUM,
+	            t.CA_CODE,
+	            t.CA_NAME,
+	            l.SUMMARY,
+	            t.CA_DIRECTION,
+	            case t.CA_DIRECTION when '1' then '流入' else '流出' end as "CA_DIRECTION_NAME",
+	            case when h.BOOKKEEPER_ID is null 
+	                 then 0.00 
+	                 else (case t.CA_DIRECTION when 1 then l.ACCOUNT_DR - l.ACCOUNT_CR else l.ACCOUNT_CR - l.ACCOUNT_DR end) end as "CA_SUM",
+	            case t.CA_DIRECTION when 1 
+	                                then l.ACCOUNT_DR - l.ACCOUNT_CR else l.ACCOUNT_CR - l.ACCOUNT_DR end as "T_CA_SUM"
+	        FROM
+	          xc_gl_v_heads h,
+	          xc_gl_v_lines l,
+	          xc_gl_ccid c,
+	          xc_gl_cash_items t
+	      where h.V_HEAD_ID = l.V_HEAD_ID
+	        and l.CCID = c.CCID
+	        and l.CA_ID = t.CA_ID
+	        and t.IS_LEAF = 'Y'
+	        and h.SUM_FLAG = 'Y'
+	        and h.LEDGER_ID=#{LEDGER_ID,jdbcType=VARCHAR}
+	        and t.CA_DIRECTION is not null
+	        <if test="includeAccount == 'N'.toString()">
+	        and  h.BOOKKEEPER_ID IS NOT NULL
+	        </if>
+	        and h.V_STATUS !='1'
+	         <![CDATA[ and (case #{PERIOD_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else h.PERIOD_CODE >= #{PERIOD_CODE_START,jdbcType=VARCHAR} end)]]>
+	        <![CDATA[ and (case #{PERIOD_CODE_END,jdbcType=VARCHAR}    when '0' then 1=1 else h.PERIOD_CODE <= #{PERIOD_CODE_END,jdbcType=VARCHAR} end)]]>
+	        <![CDATA[ and (case #{CA_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else t.CA_CODE >= #{CA_CODE_START,jdbcType=VARCHAR} end) ]]>
+	        <![CDATA[ and (case #{CA_CODE_END,jdbcType=VARCHAR}  when '0' then 1=1 else t.CA_CODE <= #{CA_CODE_END,jdbcType=VARCHAR} end) ]]>
+	        ORDER BY t.CA_CODE asc,h.PERIOD_CODE asc,h.CREATION_DATE asc,h.V_SERIAL_NUM asc
+              </when>
+      <otherwise>
+            SELECT
+	            h.PERIOD_CODE||t.CA_ID as "GROUP_FLAG",
+	            h.V_HEAD_ID,
+	            h.V_TEMPLATE_TYPE,
+	            h.LEDGER_ID,
+	            h.PERIOD_CODE,
+	            to_char(h.CREATION_DATE,'yyyy-mm-dd') AS "CREATION_DATE",
+	            h.V_SERIAL_NUM,
+	            t.CA_CODE,
+	            t.CA_NAME,
+	            l.SUMMARY,
+	            t.CA_DIRECTION,
+	            case t.CA_DIRECTION when '1' then '流入' else '流出' end as "CA_DIRECTION_NAME",
+	            case when h.BOOKKEEPER_ID is null 
+	                 then 0.00 
+	                 else (case t.CA_DIRECTION when 1 then l.ACCOUNT_DR - l.ACCOUNT_CR else l.ACCOUNT_CR - l.ACCOUNT_DR end) end as "CA_SUM",
+	            case t.CA_DIRECTION when 1 
+	                                then l.ACCOUNT_DR - l.ACCOUNT_CR else l.ACCOUNT_CR - l.ACCOUNT_DR end as "T_CA_SUM"
+	        FROM
+	          xc_gl_v_heads h,
+	          xc_gl_v_lines l,
+	          xc_gl_ccid c,
+	          xc_gl_cash_items t
+	      where h.V_HEAD_ID = l.V_HEAD_ID
+	        and l.CCID = c.CCID
+	        and l.CA_ID = t.CA_ID
+	        and t.IS_LEAF = 'Y'
+	        and h.SUM_FLAG = 'Y'
+	        and h.LEDGER_ID=#{LEDGER_ID,jdbcType=VARCHAR}
+	       <if test="includeAccount == 'N'.toString()">
+	        and  h.BOOKKEEPER_ID IS NOT NULL
+	        </if>
+	        and h.V_STATUS !='1'
+	        <![CDATA[ and (case #{PERIOD_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else h.PERIOD_CODE >= #{PERIOD_CODE_START,jdbcType=VARCHAR} end)]]>
+	        <![CDATA[ and (case #{PERIOD_CODE_END,jdbcType=VARCHAR}    when '0' then 1=1 else h.PERIOD_CODE <= #{PERIOD_CODE_END,jdbcType=VARCHAR} end)]]>
+	        <![CDATA[ and (case #{CA_CODE_START,jdbcType=VARCHAR}  when '0' then 1=1 else t.CA_CODE >= #{CA_CODE_START,jdbcType=VARCHAR} end) ]]>
+	        <![CDATA[ and (case #{CA_CODE_END,jdbcType=VARCHAR}  when '0' then 1=1 else t.CA_CODE <= #{CA_CODE_END,jdbcType=VARCHAR} end) ]]>
+	         ORDER BY t.CA_CODE asc,h.PERIOD_CODE asc,h.CREATION_DATE asc,h.V_SERIAL_NUM asc
+      </otherwise>
+    </choose>
+    </select>
+    <!-- 总账取数,按科目和会计期进行汇总,只查询末级科目-->
+    <select id="getAccountantData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.AccountStaticReport">
+      <choose>
+        <when test="dbType == 'mysql'.toString()">
+            select 
+                   acc.ACC_CODE,
+                   acc.ACC_NAME,
+                   bl.PERIOD_CODE,
+                   case acc.BALANCE_DIRECTION when '1' then '借' else '贷' end as "BALANCE_DIRECTION",
+                   case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_B_DR-bl.AMT_B_CR)  else sum(bl.AMT_B_CR-bl.AMT_B_DR) end as "QC_SL" ,                      
+                   case acc.BALANCE_DIRECTION 
+                     when '1' then  sum(ifnull((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00) - ifnull((SELECT t.B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00))
+                    else   sum(ifnull((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - ifnull((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00)) end as "QCYB_JE",                 
+                   case acc.BALANCE_DIRECTION when '1' then  sum(bl.B_DR-bl.B_CR) else sum(bl.B_CR - bl.B_DR) end as "QC_JE",                                 
+                   sum(bl.AMT_PTD_DR) as "BQJF_SL",                                                                                     
+            	  sum(IFNULL((SELECT t.PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "BQJF_YB",                                                     
+                sum(bl.PTD_DR) as "BQJF_JE",                                                                                         
+                sum(bl.AMT_PTD_CR) as  "BQDF_SL",                                                                                        
+                sum(IFNULL((SELECT T.PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "BQDF_YB",                                     
+                sum(bl.PTD_CR) as "BQDF_JE",                                                                                          
+                sum(bl.AMT_YTD_DR) AS "BNLJJF_SL",                                                                                    
+	            sum(IFNULL((SELECT T.YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "BNLJJF_YB",                                  
+	            sum(bl.YTD_DR) AS "BNLJJF_JE",   
+                sum(bl.AMT_YTD_CR) AS "BNLJDF_SL",                                                                                   
+	            sum(IFNULL( (SELECT T.YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "BNLJDF_YB",                                  
+	            sum(bl.YTD_CR) AS "BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION    when '1'  then sum(bl.AMT_PJTD_DR-bl.AMT_PJTD_CR) else sum(bl.AMT_PJTD_CR-bl.AMT_PJTD_DR) end as "QM_SL" ,                  
+                  case acc.BALANCE_DIRECTION  when '1'  then  sum(ifnull((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)-ifnull((SELECT t.PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00))
+                    else   sum(ifnull((SELECT t.PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)-ifnull((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) end as "QMYB_JE",        
+               case acc.BALANCE_DIRECTION when '1' then  sum(bl.PJTD_DR- bl.PJTD_CR) else sum(bl.PJTD_CR - bl.PJTD_DR) end as "QM_JE",                                  
+               case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_T_B_DR-bl.AMT_T_B_CR)  else sum(bl.AMT_T_B_CR-bl.AMT_T_B_DR) end as "T_QC_SL" ,                        
+               case acc.BALANCE_DIRECTION 
+                   when '1' then  sum(ifnull((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)-ifnull((SELECT t.T_B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00))
+                    else   sum(ifnull((SELECT t.T_B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)-ifnull((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) end as "T_QCYB_JE",      
+                case acc.BALANCE_DIRECTION when '1' then  sum(bl.T_B_DR-bl.T_B_CR) else sum(bl.T_B_CR-bl.T_B_DR) end as "T_QC_JE",                                 
+                sum(bl.AMT_T_PTD_DR) as "T_BQJF_SL",                                                                                      
+            	sum(IFNULL((SELECT t.T_PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "T_BQJF_YB",                                                   
+                sum(bl.T_PTD_DR) as "T_BQJF_JE",                                                    
+                sum(bl.AMT_T_PTD_CR) as "T_BQDF_SL",                      
+                sum(IFNULL((SELECT T.T_PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "T_BQDF_YB",         
+                sum(bl.T_PTD_CR) as "T_BQDF_JE",                                                   
+                sum(bl.AMT_T_YTD_DR) AS "T_BNLJJF_SL",
+	            sum(IFNULL( (SELECT T.T_YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "T_BNLJJF_YB", 
+	            sum(bl.T_YTD_DR) AS "T_BNLJJF_JE",   
+                sum(bl.AMT_T_YTD_CR) AS "T_BNLJDF_SL", 
+	            sum(IFNULL( (SELECT T.T_YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "T_BNLJDF_YB",                                
+	            sum(bl.T_YTD_CR) AS "T_BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_T_PJTD_DR-bl.AMT_T_PJTD_CR)  else sum(bl.AMT_T_PJTD_CR-bl.AMT_T_PJTD_DR) end as "T_QM_SL" ,  
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  sum(ifnull((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) - ifnull((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00))
+                    else   sum(ifnull((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - ifnull((SELECT t.T_PJTD_DR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)) end as "T_QMYB_JE",  
+               case acc.BALANCE_DIRECTION when '1' then  sum(bl.T_PJTD_DR - bl.T_PJTD_CR) else sum(bl.T_PJTD_CR - bl.T_PJTD_DR) end as "T_QM_JE"        
+          from    xc_gl_balance bl,
+                  xc_gl_ccid cc,
+	              xc_gl_accounts acc,
+                  xc_gl_ledgers le,
+                  xc_gl_ld_accounts ld
+           where bl.LEDGER_ID = cc.LEDGER_ID  
+           and   bl.CCID = cc.CCID 
+           and   cc.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = le.LEDGER_ID
+           and   bl.CURRENCY_CODE = le.CURRENCY_CODE
+           and   ld.LEDGER_ID = le.LEDGER_ID
+           and   ld.ACC_ID = cc.ACC_ID
+           and   bl.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+           <if test="isStandard == 'Y'.toString()">
+           and   bl.CURRENCY_CODE = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <if test="isStandard == 'N'.toString()">
+            and  ld.DEFAULT_CURRENCY = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <![CDATA[ and (case #{startPeriodCode,jdbcType=VARCHAR}  when '0'  then 1=1 else bl.PERIOD_CODE >=  #{startPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{endPeriodCode,jdbcType=VARCHAR}    when '0'  then 1=1 else bl.PERIOD_CODE <= #{endPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{accGroupId,jdbcType=VARCHAR}       when '-1' then 1=1 else acc.ACC_GROUP_ID = #{accGroupId,jdbcType=VARCHAR}  end)]]>
+           <![CDATA[ and (case #{accLevel,jdbcType=VARCHAR}         when '-1' then 1=1 else acc.ACC_LEVEL <= #{accLevel,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{startAccCode,jdbcType=VARCHAR}     when '0'  then 1=1 else STRCMP(acc.ACC_CODE,#{startAccCode,jdbcType=VARCHAR})  != -1 end)]]>
+           <![CDATA[ and (case #{endAccCode,jdbcType=VARCHAR}       when '0'  then 1=1 else STRCMP(acc.ACC_CODE, #{endAccCode,jdbcType=VARCHAR}) != 1 end)]]>
+           and not exists (select 1 from xc_gl_period t where t.PERIOD_CODE = bl.PERIOD_CODE and  t.IS_ENABLED = 'N' and t.IS_ADJ_PERIOD = 'Y')
+           group by acc.ACC_CODE,acc.ACC_NAME,bl.PERIOD_CODE
+           order by acc.ACC_CODE ASC,(SELECT t.START_DATE FROM xc_gl_period t WHERE t.PERIOD_CODE = bl.PERIOD_CODE) ASC
+        </when>
+        <otherwise>
+          select 
+                   acc.ACC_CODE,
+                   acc.ACC_NAME,
+                   bl.PERIOD_CODE,
+                   case acc.BALANCE_DIRECTION when '1' then '借' else '贷' end as "BALANCE_DIRECTION",
+                   case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_B_DR-bl.AMT_B_CR)  else sum(bl.AMT_B_CR-bl.AMT_B_DR) end as "QC_SL" ,                      
+                   case acc.BALANCE_DIRECTION 
+                     when '1' then  sum(nvl((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00) - nvl((SELECT t.B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00))
+                    else   sum(nvl((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - nvl((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        <![CDATA[ AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00)) end as "QCYB_JE",                 
+                   case acc.BALANCE_DIRECTION when '1' then  sum(bl.B_DR-bl.B_CR) else sum(bl.B_CR - bl.B_DR) end as "QC_JE",                                 
+                   sum(bl.AMT_PTD_DR) as "BQJF_SL",                                                                                     
+            	  sum(nvl((SELECT t.PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "BQJF_YB",                                                     
+                sum(bl.PTD_DR) as "BQJF_JE",                                                                                         
+                sum(bl.AMT_PTD_CR) as  "BQDF_SL",                                                                                        
+                sum(nvl((SELECT T.PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "BQDF_YB",                                     
+                sum(bl.PTD_CR) as "BQDF_JE",                                                                                          
+                sum(bl.AMT_YTD_DR) AS "BNLJJF_SL",                                                                                    
+	            sum(nvl((SELECT T.YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "BNLJJF_YB",                                  
+	            sum(bl.YTD_DR) AS "BNLJJF_JE",   
+                sum(bl.AMT_YTD_CR) AS "BNLJDF_SL",                                                                                   
+	            sum(nvl( (SELECT T.YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "BNLJDF_YB",                                  
+	            sum(bl.YTD_CR) AS "BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION    when '1'  then sum(bl.AMT_PJTD_DR-bl.AMT_PJTD_CR) else sum(bl.AMT_PJTD_CR-bl.AMT_PJTD_DR) end as "QM_SL" ,                  
+                  case acc.BALANCE_DIRECTION  when '1'  then  sum(nvl((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)-nvl((SELECT t.PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00))
+                    else   sum(nvl((SELECT t.PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)-nvl((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) end as "QMYB_JE",        
+               case acc.BALANCE_DIRECTION when '1' then  sum(bl.PJTD_DR- bl.PJTD_CR) else sum(bl.PJTD_CR - bl.PJTD_DR) end as "QM_JE",                                  
+               case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_T_B_DR-bl.AMT_T_B_CR)  else sum(bl.AMT_T_B_CR-bl.AMT_T_B_DR) end as "T_QC_SL" ,                        
+               case acc.BALANCE_DIRECTION 
+                   when '1' then  sum(nvl((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)-nvl((SELECT t.T_B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00))
+                    else   sum(nvl((SELECT t.T_B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)-nvl((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) end as "T_QCYB_JE",      
+                case acc.BALANCE_DIRECTION when '1' then  sum(bl.T_B_DR-bl.T_B_CR) else sum(bl.T_B_CR-bl.T_B_DR) end as "T_QC_JE",                                 
+                sum(bl.AMT_T_PTD_DR) as "T_BQJF_SL",                                                                                      
+            	sum(nvl((SELECT t.T_PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "T_BQJF_YB",                                                   
+                sum(bl.T_PTD_DR) as "T_BQJF_JE",                                                    
+                sum(bl.AMT_T_PTD_CR) as "T_BQDF_SL",                      
+                sum(nvl((SELECT T.T_PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)) AS "T_BQDF_YB",         
+                sum(bl.T_PTD_CR) as "T_BQDF_JE",                                                   
+                sum(bl.AMT_T_YTD_DR) AS "T_BNLJJF_SL",
+	            sum(nvl( (SELECT T.T_YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "T_BNLJJF_YB", 
+	            sum(bl.T_YTD_DR) AS "T_BNLJJF_JE",   
+                sum(bl.AMT_T_YTD_CR) AS "T_BNLJDF_SL", 
+	            sum(nvl( (SELECT T.T_YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)) AS "T_BNLJDF_YB",                                
+	            sum(bl.T_YTD_CR) AS "T_BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then sum(bl.AMT_T_PJTD_DR-bl.AMT_T_PJTD_CR)  else sum(bl.AMT_T_PJTD_CR-bl.AMT_T_PJTD_DR) end as "T_QM_SL" ,  
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  sum(nvl((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) - nvl((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00))
+                    else   sum(nvl((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - nvl((SELECT t.T_PJTD_DR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)) end as "T_QMYB_JE",  
+               case acc.BALANCE_DIRECTION when '1' then  sum(bl.T_PJTD_DR - bl.T_PJTD_CR) else sum(bl.T_PJTD_CR - bl.T_PJTD_DR) end as "T_QM_JE"        
+          from    xc_gl_balance bl,
+                  xc_gl_ccid cc,
+	              xc_gl_accounts acc,
+                  xc_gl_ledgers le,
+                  xc_gl_ld_accounts ld
+           where bl.LEDGER_ID = cc.LEDGER_ID  
+           and   bl.CCID = cc.CCID 
+           and   cc.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = le.LEDGER_ID
+           and   bl.CURRENCY_CODE = le.CURRENCY_CODE
+           and   ld.LEDGER_ID = le.LEDGER_ID
+           and   ld.ACC_ID = cc.ACC_ID
+           and   bl.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+           <if test="isStandard == 'Y'.toString()">
+           and   bl.CURRENCY_CODE = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <if test="isStandard == 'N'.toString()">
+           and   ld.DEFAULT_CURRENCY = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <![CDATA[ and (case #{startPeriodCode,jdbcType=VARCHAR}  when '0'  then 1=1 else bl.PERIOD_CODE >=  #{startPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{endPeriodCode,jdbcType=VARCHAR}    when '0'  then 1=1 else bl.PERIOD_CODE <= #{endPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{accGroupId,jdbcType=VARCHAR}       when '-1' then 1=1 else acc.ACC_GROUP_ID = #{accGroupId,jdbcType=VARCHAR}  end)]]>
+           <![CDATA[ and (case #{accLevel,jdbcType=VARCHAR}         when '-1' then 1=1 else acc.ACC_LEVEL <= #{accLevel,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{startAccCode,jdbcType=VARCHAR}     when '0'  then 1=1 else acc.ACC_CODE >=to_number(#{startAccCode,jdbcType=VARCHAR}) end]]>
+           <![CDATA[ and (case #{endAccCode,jdbcType=VARCHAR}       when '0'  then 1=1 else acc.ACC_CODE <=to_number(#{endAccCode,jdbcType=VARCHAR}) end]]>
+           and not exists (select 1 from xc_gl_period t where t.PERIOD_CODE = bl.PERIOD_CODE and  t.IS_ENABLED = 'N' and t.IS_ADJ_PERIOD = 'Y')
+           group by acc.ACC_CODE,acc.ACC_NAME,bl.PERIOD_CODE,acc.BALANCE_DIRECTION
+           order by acc.ACC_CODE ASC,(SELECT t.START_DATE FROM xc_gl_period t WHERE t.PERIOD_CODE = bl.PERIOD_CODE) ASC
+        </otherwise>
+      </choose>
+    </select>
+    <!-- 余额表取数 -->
+    <select id="getBalancesData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.AccountStaticReport">
+      <choose>
+       <when test="dbType =='mysql'.toString()">
+         select  '' AS CCID,
+        tmp.judgeDirection,
+        tmp.ACC_CODE,
+        tmp.ACC_NAME,
+        tmp.PERIOD_CODE,
+        tmp.CURRENCY_CODE,
+        tmp.BALANCE_DIRECTION,
+        SUM(tmp.QC_SL) AS QC_SL, 
+        SUM(tmp.QCYB_JE) AS QCYB_JE,
+        SUM(tmp.QC_JE) AS QC_JE,
+        SUM(tmp.BQJF_SL) AS BQJF_SL,
+        SUM(tmp.BQJF_YB) AS BQJF_YB,
+        SUM(tmp.BQJF_JE) AS BQJF_JE,
+        SUM(tmp.BQDF_SL) AS BQDF_SL,
+        SUM(tmp.BQDF_YB) AS BQDF_YB,
+        SUM(tmp.BQDF_JE) AS BQDF_JE,
+        SUM(tmp.BNLJJF_SL) AS BNLJJF_SL,
+        SUM(tmp.BNLJJF_JE) AS BNLJJF_JE,
+        SUM(tmp.BNLJJF_YB) AS BNLJJF_YB,
+        SUM(tmp.BNLJDF_SL) AS BNLJDF_SL,
+        SUM(tmp.BNLJDF_JE) AS BNLJDF_JE,
+        SUM(tmp.BNLJDF_YB) AS BNLJDF_YB,
+        SUM(tmp.QM_SL) AS QM_SL,
+        SUM(tmp.QMYB_JE) AS QMYB_JE,
+        SUM(tmp.QM_JE) AS QM_JE,
+        SUM(tmp.T_QC_SL) AS T_QC_SL, 
+        SUM(tmp.T_QCYB_JE) AS T_QCYB_JE,
+        SUM(tmp.T_QC_JE) AS T_QC_JE,
+        SUM(tmp.T_BQJF_SL) AS T_BQJF_SL,
+        SUM(tmp.T_BQJF_YB) AS T_BQJF_YB,
+        SUM(tmp.T_BQJF_JE) AS T_BQJF_JE,
+        SUM(tmp.T_BQDF_SL) AS T_BQDF_SL,
+        SUM(tmp.T_BQDF_YB) AS T_BQDF_YB,
+        SUM(tmp.T_BQDF_JE) AS T_BQDF_JE,
+        SUM(tmp.T_BNLJJF_SL) AS T_BNLJJF_SL,
+        SUM(tmp.T_BNLJJF_JE) AS T_BNLJJF_JE,
+        SUM(tmp.T_BNLJJF_YB) AS T_BNLJJF_YB,
+        SUM(tmp.T_BNLJDF_SL) AS T_BNLJDF_SL,
+        SUM(tmp.T_BNLJDF_JE) AS T_BNLJDF_JE,
+        SUM(tmp.T_BNLJDF_YB) AS T_BNLJDF_YB,
+        SUM(tmp.T_QM_SL) AS T_QM_SL,
+        SUM(tmp.T_QMYB_JE) AS T_QMYB_JE,
+        SUM(tmp.T_QM_JE) AS T_QM_JE
+          from (
+
+           select cc.CCID,
+                acc.ACC_CODE,
+                acc.ACC_NAME,
+                bl.PERIOD_CODE,
+                bl.CURRENCY_CODE,
+                acc.BALANCE_DIRECTION as judgeDirection,
+                case acc.BALANCE_DIRECTION when '1' then '借' else '贷' end as "BALANCE_DIRECTION",
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_B_DR-bl.AMT_B_CR  else bl.AMT_B_CR - bl.AMT_B_DR end as "QC_SL" ,                        
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  ifnull((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                                                    <![CDATA[  AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00) - ifnull((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)
+                    else   ifnull((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) -ifnull((SELECT t.B_DR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) end as "QCYB_JE",  
+                case acc.BALANCE_DIRECTION when '1' then  bl.B_DR - bl.B_CR else bl.B_CR - bl.B_DR end as "QC_JE",                              
+                bl.AMT_PTD_DR as "BQJF_SL",                                                                                     
+            	  IFNULL((SELECT t.PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "BQJF_YB",                                                         
+                bl.PTD_DR as "BQJF_JE",                                                                                       
+                bl.AMT_PTD_CR "BQDF_SL",                                                                                        
+                IFNULL((SELECT T.PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "BQDF_YB",                                    
+                bl.PTD_CR as "BQDF_JE",                                                                                        
+                bl.AMT_YTD_DR AS "BNLJJF_SL",                                                                                  
+	              IFNULL( (SELECT T.YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "BNLJJF_YB",                                
+	              bl.YTD_DR AS "BNLJJF_JE",   
+                bl.AMT_YTD_CR AS "BNLJDF_SL",                                                                                    
+	              IFNULL( (SELECT T.YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "BNLJDF_YB",                                  
+	              bl.YTD_CR AS "BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_PJTD_DR -bl.AMT_PJTD_CR  else bl.AMT_PJTD_CR -bl.AMT_PJTD_DR end as "QM_SL" ,                                                                                                                           
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  ifnull((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) -ifnull((SELECT t.PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   ifnull((SELECT t.PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) -ifnull((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "QMYB_JE",      
+               case acc.BALANCE_DIRECTION when '1' then  bl.PJTD_DR- bl.PJTD_CR else bl.PJTD_CR- bl.PJTD_DR end as "QM_JE",                                 
+              
+               case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_T_B_DR-bl.AMT_T_B_CR  else bl.AMT_T_B_CR-bl.AMT_T_B_DR end as "T_QC_SL" ,                       
+               case acc.BALANCE_DIRECTION 
+                   when '1' then  ifnull((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) - ifnull((SELECT t.T_B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   ifnull((SELECT t.T_B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - ifnull((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "T_QCYB_JE",     
+                case acc.BALANCE_DIRECTION when '1' then  bl.T_B_DR-bl.T_B_CR else bl.T_B_CR-bl.T_B_DR end as "T_QC_JE",                               
+                bl.AMT_T_PTD_DR as "T_BQJF_SL",                                                                                       
+            	  IFNULL((SELECT t.T_PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "T_BQJF_YB",                                                           
+                bl.T_PTD_DR as "T_BQJF_JE",                                                                                         
+                bl.AMT_T_PTD_CR "T_BQDF_SL",                                                                                      
+                IFNULL((SELECT T.T_PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "T_BQDF_YB",                                     
+                bl.T_PTD_CR as "T_BQDF_JE",                                                                                          
+                bl.AMT_T_YTD_DR AS "T_BNLJJF_SL",                                                                                  
+	              IFNULL( (SELECT T.T_YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "T_BNLJJF_YB",                                  
+	              bl.T_YTD_DR AS "T_BNLJJF_JE",   
+                bl.AMT_T_YTD_CR AS "T_BNLJDF_SL",                                                                                   
+	              IFNULL( (SELECT T.T_YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "T_BNLJDF_YB",                                  
+	              bl.T_YTD_CR AS "T_BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_T_PJTD_DR -bl.AMT_T_PJTD_CR else bl.AMT_T_PJTD_CR-bl.AMT_T_PJTD_DR end as "T_QM_SL" ,                                                                                                                           
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  ifnull((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) -ifnull((SELECT t.T_PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   ifnull((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - ifnull((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "T_QMYB_JE",      
+               case acc.BALANCE_DIRECTION when '1' then  bl.T_PJTD_DR-bl.T_PJTD_CR else bl.T_PJTD_CR - bl.T_PJTD_DR end as "T_QM_JE"                                        
+          from  xc_gl_balance bl,
+                xc_gl_ccid cc,
+	            xc_gl_accounts acc,
+                xc_gl_ledgers le,
+                xc_gl_ld_accounts ld
+           where bl.LEDGER_ID = cc.LEDGER_ID  
+           and   bl.CCID = cc.CCID 
+           and   cc.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = le.LEDGER_ID
+           and   bl.CURRENCY_CODE = le.CURRENCY_CODE
+           and   le.LEDGER_ID = ld.LEDGER_ID
+           and   ld.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+           <if test="isStandard == 'N'.toString()">
+              and ld.DEFAULT_CURRENCY = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <![CDATA[ and (case #{startPeriodCode,jdbcType=VARCHAR} when '0'  then 1=1  else bl.PERIOD_CODE >=  #{startPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{endPeriodCode,jdbcType=VARCHAR}   when '0'  then 1=1  else bl.PERIOD_CODE <= #{endPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{accGroupId,jdbcType=VARCHAR}      when '-1' then 1=1  else acc.ACC_GROUP_ID = #{accGroupId,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{summaryLevel,jdbcType=VARCHAR}    when '-1' then 1=1  else acc.ACC_LEVEL <= #{summaryLevel,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{startAccCode,jdbcType=VARCHAR}    when '0'  then 1=1  else STRCMP(acc.ACC_CODE,#{startAccCode,jdbcType=VARCHAR})  != -1 end)]]>
+           <![CDATA[ and (case #{endAccCode,jdbcType=VARCHAR}      when '0'  then 1=1  else STRCMP(acc.ACC_CODE,#{endAccCode,jdbcType=VARCHAR}) != 1 end)]]>
+           order by acc.ACC_CODE ASC,(select pe.START_DATE from xc_gl_period pe where pe.PERIOD_CODE = bl.PERIOD_CODE) asc
+) tmp  GROUP BY tmp.ACC_CODE,
+                tmp.ACC_NAME,
+                tmp.PERIOD_CODE,
+                tmp.CURRENCY_CODE,
+                tmp.BALANCE_DIRECTION,
+                tmp.judgeDirection
+         </when>
+         <otherwise>
+         select  '' AS CCID,
+        tmp.judgeDirection,
+        tmp.ACC_CODE,
+        tmp.ACC_NAME,
+        tmp.PERIOD_CODE,
+        tmp.CURRENCY_CODE,
+        tmp.BALANCE_DIRECTION,
+        SUM(tmp.QC_SL) AS QC_SL, 
+        SUM(tmp.QCYB_JE) AS QCYB_JE,
+        SUM(tmp.QC_JE) AS QC_JE,
+        SUM(tmp.BQJF_SL) AS BQJF_SL,
+        SUM(tmp.BQJF_YB) AS BQJF_YB,
+        SUM(tmp.BQJF_JE) AS BQJF_JE,
+        SUM(tmp.BQDF_SL) AS BQDF_SL,
+        SUM(tmp.BQDF_YB) AS BQDF_YB,
+        SUM(tmp.BQDF_JE) AS BQDF_JE,
+        SUM(tmp.BNLJJF_SL) AS BNLJJF_SL,
+        SUM(tmp.BNLJJF_JE) AS BNLJJF_JE,
+        SUM(tmp.BNLJJF_YB) AS BNLJJF_YB,
+        SUM(tmp.BNLJDF_SL) AS BNLJDF_SL,
+        SUM(tmp.BNLJDF_JE) AS BNLJDF_JE,
+        SUM(tmp.BNLJDF_YB) AS BNLJDF_YB,
+        SUM(tmp.QM_SL) AS QM_SL,
+        SUM(tmp.QMYB_JE) AS QMYB_JE,
+        SUM(tmp.QM_JE) AS QM_JE,
+        SUM(tmp.T_QC_SL) AS T_QC_SL, 
+        SUM(tmp.T_QCYB_JE) AS T_QCYB_JE,
+        SUM(tmp.T_QC_JE) AS T_QC_JE,
+        SUM(tmp.T_BQJF_SL) AS T_BQJF_SL,
+        SUM(tmp.T_BQJF_YB) AS T_BQJF_YB,
+        SUM(tmp.T_BQJF_JE) AS T_BQJF_JE,
+        SUM(tmp.T_BQDF_SL) AS T_BQDF_SL,
+        SUM(tmp.T_BQDF_YB) AS T_BQDF_YB,
+        SUM(tmp.T_BQDF_JE) AS T_BQDF_JE,
+        SUM(tmp.T_BNLJJF_SL) AS T_BNLJJF_SL,
+        SUM(tmp.T_BNLJJF_JE) AS T_BNLJJF_JE,
+        SUM(tmp.T_BNLJJF_YB) AS T_BNLJJF_YB,
+        SUM(tmp.T_BNLJDF_SL) AS T_BNLJDF_SL,
+        SUM(tmp.T_BNLJDF_JE) AS T_BNLJDF_JE,
+        SUM(tmp.T_BNLJDF_YB) AS T_BNLJDF_YB,
+        SUM(tmp.T_QM_SL) AS T_QM_SL,
+        SUM(tmp.T_QMYB_JE) AS T_QMYB_JE,
+        SUM(tmp.T_QM_JE) AS T_QM_JE
+          from (
+          select cc.CCID,
+                acc.ACC_CODE,
+                acc.ACC_NAME,
+                bl.PERIOD_CODE,
+                bl.CURRENCY_CODE,
+                acc.BALANCE_DIRECTION as judgeDirection,
+                case acc.BALANCE_DIRECTION when '1' then '借' else '贷' end as "BALANCE_DIRECTION",
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_B_DR-bl.AMT_B_CR  else bl.AMT_B_CR - bl.AMT_B_DR end as "QC_SL" ,                        
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  nvl((SELECT t.B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                                                    <![CDATA[  AND t.CURRENCY_CODE <> bl.CURRENCY_CODE]]>),0.00) - nvl((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                    AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00)
+                    else   nvl((SELECT t.B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) -nvl((SELECT t.B_DR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) end as "QCYB_JE",  
+                case acc.BALANCE_DIRECTION when '1' then  bl.B_DR - bl.B_CR else bl.B_CR - bl.B_DR end as "QC_JE",                              
+                bl.AMT_PTD_DR as "BQJF_SL",                                                                                     
+            	  nvl((SELECT t.PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "BQJF_YB",                                                         
+                bl.PTD_DR as "BQJF_JE",                                                                                       
+                bl.AMT_PTD_CR "BQDF_SL",                                                                                        
+                nvl((SELECT T.PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "BQDF_YB",                                    
+                bl.PTD_CR as "BQDF_JE",                                                                                        
+                bl.AMT_YTD_DR AS "BNLJJF_SL",                                                                                  
+	              nvl( (SELECT T.YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "BNLJJF_YB",                                
+	              bl.YTD_DR AS "BNLJJF_JE",   
+                bl.AMT_YTD_CR AS "BNLJDF_SL",                                                                                    
+	              nvl( (SELECT T.YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "BNLJDF_YB",                                  
+	              bl.YTD_CR AS "BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_PJTD_DR -bl.AMT_PJTD_CR  else bl.AMT_PJTD_CR -bl.AMT_PJTD_DR end as "QM_SL" ,                                                                                                                           
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  nvl((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) -nvl((SELECT t.PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   nvl((SELECT t.PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) -nvl((SELECT t.PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "QMYB_JE",      
+               case acc.BALANCE_DIRECTION when '1' then  bl.PJTD_DR- bl.PJTD_CR else bl.PJTD_CR- bl.PJTD_DR end as "QM_JE",                                 
+              
+               case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_T_B_DR-bl.AMT_T_B_CR  else bl.AMT_T_B_CR-bl.AMT_T_B_DR end as "T_QC_SL" ,                       
+               case acc.BALANCE_DIRECTION 
+                   when '1' then  nvl((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) - nvl((SELECT t.T_B_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   nvl((SELECT t.T_B_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - nvl((SELECT t.T_B_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "T_QCYB_JE",     
+                case acc.BALANCE_DIRECTION when '1' then  bl.T_B_DR-bl.T_B_CR else bl.T_B_CR-bl.T_B_DR end as "T_QC_JE",                               
+                bl.AMT_T_PTD_DR as "T_BQJF_SL",                                                                                       
+            	  nvl((SELECT t.T_PTD_DR FROM xc_gl_balance t             
+                             WHERE t.LEDGER_ID = bl.LEDGER_ID
+	                           AND t.CCID = bl.CCID
+	                           AND t.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "T_BQJF_YB",                                                           
+                bl.T_PTD_DR as "T_BQJF_JE",                                                                                         
+                bl.AMT_T_PTD_CR "T_BQDF_SL",                                                                                      
+                nvl((SELECT T.T_PTD_CR  FROM xc_gl_balance T
+	                           WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID = bl.CCID
+	                           AND T.PERIOD_CODE = bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)AS "T_BQDF_YB",                                     
+                bl.T_PTD_CR as "T_BQDF_JE",                                                                                          
+                bl.AMT_T_YTD_DR AS "T_BNLJJF_SL",                                                                                  
+	              nvl( (SELECT T.T_YTD_DR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "T_BNLJJF_YB",                                  
+	              bl.T_YTD_DR AS "T_BNLJJF_JE",   
+                bl.AMT_T_YTD_CR AS "T_BNLJDF_SL",                                                                                   
+	              nvl( (SELECT T.T_YTD_CR FROM xc_gl_balance T 
+                             WHERE T.LEDGER_ID = bl.LEDGER_ID
+	                           AND T.CCID =  bl.CCID
+	                           AND T.PERIOD_CODE =  bl.PERIOD_CODE
+	                           AND T.CURRENCY_CODE !=  bl.CURRENCY_CODE),0.00)AS "T_BNLJDF_YB",                                  
+	              bl.T_YTD_CR AS "T_BNLJDF_JE",   
+                case acc.BALANCE_DIRECTION  when '1'  then bl.AMT_T_PJTD_DR -bl.AMT_T_PJTD_CR else bl.AMT_T_PJTD_CR-bl.AMT_T_PJTD_DR end as "T_QM_SL" ,
+                case acc.BALANCE_DIRECTION 
+                   when '1' then  nvl((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) -nvl((SELECT t.T_PJTD_CR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00)
+                    else   nvl((SELECT t.T_PJTD_CR   FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE ),0.00) - nvl((SELECT t.T_PJTD_DR FROM xc_gl_balance t
+                                                        WHERE t.LEDGER_ID = bl.LEDGER_ID 
+                                                        AND t.CCID = bl.CCID
+	                                                      AND t.PERIOD_CODE = bl.PERIOD_CODE
+                                                        AND t.CURRENCY_CODE != bl.CURRENCY_CODE),0.00) end as "T_QMYB_JE",      
+               case acc.BALANCE_DIRECTION when '1' then  bl.T_PJTD_DR-bl.T_PJTD_CR else bl.T_PJTD_CR - bl.T_PJTD_DR end as "T_QM_JE"                                        
+          from  xc_gl_balance bl,
+                xc_gl_ccid cc,
+	            xc_gl_accounts acc,
+                xc_gl_ledgers le,
+                xc_gl_ld_accounts ld
+           where bl.LEDGER_ID = cc.LEDGER_ID  
+           and   bl.CCID = cc.CCID 
+           and   cc.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = le.LEDGER_ID
+           and   bl.CURRENCY_CODE = le.CURRENCY_CODE
+           and   le.LEDGER_ID = ld.LEDGER_ID
+           and   ld.ACC_ID = acc.ACC_ID
+           and   bl.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+           <if test="isStandard == 'N'.toString()">
+              and ld.DEFAULT_CURRENCY = #{currencyCode,jdbcType=VARCHAR} 
+           </if>
+           <![CDATA[ and (case #{startPeriodCode,jdbcType=VARCHAR} when '0'  then 1=1  else bl.PERIOD_CODE >=  #{startPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{endPeriodCode,jdbcType=VARCHAR}   when '0'  then 1=1  else bl.PERIOD_CODE <= #{endPeriodCode,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{accGroupId,jdbcType=VARCHAR}      when '-1' then 1=1  else acc.ACC_GROUP_ID = #{accGroupId,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{summaryLevel,jdbcType=VARCHAR}    when '-1' then 1=1  else acc.ACC_LEVEL <= #{summaryLevel,jdbcType=VARCHAR} end)]]>
+           <![CDATA[ and (case #{startAccCode,jdbcType=VARCHAR}    when '0'  then 1=1  else acc.ACC_CODE >=to_number(#{startAccCode,jdbcType=VARCHAR}) end)]]>
+           <![CDATA[ and (case #{endAccCode,jdbcType=VARCHAR}      when '0'  then 1=1  else acc.ACC_CODE <=to_number(#{endAccCode,jdbcType=VARCHAR}) end)]]>
+           order by acc.ACC_CODE ASC,(select pe.START_DATE from xc_gl_period pe where pe.PERIOD_CODE = bl.PERIOD_CODE) asc
+) tmp  GROUP BY tmp.ACC_CODE,
+                tmp.ACC_NAME,
+                tmp.PERIOD_CODE,
+                tmp.CURRENCY_CODE,
+                tmp.BALANCE_DIRECTION,
+                tmp.judgeDirection
+         </otherwise>
+         </choose>
+    </select>    
+<!-- 记账凭证 -->
+    <select id="getVDataReport" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.VDataReport">
+      <choose>
+        <when test="dbType == 'mysql'.toString()">
+	        SELECT   
+	     		h.V_HEAD_ID,
+	     		v.V_CATEGORY_NAME,
+	   			(SELECT t.LEDGER_NAME FROM xc_gl_ledgers t WHERE t.LEDGER_ID = h.LEDGER_ID) AS "LEDGER_NAME",
+	   			(select p.ORG_NAME from xip_pub_orgs p where p.ORG_ID=(select m.ORG_ID from xc_gl_ledgers m where m.LEDGER_ID = h.LEDGER_ID)) as "ORG_NAME",
+	   			h.V_ATTCH_TOTAL,
+	   			h.V_SERIAL_NUM,
+	   			h.CREATION_DATE,
+	   			l.SUMMARY,
+	   			CONCAT(c.CCID_NAME,'/',cu.CURRENCY_NAME) as FOREIGN_NAME,
+	   			IF(di.DIM_NAME IS NULL,c.CCID_NAME, CONCAT(c.CCID_NAME,'/',di.DIM_NAME,'')) as DIMENSION_NAME,
+	   		    c.CCID_NAME,
+	   			(select p.BALANCE_DIRECTION from xc_gl_accounts p where p.ACC_ID = a.ACC_ID) as "BALANCE_DIRECTION",
+	   			l.ACCOUNT_DR as "T_ACCOUNT_DR",
+	   			l.ACCOUNT_CR as "T_ACCOUNT_CR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_DR else 0.00 end as "ACCOUNT_DR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_CR else 0.00 end as "ACCOUNT_CR",
+	   			h.CREATED_NAME,
+	   			h.VERIFIER,
+	   			h.SIGNATORY,
+	   			h.BOOKKEEPER,
+	   			l.AMOUNT as "T_AMOUNT",
+          case when h.BOOKKEEPER_ID is not null then l.AMOUNT else 0.00 end as "AMOUNT",
+	   			l.ENTER_DR as "T_ENTER_DR",
+	   			l.ENTER_CR as "T_ENTER_CR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_DR else 0.00 end as "ENTER_DR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_CR else 0.00 end as "ENTER_CR",
+                l.EXCHANGE_RATE
+			FROM xc_gl_v_heads h,
+			     xc_gl_v_category v,
+	      		 xc_gl_ccid c,
+	      		 xc_gl_ld_accounts a,
+	      		 xc_gl_currencies cu,
+	      		 xc_gl_v_lines l LEFT JOIN xc_gl_dimensions  di on l.DIM_ID = di.DIM_ID
+			WHERE h.V_HEAD_ID = l.V_HEAD_ID
+			  AND h.V_CATEGORY_ID = v.V_CATEGORY_ID 
+	  		  AND l.CCID = c.CCID
+	          AND h.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	  		  <![CDATA[ AND (CASE #{startPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE>=#{startPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{endPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE<=#{endPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{headerIds,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_HEAD_ID IN (#{headerIds,jdbcType=VARCHAR}) END)]]>
+	  		  <![CDATA[ AND (CASE #{headerCatogery,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_CATEGORY_ID = #{headerCatogery,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{accCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE c.ACC_CODE LIKE #{accCode,jdbcType=VARCHAR} END)  ]]>
+	  		  <![CDATA[ AND ((CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR>=#{startAmount,jdbcType=VARCHAR} END) OR (CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR>=#{startAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND ((CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR<=#{endAmount,jdbcType=VARCHAR} END) OR (CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR<=#{endAmount,jdbcType=VARCHAR} END))]]>
+	  		  AND (CASE #{headerStatus,jdbcType=VARCHAR} WHEN '0' THEN h.V_STATUS ='2' ELSE h.V_STATUS = #{headerStatus,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerMaker,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.CREATED_NAME LIKE #{headerMaker,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerSummary,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.SUMMARY LIKE #{headerSummary,jdbcType=VARCHAR} END)
+	  		  AND a.LEDGER_ID = h.LEDGER_ID
+	  		  AND a.ACC_ID = c.ACC_ID
+	  		  AND a.DEFAULT_CURRENCY = cu.CURRENCY_CODE
+        </when>
+        <otherwise>
+        	SELECT   
+	     		h.V_HEAD_ID,
+	     		v.V_CATEGORY_NAME,
+	   			(SELECT t.LEDGER_NAME FROM xc_gl_ledgers t WHERE t.LEDGER_ID = h.LEDGER_ID) AS "LEDGER_NAME",
+	   			(select p.ORG_NAME from xip_pub_orgs p where p.ORG_ID=(select m.ORG_ID from xc_gl_ledgers m where m.LEDGER_ID = h.LEDGER_ID)) as "ORG_NAME",
+	   			h.V_ATTCH_TOTAL,
+	   			h.V_SERIAL_NUM,
+	   			h.CREATION_DATE,
+	   			l.SUMMARY,
+	   			c.CCID_NAME||'/'||cu.CURRENCY_NAME as FOREIGN_NAME,
+	   			decode(nvl(di.DIM_NAME,''),'',c.CCID_NAME,c.CCID_NAME||'/'||di.DIM_NAME) as DIMENSION_NAME,
+	   			c.CCID_NAME,
+	   			(select p.BALANCE_DIRECTION from xc_gl_accounts p where p.ACC_ID = a.ACC_ID) as "BALANCE_DIRECTION",
+	   			l.ACCOUNT_DR as "T_ACCOUNT_DR",
+	   			l.ACCOUNT_CR as "T_ACCOUNT_CR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_DR else 0.00 end as "ACCOUNT_DR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_CR else 0.00 end as "ACCOUNT_CR",
+	   			h.CREATED_NAME,
+	   			h.VERIFIER,
+	   			h.SIGNATORY,
+	   			h.BOOKKEEPER,
+	   			l.AMOUNT as "T_AMOUNT",
+          case when h.BOOKKEEPER_ID is not null then l.AMOUNT else 0.00 end as "AMOUNT",
+	   			l.ENTER_DR as "T_ENTER_DR",
+	   			l.ENTER_CR as "T_ENTER_CR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_DR else 0.00 end as "ENTER_DR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_CR else 0.00 end as "ENTER_CR",
+                 l.EXCHANGE_RATE
+			FROM xc_gl_v_heads h,
+			     xc_gl_v_category v,
+	      		 xc_gl_ccid c,
+	      		 xc_gl_ld_accounts a,
+	      		 xc_gl_currencies cu,
+	      		 xc_gl_v_lines l LEFT JOIN xc_gl_dimensions  di on l.DIM_ID = di.DIM_ID
+			WHERE h.V_HEAD_ID = l.V_HEAD_ID
+			  AND h.V_CATEGORY_ID = v.V_CATEGORY_ID 
+	  		  AND l.CCID = c.CCID
+	          AND h.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	  		  <![CDATA[ AND (CASE #{startPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE>=#{startPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{endPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE<=#{endPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{headerlds,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_HEAD_ID IN (#{headerlds,jdbcType=VARCHAR}) END)]]>
+	  		  <![CDATA[ AND (CASE #{headerCatogery,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_CATEGORY_ID = #{headerCatogery,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{accCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE c.ACC_CODE LIKE #{accCode,jdbcType=VARCHAR} END)  ]]>
+	  		  <![CDATA[ AND ((CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR>=#{startAmount,jdbcType=VARCHAR} END) OR (CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR>=#{startAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND ((CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR<=#{endAmount,jdbcType=VARCHAR} END) OR (CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR<=#{endAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND (CASE #{headerStatus,jdbcType=VARCHAR} WHEN '0' THEN h.V_STATUS ='2' ELSE h.V_STATUS = #{headerStatus,jdbcType=VARCHAR} END)]]>
+	  		  AND (CASE #{headerMaker,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.CREATED_NAME LIKE #{headerMaker,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerSummary,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.SUMMARY LIKE #{headerSummary,jdbcType=VARCHAR} END)
+	  		  AND a.LEDGER_ID = h.LEDGER_ID
+	  		  AND a.ACC_ID = c.ACC_ID
+	  		  AND a.DEFAULT_CURRENCY = cu.CURRENCY_CODE
+        </otherwise>
+      </choose>
+    </select>
+    <!-- 批量记账凭证 -->
+    <select id="getBatchVData" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.report.modal.VDataReport">
+      <choose>
+        <when test="dbType == 'mysql'.toString()">
+	        SELECT   
+	     		h.V_HEAD_ID,
+	     		v.V_CATEGORY_NAME,
+	   			(SELECT t.LEDGER_NAME FROM xc_gl_ledgers t WHERE t.LEDGER_ID = h.LEDGER_ID) AS "LEDGER_NAME",
+	   			(select p.ORG_NAME from xip_pub_orgs p where p.ORG_ID=(select m.ORG_ID from xc_gl_ledgers m where m.LEDGER_ID = h.LEDGER_ID)) as "ORG_NAME",
+	   			h.V_ATTCH_TOTAL,
+	   			h.V_SERIAL_NUM,
+	   			h.CREATION_DATE,
+	   			l.SUMMARY,
+	   			CONCAT(c.CCID_NAME,'/',cu.CURRENCY_NAME) as FOREIGN_NAME,
+	   			IF(di.DIM_NAME IS NULL,c.CCID_NAME, CONCAT(c.CCID_NAME,'/',di.DIM_NAME,'')) as DIMENSION_NAME,
+	   		    c.CCID_NAME,
+	   			(select p.BALANCE_DIRECTION from xc_gl_accounts p where p.ACC_ID = a.ACC_ID) as "BALANCE_DIRECTION",
+	   			l.ACCOUNT_DR as "T_ACCOUNT_DR",
+	   			l.ACCOUNT_CR as "T_ACCOUNT_CR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_DR else 0.00 end as "ACCOUNT_DR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_CR else 0.00 end as "ACCOUNT_CR",
+	   			h.CREATED_NAME,
+	   			h.VERIFIER,
+	   			h.SIGNATORY,
+	   			h.BOOKKEEPER,
+	   			l.AMOUNT as "T_AMOUNT",
+          case when h.BOOKKEEPER_ID is not null then l.AMOUNT else 0.00 end as "AMOUNT",
+	   			l.ENTER_DR as "T_ENTER_DR",
+	   			l.ENTER_CR as "T_ENTER_CR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_DR else 0.00 end as "ENTER_DR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_CR else 0.00 end as "ENTER_CR",
+                l.EXCHANGE_RATE
+			FROM xc_gl_v_heads h,
+			     xc_gl_v_category v,
+	      		 xc_gl_ccid c,
+	      		 xc_gl_ld_accounts a,
+	      		 xc_gl_currencies cu,
+	      		 xc_gl_v_lines l LEFT JOIN xc_gl_dimensions  di on l.DIM_ID = di.DIM_ID
+			WHERE h.V_HEAD_ID = l.V_HEAD_ID
+			  AND h.V_CATEGORY_ID = v.V_CATEGORY_ID 
+	  		  AND l.CCID = c.CCID
+	          AND h.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	  		  <![CDATA[ AND (CASE #{startPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE>=#{startPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{endPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE<=#{endPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{headerIds,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_HEAD_ID IN (${headerIds}) END)]]>
+	  		  <![CDATA[ AND (CASE #{headerCatogery,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_CATEGORY_ID = #{headerCatogery,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{accCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE c.ACC_CODE LIKE #{accCode,jdbcType=VARCHAR} END)  ]]>
+	  		  <![CDATA[ AND ((CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR>=#{startAmount,jdbcType=VARCHAR} END) OR (CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR>=#{startAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND ((CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR<=#{endAmount,jdbcType=VARCHAR} END) OR (CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR<=#{endAmount,jdbcType=VARCHAR} END))]]>
+	  		  AND (CASE #{headerStatus,jdbcType=VARCHAR} WHEN '0' THEN h.V_STATUS ='2' ELSE h.V_STATUS = #{headerStatus,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerMaker,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.CREATED_NAME LIKE #{headerMaker,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerSummary,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.SUMMARY LIKE #{headerSummary,jdbcType=VARCHAR} END)
+	  		  AND a.LEDGER_ID = h.LEDGER_ID
+	  		  AND a.ACC_ID = c.ACC_ID
+	  		  AND a.DEFAULT_CURRENCY = cu.CURRENCY_CODE
+	  		  ORDER BY h.V_HEAD_ID asc
+        </when>
+        <otherwise>
+        	SELECT   
+	     		h.V_HEAD_ID,
+	     		v.V_CATEGORY_NAME,
+	   			(SELECT t.LEDGER_NAME FROM xc_gl_ledgers t WHERE t.LEDGER_ID = h.LEDGER_ID) AS "LEDGER_NAME",
+	   			(select p.ORG_NAME from xip_pub_orgs p where p.ORG_ID=(select m.ORG_ID from xc_gl_ledgers m where m.LEDGER_ID = h.LEDGER_ID)) as "ORG_NAME",
+	   			h.V_ATTCH_TOTAL,
+	   			h.V_SERIAL_NUM,
+	   			h.CREATION_DATE,
+	   			l.SUMMARY,
+	   			c.CCID_NAME||'/'||cu.CURRENCY_NAME as FOREIGN_NAME,
+	   			decode(nvl(di.DIM_NAME,''),'',c.CCID_NAME,c.CCID_NAME||'/'||di.DIM_NAME) as DIMENSION_NAME,
+	   			c.CCID_NAME,
+	   			(select p.BALANCE_DIRECTION from xc_gl_accounts p where p.ACC_ID = a.ACC_ID) as "BALANCE_DIRECTION",
+	   			l.ACCOUNT_DR as "T_ACCOUNT_DR",
+	   			l.ACCOUNT_CR as "T_ACCOUNT_CR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_DR else 0.00 end as "ACCOUNT_DR",
+                case when h.BOOKKEEPER_ID is not null then l.ACCOUNT_CR else 0.00 end as "ACCOUNT_CR",
+	   			h.CREATED_NAME,
+	   			h.VERIFIER,
+	   			h.SIGNATORY,
+	   			h.BOOKKEEPER,
+	   			l.AMOUNT as "T_AMOUNT",
+          case when h.BOOKKEEPER_ID is not null then l.AMOUNT else 0.00 end as "AMOUNT",
+	   			l.ENTER_DR as "T_ENTER_DR",
+	   			l.ENTER_CR as "T_ENTER_CR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_DR else 0.00 end as "ENTER_DR",
+          case when h.BOOKKEEPER_ID is not null then l.ENTER_CR else 0.00 end as "ENTER_CR",
+                 l.EXCHANGE_RATE
+			FROM xc_gl_v_heads h,
+			     xc_gl_v_category v,
+	      		 xc_gl_ccid c,
+	      		 xc_gl_ld_accounts a,
+	      		 xc_gl_currencies cu,
+	      		 xc_gl_v_lines l LEFT JOIN xc_gl_dimensions  di on l.DIM_ID = di.DIM_ID
+			WHERE h.V_HEAD_ID = l.V_HEAD_ID
+			  AND h.V_CATEGORY_ID = v.V_CATEGORY_ID 
+	  		  AND l.CCID = c.CCID
+	          AND h.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	  		  <![CDATA[ AND (CASE #{startPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE>=#{startPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{endPeriodCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.PERIOD_CODE<=#{endPeriodCode,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{headerlds,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_HEAD_ID IN (${headerIds}) END)]]>
+	  		  <![CDATA[ AND (CASE #{headerCatogery,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.V_CATEGORY_ID = #{headerCatogery,jdbcType=VARCHAR} END)]]>
+	  		  <![CDATA[ AND (CASE #{accCode,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE c.ACC_CODE LIKE #{accCode,jdbcType=VARCHAR} END)  ]]>
+	  		  <![CDATA[ AND ((CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR>=#{startAmount,jdbcType=VARCHAR} END) OR (CASE #{startAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR>=#{startAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND ((CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_DR<=#{endAmount,jdbcType=VARCHAR} END) OR (CASE #{endAmount,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.T_CR<=#{endAmount,jdbcType=VARCHAR} END))]]>
+	  		  <![CDATA[ AND (CASE #{headerStatus,jdbcType=VARCHAR} WHEN '0' THEN h.V_STATUS ='2' ELSE h.V_STATUS = #{headerStatus,jdbcType=VARCHAR} END)]]>
+	  		  AND (CASE #{headerMaker,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.CREATED_NAME LIKE #{headerMaker,jdbcType=VARCHAR} END)
+	  		  AND (CASE #{headerSummary,jdbcType=VARCHAR} WHEN '0' THEN 1=1 ELSE h.SUMMARY LIKE #{headerSummary,jdbcType=VARCHAR} END)
+	  		  AND a.LEDGER_ID = h.LEDGER_ID
+	  		  AND a.ACC_ID = c.ACC_ID
+	  		  AND a.DEFAULT_CURRENCY = cu.CURRENCY_CODE
+	  		  ORDER BY h.V_HEAD_ID asc
+        </otherwise>
+      </choose>
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+{
+  la_userTitle:"User Role Authorization",
+  la_ledgerTitle:"Ledger Authorize",
+  la_querySet:"Query Conditions",
+  la_ledgerName:"Ledger Name",
+  la_userName:"User Name",
+  la_empName:"Employee Name",
+  la_roleName:"Role",
+  la_codeName:"User/Employee",
+  
+  queryBtn:"Query",
+  resetBtn:"Reset",
+  authorizeBtn:"Add Authorization",
+  delBtn:"Delete",
+  cancelAuthBtn:"Cancel Authorization",
+  cancelBtn:"Cancel",
+  editBtn:"Edit",
+  saveBtn:"Save",
+  
+  rownum:"NO",
+  la_winTitle:"Authorization",
+  la_labelWidth:120
+}

@@ -1,0 +1,20 @@
+{
+  AR_SALE_TYPE_NAME 		: "销售类型",
+  		
+  queryBtn					: "查询",
+  clearBtn					: "重置",
+  okBtn						: "确认",
+  cancelBtn					: "取消",
+  
+  ROWNUM_COL				: "序号",
+  AR_SALE_TYPE_NAME_COL		: "销售类型",
+  BG_ITEM_NAME_COL			: "预算项目",
+  ACC_NAME_COL				: "销售收入科目",
+  PAY_AMT_COL				: "金额",
+  
+  qzsxzytjl					: "请选择至少 1 条记录！",
+  jebnwk					: "金额不能为空！",
+  jebnwl					: "金额不能为 0 ！",
+  jeydyl					: "金额应大于 0 ！",
+  jeyxyl					: "金额应小于 0 ！"
+}

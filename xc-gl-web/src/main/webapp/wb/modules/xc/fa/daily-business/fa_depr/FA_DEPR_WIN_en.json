@@ -1,0 +1,10 @@
+{
+  LEDGER_NAME:'Ledger',
+  PERIOD_CODE:'Period',
+  ZJFF:'Depreciation Method',
+  YZ:'Original Value',
+  JZZB:'Impairment Provision',
+  CZ:'Residual Value',
+  LJZJ_LJTX:'Accumulated Depreciation/Amortisation',
+  BQZJ:'Current Depreciation'
+}

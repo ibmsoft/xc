@@ -1,0 +1,23 @@
+{
+  dimensionName :"Dimension Name",
+  dimensionCategory:"Dimension Category",
+  queryBtn:"Query",
+  resetBtn:"Reset",
+  rownum : "NO",
+  dimensionCode:"Dimension Alias",
+  dimensionDesc:"Dimension Description",
+  
+  addBtn:"Add",
+  delBtn:"Delete",
+  saveBtn:"Save",
+  importBtn:"Import",
+  exprotBtn:"Export",
+  
+  importTitle:"Importing The Data of Dimension",
+  fileTip:"Please Select Microsoft Office Excel Document",
+  fileName:"<font color='red'>*</font>File",
+  importLogs:"Importing Logs",
+  incorrectColumn:"Incorrect No",
+  errorInformation:"Error Information",
+  labelWidth:125
+}

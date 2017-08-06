@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.ExcelMapper">
+	<resultMap id="ColitemResultMap" type="com.xzsoft.xsr.core.modal.Colitem">
+		<result column="DATA_COL" property="DATA_COL"/>
+		<result column="COLITEM_ID" property="COLITEM_ID"/>
+		<result column="COLNO" property="COLNO"/>
+		<result column="COL" property="COL"/>
+	</resultMap>
+	<select id="expYgRepData" resultType="com.xzsoft.xsr.core.modal.CellValue">
+		   SELECT d.ROWNO,d.COLNO,
+			CASE d.DATATYPE WHEN 1 then d.celltextv 
+							WHEN 3 THEN d.cellv 
+							WHEN 5 THEN d.celltextv
+							END AS CELLV,
+			d.DATATYPE 
+			FROM (select rs.sheet_id,
+					   r.suit_id,
+		               rs.modaltype_id,
+					   rs.MODALTYPE_CODE,
+		               rs.modalsheet_id,
+					   rs.MODALSHEET_CODE,
+		               rs.entity_id,
+		               rs.period_id,
+		               rs.period_code,
+		               rs.currency_id,
+		               rs.currency_code,
+		               r.rowitem_id,
+		               r.colitem_id,
+		               rr.rowno,
+		               rc.colno,
+		               r.cellv,
+		               r.celltextv,
+		               rr.lanno,
+		               r.formulav,
+		               c.datatype
+		          FROM xsr_rep_cellvalue   r,
+		               xsr_rep_sheets      rs,
+		               xsr_rep_rowmodalref rr,
+		               xsr_rep_colmodalref rc,
+						xsr_rep_colitem c
+		         where r.suit_id = #{0}
+		           and r.entity_id = rs.entity_id
+		           and r.period_id = rs.period_id
+		           and r.currency_id = rs.currency_id
+		           and r.rowitem_id = rr.rowitem_id
+		           and r.colitem_id = rc.colitem_id
+				   and r.colitem_id=c.colitem_id 
+				   and c.colitem_id=rc.colitem_id
+		           and rs.modalsheet_id = rr.modalsheet_id
+		           and rs.modalsheet_id = rc.modalsheet_id
+           		   and rr.lanno = rc.lanno
+			       and (IFNULL(r.cellv,0)<![CDATA[<>]]>0
+			           OR IFNULL(r.celltextv,'-^')<![CDATA[<>]]>'-^'
+			           OR IFNULL(r.formulav,'-^')<![CDATA[<>]]>'-^')
+		           and rr.rowitem_id in
+		               (select rr.rowitem_id
+		                  from xsr_rep_rowmodalref rr
+		                 where rr.modalsheet_id = rs.modalsheet_id)
+		           and rc.colitem_id in
+		               (select rr.colitem_id
+		                  from xsr_rep_colmodalref rr
+		                 where rr.modalsheet_id = rs.modalsheet_id)
+          			order by rr.lanno,rr.rowno,rc.colitem_id )d,xip_pub_orgs o  
+					WHERE d.entity_id=o.ORG_ID AND d.suit_id=#{0}
+					AND o.ORG_CODE=#{1} 
+					AND d.period_code=#{2} 
+					AND d.currency_code=#{3}
+					AND d.MODALTYPE_CODE=#{4}
+					AND d.MODALSHEET_CODE=#{5}
+					ORDER BY d.ROWNO
+	</select>
+	<select id="getFjColitemList"  resultType="com.xzsoft.xsr.core.modal.Colitem">
+				SELECT s.DATA_COL,cf.COLNO,s.COLITEM_ID,s.COLITEM_CODE,c.DATATYPE
+					FROM xsr_rep_fj_colitem_set s,xsr_rep_colmodalref cf,xsr_rep_modalsheet r,xsr_rep_colitem c
+					WHERE s.COLITEM_ID=cf.COLITEM_ID
+					AND c.COLITEM_ID=cf.COLITEM_ID 
+					AND r.MODALSHEET_ID=s.MODALSHEET_ID 
+					AND r.MODALSHEET_ID=cf.MODALSHEET_ID 
+					AND r.SUIT_ID=cf.SUIT_ID 
+					AND r.SUIT_ID=s.SUIT_ID
+					AND r.SUIT_ID=c.SUIT_ID
+					AND r.SUIT_ID=#{0}
+					AND r.MODALSHEET_CODE=#{1}
+					AND r.MODALTYPE_CODE=#{2}
+	</select>
+	<select id="getCellValues" resultType="com.xzsoft.xsr.core.modal.CellValue">
+				SELECT cv.ROWITEM_ID,cv.COLITEM_ID,cv.CELLV,cv.CELLTEXTV    
+					FROM xsr_rep_cellvalue cv
+					WHERE cv.SUIT_ID=#{0} 
+					AND cv.ENTITY_CODE=#{1}  
+					AND cv.PERIOD_CODE=#{2}
+					AND cv.CURRENCY_CODE=#{3}
+	</select>
+	<select id="getUserName" resultType="String">
+				SELECT u.USER_NAME 
+				FROM xip_pub_users u 
+				WHERE u.USER_ID=#{0}
+	</select>
+</mapper>

@@ -1,0 +1,18 @@
+{
+	save:'保存',
+  	saveMsg1:'拆分金额超过原始期初金额！',
+  	saveMsg2:'保存成功',
+  	saveMsg3:'表单填写不完整!',
+  	saveMsg4:'保存失败',
+  	saveMsg5:'拆分金额超过未拆分金额',
+  	label:'客户期初拆分',
+  	docType:'单据类型',
+  	docCode:'单据号',
+  	glDate:'入账日期',
+  	amount:'价税合计',
+  	description:'摘要',
+  	tax:'税额',
+  	taxRate:'税率',
+  	shouleAccessDoc:'应收单',
+  	saveMsg6:'金额为0不能保存'
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.bg.mapper.BudgetCtrlMapper">
+	<!-- 根据预算项ID查询账簿级预算项信息 -->
+	<select id="getBgLdItem" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.bg.modal.BgLdItemBean">
+		SELECT
+			BG_LD_ITEM_ID			as bgLdItemId,
+			LEDGER_ID				as ledgerId,
+			BG_ITEM_ID				as bgItemId,
+			BG_CTRL_DIM				as bgCtrlDim,
+			BG_CTRL_MODE			as bgCtrlMode,
+			IS_ENABLED				as isEnabled
+		FROM
+			xc_bg_ld_items
+		WHERE
+			LEDGER_ID = #{ledgerId}
+			AND BG_ITEM_ID = #{bgItemId}
+	</select>
+	
+	<!-- 计算项目预算余额   -->
+	<select id="getPrjBgTotalBal" parameterType="com.xzsoft.xc.bg.modal.BgFactBean" resultType="java.lang.Double">
+		select t.bg_amt
+		  from xc_bg_prj_bal t
+		 where t.ledger_id = #{ledgerId}
+		 <!-- 1-项目，2-项目+预算项目，3-项目+预算项目+成本中心  -->
+		 <choose>
+		 	<when test="ctrlDim == '1'.toString() ">
+		 		and t.project_id = #{projectId}
+		 		and t.bg_item_id = 'A'
+		 		and t.dept_id = 'A'
+		 	</when>
+		 	<when test="ctrlDim == '2'.toString() ">
+		 		and t.project_id = #{projectId}
+		 		and t.bg_item_id = #{bgItemId}
+		 		and t.dept_id = 'A'
+		 	</when>
+		 	<when test="ctrlDim == '3'.toString() ">
+		 		and t.project_id = #{projectId}
+		 		and t.bg_item_id = #{bgItemId}
+		 		and t.dept_id = #{deptId}
+		 	</when>
+		 </choose>
+	</select>
+	
+	<!-- 计算项目预算占用/发生数   -->
+	<select id="getPrjBgFactBal" parameterType="com.xzsoft.xc.bg.modal.BgFactBean" resultType="java.lang.Double">
+		select sum(t.amount) as amount
+		  from xc_bg_fact t
+		 where t.ledger_id = #{ledgerId}
+		 <!-- 1-项目，2-项目+预算项目，3-项目+预算项目+成本中心  -->
+		 <choose>
+		 	<when test="ctrlDim == '1'.toString() ">
+		 		and t.project_id = #{projectId}
+		 	</when>
+		 	<when test="ctrlDim == '2'.toString() ">
+		 		and t.project_id = #{projectId}
+		 		and t.bg_item_id = #{bgItemId}
+		 	</when>
+		 	<when test="ctrlDim == '3'.toString() ">
+		 		and t.project_id = #{projectId}
+		 		and t.bg_item_id = #{bgItemId}
+		 		and t.dept_id = #{deptId}
+		 	</when>
+		 </choose>
+	</select>
+	
+	<!-- 计算费用预算总额  -->
+	<select id="getCostBgTotalBal" parameterType="com.xzsoft.xc.bg.modal.BgFactBean" resultType="java.lang.Double">
+		<choose>
+			<!-- 按年控制 -->
+			<when test="ctrlPeriod == '1'.toString() ">
+				select sum(t.bg_amt) as amount
+				  from xc_bg_cost_bal t
+				 where t.ledger_id = #{ledgerId}
+				   and t.bg_year = #{year}
+				   and t.bg_item_id = #{bgItemId}
+				   <!-- 1-预算项目，2-预算项目+成本中心  -->
+				   <choose>
+				   		<when test="ctrlDim == '1'.toString() ">
+				   			and t.dept_id = 'A'
+				   		</when>
+				   		<when test="ctrlDim == '2'.toString() ">
+				   			and t.dept_id = #{deptId}
+				   		</when>
+				   </choose>
+			</when>
+			<!-- 按月累计控制  -->
+			<when test="ctrlPeriod == '2'.toString() ">
+				select sum(t.bg_amt) as amount
+				  from xc_bg_cost_bal t, xc_gl_period xp
+				 where t.period_code = xp.period_code
+				   and t.ledger_id = #{ledgerId}
+				   and t.bg_year = #{year}
+				   <![CDATA[
+				   		and xp.end_date <= (select a.end_date from xc_gl_period a where a.period_code = #{periodCode})
+				   ]]>
+				   and t.bg_item_id = #{bgItemId}
+				   <!-- 1-预算项目，2-预算项目+成本中心  -->
+				   <choose>
+				   		<when test="ctrlDim == '1'.toString() ">
+				   			and t.dept_id = 'A'
+				   		</when>
+				   		<when test="ctrlDim == '2'.toString() ">
+				   			and t.dept_id = #{deptId}
+				   		</when>
+				   </choose>
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 计算费用预算发占用/发生数  -->
+	<select id="getCostBgFactBal" parameterType="com.xzsoft.xc.bg.modal.BgFactBean" resultType="java.lang.Double">
+		<choose>
+			<!-- 按年控制 -->
+			<when test="ctrlPeriod == '1'.toString() ">
+				select sum(t.amount) as amount
+				  from xc_bg_fact t
+				 where t.ledger_id = #{ledgerId}
+				   and substr(t.fact_date,0,7) = #{year}
+				   and t.bg_item_id = #{bgItemId}
+				   <!-- 1-预算项目，2-预算项目+成本中心  -->
+				   <if test="ctrlDim == '2'.toString()">
+				   		and t.dept_id = #{deptId}
+				   </if>
+			</when>
+			<!-- 按月累计控制  -->
+			<when test="ctrlPeriod == '2'.toString() ">
+				select sum(t.amount) as amount
+				  from xc_bg_fact t
+				 where t.ledger_id = #{ledgerId}
+				   and substr(t.fact_date,0,7) = #{year}
+				   <![CDATA[
+				   		and t.fact_date <= #{factDate} 
+				   ]]>
+				   and t.bg_item_id = #{bgItemId}
+				   <!-- 1-预算项目，2-预算项目+成本中心  -->
+				   <if test="ctrlDim == '2'.toString() ">
+				   		and t.dept_id = #{deptId}
+				   </if>
+			</when>
+		</choose>
+	</select>
+	
+</mapper>

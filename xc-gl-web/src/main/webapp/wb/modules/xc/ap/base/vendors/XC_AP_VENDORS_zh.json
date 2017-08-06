@@ -1,0 +1,100 @@
+{
+
+  XH:'序号',
+ queryBtn:'查询',
+  resetBtn:'重置',
+  addBtn:'新增',
+  saveBtn:'保存',
+  delBtn:'删除',
+  cancelBtn:'取消',
+  editBtn:'修改',
+  editmoreBtn:'批量修改',
+  browseBtn:'查看',
+
+  importBtn:'导入',
+  exportBtn:'导出',
+
+  classify_label:'&nbsp分&nbsp&nbsp&nbsp&nbsp&nbsp类&nbsp&nbsp',
+  start_date:'&nbsp开始日期&nbsp',
+  end_date:'&nbsp结束日期&nbsp',
+  CODE_COL:'编码',
+
+  NAME_COL:'名称',
+  VENDOR_TYPE_label:'分类',
+
+  TAX_NO1:'税号',
+  ADDRESS1:'地址',
+
+  CONTACT1:'联系人',
+
+  TEL1:'办公电话',
+
+  MOBILE1:'移动电话',
+
+  QQ1:'QQ号',
+  EMAIL1:'电子邮件',
+
+  WECHAT1:'微信号',
+  START_DATE1:'开始日期',
+  END_DATE1:'结束日期',
+  CODE_NAME:'编码/名称',
+
+  VENDOR_ID1:'供应商ID',
+  CUSTOMER_NAME_COL:'对应客户',
+
+  CODEMSG:'编码重复！',
+  message:'正在保存中...',
+
+  SAVETIP:'保存成功！',
+  DELTIP:'请选择要删除的记录!',
+  DELOKTIP:'您确定要删除？',
+  DELTIP1:'删除成功!',
+  EDITETIP:'修改成功！',
+
+  OPTYPE_COL:'操作类型',
+  
+  CUSTOMER_CODE_COL:'客户编码',
+CUSTOMER_NAME_COL1:'客户名称',
+  MSG1:'供应商信息不完整，请确认!',
+  MSG2:'移动电话格式不合法!',
+  MSG3:'固定电话格式不合法!',
+  MSG4:'邮箱格式不合法!',
+
+  MSG5:'开始日期不可晚于结束日期!',
+  MSG6:'结束日期作为修改项不可修改为空!',
+
+  MSG7:'开始日期作为修改项不可修改为空!',
+  MSG8:'请勾选要批量修改项!',
+
+  MSG9:'供应商已关联银行不可以删除！',
+  MS10:'该供应商已被账簿供应商设置引用，不可删除!',
+
+  MS11:'供应商编码已存在！',
+
+
+  MSG14:'请先保存供应商信息',
+  MSG15:'银行账号不可重复!',
+
+  MSG16:'请选择一条数据',
+  MSG17:'请选择要批量修改的记录!',
+  TIP:'提示',
+
+  BASE:'基本信息',
+
+  BANK_ID:'开户行ID',
+  ACCOUNT_NAME:'户名',
+
+  BANK_NAME:'银行名称',
+
+  DEPOSIT_BANK_NAME:'开户行',
+
+  BANK_ACCOUNT:'账号',
+
+  CORRESPONDENT:'联行号',
+
+  IS_DEFAULT:'是否默认',
+
+  BANK:'开户行',
+  ORG_NAME:'组织',
+  ORG_CODE:'组织编码'
+}

@@ -1,0 +1,22 @@
+{
+  query_ledger:'Ledger',
+  query_ld_period_year:'Period',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  add_next_ld_period:'Enable Next Period',
+  addAdjustPeriod:'Append Adjustable Period',
+  period_row:'Order',
+  ledger_id_col:'Ledger ID',
+  period_code_col:'Period',
+  year_col:'Year',
+  quarter_col:'Quarter',
+  start_date_col:'Start Date',
+  end_date_col:'End Date',
+  is_adj_period_col:'Adjustable Period',
+  ld_period_status_col:'Status',
+  addAdjustWindow:'Append Adjustable Period',
+  queryPeriodCode:'Peroid',
+  addBtn:'Append',
+  cancelBtn:'Cancel'
+}
+

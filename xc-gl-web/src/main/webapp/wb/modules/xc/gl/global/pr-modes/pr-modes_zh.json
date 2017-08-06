@@ -1,0 +1,18 @@
+{
+  moduleTitle:"收付款方式管理",
+  cancelBtn:"取消",
+  editBtn:"修改",
+  delBtn:"删除",
+  saveBtn:"保存",
+  stopBtn:"停用",
+  addBtn:"增加",
+  
+  rownum:"序号",
+  la_paymentType:"收付款分类",
+  la_paymentName:"收付款名称",
+  la_isEnable:"是否启用",
+  la_necessaryType:"<font color='red'>*</font>收付款类型",
+  la_paymentWay:"<font color='red'>*</font>收付款方式",
+  la_description:"描述",
+  la_labelWidth:100
+}

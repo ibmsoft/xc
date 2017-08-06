@@ -1,0 +1,60 @@
+{
+    titleLabel : "Cost and expense budget",
+    titleLabel1 : "Project budget",
+    saveButton : "Save",
+    submitButton : "Submit",
+  
+  
+    LEDGER_NAME : "Ledger",
+    ORG_ID : "Organization",
+    PROJECT_NAME : "Project",
+    BG_VER_NAME : "Budget Version",
+  
+    BG_DOC_CODE : "Budget number",
+    Automatically  : "Automatically generated",
+    BG_VER_PERIOD : "Budget year",
+    BG_DOC_DESC : "Description",
+  
+	addButton : "Add Line",
+	deleteButton : "Delete Line",
+    cancelsBtn : "Clear",
+  
+    ORDERBY : "NO",
+	BG_ITEM_NAME : "Budget items",
+	DEPT_NAME : "Department",
+	PERIOD_CODE : "Month",
+    AMOUNT : "Amount",
+    BG_DTL_DESC : "Description",
+  
+    saveInfo1 : "Books cannot be empty! Please re-enter!",
+    saveInfo2 : "The book budget type is not enabled encoding rules!",
+    saveInfo3 : "Is being saved...",
+    saveInfo4 : "Data saved successfully!",
+  
+    submitInfo1 : "Please fill in all required fields!",
+    submitInfo2 : "Please save the data, and then submit!",
+    submitInfo3 : "Budget sheet",
+    submitInfo4 : "no budget statement, can not be submitted!",
+    submitInfo5 : "The single type of budget does not enable the approval process!",
+    submitInfo6 : "No choice of the computer side to approve the document!",
+    submitInfo7 : "Process submission success!",
+    submitInfo8 : "Process has been submitted, please select!",
+    submitInfo9 : "Process information is not correct!",
+  
+    deleteInfo1 : "Please select the records you need to delete!",
+    deleteInfo2 : "Sure you want to delete the selected",
+    deleteInfo3 : "records?",
+    deleteInfo4 : "List of the budget to remove the success of a single detail!",
+  
+    item_text : "According to the code / name query",
+    queryButton : "Query",
+    resetButton : "Reset",
+  
+    BG_ITEM_CODE_COL : "Budget items code",
+    BG_ITEM_NAME_COL : "Budget items name",
+    DEPT_CODE_COL : "Department code",
+    DEPT_NAME_COL : "Department name",
+    PROJECT_CODE_COL : "Project code",
+    PROJECT_NAME_COL : "Project name"
+
+}

@@ -1,0 +1,36 @@
+{
+  empty_text_ledger		: "请选择账薄",
+  query_ledger			: "账薄",
+  query_code			: "单据编号/摘要",
+  query_create_by		: "报销人",
+  query_dept			: "成本中心",
+  query_project			: "项目",
+  
+  queryBtn				: "查询",
+  resetBtn				: "重置",
+  seekBtn				: "查看详情",
+  seekHeadBtn			: "查看凭证",
+  enclosureBtn			: "附件",
+  cancelDoc				: "退回",
+  monitorBtn			: "监控",
+  cancelDoc_tooltip		: "取消审批通过但未复核的单据",
+  printBtn				: "打印单据",
+  
+  row_num_col			: "序号",
+  ex_doc_code_col		: "单据编号",
+  ex_reason_col			: "单据摘要",
+  amount_col			: "报销金额",
+  no_account_col		: "未支付金额",
+  ex_cat_name_col		: "报销单类型",
+  created_by_col		: "报销人",
+  dept_name_col			: "成本中心",
+  project_name_col		: "项目",
+  creation_date_col		: "创建日期",
+  v_status_name_col		: "凭证状态",
+  fin_user_name_col		: "复核人",
+  audit_date_col		: "审批通过日期",
+  audit_status_desc_col	: "审批状态",
+  verifier_name_col		: "当前审批人",
+  
+  ex_doc_print_win		: '单据打印'
+}

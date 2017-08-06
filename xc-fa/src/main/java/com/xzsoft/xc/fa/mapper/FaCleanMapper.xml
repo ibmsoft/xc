@@ -1,0 +1,24 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.FaCleanMapper">
+<!-- 修改清理资产信息-->
+<update id="cleanFaAddition" parameterType="com.xzsoft.xc.fa.modal.FaAddition">
+		 
+
+        UPDATE  xc_fa_additions SET 
+         QLRQ=#{qlrq, jdbcType=TIMESTAMP},
+         QLQJ=#{qlqj,jdbcType=VARCHAR},
+         QLYY=#{qlyy,jdbcType=VARCHAR},
+         QLKM=#{qlkm,jdbcType=VARCHAR}
+      WHERE  
+      ASSET_ID=#{assetId,jdbcType=VARCHAR}
+  
+	</update>
+<!-- 删除会计平台中取消清理资产记录 -->
+	<delete id="deleteInterface" parameterType="com.xzsoft.xc.fa.modal.FaAddition">
+	    DELETE FROM xc_gl_v_interface where SRC_H_ID=#{assetId, jdbcType=VARCHAR} and TRANS_CODE='ZCQL'
+	</delete>
+
+
+</mapper>
+
+  

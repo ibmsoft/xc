@@ -1,0 +1,14 @@
+{
+  LEDGER_CODE : '账簿名称',
+  queryBtn : '查询',
+  addBtn : '增加',
+  delBtn : '删除',
+  syncBtn : '同步',
+  saveBtn : '保存',
+  ROW_NUMBER_COL : '序号',
+  V_SUMMARY_ID_COL : '枚举ID',
+  LEDGER_ID_COL : '账簿ID',
+  LEDGER_NAME_COL : '账簿名称',
+  V_SUMMARY_COL : '摘要信息',
+  ASS_KEY_COL : '助记符'
+}

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStLocationAdjustMapper">
+	<!-- 货位调整单主表列 -->
+	<sql id="xcStLocationAdjustHColumn">
+		LO_ADJUST_H_ID,
+		LO_ADJUST_H_CODE,
+		LO_ADJUST_H_NAME,
+		BUSINESS_TYPE_ID,
+		DOC_CAT_CODE,
+		ADJUST_REASON,
+		WH_KEEPER_ID,
+		WAREHOUSE_ID,
+		STATUS,
+		LEDGER_ID,
+		ORG_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		BIZ_DATE
+	</sql>
+	<!-- 货位调整单明细列 -->
+	<sql id="xcStLocationAdjustLColumn">
+		LO_ADJUST_L_ID,
+		LO_ADJUST_H_ID,
+		MATERIAL_ID,
+		LOCATION_ID,
+		ADJUST_QTY,
+		ENTRY_H_ID,
+		ENTRY_L_ID,
+		ORDER_H_ID,
+		ORDER_L_ID,
+		NEW_LOCATION_ID,
+		ORG_ID,
+		LEDGER_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		LO_INVENTORY_ID,
+		SERIAL_BATCH_NUM
+	</sql>
+	<!-- 根据货位调整单主键ID得到相应数据信息 -->
+	<select id="selectXcStLocationAdjustH" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStLocationAdjustHColumn"/>
+		FROM xc_st_location_adjust_h
+		WHERE LO_ADJUST_H_ID = #{LO_ADJUST_H_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据货位调整单行ID得到相应数据信息 -->
+	<select id="selectXcStLocationAdjustL" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStLocationAdjustLColumn"/>
+		FROM xc_st_location_adjust_l
+		WHERE LO_ADJUST_L_ID = #{LO_ADJUST_L_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据货位调整单主ID得到行相应数据信息 -->
+	<select id="selectXcStLocationAdjustLByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStLocationAdjustLColumn"/>
+		FROM xc_st_location_adjust_l
+		WHERE LO_ADJUST_H_ID = #{LO_ADJUST_H_ID,jdbcType=VARCHAR}
+	</select>
+    <!-- 插入货位调整单主表 -->
+    <insert id="insertXcStLocationAdjustH" parameterType="java.util.Map">
+    	INSERT INTO xc_st_location_adjust_h (
+			<include refid="xcStLocationAdjustHColumn"/>
+    	)
+		VALUES (
+		   #{LO_ADJUST_H_ID,jdbcType=VARCHAR},
+		   #{LO_ADJUST_H_CODE,jdbcType=VARCHAR},
+		   #{LO_ADJUST_H_NAME,jdbcType=VARCHAR},
+		   #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+		   #{DOC_CAT_CODE,jdbcType=VARCHAR},
+		   #{ADJUST_REASON,jdbcType=VARCHAR},
+		   #{WH_KEEPER_ID,jdbcType=VARCHAR},
+		   #{WAREHOUSE_ID,jdbcType=VARCHAR},
+		   #{STATUS,jdbcType=VARCHAR},
+		   #{LEDGER_ID,jdbcType=VARCHAR},
+		   #{ORG_ID,jdbcType=VARCHAR},
+		   #{CREATION_DATE,jdbcType=TIMESTAMP},
+		   #{CREATED_BY,jdbcType=VARCHAR},
+		   #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		   #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+		   #{BIZ_DATE,jdbcType=TIMESTAMP}
+		)
+    </insert>
+    <!-- 更新货位调整单主表 -->
+    <update id="updateXcStLocationAdjustH" parameterType="java.util.Map">
+    	UPDATE xc_st_location_adjust_h SET
+			LO_ADJUST_H_NAME	= #{LO_ADJUST_H_NAME,jdbcType=VARCHAR},
+			BUSINESS_TYPE_ID	= #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+			DOC_CAT_CODE		= #{DOC_CAT_CODE,jdbcType=VARCHAR},
+			ADJUST_REASON		= #{ADJUST_REASON,jdbcType=VARCHAR},
+			WH_KEEPER_ID		= #{WH_KEEPER_ID,jdbcType=VARCHAR},
+			WAREHOUSE_ID		= #{WAREHOUSE_ID,jdbcType=VARCHAR},
+			STATUS				= #{STATUS,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE	= #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY		= #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+			BIZ_DATE			= #{BIZ_DATE,jdbcType=TIMESTAMP}
+		WHERE
+			LO_ADJUST_H_ID 		= #{LO_ADJUST_H_ID,jdbcType=VARCHAR}
+    </update>
+	
+	<!-- 保存货位调整单明细 -->
+	<insert id="insertXcStLocationAdjustL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_location_adjust_l (
+						<include refid="xcStLocationAdjustLColumn"/>
+					)
+					VALUES (
+						#{item.LO_ADJUST_L_ID,jdbcType=VARCHAR},
+						#{item.LO_ADJUST_H_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ADJUST_QTY,jdbcType=NUMERIC},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.ORDER_H_ID,jdbcType=VARCHAR},
+						#{item.ORDER_L_ID,jdbcType=VARCHAR},
+						#{item.NEW_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.LO_INVENTORY_ID,jdbcType=VARCHAR},
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_location_adjust_l (
+						<include refid="xcStLocationAdjustLColumn"/>
+					)
+					VALUES (
+						#{item.LO_ADJUST_L_ID,jdbcType=VARCHAR},
+						#{item.LO_ADJUST_H_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ADJUST_QTY,jdbcType=NUMERIC},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.ORDER_H_ID,jdbcType=VARCHAR},
+						#{item.ORDER_L_ID,jdbcType=VARCHAR},
+						#{item.NEW_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.LO_INVENTORY_ID,jdbcType=VARCHAR},
+						#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+
+	<!-- 更新货位调整单明细  -->
+	<update id="updateXcStLocationAdjustL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_location_adjust_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR},
+						ADJUST_QTY			= #{item.ADJUST_QTY,jdbcType=NUMERIC},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						ORDER_H_ID			= #{item.ORDER_H_ID,jdbcType=VARCHAR},
+						ORDER_L_ID			= #{item.ORDER_L_ID,jdbcType=VARCHAR},
+						NEW_LOCATION_ID		= #{item.NEW_LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						LO_ADJUST_L_ID	= #{item.LO_ADJUST_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_location_adjust_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR},
+						ADJUST_QTY			= #{item.ADJUST_QTY,jdbcType=NUMERIC},
+						ENTRY_H_ID			= #{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						ENTRY_L_ID			= #{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						ORDER_H_ID			= #{item.ORDER_H_ID,jdbcType=VARCHAR},
+						ORDER_L_ID			= #{item.ORDER_L_ID,jdbcType=VARCHAR},
+						NEW_LOCATION_ID		= #{item.NEW_LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						LO_ADJUST_L_ID	= #{item.LO_ADJUST_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 批量删除货位调整单主表  -->
+	<delete id="deleteXcStLocationAdjustH" parameterType="java.util.List">
+		DELETE FROM xc_st_location_adjust_h WHERE LO_ADJUST_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据货位调整单主表ID批量删除货位调整单行表信息 -->
+	<delete id="deleteXcStLocationAdjustLByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_location_adjust_l WHERE LO_ADJUST_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据货位调整单行表ID批量删除货位调整单行表信息 -->
+	<delete id="deleteXcStLocationAdjustLByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_location_adjust_l WHERE LO_ADJUST_L_ID = #{item.LO_ADJUST_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_location_adjust_l WHERE LO_ADJUST_L_ID = #{item.LO_ADJUST_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+</mapper>

@@ -1,0 +1,7 @@
+{
+	po_pur_po_com_lov_order_code:'采购订单编号',
+  	po_pur_po_com_lov_order_name:'采购订单名称',
+  	po_pur_po_com_lov_order_code_name:'采购订单编号/名称',
+  	po_pur_po_com_lov_order_org_null:'请先选择组织',
+  	po_pur_po_com_lov_order_vendor_name:'供应商'
+}

@@ -1,0 +1,11 @@
+{
+    AP_INV_GL_H_CODE : "蓝字应付单",
+    AP_INV_GL_H_CODE1 : "应付单",
+    AP_INV_H_CODE_COL : "应付单编码",
+    DESCRIPTION : "摘要",
+    AP_DOC_CAT_NAME : "单据类型",
+    NO_PAY_AMT : "未付金额",
+    AP_INV_H_CODE_NAME : "应付单编码/摘要",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！",
+    EMPTY_VENDOR_INFO : "请先选择供应商信息！"
+}

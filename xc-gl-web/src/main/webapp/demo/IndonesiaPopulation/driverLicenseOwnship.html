@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="js/echarts.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    title: {
+        text: "Driver's license ownership by age and gender",
+		x: 'center'
+    },
+    tooltip: {
+        trigger: 'axis',
+		formatter: function(params) {
+            return 'Age : '+params[0].name + '<br/>'
+                   + params[0].seriesName + ' : ' + params[0].value + ' (%)<br/>'
+                   + params[1].seriesName + ' : ' + params[1].value + ' (%)';
+        }
+    },
+    legend: {
+        data:['males','females'],
+		x: 'left'
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        
+    },
+    xAxis: {
+	    name: 'Age',
+        type: 'category',
+        boundaryGap: false,
+        data: [	
+						 16,18,
+				20,22,24,26,28,
+				30,32,34,36,38,
+				40,42,44,46,48,
+				50,52,54,56,58,
+				60,62,64,66,68,
+				70,72,74,76,78,
+				80
+						 ]
+    },
+    yAxis: {
+        type: 'value',
+		axisLabel : {
+                formatter: '{value} %'
+        },
+    },
+    series: [
+        {
+            name:'males',
+            type:'line',
+			itemStyle: {
+			  normal: {
+			    lineStyle: {
+				  width: 4
+				}
+			  }
+			},
+            data:[
+							 61,80,
+					82,81,83,84,90,
+					90,91,94,94,98,
+					98,95,95,96,96,
+					100,96,85,82,80,
+					72,70,60,55,46,
+					40,30,20,16,8,
+					3
+				  ]
+        },
+        {
+            name:'females',
+            type:'line',
+			itemStyle: {
+			  normal: {
+			    lineStyle: {
+				  width: 4
+				}
+			  }
+			},
+            data:[
+							 62,80,
+					84,82,83,86,86,
+					88,89,91,91,94,
+					94,92,92,92,92,
+					91,90,80,72,74,
+					60,63,55,49,40,
+					30,20,10,5,2,
+					1
+				  ]
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

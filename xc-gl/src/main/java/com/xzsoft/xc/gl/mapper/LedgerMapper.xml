@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.LedgerMapper">
+
+	<!-- 获取建账标志 -->
+	<select id="getCreateFlag" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select t.LEDGER_ID , t.IS_CREATE_BA, t.IS_CREATE_CA from xc_gl_ledgers t where t.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 更新建账标志位 -->
+	<update id="updateCreateFlag" parameterType="java.util.HashMap">
+		update xc_gl_ledgers t set 
+		 <choose>
+		 	<when test="createType == 'BA' ">
+		 		t.IS_CREATE_BA = #{flag,jdbcType=VARCHAR},
+		 	</when>
+		 	<when test="createType == 'CA' ">
+		 		t.IS_CREATE_CA = #{flag,jdbcType=VARCHAR},
+		 	</when>
+		 </choose>
+		 	t.LAST_UPDATED_BY = #{userId,jdbcType=VARCHAR} , 
+			t.LAST_UPDATE_DATE = #{cdate,jdbcType=TIMESTAMP}
+		 where t.LEDGER_ID = #{ledgerId}
+	</update>
+	
+	<!-- 取得账簿授权信息   -->
+	<select id="getLedgerSec" parameterType="java.util.List" resultType="com.xzsoft.xc.gl.modal.LedgerSecDTO">
+		select t.LEDGER_SEC_ID ldSecId,t.LEDGER_ID ledgerId,t.ROLE_ID roleId,t.USER_ID userId 
+		from xc_gl_ld_sec t  
+		where t.LEDGER_ID in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 账簿授权  -->
+	<insert id="saveLdSec" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					insert into xc_gl_ld_sec
+					  (ledger_sec_id,
+					   ledger_id,
+					   role_id,
+					   user_id,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+					   )values(
+					   	#{item.ldSecId,jdbcType=VARCHAR},
+					   	#{item.ledgerId,jdbcType=VARCHAR},
+					   	#{item.roleId,jdbcType=VARCHAR},
+					   	#{item.userId,jdbcType=VARCHAR},
+					   	#{item.creationDate,jdbcType=TIMESTAMP},
+					   	#{item.createdBy,jdbcType=VARCHAR},
+					   	#{item.creationDate,jdbcType=TIMESTAMP},
+					   	#{item.createdBy,jdbcType=VARCHAR}
+					   )				
+				</foreach>
+			</when>
+			<when test="dbType=='oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					insert into xc_gl_ld_sec
+					  (ledger_sec_id,
+					   ledger_id,
+					   role_id,
+					   user_id,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+					   )values(
+					   	#{item.ldSecId,jdbcType=VARCHAR},
+					   	#{item.ledgerId,jdbcType=VARCHAR},
+					   	#{item.roleId,jdbcType=VARCHAR},
+					   	#{item.userId,jdbcType=VARCHAR},
+					   	#{item.creationDate,jdbcType=TIMESTAMP},
+					   	#{item.createdBy,jdbcType=VARCHAR},
+					   	#{item.creationDate,jdbcType=TIMESTAMP},
+					   	#{item.createdBy,jdbcType=VARCHAR}				   	
+					   )				
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	
+	<!-- 取消账簿授权信息  -->
+	<delete id="delLdSec" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_gl_ld_sec where LEDGER_ID = #{item.ledgerId} and USER_ID = #{item.userId} and ROLE_ID = #{item.roleId}
+				</foreach>
+			</when>
+			<when test="dbType=='oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_gl_ld_sec where LEDGER_ID = #{item.ledgerId} and USER_ID = #{item.userId} and ROLE_ID = #{item.roleId}
+				</foreach>
+			</when>
+		</choose>
+	</delete>
+	
+	<!-- 批量删除授权信息  -->
+	<delete id="batchDelSec" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_gl_ld_sec where LEDGER_SEC_ID = #{item}
+				</foreach>
+			</when>
+			<when test="dbType=='oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_gl_ld_sec where LEDGER_SEC_ID = #{item}
+				</foreach>
+			</when>
+		</choose>	
+	</delete>
+	
+</mapper>

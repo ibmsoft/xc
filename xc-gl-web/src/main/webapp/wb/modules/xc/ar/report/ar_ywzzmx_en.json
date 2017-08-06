@@ -1,0 +1,8 @@
+{
+  LEDGER		    : "Account Book",
+  CUSTOMER_NAME		: "Customer",
+  PERIOD 			: "Accounting Period",
+  TO 			    : "to",
+  queryBtn			: "Search",
+  clearBtn			: "Reset",
+}

@@ -1,0 +1,55 @@
+{
+  XH:'序号',
+
+  saveBtn:'保存',
+  addBtn:'增加',
+
+  delBtn:'删除',
+
+  syncBtn:'同步',
+  exportBtn:'导出',
+  selBtn:'查询',
+  clearBtn:'清空',
+  emptyText:'输入销售类型或销售对象查询',
+  LEDGER_ID_COL:'账簿ID',
+  AR_SALE_TYPE_ID_COL:'销售类型ID',
+  AR_SALE_TYPE_NAME_COL:'销售类型',
+
+  SALE_OBJECT_COL:'销售对象',
+
+  BG_ITEM_ID_COL:'预算科目',
+  AR_ACC_ID_INV_COL:'销售收入科目',
+
+  QUERY_CODE_NAME:'编码/名称',
+
+
+  DESCRIPTION_COL:'说明',
+
+  AR_ACC_ID_DEBT_COL:'应收科目',
+
+  AR_ACC_ID_PRE_NAME_COL:'预收科目',
+  AR_ACC_ID_TAX_COL:'销项税科目',
+
+  PRODUCT_NAME:'产品',
+  PRODUCT_ID:'产品ID',
+  TIP:'提示',
+
+  DELTIP:'请选择要删除的记录!',
+  DELOKTIP:'您确定要删除？',
+  DELTIP1:'删除成功!',
+  EDITETIP:'修改成功！',
+  MSG1:'已经被关联不可删除!',
+  MSG2:'销售类型不可重复!',
+  MSG3:'请选择一条记录!',
+  MSG4:'同步了',
+  MSG5:'条记录!',
+  message:'正在保存中...',
+
+  SAVETIP:'保存成功！'
+
+
+
+
+
+
+}

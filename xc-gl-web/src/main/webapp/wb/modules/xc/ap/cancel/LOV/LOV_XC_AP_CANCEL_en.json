@@ -1,0 +1,33 @@
+{
+  QUERY							: "Query",
+  RESET							: "Reset",
+  SURE							: "Sure",
+  CANCEL						: "Cancel",
+  
+  CONTRACT						: "Contract",
+  DOC_CODE						: "Document Code",
+  CREATED_BY_NAME				: "Creator",
+  ROWNUM						: "No.",
+  NO_CANCEL_AMT					: "Amount Of Offset",
+  CANCEL_AMT					: "Offset Amount",
+  GL_DATE						: "Business Date",
+  AP_PAY_H_CODE					: "Payment Order Code",
+  AP_INV_GL_H_CODE				: "Payable Order Code",
+  AR_INV_GL_H_CODE				: "Accounts Receivable Code",
+  DESCRIPTION					: "Description",
+  VENDOR						: "Vendor", 
+  DEPT							: "Departure",
+  PROJECT						: "Project",
+  ACC							: "Subject",
+  CCID							: "Subject Combinations",
+  CUSTOMER						: "Customer",
+  
+  qxzzsytjl						: "Please select at least one record!",
+  hxjebnwk						: "Write-off amount can not be empty!",
+  hxjebnwl						: "Write-off amount can not be 0!",
+  qdyxzd						: "Are you sure you want to select",
+  tjlm							: "records?",
+  hxjebkcgkhxje					: "Write-off amount can not exceed the amount can be written off!",
+  hxjeydyl						: "Write off the amount should be greater than 0!",
+  hxjeyxyl						: "Write off the amount should be less than 0!"
+}

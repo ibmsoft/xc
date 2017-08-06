@@ -1,0 +1,7 @@
+{
+    VENDOR_NAME : "供应商",
+    VENDOR_CODE_COL : "供应商编码",
+    VENDOR_NAME_COL : "供应商名称",
+    VENDOR_CODE_NAME : "供应商编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

@@ -1,0 +1,5 @@
+{
+  DEPOSIT_BANK_NAME : "Account",
+  ACCOUNT_NAME_COL	: "Account Name",
+  BANK_ACCOUNT_COL	: "Bank Account"
+}

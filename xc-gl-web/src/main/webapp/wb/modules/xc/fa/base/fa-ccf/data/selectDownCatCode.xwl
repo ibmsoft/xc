@@ -1,0 +1,1 @@
+{"inframe":false,"title":"获取下级资产的编码","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select CAT_CODE FROM XC_FA_CATS \nWHERE UP_CODE IN ({#CAT_CODE#})","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

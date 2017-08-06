@@ -1,0 +1,102 @@
+{
+  XH:'num',
+
+  CODE_COL:'code',
+
+  NAME_COL:'name',
+  CODE_NAME:'code/name',
+  IS_USE_COL:'enable',
+  queryBtn:'query',
+  resetBtn:'reset',
+
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+  cancelBtn:'cancel',
+  editBtn:'modify',
+  editmoreBtn:'batch modify',
+  browseBtn:'browse',
+
+  importBtn:'import',
+  exportBtn:'export',
+
+  CODEMSG:'coding repeat！',
+  message:'saving...',
+
+  SAVETIP:'save success!',
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete?',
+  DELTIP1:'Delete  success!',
+  EDITETIP:'Modify  success!',
+
+  OPTYPE_COL:'operation type',
+
+
+  START_DATE1:'start Date',
+  END_DATE1:'end Date',
+
+
+  TAX_NO1:'Tax number',
+
+
+  MSG1:'Customer information is not complete, please confirm!',
+  MSG2:'Mobile phone format is illegal!',
+  MSG3:'Fixed telephone format is not legal!',
+  MSG4:'Email address format is not legal!',
+  MSG5:'Start date  can not later than the end date!',
+  MSG6:'End date as immutable modified item is empty!',
+
+  MSG7:'Start date as immutable modified item is empty!',
+  MSG8:'Please check the bath changes you want!',
+
+  MSG9:'Customers have associated bank can not be deleted！',
+  MS10:'The customer has been set the reference books of the suppliers, do not delete!',
+
+  MS11:'The customer code has been in existence！',
+  MSG12:'The customer name already exists！',
+  MSG13:'Taxpayer identification number has been in existence！',
+  MSG14:'Please save the customer information!',
+  MSG15:'The bank account not repeatable!',
+
+  TIP:'tip',
+
+  ADDRESS1:'address',
+
+  CONTACT1:'contact',
+
+  TEL1:'telephone',
+
+  MOBILE1:'mobile',
+
+  QQ1:'QQ number',
+  EMAIL1:'email',
+
+  WECHAT1:'webchat',
+
+  VENDOR_NAME:'vendor name',
+
+  VENDOR_CODE:'vendor code',
+
+  CUSTOM_ID1:'customer ID',
+
+  BASE:'basic information',
+
+
+
+  BANK_ID:'bank ID',
+  ACCOUNT_NAME:'account name',
+
+  BANK_NAME:'bank name',
+
+  DEPOSIT_BANK_NAME:'deposit bank name',
+
+  BANK_ACCOUNT:'acount number',
+
+  CORRESPONDENT:'correspondent',
+
+  IS_DEFAULT:'is default',
+
+
+  BANK:'open bank'
+}
+}

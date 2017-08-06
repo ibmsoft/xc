@@ -1,0 +1,39 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.base.persistence.account.UserSettingMapper">
+
+	<resultMap id="userSettingMap" type="com.cubedrive.base.domain.account.UserSetting">
+		<id column="user_setting_id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="language" property="lang" jdbcType="CHAR" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		user_setting.user_setting_id, user_setting.user_id, user_setting.language
+	</sql>
+
+	<insert id="insertUserSetting">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"	order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into user_setting
+		(user_id,language)
+		values
+		(#{userId,jdbcType=INTEGER},#{userSetting.lang,jdbcType=CHAR})
+	</insert>
+
+	<update id="updateUserSetting">
+		update user_setting
+		set language=#{userSetting.lang,jdbcType=CHAR}
+		where user_id=#{userSetting.userId}
+	</update>
+	
+	<select id="load" parameterType="java.lang.Integer"	resultMap="userSettingMap">
+		select	<include refid="base_column_list" />
+		from user_setting
+		where user_setting.user_id=#{userId}
+		limit 1
+	</select>
+
+</mapper>

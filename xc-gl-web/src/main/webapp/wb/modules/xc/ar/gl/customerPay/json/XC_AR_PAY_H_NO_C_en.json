@@ -1,0 +1,17 @@
+{
+	save:'save',
+  	saveMsg1:'Split Opening amount exceeds the original amount',
+  	saveMsg2:'Successfulilly save',
+  	saveMsg3:'Fill out the form is not complete',
+  	label:'Suppliers beginning Split',
+  	docType:'document type',
+  	docCode:'document code',
+  	glDate:'recorded date',
+  	amount:'pay amount',
+  	description:'description',
+  	tax:'tax',
+  	taxRate:'taxRate',
+  	payDocPre:'payDoc-pre',
+  	saveMsg4:'saveMsg4',
+  	customerPay_contract:'Contract'
+}

@@ -1,0 +1,11 @@
+{
+  maintainBtn:"Maintain Segment",
+  rownum:"NO",
+  segmentName:"Segment Name",
+  segmentType:"Segment Category",
+  isEnabled:"Enable",
+  segmentDesc:"Description",
+  segmentCode:"Segment Code",
+  orderNumber:"Order Number",
+  moduleTitle:"Segment Management"
+}

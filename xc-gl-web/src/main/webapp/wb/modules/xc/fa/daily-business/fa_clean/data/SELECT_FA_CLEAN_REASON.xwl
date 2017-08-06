@@ -1,0 +1,1 @@
+{"inframe":false,"title":"查询清理原因","hidden":false,"roles":{"default":1},"children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"SELECT\n\tREASON_ID,\n\tREASON_NAME\nFROM\n\txc_fa_clean_reason \n\n","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

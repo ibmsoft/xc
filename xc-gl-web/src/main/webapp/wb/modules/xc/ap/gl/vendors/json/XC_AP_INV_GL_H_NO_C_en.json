@@ -1,0 +1,16 @@
+{
+	save:'save',
+  	saveMsg1:'Split Opening amount exceeds the original amount',
+  	saveMsg2:'Successfulilly save',
+  	saveMsg3:'Fill out the form is not complete',
+  	label:'Suppliers beginning Split',
+  	docType:'document type',
+  	docCode:'document code',
+  	glDate:'recorded date',
+  	amount:'total ad valorem tax',
+  	description:'description',
+  	tax:'tax',
+  	taxRate:'taxRate',
+  	shoulePayDoc:'shoulePayDoc',
+  	editorMsg1:'editorMsg1'
+}

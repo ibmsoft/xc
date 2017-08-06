@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"SELECT xgag.ACC_GROUP_ID,xgag.ACC_GROUP_NAME FROM xc_gl_acc_group xgag  order by xgag.ORDERBY asc ","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

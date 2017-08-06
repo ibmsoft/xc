@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.XCGLCommonMapper">
+	
+	<!-- CCID信息 -->
+	<sql id="ccidItemColumns">
+		ccid,
+		ccid_code ccidCode,
+		ccid_name ccidName,
+		ledger_id ledgerId,
+		acc_id accId,
+		acc_code accCode,
+		acc_name accName,
+		vendor_id vendorId,
+		vendor_code vendorCode,
+		vendor_name vendorName,
+		customer_id customerId,
+		customer_code customerCode,
+		customer_name customerName,
+		org_id orgId,
+		org_code orgCode,
+		org_name orgName,
+		dept_id deptId,
+		dept_code deptCode,
+		dept_name deptName,
+		emp_id empId,
+		emp_code empCode,
+		emp_name empName,
+		product_id productId,
+		product_code productCode,
+		product_name productName,
+		project_id projectId,
+		project_code projectCode,
+		project_name projectName,
+		custom1_id custom1Id,
+		custom1_code custom1Code,
+		custom1_name custom1Name,
+		custom2_id custom2Id,
+		custom2_code custom2Code,
+		custom2_name custom2Name,
+		custom3_id custom3Id,
+		custom3_code custom3Code,
+		custom3_name custom3Name,
+		custom4_id custom4Id,
+		custom4_code custom4Code,
+		custom4_name custom4Name,
+		is_leaf isLeaf,
+		creation_date creationDate,
+		created_by createdBy,
+		last_update_date lastUpdateDate,
+		last_updated_by lastUpdatedBy	
+	</sql>
+	
+	<!-- 账簿信息映射关系 -->
+	<resultMap type="com.xzsoft.xc.util.modal.Ledger" id="ledgerMap">
+		<id property="ledgerId" column="LEDGER_ID" />
+		<result property="ledgerCode" column="LEDGER_CODE" />
+		<result property="ledgerName" column="LEDGER_NAME" />
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="startPeriodCode" column="START_PERIOD_CODE" />
+		<result property="cnyCode" column="CURRENCY_CODE" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="orgCode" column="ORG_CODE" />
+		<result property="retainedAccId" column="RETAINED_ACC_ID" />
+		<result property="exchangeAccId" column="EXCHANGE_ACC_ID" />
+		<result property="ledgerDesc" column="LEDGER_ACC_DESC" />
+		<result property="isValid" column="IS_VALID" />
+		<result property="bgHrcyId" column="BG_HRCY_ID" />
+		<result property="bgIsChk" column="BG_IS_CHK" />
+		<result property="bgExPeriod" column="BG_EX_PERIOD" />
+		<result property="bgIsSpecial" column="BG_IS_SPECIAL" />
+		<result property="bgIsCash" column="BG_IS_CASH" />
+		<result property="exHrcyId" column="EX_HRCY_ID" />
+		<result property="exIaAccId" column="EX_IA_ACC_ID" />
+		<result property="exCrAccId" column="EX_CR_ACC_ID" />
+		<result property="isCrPay" column="IS_CR_PAY" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	<sql id="ledgerSql">
+		t.LEDGER_ID         ,
+		t.LEDGER_CODE       ,
+		t.LEDGER_NAME       ,
+		t.ACC_HRCY_ID       ,
+		t.START_PERIOD_CODE ,
+		t.CURRENCY_CODE     ,
+		t.ORG_ID            ,
+		t.RETAINED_ACC_ID   ,
+		t.EXCHANGE_ACC_ID   ,
+		t.LEDGER_ACC_DESC   ,
+		t.IS_VALID	,
+		t.BG_HRCY_ID	,
+		t.BG_IS_CHK	,
+		t.BG_EX_PERIOD	,
+		t.BG_IS_SPECIAL	,
+		t.BG_IS_CASH	,
+		t.EX_HRCY_ID	,
+		t.EX_IA_ACC_ID	,
+		t.EX_CR_ACC_ID	,
+		t.IS_CR_PAY		,
+		t.CREATED_BY,
+		t.CREATION_DATE,
+		t.LAST_UPDATED_BY,
+		t.LAST_UPDATE_DATE
+	</sql>
+	
+	<!-- 科目体系信息 -->
+	<resultMap type="com.xzsoft.xc.gl.modal.AccHrcy" id="accHrcyResultMap">
+		<result property="accHrcyId" column="ACC_HRCY_ID" />
+		<result property="accHrcyCode" column="ACC_HRCY_CODE" />
+		<result property="accHrcyName" column="ACC_HRCY_NAME" />
+		<result property="accHrcyDesc" column="ACC_HRCY_DESC" />
+		<result property="isPrepared" column="IS_PREPARED" />
+		<result property="orderby" column="ORDERBY" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="creationDate" column="CREATION_DATE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" />
+	</resultMap>
+	<sql id="accHrcySql">
+		ACC_HRCY_ID,
+		ACC_HRCY_CODE,
+		ACC_HRCY_NAME,
+		ACC_HRCY_DESC,
+		IS_PREPARED,
+		ORDERBY,
+		START_DATE,
+		END_DATE,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY	
+	</sql>
+	
+	
+	
+	<!-- 查询所有的账簿信息  -->
+	<select id="getAllLedgers" resultMap="ledgerMap">
+		select <include refid="ledgerSql"/>
+		  from xc_gl_ledgers t
+	</select>
+	
+	<!-- 查询用户权限下的账簿信息  -->
+	<select id="getSecAllLedgers" parameterType="java.lang.String" resultMap="ledgerMap">
+		select <include refid="ledgerSql"/>
+		  from xc_gl_ledgers t
+		where EXISTS (select 1 from xc_gl_ld_sec b where t.LEDGER_ID = b.LEDGER_ID and b.USER_ID =#{userId})	
+	</select>
+	
+	<!-- 获取账簿信息 -->
+	<select id="getLedger" parameterType="java.lang.String" resultMap="ledgerMap">
+		select <include refid="ledgerSql"/>
+		  from xc_gl_ledgers t
+		 where t.LEDGER_ID = #{ledgerId}	
+	</select>
+	
+	<!-- 获取账簿信息 -->
+	<select id="getLedgerByCode" parameterType="java.lang.String" resultMap="ledgerMap">
+		select <include refid="ledgerSql"/>
+		  from xc_gl_ledgers t
+		 where t.LEDGER_CODE = #{ledgerCode}	
+	</select>
+	
+	<!-- 按组织ID查询账簿 -->
+	<select id="getLedgerByOrg" parameterType="java.lang.String" resultMap="ledgerMap">
+		 select <include refid="ledgerSql"/> 
+		 	from xc_gl_ledgers t 
+		 where t.ORG_ID = #{orgId}
+	</select>
+
+	<!-- 查询账簿下已启用的辅助核算信息   -->
+	<select id="getLedgerSemgments" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.LedgerSegment">
+		select t.LD_SEG_ID    ldSegId,
+		       t.LEDGER_ID    ledgerId,
+		       t.SEG_CODE     segCode,
+		       a.seg_name     segName,
+		       t.LD_SEG_ALIAS ldSegAlias,
+		       t.IS_ENABLED   isEnabled,
+		       t.LD_SEG_DESC  ldSegDesc
+		  from xc_gl_ld_ass_segments t, xc_gl_ass_segments a
+		 where t.SEG_CODE = a.SEG_CODE
+		   and t.is_enabled = 1
+		   <choose>
+		   		<when test="ledgerId != 'ALL' ">
+		   			and t.ledger_id = #{ledgerId}
+		   		</when>
+		   		<when test="ledgerId == 'ALL' ">
+				 	and EXISTS (select 1 from xc_gl_ld_sec b where t.LEDGER_ID = b.LEDGER_ID and b.USER_ID =#{userId})		   		
+		   		</when>
+		   </choose>
+	</select>
+
+	<!-- 获取账簿辅助核算段启用情况 -->
+	<select id="getSegEnabled" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select a.SEG_CODE,
+		       b.IS_ENABLED
+		  from xc_gl_ass_segments a
+		  left join xc_gl_ld_ass_segments b
+		    on a.SEG_CODE = b.SEG_CODE
+		   and b.LEDGER_ID = #{ledgerId}
+		 order by a.ORDERBY
+	</select>
+	
+	<!-- 查询所有会计科目体系信息 -->
+	<select id="getAllAccHrcys" resultMap="accHrcyResultMap">
+		SELECT <include refid="accHrcySql" /> FROM XC_GL_ACC_HRCY
+	</select>
+	
+	<!-- 按科目体系ID查询科目体系信息 -->
+	<select id="getAccHrcyById" parameterType="java.lang.String" resultMap="accHrcyResultMap">
+		SELECT <include refid="accHrcySql" /> FROM XC_GL_ACC_HRCY where ACC_HRCY_ID = #{accHrcyId}
+	</select>
+	
+	<!-- 按科目体系编码查询科目体系信息 -->
+	<select id="getAccHrcyByCode" parameterType="java.lang.String" resultMap="accHrcyResultMap">
+		SELECT <include refid="accHrcySql" /> FROM XC_GL_ACC_HRCY where ACC_HRCY_CODE = #{accHrcyCode}
+	</select>
+	
+	<!-- 查询供应商信息 -->
+	<select id="getAllVendors" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Vendor">
+		select t.VENDOR_ID   vendorId,
+		       t.VENDOR_CODE vendorCode,
+		       t.VENDOR_NAME vendorName,
+		       t.START_DATE  startDate,
+		       t.END_DATE    endDate
+		  from xc_ap_vendors t	
+		  <if test="dbType == 'mysql' ">
+		 	 <![CDATA[
+		 		where t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 	 ]]>		  
+		  </if>
+		  <if test="dbType == 'oracle' ">
+		 	  <![CDATA[
+		 	  	where t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  ]]>		  
+		  </if>
+	</select>
+	
+	<!-- 查询供应商信息 -->
+	<select id="getVendorById" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Vendor">
+		select t.VENDOR_ID   vendorId,
+		       t.VENDOR_CODE vendorCode,
+		       t.VENDOR_NAME vendorName,
+		       t.START_DATE  startDate,
+		       t.END_DATE    endDate
+		  from xc_ap_vendors t	
+		 where t.VENDOR_ID = #{vendorId}
+		  <if test="dbType == 'mysql' ">
+		 	 <![CDATA[
+		 		and t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 	 ]]>		  
+		  </if>
+		  <if test="dbType == 'oracle' ">
+		 	  <![CDATA[
+		 	  	and t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  ]]>		  
+		  </if>
+	</select>
+	
+	<!-- 查询客户信息  -->
+	<select id="getAllCustomers" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Customer">
+		select t.CUSTOMER_ID   customerId,
+		       t.CUSTOMER_CODE customerCode,
+		       t.CUSTOMER_NAME customerName,
+		       t.START_DATE    startDate,
+		       t.END_DATE      endDate
+		  from xc_ar_customers t
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+		 	<![CDATA[
+		 		where t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>  
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+		 	<![CDATA[
+		 	  	where t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>  
+		 	</when>
+		 </choose>		
+	</select>
+	
+	<!-- 查询单个客户信息  -->
+	<select id="getCustomerById" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Customer">
+		select t.CUSTOMER_ID   customerId,
+		       t.CUSTOMER_CODE customerCode,
+		       t.CUSTOMER_NAME customerName,
+		       t.START_DATE    startDate,
+		       t.END_DATE      endDate
+		  from xc_ar_customers t
+		 where t.CUSTOMER_ID = #{customerId}
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+		 	<![CDATA[
+		 		and t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>  
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+		 	<![CDATA[
+		 	  	and t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>  
+		 	</when>
+		 </choose>		
+	</select>
+	
+	<!-- 查询产品信息 -->
+	<select id="getAllProducts" resultType="com.xzsoft.xc.gl.modal.Product">
+		select t.PRODUCT_ID   productId,
+		       t.PRODUCT_CODE productCode,
+		       t.PRODUCT_NAME productName,
+		       t.START_DATE   startDate,
+		       t.END_DATE     endDate
+		  from xc_gl_products t
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+		 	<![CDATA[
+		 		where t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+		 	<![CDATA[
+		 	  	where t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>
+		 	</when>
+		 </choose>	
+		 
+	</select>
+	
+	<!-- 查询内部往来信息 -->
+	<select id="getAllOrgs" resultType="com.xzsoft.xc.gl.modal.Organization">
+		select t.ORG_ID         orgId,
+		       t.ORG_CODE       orgCode,
+		       t.ORG_NAME       orgName,
+		       t.ORG_SHORT_NAME orgShortName,
+		       t.UP_ORG_ID      upOrgId
+		  from xip_pub_orgs t
+		 where t.ENABLE_FLAG = 'Y'	
+	</select>
+	
+	<!-- 按组织ID查询组织信息 -->
+	<select id="getOrgById" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Organization">
+		select t.ORG_ID         orgId,
+		       t.ORG_CODE       orgCode,
+		       t.ORG_NAME       orgName,
+		       t.ORG_SHORT_NAME orgShortName,
+		       t.UP_ORG_ID      upOrgId
+		  from xip_pub_orgs t
+		 where t.ENABLE_FLAG = 'Y' 
+		   and t.ORG_ID = #{orgId}
+	</select>
+
+	<!-- 按账簿ID查询组织信息 -->
+	<select id="getOrgByLedgerId" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Organization">
+		select t.ORG_ID         orgId,
+		       t.ORG_CODE       orgCode,
+		       t.ORG_NAME       orgName,
+		       t.ORG_SHORT_NAME orgShortName,
+		       t.UP_ORG_ID      upOrgId
+		  from xip_pub_orgs t, xc_gl_ledgers xl
+		 where t.ORG_ID = xl.ORG_ID
+		   and xl.LEDGER_ID = #{ledgerId}
+	</select>
+
+	<!-- 查询个人往来信息  -->
+	<select id="getAllEmps" resultType="com.xzsoft.xc.gl.modal.Employee">
+		select t.EMP_ID empId, t.EMP_CODE empCode, t.EMP_NAME empName
+		  from xip_pub_emps t
+		 where t.ATTRIBUTE2 = 'Y'	
+	</select>
+	
+	<!-- 查询账簿下的成本中心信息  -->
+	<select id="getAllDeptsByLedger" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Department">
+		select t.DEPT_ID         deptId,
+		       t.DEPT_CODE       deptCode,
+		       t.DEPT_NAME       deptName,
+		       t.DEPT_SHORT_NAME deptShortName,
+		       t.UP_DP_ID        upDeptId,
+		       t.ORG_ID          orgId,
+		       xl.LEDGER_ID		 ledgerId
+		  from xip_pub_depts t,xc_gl_ld_depts xld, xc_gl_ledgers xl
+		where t.ENABLE_FLAG = 'Y'
+		  and t.ORG_ID = xl.ORG_ID
+          and xld.DEPT_ID = t.DEPT_ID
+      	  and xld.LEDGER_ID = xl.LEDGER_ID
+		  and t.ENABLE_FLAG = 'Y' 
+		  and xld.IS_ENABLED = 1
+		  and xld.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 查询账簿下的项目信息  -->
+	<select id="getAllProjectsByLedger" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Project">
+		select t.PROJECT_ID    projectId,
+		       t.PROJECT_CODE  projectCode,
+		       t.PROJECT_NAME  projectName,
+		       t.UP_PROJECT_ID upProjectId,
+		       t.LEDGER_ID     ledgerId
+		  from xc_pm_projects t
+		where t.LEDGER_ID = #{ledgerId}	
+	</select>
+	
+	<!-- 查询账簿下的自定义段值信息  -->
+	<select id="getAllCustomsByLedger" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Custom">
+		select t.LEDGER_ID           ledgerId,
+		       t.SEG_CODE            segCode,
+		       t.LD_CUST_SEGVAL_ID   segvalId,
+		       t.LD_CUST_SEGVAL_CODE segvalCode,
+		       t.LD_CUST_SEGVAL_NAME segvalName,
+		       t.UP_CUST_SEGVAL_ID	 upSegvalId,
+		       t.START_DATE          startDate,
+		       t.END_DATE            endDate
+		  from xc_gl_ld_cust_ass_segvals t
+		where t.LEDGER_ID = #{ledgerId}	
+		  and t.SEG_CODE = #{segCode}
+		
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+		 	<![CDATA[
+		 		and t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+		 	<![CDATA[
+		 	  	and t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>
+		 	</when>
+		 </choose>	
+		 	
+	</select>	
+	
+	<!-- 查询会计科目体系下的所有科目信息 -->
+	<select id="getAllAccountsByHrcy" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+			select t.ACC_ID            accId,
+			       t.ACC_CODE          accCode,
+			       t.ACC_NAME          accName,
+			       t.UP_ACC_CODE       upAccCode,
+			       IFNULL((select a.ACC_ID from xc_gl_accounts a where a.ACC_CODE = t.UP_ACC_CODE and a.acc_hrcy_id = #{hrcyId}),'-1') upAccId ,
+			       t.ACC_CATEGORY_CODE accCategoryCode,
+			       t.ACC_GROUP_ID      accGroupId,
+			       t.ACC_HRCY_ID       accHrcyId,
+			       t.BALANCE_DIRECTION balanceDirection,
+			       t.IS_BANK_ACC       isBankAcc,
+			       t.IS_CASH_ACC       isCashAcc,
+			       t.IS_CASH_ITEM      isCashItem,
+			       t.START_DATE        startDate,
+			       t.END_DATE          endDate,
+			       t.IS_LEAF           isLeaf,
+			       t.ACC_LEVEL         accLevel
+			  from xc_gl_accounts t
+			where t.acc_hrcy_id = #{hrcyId}			 	
+		 	<![CDATA[
+		 		and t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+			select t.ACC_ID            accId,
+			       t.ACC_CODE          accCode,
+			       t.ACC_NAME          accName,
+			       t.UP_ACC_CODE       upAccCode,
+			       nvl((select a.ACC_ID from xc_gl_accounts a where a.ACC_CODE = t.UP_ACC_CODE and a.acc_hrcy_id = #{hrcyId}),'-1') upAccId ,
+			       t.ACC_CATEGORY_CODE accCategoryCode,
+			       t.ACC_GROUP_ID      accGroupId,
+			       t.ACC_HRCY_ID       accHrcyId,
+			       t.BALANCE_DIRECTION balanceDirection,
+			       t.IS_BANK_ACC       isBankAcc,
+			       t.IS_CASH_ACC       isCashAcc,
+			       t.IS_CASH_ITEM      isCashItem,
+			       t.START_DATE        startDate,
+			       t.END_DATE          endDate,
+			       t.IS_LEAF           isLeaf,
+			       t.ACC_LEVEL         accLevel
+			  from xc_gl_accounts t
+			where t.acc_hrcy_id = #{hrcyId}	
+		 	<![CDATA[
+		 	  	and t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>
+		 	</when>
+		 </choose>			
+	</select>
+	
+	<!-- 查询会计科目体系下的所有科目信息 -->
+	<select id="getAllAccountsByLedger" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		 <choose>
+		 	<when test="dbType == 'mysql' ">
+			select t.ACC_ID            accId,
+			       t.ACC_CODE          accCode,
+			       t.ACC_NAME          accName,
+			       t.UP_ACC_CODE       upAccCode,
+			       IFNULL((select a.ACC_ID from xc_gl_accounts a where a.ACC_CODE = t.UP_ACC_CODE and a.acc_hrcy_id = b.ACC_HRCY_ID),'-1') upAccId ,
+			       t.ACC_CATEGORY_CODE accCategoryCode,
+			       t.ACC_GROUP_ID      accGroupId,
+			       t.ACC_HRCY_ID       accHrcyId,
+			       t.BALANCE_DIRECTION balanceDirection,
+			       t.IS_BANK_ACC       isBankAcc,
+			       t.IS_CASH_ACC       isCashAcc,
+			       t.IS_CASH_ITEM      isCashItem,
+			       t.START_DATE        startDate,
+			       t.END_DATE          endDate,
+			       t.IS_LEAF           isLeaf,
+			       t.ACC_LEVEL         accLevel
+			  from xc_gl_accounts t, xc_gl_ledgers b
+			where t.ACC_HRCY_ID = b.ACC_HRCY_ID
+			  and b.LEDGER_ID = #{ledgerId}			 	
+		 	<![CDATA[
+		 		and t.START_DATE <=  NOW() and t.END_DATE >= NOW()
+		 		]]>
+		 	</when>
+		 	<when test="dbType == 'oracle' ">
+			select t.ACC_ID            accId,
+			       t.ACC_CODE          accCode,
+			       t.ACC_NAME          accName,
+			       t.UP_ACC_CODE       upAccCode,
+			       nvl((select a.ACC_ID from xc_gl_accounts a where a.ACC_CODE = t.UP_ACC_CODE and a.acc_hrcy_id = b.ACC_HRCY_ID),'-1') upAccId ,
+			       t.ACC_CATEGORY_CODE accCategoryCode,
+			       t.ACC_GROUP_ID      accGroupId,
+			       t.ACC_HRCY_ID       accHrcyId,
+			       t.BALANCE_DIRECTION balanceDirection,
+			       t.IS_BANK_ACC       isBankAcc,
+			       t.IS_CASH_ACC       isCashAcc,
+			       t.IS_CASH_ITEM      isCashItem,
+			       t.START_DATE        startDate,
+			       t.END_DATE          endDate,
+			       t.IS_LEAF           isLeaf,
+			       t.ACC_LEVEL         accLevel
+			  from xc_gl_accounts t, xc_gl_ledgers b
+			where t.ACC_HRCY_ID = b.ACC_HRCY_ID
+			  and b.LEDGER_ID = #{ledgerId}	
+		 	<![CDATA[
+		 	  	and t.START_DATE <= sysdate and t.END_DATE >= sysdate
+		 	  	]]>
+		 	</when>
+		 </choose>			
+	</select>
+	
+	<!-- 查询所有已经存在的CCID信息 -->	
+	<select id="getCCID4Ledger" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.CCID">
+		select <include refid="ccidItemColumns"></include>
+		  from xc_gl_ccid
+		where ledger_id = #{ledgerId}
+	</select>
+	
+	<!-- 查询CCID信息  -->	
+	<select id="getCCIDById" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.CCID">
+		select <include refid="ccidItemColumns" />
+		  from xc_gl_ccid
+		where CCID = #{id}
+	</select>
+	
+	<!-- 查询CCID信息  -->	
+	<select id="getCCIDByCode" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.CCID">
+		select <include refid="ccidItemColumns" />
+		  from xc_gl_ccid
+		where ledger_id = #{ledgerId} and CCID_CODE = #{code}
+	</select>
+	
+	<!-- 查询所有现金流量项目信息 -->
+	<select id="getCashItems" resultType="com.xzsoft.xc.gl.modal.CashItem">
+		select t.CA_ID        caId,
+		       t.CA_CODE      caCode,
+		       t.CA_NAME      caName,
+		       t.UP_ID        upId,
+		       t.CA_DIRECTION caDirection,
+		       t.CA_LEVEL     caLevel,
+		       t.START_DATE   startDate,
+		       t.END_DATE     endDate,
+		       t.CA_DESC      caDesc,
+		       t.ORDERBY      orderby
+		  from xc_gl_cash_items t	
+	</select>
+	
+	<!-- 查询凭证分类信息  -->
+	<select id="getVCategory" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VoucherCategory">
+		select t.V_CATEGORY_ID   categoryId,
+		       t.V_CATEGORY_CODE categoryCode,
+		       t.V_CATEGORY_NAME categoryName,
+		       t.V_CATEGORY_DESC categoryDesc
+		  from xc_gl_v_category t
+		 where t.v_category_id = #{categoryId}
+	</select>
+	
+	<!-- 查询所有凭证分类信息  -->
+	<select id="getAllVCategory" resultType="com.xzsoft.xc.gl.modal.VoucherCategory">
+		select t.V_CATEGORY_ID   categoryId,
+		       t.V_CATEGORY_CODE categoryCode,
+		       t.V_CATEGORY_NAME categoryName,
+		       t.V_CATEGORY_DESC categoryDesc
+		  from xc_gl_v_category t
+	</select>	
+	
+	<!-- 查询凭证分类信息   -->
+	<select id="getCategory" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VoucherCategory">
+		select t.V_CATEGORY_ID   categoryId,
+		       t.V_CATEGORY_CODE categoryCode,
+		       t.V_CATEGORY_NAME categoryName,
+		       t.V_CATEGORY_DESC categoryDesc
+		  from xc_gl_v_category t
+		where t.V_CATEGORY_ID = #{catId}
+	</select>		
+	
+	<!-- 按凭证分类编码查询凭证分类信息     -->
+	<select id="getCategoryByCode" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VoucherCategory">
+		select t.V_CATEGORY_ID   categoryId,
+		       t.V_CATEGORY_CODE categoryCode,
+		       t.V_CATEGORY_NAME categoryName,
+		       t.V_CATEGORY_DESC categoryDesc
+		  from xc_gl_v_category t
+		where t.V_CATEGORY_CODE = #{catCode}
+	</select>
+	
+	<!-- 根据当前日期查询账簿会计期  -->
+	<select id="getCurrentPeriod" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select a.period_code         periodCode,
+		       year,
+		       quarter,
+		       start_date          startDate,
+		       end_date            endDate,
+		       is_enabled          isEnabled,
+		       is_adj_period       isAdjPeriod,
+		       a.ledger_id        ledgerId,
+		       a.ld_period_status periodStatus
+		  from xc_gl_ld_period a, xc_gl_period b
+		 where a.PERIOD_CODE = b.PERIOD_CODE
+		   and a.LEDGER_ID = #{ledgerId}
+		   and a.LD_PERIOD_STATUS = '1'
+		   and b.IS_ADJ_PERIOD = 'N'
+		   <choose>
+		   		<when test="dbType = 'mysql' ">
+					<![CDATA[
+						and b.START_DATE <= NOW() and b.end_date >= NOW()
+					]]>		   		
+		   		</when>
+		   		<when test="dbType = 'oracle' ">
+					<![CDATA[
+						and b.START_DATE <= sysdate and b.end_date >= sysdate
+					]]>		   		
+		   		</when>
+		   </choose>
+	</select>
+	
+	<!-- 查询账簿打开的最大会计日期  -->
+	<select id="getMaxOpenPeriod" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select a.period_code         periodCode,
+		       year,
+		       quarter,
+		       start_date          startDate,
+		       end_date            endDate,
+		       is_enabled          isEnabled,
+		       is_adj_period       isAdjPeriod,
+		       a.ledger_id        ledgerId,
+		       a.ld_period_status periodStatus
+		  from xc_gl_ld_period a, xc_gl_period b
+		 where a.PERIOD_CODE = b.PERIOD_CODE
+		   and a.LEDGER_ID = #{ledgerId}
+		   and a.LD_PERIOD_STATUS = '1'
+		   and b.START_DATE =
+		       (select max(c.START_DATE)
+		          from xc_gl_period c, xc_gl_ld_period d
+		         where c.PERIOD_CODE = d.PERIOD_CODE
+		           and d.LEDGER_ID = #{ledgerId}
+		      		<choose>
+				   		<when test="dbType = 'mysql' ">
+							<![CDATA[
+								and b.end_date <= NOW()
+							]]>		   		
+				   		</when>
+				   		<when test="dbType = 'oracle' ">
+							<![CDATA[
+								and b.end_date <= sysdate
+							]]>		   		
+				   		</when>
+		      		</choose>     
+		           )
+	</select>
+	
+	<!-- 查询某个账簿下的会计期信息  -->
+	<select id="getPeriod" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select p.period_code         periodCode,
+		       year,
+		       quarter,
+		       start_date          startDate,
+		       end_date            endDate,
+		       is_enabled          isEnabled,
+		       is_adj_period       isAdjPeriod,
+		       xp.ledger_id        ledgerId,
+		       xp.ld_period_status periodStatus
+		  from xc_gl_period p, xc_gl_ld_period xp
+		 where p.period_code = xp.period_code
+		   and xp.ledger_id = #{ledgerId}
+		   and xp.period_code = #{periodCode}
+	</select>
+	
+	<!-- 判断会计期是否在当前会计期的日期范围之内 -->
+	<select id="getPeriodByAccDate" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select p.period_code         periodCode,
+		       year,
+		       quarter,
+		       start_date          startDate,
+		       end_date            endDate,
+		       is_enabled          isEnabled,
+		       is_adj_period       isAdjPeriod
+		  from xc_gl_period p
+		 where p.PERIOD_CODE = #{pcode}
+	 	<choose>
+	 		<when test="dbType == 'mysql'">
+			  <![CDATA[
+			   	and p.START_DATE <= DATE_FORMAT(#{accDate},'%Y-%m-%d') and p.END_DATE >= DATE_FORMAT(#{accDate},'%Y-%m-%d')	
+			  ]]>		 		
+	 		</when>
+	 		<when test="dbType == 'oracle'">
+			  <![CDATA[
+			   	and p.START_DATE <= to_date(#{accDate},'yyyy-mm-dd') and p.END_DATE >= to_date(#{accDate},'yyyy-mm-dd')	
+			  ]]>
+	 		</when>
+	 	</choose>
+	</select>
+	
+	<!-- 查询某个账簿下的所有会计期信息  -->
+	<select id="getAllPeriods" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Period">
+		select p.period_code         periodCode,
+		       year,
+		       quarter,
+		       start_date          startDate,
+		       end_date            endDate,
+		       is_enabled          isEnabled,
+		       is_adj_period       isAdjPeriod,
+		       xp.ledger_id        ledgerId,
+		       xp.ld_period_status periodStatus
+		  from xc_gl_period p, xc_gl_ld_period xp
+		 where p.period_code = xp.period_code
+		   and xp.ledger_id = #{ledgerId}
+	</select>
+	
+	<!-- 查询账簿下所有的科目信息  -->
+	<select id="getLedgerAllAccounts" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		select a.acc_id accId,
+		       a.acc_code accCode,
+		       a.acc_name accName,
+		       a.up_acc_code upAccCode,
+		       a.acc_category_code accCategoryCode,
+		       a.acc_hrcy_id accHrcyId,
+		       a.balance_direction balanceDirection,
+		       a.is_bank_acc isBankAcc,
+		       a.is_cash_acc isCashAcc,
+		       a.is_cash_item isCashItem,
+		       a.is_leaf isLeaf,
+		       a.acc_level accLevel,
+		       a.ass_key assKey,
+		       ld.ledger_id ledgerId,
+		       ld.start_date startDate,
+		       ld.end_date endDate,
+		       ld.is_foregin_cny isForeignCny,
+		       ld.default_currency defaultCny,
+		       ld.is_amount isAmount,
+		       ld.dim_id dimId,
+		       ld.bg_item_id bgItemId
+		  from xc_gl_ld_accounts la, xc_gl_accounts a
+		where la.acc_id = a.acc_id
+		  and la.ledger_id = #{ledgerId}
+		  <choose>
+		  	<when test="dbType == 'mysql' ">
+			  <![CDATA[
+			  	and la.start_date <= NOW() and la.end_date >= NOW()			  
+			  ]]>		  	
+		  	</when>
+		  	<when test="dbType == 'oracle' ">
+			  <![CDATA[
+			  	and la.start_date <= sysdate and la.end_date >= sysdate		  
+			  ]]>		  	
+		  	</when>
+		  </choose>
+	</select>
+	
+	<!-- 查询账簿下指定的科目信息  -->
+	<select id="getLedgerAccounts" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		select a.acc_id accId,
+		       a.acc_code accCode,
+		       a.acc_name accName,
+		       a.up_acc_code upAccCode,
+		       a.acc_category_code accCategoryCode,
+		       a.acc_hrcy_id accHrcyId,
+		       a.balance_direction balanceDirection,
+		       a.is_bank_acc isBankAcc,
+		       a.is_cash_acc isCashAcc,
+		       a.is_cash_item isCashItem,
+		       a.is_leaf isLeaf,
+		       a.acc_level accLevel,
+		       a.ass_key assKey,
+		       la.ledger_id ledgerId,
+		       la.start_date startDate,
+		       la.end_date endDate,
+		       la.is_foregin_cny isForeignCny,
+		       la.default_currency defaultCny,
+		       la.is_amount isAmount,
+		       la.dim_id dimId,
+		       la.bg_item_id bgItemId
+		  from xc_gl_ld_accounts la, xc_gl_accounts a
+		where la.acc_id = a.acc_id
+		  and la.ledger_id = #{ledgerId}
+		  <choose>
+		  	<when test="dbType == 'mysql' ">
+			  <![CDATA[
+			  	and la.start_date <= NOW() and la.end_date >= NOW()			  
+			  ]]>		  	
+		  	</when>
+		  	<when test="dbType == 'oracle' ">
+			  <![CDATA[
+			  	and la.start_date <= sysdate and la.end_date >= sysdate		  
+			  ]]>		  	
+		  	</when>
+		  </choose>
+		  and a.acc_id in 
+		  <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+		  	#{item}
+		  </foreach>
+	</select>
+	
+	<!-- 查询科目启用的辅助段信息  -->
+	<select id="getAccSeg" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select b.SEG_CODE
+		  from xc_gl_ld_accounts a, xc_gl_ld_ass_segments b, xc_gl_ld_acc_ass_seg c
+		 where a.LD_ACC_ID = c.LD_ACC_ID
+		   and b.LD_SEG_ID = c.LD_SEG_ID
+		   and a.LEDGER_ID = b.LEDGER_ID
+		   and b.IS_ENABLED = 1
+		   and c.IS_ENABLED = 1
+		   and a.ACC_ID = #{accId}
+		   and a.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 查询凭证来源   -->
+	<select id="getVSource" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.VSource">
+		select t.V_SRC_CODE srcCode,
+		       t.V_SRC_URL  srcUrl,
+		       t.V_SRC_DESC srcDesc,
+		       t.IS_SYS     isSys,
+		       t.V_CAT      vCat
+		  from xc_gl_v_source t
+		 where t.v_src_code = #{srcCode}
+	</select>
+	
+	<!-- 根据用户ID查询员工信息  -->
+	<select id="getEmployeeByUserId" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Employee">
+		select xe.EMP_ID    empId,
+		       xe.EMP_CODE  empCode,
+		       xe.EMP_NAME  empName,
+		       xu.USER_ID   userId,
+		       xu.USER_NAME userName
+		  from xip_pub_emps xe, xip_pub_users xu
+		 where xe.EMP_ID = xu.EMP_ID
+		   and xu.USER_ID = #{userId}	
+	</select>
+	
+	<!-- 查询单个科目信息   -->
+	<select id="getAccount" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Account">
+		select acc_id accId,
+		       acc_code accCode,
+		       acc_name accName,
+		       up_acc_code upAccCode,
+		       acc_category_code accCategoryCode,
+		       acc_hrcy_id accHrcyId,
+		       balance_direction balanceDirection,
+		       is_bank_acc isBankAcc,
+		       is_cash_acc isCashAcc,
+		       is_cash_item isCashItem,
+		       start_date startDate,
+		       end_date endDate,
+		       is_leaf isLeaf,
+		       acc_level accLevel
+		  from xc_gl_accounts
+		where acc_id = #{accId}	
+	</select>
+	
+	<!-- 判断该科目是否分配到账簿   -->
+	<select id="getLdAccount" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.Account">
+		select a.acc_id accId,
+		       a.acc_code accCode,
+		       a.acc_name accName,
+		       a.up_acc_code upAccCode,
+		       a.acc_category_code accCategoryCode,
+		       a.acc_hrcy_id accHrcyId,
+		       a.balance_direction balanceDirection,
+		       a.is_bank_acc isBankAcc,
+		       a.is_cash_acc isCashAcc,
+		       a.is_cash_item isCashItem,
+		       a.start_date startDate,
+		       a.end_date endDate,
+		       a.is_leaf isLeaf,
+		       a.acc_level accLevel
+		  from xc_gl_accounts a ,xc_gl_ld_accounts b
+		where a.acc_id = b.acc_id
+		  and b.ledger_id = #{ledgerId} 
+		  and b.acc_id = #{accId}
+          <if test="dbType == 'mysql' ">
+		 	 <![CDATA[
+		 		and b.start_date <= NOW() and b.end_date >= NOW()
+		 	 ]]>		  
+		  </if>
+		  <if test="dbType == 'oracle' ">
+		 	  <![CDATA[
+		 	  	and b.start_date <= sysdate and b.end_date >= sysdate
+		 	  ]]>		  
+		  </if>
+	</select>
+	
+	<!-- 查询账簿科目属性信息  -->
+	<select id="getLdAccProperties" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Account">
+		select t.LEDGER_ID      ledgerId,
+		       t.ACC_ID         accId,
+		       <choose>
+		       		<when test="dbType == 'mysql' ">
+			 			IF(t.IS_FOREGIN_CNY=1,'Y','N') isForeignCny,
+			 			IF(t.IS_AMOUNT=1,'Y','N') isAmount,     		
+		       		</when>
+		       		<when test="dbType == 'oracle' ">
+				       	decode(t.IS_FOREGIN_CNY,1,'Y','N') isForeignCny,
+				       	decode(t.IS_AMOUNT,1,'Y','N') isAmount,    		
+		       		</when>
+		       </choose>
+		       b.ACC_CODE       accCode,
+		       b.ACC_NAME       accName
+		  from xc_gl_ld_accounts t, xc_gl_accounts b
+		 where t.ACC_ID = b.ACC_ID
+		   and t.LEDGER_ID = #{ledgerId}
+		   and t.ACC_ID in 
+		   <foreach collection="list" index="index" open="(" close=")" item="item" separator=",">
+		   	#{item}
+		   </foreach>	
+	</select>
+	
+	<!-- 查询单个现金流量项目信息   -->
+	<select id="getCashItem" parameterType="java.lang.String" resultType="com.xzsoft.xc.gl.modal.CashItem">
+		select ca_id caId,
+		       ca_code caCode,
+		       ca_name caName,
+		       up_id upId,
+		       ca_direction caDirection,
+		       ca_level caLevel,
+		       is_leaf isLeaf,
+		       start_date startDate,
+		       end_date endDate,
+		       ca_desc caDesc,
+		       orderby
+		  from xc_gl_cash_items
+		where ca_id = #{caId}	
+	</select>
+	
+	<!-- 查询项目信息  -->
+	<select id="getProject" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Project">
+		select project_id projectId,
+		       ledger_id ledgerId,
+		       project_code projectCode,
+		       project_name projectName,
+		       up_project_id upPorjectId,
+		       start_date startDate,
+		       end_date endDate,
+		       prj_ctrl_dim prjCtrlDim,
+		       prj_ctrm_mode prjCtrmMode
+		  from xc_pm_projects
+		where project_id = #{prjId}	
+	</select>
+	
+	<!-- 查询成本中心信息   -->
+	<select id="getDept" parameterType="java.lang.String" resultType="com.xzsoft.xc.util.modal.Department">
+		select t.DEPT_ID         deptId,
+		       t.DEPT_CODE       deptCode,
+		       t.DEPT_NAME       deptName,
+		       t.DEPT_SHORT_NAME deptShortName,
+		       t.UP_DP_ID        upDeptId,
+		       t.ORG_ID          orgId
+		  from xip_pub_depts t
+		 where t.dept_id = #{deptId}		
+	</select>
+	
+</mapper>

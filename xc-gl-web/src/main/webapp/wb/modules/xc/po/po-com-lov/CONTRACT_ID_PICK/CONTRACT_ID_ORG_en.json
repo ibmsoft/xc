@@ -1,0 +1,8 @@
+{
+    CONTRACT_NAME : "Contract",
+    DEPT_NAME_COL : "Dept Name",
+    CONTRACT_CODE_COL : "Contract Code",
+    CONTRACT_NAME_COL : "Contract Name",
+    CONTRACT_CODE_NAME : "Code/Name",
+    EMPTY_ORG_INFO : "Please select the organization information first"
+}

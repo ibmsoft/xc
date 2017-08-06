@@ -1,0 +1,18 @@
+{
+  addBtn: '新增',
+  delBtn: '删除',
+  saveBtn: '保存',
+  impBtn: '导入',
+  expBtn: '导出',
+  queryBtn:'查询',
+  resetBtn:'重置',
+  reasonCodeName:'清理原因编码/名称',
+  reasonCodeCol: '清理原因编码',
+  reasonNameCol: '清理原因名称',
+  reasonDescCol: '清理原因描述',
+  reasonIdCol: '清理原因Id',
+  codeExistBeforeMsg: '编码【',
+  codeExistAfterMsg: '】已存在',
+  saveWaitMsg: '正在保存中...',
+  successMsg: '保存成功'
+}

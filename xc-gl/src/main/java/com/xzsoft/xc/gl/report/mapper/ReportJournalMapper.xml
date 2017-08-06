@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.report.mapper.ReportJournalMapper">
+  <resultMap type="com.xzsoft.xc.gl.report.modal.JournalLedgerReport" id="journalMap">
+  	<result column="PERIOD_CODE" property="periodCode" jdbcType="VARCHAR"/>
+  	<result column="V_SERIAL_NUM" property="serialNumber" jdbcType="VARCHAR"/>
+  	<result column="ORDERBY" property="orderNumber" jdbcType="INTEGER"/>
+  	<result column="ACC_CODE" property="accountCode" jdbcType="VARCHAR"/>
+  	<result column="ACC_NAME" property="accountName" jdbcType="VARCHAR"/>
+  	<result column="CCID_NAME" property="ccidName" jdbcType="VARCHAR"/>
+  	<result column="CURRENCY_NAME" property="currencyName" jdbcType="VARCHAR"/>
+  	<result column="SUMMARY" property="voucherSummary" jdbcType="VARCHAR"/>
+  	<result column="ACCOUNT_DR" property="accountDR" jdbcType="DOUBLE"/>
+  	<result column="ACCOUNT_CR" property="accountCR" jdbcType="DOUBLE"/>
+  	<result column="ENTER_DR" property="enterDR" jdbcType="DOUBLE"/>
+	<result column="ENTER_CR" property="enterCR" jdbcType="DOUBLE"/>
+  	<result column="DIM_NAME" property="dimensionName" jdbcType="VARCHAR"/>
+  	<result column="AMOUNT" property="amount" jdbcType="DOUBLE"/>
+	<result column="V_HEAD_ID" property="headId" jdbcType="VARCHAR"/>
+	<result column="ACCOUNT_ORIGINAL" property="amountOriginal" jdbcType="DOUBLE"/>
+	<result column="VENDOR_NAME" property="vendorName" jdbcType="VARCHAR"/>
+	<result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR"/>
+	<result column="ORG_NAME" property="orgName" jdbcType="VARCHAR"/>
+	<result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+	<result column="EMP_NAME" property="empName" jdbcType="VARCHAR"/>
+	<result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+	<result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR"/>
+	<result column="CUSTOM1_NAME" property="custom1Name" jdbcType="VARCHAR"/>
+	<result column="CUSTOM2_NAME" property="custom2Name" jdbcType="VARCHAR"/>
+	<result column="CUSTOM3_NAME" property="custom3Name" jdbcType="VARCHAR"/>
+	<result column="CUSTOM4_NAME" property="custom4Name" jdbcType="VARCHAR"/>
+  </resultMap>
+  <!-- 序时表查询 -->
+  <select id="getJournalLedgerData" parameterType="java.util.HashMap" resultMap="journalMap">
+      SELECT
+          h.V_HEAD_ID,
+		  h.PERIOD_CODE,
+		  h.V_SERIAL_NUM,
+		  l.ORDERBY,
+		  c.ACC_CODE,
+		  c.ACC_NAME,
+		  c.CCID_NAME,
+		  e.CURRENCY_NAME,
+		  l.SUMMARY,
+		  l.ACCOUNT_DR,
+		  l.ACCOUNT_CR,
+		  CASE a.BALANCE_DIRECTION WHEN '1' THEN l.ACCOUNT_DR ELSE l.ACCOUNT_CR END AS ACCOUNT_ORIGINAL,
+		  l.ENTER_DR,
+		  l.ENTER_CR,
+		  d.DIM_NAME,
+		  CASE a.BALANCE_DIRECTION WHEN '1' THEN l.AMOUNT ELSE 0 END AS AMOUNT_DR,
+		  CASE a.BALANCE_DIRECTION WHEN '1' THEN 0 ELSE l.AMOUNT END AS AMOUNT_CR,
+		  l.AMOUNT,
+		  CASE c.VENDOR_NAME WHEN '00' THEN '' ELSE c.VENDOR_NAME END AS VENDOR_NAME,
+		  CASE c.CUSTOMER_NAME WHEN '00' THEN '' ELSE c.CUSTOMER_NAME END AS CUSTOMER_NAME,
+		  CASE c.ORG_NAME WHEN '00' THEN '' ELSE c.ORG_NAME END AS ORG_NAME,
+		  CASE c.DEPT_NAME WHEN '00' THEN '' ELSE c.DEPT_NAME END AS DEPT_NAME,
+		  CASE c.EMP_NAME WHEN '00' THEN '' ELSE c.EMP_NAME END AS EMP_NAME,
+		  CASE c.PRODUCT_NAME WHEN '00' THEN '' ELSE c.PRODUCT_NAME END AS PRODUCT_NAME,
+		  CASE c.PROJECT_NAME WHEN '00' THEN '' ELSE c.PROJECT_NAME END AS PROJECT_NAME,
+		  CASE c.CUSTOM1_NAME WHEN '00' THEN '' ELSE c.CUSTOM1_NAME END AS CUSTOM1_NAME,
+		  CASE c.CUSTOM2_NAME WHEN '00' THEN '' ELSE c.CUSTOM2_NAME END AS CUSTOM2_NAME,
+		  CASE c.CUSTOM3_NAME WHEN '00' THEN '' ELSE c.CUSTOM3_NAME END AS CUSTOM3_NAME,
+		  CASE c.CUSTOM4_NAME WHEN '00' THEN '' ELSE c.CUSTOM4_NAME END AS CUSTOM4_NAME
+		FROM
+			xc_gl_v_heads h,
+			xc_gl_v_lines l,
+			xc_gl_ccid c,
+			xc_gl_currencies e,
+		  xc_gl_accounts a,
+		  xc_gl_ld_accounts ld LEFT JOIN xc_gl_dimensions d ON ld.DIM_ID = d.DIM_ID
+		WHERE
+		  h.V_HEAD_ID = l.V_HEAD_ID
+		AND
+		  l.CCID = c.CCID
+		AND
+		  ld.LEDGER_ID = h.LEDGER_ID
+		AND
+		  ld.ACC_ID = c.ACC_ID
+		AND
+		  l.CURRENCY_CODE = e.CURRENCY_CODE
+		AND
+		  c.ACC_ID = a.ACC_ID
+		AND
+		  h.LEDGER_ID =#{ledgerId,jdbcType=VARCHAR}
+		AND 
+		  h.PERIOD_CODE >= #{startPeriodCode,jdbcType=VARCHAR}
+		AND 
+		 <![CDATA[ h.PERIOD_CODE <= #{endPeriodCode,jdbcType=VARCHAR}]]>
+	<choose>
+	    <!-- 只查已过账的数据 -->
+		<when test="isAccount == '0'.toString()">
+		   AND  h.BOOKKEEPER_ID IS NOT NULL
+		</when>
+	</choose>
+	 ORDER BY h.PERIOD_CODE ASC,h.V_SERIAL_NUM ASC,l.ORDERBY ASC
+  </select>
+  
+  <select id="getJournalLedgerTitle" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    SELECT
+  		b.SEG_CODE as segCode,
+		CASE WHEN p.LD_SEG_ALIAS IS NULL THEN b.SEG_NAME ELSE p.LD_SEG_ALIAS END AS segName
+	FROM
+	    xc_gl_ass_segments b
+    LEFT JOIN (SELECT * FROM xc_gl_ld_ass_segments a WHERE a.LEDGER_ID = #{ledgerId,jdbcType = VARCHAR})p ON b.SEG_CODE = p.SEG_CODE
+    ORDER BY b.ORDERBY ASC
+  </select>
+</mapper>

@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select is_leaf from xc_fa_cats where cat_code = {?catCode?}","itemId":"dataprovider1"},"children":[],"type":"dataprovider","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

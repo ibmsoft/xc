@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStCommonMapper">
+	<!-- 提交时更新提交之后的状态（1：草稿、2：已提交、3：已记账） -->
+	<update id="updateXcStDocStatus" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE ${item.tableName}
+						SET STATUS = #{item.status,jdbcType=VARCHAR}
+					WHERE
+						${item.priKey} = #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE ${item.tableName}
+						SET STATUS = #{item.status,jdbcType=VARCHAR}
+					WHERE
+						${item.priKey} = #{item.priKeyId}
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 查询账簿级相关流程信息 -->
+	<select id="getXcStLdProcessInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			sdc.ST_CAT_CODE,
+			sdc.ST_CAT_NAME,
+			sdc.ATT_CAT_CODE,
+			sldc.PROCESS_ID,
+			wp.PROCESS_CODE,
+			sldc.RULE_CODE,
+			gl.ORG_ID
+		FROM
+			xc_st_doc_cats sdc
+		LEFT JOIN xc_st_ld_doc_cats sldc ON sdc.ST_CAT_CODE = sldc.ST_CAT_CODE
+		LEFT JOIN xip_wf_processes wp ON sldc.PROCESS_ID = wp.PROCESS_ID
+		LEFT JOIN xc_gl_ledgers gl ON sldc.LEDGER_ID = gl.LEDGER_ID
+		WHERE
+			sdc.ST_CAT_CODE = #{stCatCode}
+		AND sldc.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 查询全局相关流程信息 -->
+	<select id="getXcStProcessInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			sdc.ST_CAT_CODE,
+			sdc.ST_CAT_NAME,
+			sdc.ATT_CAT_CODE,
+			sdc.PROCESS_ID,
+			wp.PROCESS_CODE,
+			sdc.PC_W_FORM_ID,
+			c.FORM_URL PC_W_FORM_URL,
+			sdc.PC_A_FORM_ID,
+			d.FORM_URL PC_A_FORM_URL,
+			sdc.PC_P_FORM_ID,
+			e.FORM_URL PC_P_FORM_URL,
+			sdc.M_W_FORM_ID,
+			f.FORM_URL M_W_FORM_URL,
+			sdc.M_A_FORM_ID,
+			g.FORM_URL M_A_FORM_URL
+		FROM
+			xc_st_doc_cats sdc
+		LEFT JOIN xip_wf_processes wp ON sdc.PROCESS_ID = wp.PROCESS_ID
+		LEFT JOIN xip_wf_process_forms c ON sdc.PC_W_FORM_ID = c.FORM_ID AND c.CLIENT_TYPE = 'PC' AND c.ENABLE_FLAG = 'Y'
+		LEFT JOIN xip_wf_process_forms d ON sdc.PC_A_FORM_ID = d.FORM_ID AND d.CLIENT_TYPE = 'PC' AND d.ENABLE_FLAG = 'Y'
+		LEFT JOIN xip_wf_process_forms e ON sdc.PC_P_FORM_ID = e.FORM_ID AND e.CLIENT_TYPE = 'PC' AND e.ENABLE_FLAG = 'Y'
+		LEFT JOIN xip_wf_process_forms f ON sdc.M_W_FORM_ID = f.FORM_ID AND f.CLIENT_TYPE = 'Mobile' AND f.ENABLE_FLAG = 'Y'
+		LEFT JOIN xip_wf_process_forms g ON sdc.M_A_FORM_ID = g.FORM_ID AND g.CLIENT_TYPE = 'Mobile' AND g.ENABLE_FLAG = 'Y'
+		WHERE
+			sdc.ST_CAT_CODE = #{stCatCode}
+	</select>
+	
+	<!-- 根据入库及退货（出库及退库）行ID批量删除入库及退货（出库及退库）货位表 -->
+	<delete id="deleteXcStWhBLocationByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_wh_b_location WHERE BUSINESS_L_ID = #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_wh_b_location WHERE BUSINESS_L_ID = #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 根据入库及退货（出库及退库）行ID批量删除入库及退货（出库及退库）批次OR序列号表 -->
+	<delete id="deleteXcStWhBSerByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_wh_b_ser WHERE BUSINESS_L_ID = #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_wh_b_ser WHERE BUSINESS_L_ID = #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 根据入库及退货（出库及退库）主ID批量删除入库及退货（出库及退库）货位表 -->
+	<delete id="deleteXcStWhBLocationByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_wh_b_location WHERE BUSINESS_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据入库及退货（出库及退库）主ID批量删除入库及退货（出库及退库）批次OR序列号表 -->
+	<delete id="deleteXcStWhBSerByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_wh_b_ser WHERE BUSINESS_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据物资调拨单行ID批量删除物资调拨单货位表 -->
+	<delete id="deleteXcStTransshipmentLoByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_transshipment_lo WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_transshipment_lo WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 根据物资调拨单行ID批量删除物资调拨单批次OR序列号表 -->
+	<delete id="deleteXcStTransshipmentSerByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_transshipment_ser WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_transshipment_ser WHERE TR_L_ID = #{item.TR_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 根据物资调拨单主ID批量删除物资调拨单货位表 -->
+	<delete id="deleteXcStTransshipmentLoByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_transshipment_lo WHERE TR_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据物资调拨单主ID批量删除物资调拨单批次OR序列号表 -->
+	<delete id="deleteXcStTransshipmentSerByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_transshipment_ser WHERE TR_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据货位调整单行ID批量删除货位调整序列号表 -->
+	<delete id="deleteXcStLoAdjustSerByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_lo_adjust_ser WHERE LO_ADJUST_L_ID = #{item.LO_ADJUST_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_lo_adjust_ser WHERE LO_ADJUST_L_ID = #{item.LO_ADJUST_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 根据货位调整单主ID批量删除货位调整序列号表 -->
+	<delete id="deleteXcStLoAdjustSerByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_lo_adjust_ser WHERE LO_ADJUST_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 判断制单人是否属于这个仓库的管理员 -->
+	<select id="createrIsOrNotWarehouseKeeper" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			WAREHOUSE_KEEPER_ID
+		FROM
+			xc_st_warehouse_keeper
+		WHERE
+			EMP_ID = #{EMP_ID}
+		AND WAREHOUSE_ID = #{WAREHOUSE_ID}
+		AND LEDGER_ID = #{LEDGER_ID}
+	</select>
+	
+	<!-- 采购入库选择采购订单保存时回写采购订单对应的已入库数量等信息 -->
+	<update id="updatePoOrderLInfo" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_po_order_l SET
+						ENTRY_QTY		= IFNULL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						ORDER_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_po_order_l SET
+						ENTRY_QTY		= NVL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						ORDER_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	<!-- 销售出库选择销售订单保存时回写销售订单对应的已出库数量等信息 -->
+	<update id="updateSoOrderLInfo" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_po_order_l SET
+						ENTRY_QTY		= IFNULL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						ORDER_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_po_order_l SET
+						ENTRY_QTY		= NVL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						ORDER_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 更新入库单主表金额 -->
+	<update id="updateXcStWhEntryHAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_entry_h SET
+						AMOUNT			= IFNULL(AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						ENTRY_H_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_entry_h SET
+						AMOUNT			= NVL(AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						ENTRY_H_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 更新出库单主表金额 -->
+	<update id="updateXcStWhDeleveredHAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_delevered_h SET
+						AMOUNT			= IFNULL(AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						DELEVERED_H_ID	= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_delevered_h SET
+						AMOUNT			= NVL(AMOUNT,0) + #{item.AMOUNT}
+					WHERE
+						DELEVERED_H_ID	= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 更新入库单行表已出庫數量 -->
+	<update id="updateXcStWhEntryLAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_entry_l SET
+						DELEVERED_QTY	= IFNULL(DELEVERED_QTY,0) + #{item.QTY}
+					WHERE
+						ENTRY_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_entry_l SET
+						DELEVERED_QTY	= NVL(DELEVERED_QTY,0) + #{item.QTY}
+					WHERE
+						ENTRY_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 更新出库单行表已入库数量 -->
+	<update id="updateXcStWhDeleveredLAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_delevered_l SET
+						ENTRY_QTY	= IFNULL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						DELEVERED_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_delevered_l SET
+						ENTRY_QTY	= NVL(ENTRY_QTY,0) + #{item.QTY}
+					WHERE
+						DELEVERED_L_ID		= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 判断当前操作的红单对应的蓝单金额是否还够回冲 -->
+	<select id="judgmentXcStWhEntryHAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			ENTRY_H_CODE
+		FROM
+			xc_st_wh_entry_h
+		WHERE
+			ENTRY_H_ID = #{RE_WH_ENTRY_H_ID}
+		AND (AMOUNT + #{AMOUNT}) &lt; 0
+	</select>
+	
+	<!-- 判断当前操作的出库单-红单对应的蓝单金额是否还够回冲 -->
+	<select id="judgmentXcStWhDeleveredHAmount" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			DELEVERED_H_CODE
+		FROM
+			xc_st_wh_delevered_h
+		WHERE
+			DELEVERED_H_ID = #{RE_DELEVERED_H_ID}
+		AND (AMOUNT + #{AMOUNT}) &lt; 0
+	</select>
+	
+	<!-- 更新领用申请单主表金额（领用出库选择领用申请单的时候，回写） -->
+	<update id="updateXcStUseApplyLAmount" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_use_apply_l SET
+						DELEVERED_QTY	= IFNULL(DELEVERED_QTY,0) + #{item.QTY}
+					WHERE
+						USE_APPLY_L_ID	= #{item.priKeyId}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_use_apply_l SET
+						DELEVERED_QTY	= NVL(DELEVERED_QTY,0) + #{item.QTY}
+					WHERE
+						USE_APPLY_L_ID	= #{item.priKeyId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 根据账簿的单据业务日期得到上个会计期的状态 -->
+	<select id="selectUpPeriodStatusByLedger" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				SELECT
+					ST_PERIODS,START_DATE,END_DATE,PERIODS_STATUS,LEDGER_ID
+				FROM
+					xc_st_ld_periods
+				WHERE
+					LEDGER_ID = #{LEDGER_ID}
+				AND (DATE_SUB(#{BIZ_DATE},INTERVAL 1 MONTH) BETWEEN START_DATE AND END_DATE)
+			</when>
+			<when test=" dbType == 'oracle' ">
+				SELECT
+					ST_PERIODS,START_DATE,END_DATE,PERIODS_STATUS,LEDGER_ID
+				FROM
+					xc_st_ld_periods
+				WHERE
+					LEDGER_ID = #{LEDGER_ID}
+					
+				AND (ADD_MONTHS(TO_DATE(#{BIZ_DATE},'yy-mm-dd'),-1) BETWEEN START_DATE AND END_DATE)
+			</when>
+		</choose>
+	</select>
+	<!-- 保存的时候，需要往入库及退货货位表插入数据 -->
+	<insert id="insertXcStWhBLocation" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_wh_b_location (
+						B_LOCATION_ID,
+						ORG_ID,
+						LEDGER_ID,
+						DOC_CAT_CODE,
+						BUSINESS_TYPE_ID,
+						BUSINESS_H_ID,
+						BUSINESS_L_ID,
+						LOCATION_ID,
+						QTY,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)
+					VALUES (
+						#{item.B_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_H_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_L_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						ABS(#{item.QTY,jdbcType=NUMERIC}),
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_wh_b_location (
+						B_LOCATION_ID,
+						ORG_ID,
+						LEDGER_ID,
+						DOC_CAT_CODE,
+						BUSINESS_TYPE_ID,
+						BUSINESS_H_ID,
+						BUSINESS_L_ID,
+						LOCATION_ID,
+						QTY,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)
+					VALUES (
+						#{item.B_LOCATION_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_H_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_L_ID,jdbcType=VARCHAR},
+						#{item.LOCATION_ID,jdbcType=VARCHAR},
+						ABS(#{item.QTY,jdbcType=NUMERIC}),
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	<!-- 保存的时候，需要往入库及退货货位表更新数据 -->
+	<update id="updateXcStWhBLocation" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						QTY					= QTY + #{item.QTY,jdbcType=NUMERIC},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						BUSINESS_H_ID		= #{item.BUSINESS_H_ID}
+					AND BUSINESS_L_ID		= #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						QTY					= QTY + #{item.QTY,jdbcType=NUMERIC},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						BUSINESS_H_ID		= #{item.BUSINESS_H_ID}
+					AND BUSINESS_L_ID		= #{item.BUSINESS_L_ID}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 货位调整提交时，更新货位信息 -->
+	<update id="updateXcStLocationInventory" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_location_inventory SET
+						QTY					= IFNULL(QTY,0) + #{item.QTY,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						WAREHOUSE_ID		= #{item.WAREHOUSE_ID}
+					AND MATERIAL_ID			= #{item.MATERIAL_ID}
+					AND SERIAL_BATCH_NUM	= IFNULL(#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},SERIAL_BATCH_NUM)
+					AND LOCATION_ID			= IFNULL(#{item.LOCATION_ID,jdbcType=VARCHAR},LOCATION_ID)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_location_inventory SET
+						QTY					= NVL(QTY,0) + #{item.QTY,jdbcType=NUMERIC},
+						LOCATION_ID			= #{item.LOCATION_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						WAREHOUSE_ID		= #{item.WAREHOUSE_ID}
+					AND MATERIAL_ID			= #{item.MATERIAL_ID}
+					AND SERIAL_BATCH_NUM	= NVL(#{item.SERIAL_BATCH_NUM,jdbcType=VARCHAR},SERIAL_BATCH_NUM)
+					AND LOCATION_ID			= NVL(#{item.LOCATION_ID,jdbcType=VARCHAR},LOCATION_ID)
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 回冲的时候，需要往入库及退货货位表更新数据 -->
+	<update id="updateXcStWhBLocation_01" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						DELEVERED_QTY		= IFNULL(DELEVERED_QTY,0) + #{item.DELEVERED_QTY,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						B_LOCATION_ID		= #{item.B_LOCATION_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						DELEVERED_QTY		= NVL(DELEVERED_QTY,0) + #{item.DELEVERED_QTY,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						B_LOCATION_ID		= #{item.B_LOCATION_ID}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 回冲的时候，根据业主主ID和行ID更新货位现存量 -->
+	<update id="updateXcStWhBLocation_02" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list_01" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						DELEVERED_QTY		= IFNULL(DELEVERED_QTY,0) + #{item.DELEVERED_QTY,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						BUSINESS_H_ID		= #{item.BUSINESS_H_ID}
+					AND BUSINESS_L_ID		= #{item.BUSINESS_L_ID}
+					AND LOCATION_ID			= #{item.LOCATION_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list_01" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_wh_b_location SET
+						DELEVERED_QTY		= NVL(DELEVERED_QTY,0) + #{item.DELEVERED_QTY,jdbcType=NUMERIC},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						BUSINESS_H_ID		= #{item.BUSINESS_H_ID}
+					AND BUSINESS_L_ID		= #{item.BUSINESS_L_ID}
+					AND LOCATION_ID			= #{item.LOCATION_ID}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 通过物料ID来判断当前账簿下的物料是否启用序列号或批次 -->
+	<select id="getMaterialParamsInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			smp.MATERIAL_ID,
+			smp.IS_BATCH,
+			smp.IS_SERIAL,
+			smp.IS_PURCHASE,
+			smp.PURCHASE_PRICE,
+			smp.IS_SALE_EXCESS,
+			smp.IS_PURCHASE_EXCESS,
+			smp.IS_SALE,
+			smp.SALE_PRICE
+		FROM
+			xc_st_material_parms smp
+		WHERE
+			smp.MATERIAL_ID = #{MATERIAL_ID}
+		AND smp.LEDGER_ID = #{LEDGER_ID}
+	</select>
+	<!-- 通过业务主ID、业务行ID来判断当前物料若启用序列号或者批次的时候，序列号或批次是否录入 -->
+	<select id="weatherExistBatchOrSerial" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT
+			COUNT(SERIAL_BATCH_NUM) AS COUNT
+		FROM
+			xc_st_wh_b_ser swbs
+		WHERE
+			swbs.BUSINESS_H_ID = #{BUSINESS_H_ID}
+		AND swbs.BUSINESS_L_ID = #{BUSINESS_L_ID}
+		AND swbs.MATERIAL_ID = #{MATERIAL_ID}
+	</select>
+</mapper>

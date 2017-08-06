@@ -1,0 +1,1 @@
+{"inframe":false,"title":"删除明细操作","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"delete from XC_AP_PAY_H where AP_PAY_H_ID in ({#arry1#})","itemId":"query2"},"children":[],"expanded":false,"type":"query"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,33 @@
+{
+  queryBtn				: "查询",
+  clearBtn				: "重置",
+  commitBtn				: "确认",
+  closeBtn				: "取消",
+  
+  AP_CONTRACT_NAME		: "合同编号/名称",
+  AP_PAY_H_CODE			: "单据编号/名称",
+  CREATED_BY_NAME		: "制单人",
+  AP_DOC_CAT_CODE		: "",
+  LEDGER_ID				: "",
+  
+  GL_DATE_COL			: "业务日期",
+  AP_PAY_H_CODE_COL		: "付款单编号",
+  AP_INV_GL_H_CODE_COL	: "应付单编号",
+  DESCRIPTION_COL		: "摘要",
+  AP_CONTRACT_NAME_COL	: "合同",
+  DEPT_NAME_COL			: "成本中心",
+  PROJECT_NAME_COL		: "项目",
+  ACC_NAME_COL			: "科目/辅助项",
+  AMOUNT_COL			: "金额",
+  NO_CANCEL_AMT_COL		: "可退款金额",
+  PAY_AMT_COL			: "退款金额",
+  
+  qzsxzytjl				: "请选择至少一条记录！",
+  tkjebnwk				: "退款金额不能为空！",
+  tkjebnwl				: "退款金额不能为 0 ！",
+  qdyxzd				: "确定要选择的",
+  tjlm					: "条记录吗？",
+  yfkmxznyyt			: "预付款付款明细只能选择一条！",
+  tkjeyxyktkje			: "退款金额应小于可退款金额！",
+  tkjeydyl				: "退款金额应大于 0 ！"
+}	

@@ -1,0 +1,17 @@
+{
+	purchaseType:'purchase type',
+  	query:'query',
+  	reset:'reset',
+  	ok:'ok',
+  	okMsg1:'Please select at least one record',
+  	okMsg2:'Payment amount can not be empty',
+  	okMsg3:'Are you sure to select',
+  	okMsg4:'records',
+  	cancel:'cancel',
+  	purchaseObject:'purchase object',
+  	budgetProject:'budget project',
+  	costProject:'cost project',
+  	invAccount:'inv account',
+  	prePayAccount:'prePayAccount',
+  	payAmt:'payAmt'
+}

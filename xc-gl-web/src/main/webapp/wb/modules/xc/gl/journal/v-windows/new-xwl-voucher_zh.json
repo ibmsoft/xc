@@ -1,0 +1,36 @@
+{
+  VOUCHER : "凭证信息",
+  saveBtn : "保存" ,
+  submitBtn : "提交审核" ,
+  
+  ledger : "账簿" ,
+  accountDate : "会计日期" ,
+  ldPeriod : "会计期" ,
+  v_attchment_num : "附件张数" ,
+  v_serial_no : "编号" ,
+  v_category : "凭证分类" ,
+  v_summary : "摘要" ,
+  
+  addLine : '增行' ,
+  delLine : '删行' ,
+
+  rowNumber : "序号",
+  v_line_summary : "摘要",
+  v_line_account : "科目组合",
+  v_ca_name : "现金流量名称",
+  v_line_amount : "数量",
+  v_dim_name : "单位",
+  v_exchange_rate : "汇率",
+  v_cny_name : "币种",
+  v_enter_dr : "原币借方",
+  v_enter_cr : "原币贷方",
+  v_account_dr : "借方",
+  v_account_cr : "贷方",
+  total : "合计",
+  vouchers : "凭证",
+  
+  v_created_name : "制单",
+  v_verifier : "审核",
+  v_signatory : "出纳",
+  v_bookkeeper : "记账"
+}

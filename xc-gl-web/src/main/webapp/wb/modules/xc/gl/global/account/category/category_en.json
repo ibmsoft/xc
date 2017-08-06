@@ -1,0 +1,8 @@
+{
+  moduleTitle:"Account Category",
+  categoryCode:"Category Code",
+  categoryName:"Category Name",
+  balanceDirection:"Balance Direction",
+  hasYearBalance:"Has Annual Balance",
+  note:"Note"
+}

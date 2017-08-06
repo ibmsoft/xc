@@ -1,0 +1,23 @@
+{
+  queryBtn				: "Search",
+  clearBtn				: "Reset",
+  commitBtn				: "Sure",
+  closeBtn				: "Cancel",
+  
+  AP_PUR_TYPE_NAME		: "Procurement Type",
+  
+  PUR_OBJECT_NAME_COL	: "Procurement Objects",
+  AP_PUR_TYPE_NAME_COL	: "Clasificacion Contable",
+  BG_ITEM_NAME_COL		: "Project Budget",
+  AP_ACC_NAME_INV_COL	: "inventory/Cost Account",
+  AP_ACC_NAME_DEBT_COL	: "Need Payment Subjects",
+  AP_ACC_NAME_EST_COL	: "Short Course",
+  AP_ACC_NAME_PRE_COL	: "Subjects In Advance",
+  PAY_AMT_COL			: "Pay Amount",
+  
+  qxzzsytjl				: "Please select at least one record!",
+  qdyxzd				: "Are you sure you want to choose",
+  tjlm					: "records?",
+  zfjeydyl				: "Payment amount should be greater than 0!",
+  zfjeyxyl				: "Payment amount should be less than 0!"
+}

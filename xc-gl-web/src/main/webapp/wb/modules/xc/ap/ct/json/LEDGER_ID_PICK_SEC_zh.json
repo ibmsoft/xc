@@ -1,0 +1,6 @@
+{
+	ledger:'账簿',
+  	ledgerCode:'账簿编码',
+  	ledgerName:'账簿名称',
+  	condition:'账簿编码/名称'
+}

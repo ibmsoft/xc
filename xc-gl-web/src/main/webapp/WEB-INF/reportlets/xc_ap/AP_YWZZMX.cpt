@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20110221">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="ledgerId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="periodCodeStart"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="periodCodeEnd"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="vendorId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT * FROM (
+SELECT 
+  b.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = b.LEDGER_ID) LEDGER_NAME,
+  a.`VENDOR_ID`,
+  a.`VENDOR_CODE`,
+  a.`VENDOR_NAME`,
+  STR_TO_DATE('04/31/1700', '%m/%d/%Y') GL_DATE,
+  '' V_HEAD_ID,
+  '' V_SERIAL_NUM,
+  '余额' DESCRIPTION,
+  '' AP_DOC_CAT_CODE,
+  '' AP_CAT_NAME,
+  '' AP_INV_GL_H_CODE,
+  '' AP_CONTRACT_ID,
+  '' AP_CONTRACT_NAME,
+  '' DEPT_NAME,
+  '' PROJECT_NAME,
+  IFNULL(
+    (SELECT 
+      SUM(gl.INV_AMOUNT) - IFNULL(
+        (SELECT 
+          SUM(pay.AMOUNT) 
+        FROM
+          xc_ap_pay_h pay 
+        WHERE pay.VENDOR_ID = a.`VENDOR_ID` 
+          ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  pay.`GL_DATE` <'"+periodCodeStart+"'")}          
+          ),
+        0
+      ) + IFNULL(
+        (SELECT 
+          SUM(tz.ADJ_AMT) 
+        FROM
+          xc_ap_inv_gl_adj tz 
+        WHERE tz.VENDOR_ID = a.`VENDOR_ID` 
+         ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  tz.`GL_DATE` <'"+periodCodeStart+"'")}                    
+          ),
+        0
+      ) - IFNULL(
+        (SELECT 
+          SUM(SRC_AMT) 
+        FROM
+          xc_ap_cancel_h cancel 
+        WHERE 
+          (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = cancel.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = cancel.SRC_ID) = a.`VENDOR_ID` 
+${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  cancel.`GL_DATE` <'"+periodCodeStart+"'")}                    
+          ),
+        0
+      ) 
+    FROM
+      xc_ap_inv_gl_h gl 
+    WHERE gl.ap_inv_gl_h_code IS NOT NULL AND gl.VENDOR_ID = a.`VENDOR_ID` 
+      ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  gl.`GL_DATE` <'"+periodCodeStart+"'")} ),
+    0
+  ) INV_AMOUNT,
+  0 PAY_AMT,
+  IFNULL(
+    (SELECT 
+      SUM(gl.INV_AMOUNT) - IFNULL(
+        (SELECT 
+          SUM(pay.AMOUNT) 
+        FROM
+          xc_ap_pay_h pay 
+        WHERE pay.VENDOR_ID = a.`VENDOR_ID` 
+          ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  pay.`GL_DATE` <'"+periodCodeStart+"'")}          
+          ),
+        0
+      ) + IFNULL(
+        (SELECT 
+          SUM(tz.ADJ_AMT) 
+        FROM
+          xc_ap_inv_gl_adj tz 
+        WHERE tz.VENDOR_ID = a.`VENDOR_ID` 
+         ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  tz.`GL_DATE` <'"+periodCodeStart+"'")}                    
+          ),
+        0
+      ) - IFNULL(
+        (SELECT 
+          SUM(SRC_AMT) 
+        FROM
+          xc_ap_cancel_h cancel 
+        WHERE 
+          (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = cancel.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = cancel.SRC_ID) = a.`VENDOR_ID` 
+${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  cancel.`GL_DATE` <'"+periodCodeStart+"'")}                    
+          ),
+        0
+      ) 
+    FROM
+      xc_ap_inv_gl_h gl 
+    WHERE gl.ap_inv_gl_h_code IS NOT NULL AND gl.VENDOR_ID = a.`VENDOR_ID` 
+      ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  gl.`GL_DATE` <'"+periodCodeStart+"'")} ),
+    0
+  ) NO_PAY_AMT 
+FROM
+  `xc_ap_vendors` a,
+  `xc_gl_ld_vendors` b 
+WHERE a.`VENDOR_ID` = b.`VENDOR_ID` 
+  ${IF(len(ledgerId) == 0, " and 1=2 ", " and  B.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(vendorId) == 0, " and 1=2 ", " and  A.`VENDOR_CODE` ='"+vendorId+"'")}
+  UNION
+  SELECT 
+  H.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = H.LEDGER_ID) LEDGER_NAME,
+  H.`VENDOR_ID`,
+  (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_CODE,
+  (SELECT 
+    VENDOR_NAME 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_NAME,
+  H.`GL_DATE`,
+  H.`V_HEAD_ID`,
+  (SELECT 
+    V_SERIAL_NUM 
+  FROM
+    xc_gl_v_heads vh 
+  WHERE vh.V_HEAD_ID = H.V_HEAD_ID) V_SERIAL_NUM,
+  h.DESCRIPTION,
+  H.`AP_DOC_CAT_CODE`,
+  (SELECT 
+    AP_CAT_NAME 
+  FROM
+    xc_ap_doc_cats c 
+  WHERE c.AP_CAT_CODE = H.AP_DOC_CAT_CODE) AP_CAT_NAME,
+  H.`AP_INV_GL_H_CODE`,
+  H.`AP_CONTRACT_ID`,
+  (SELECT 
+    AP_CONTRACT_NAME 
+  FROM
+    xc_ap_contract con 
+  WHERE con.AP_CONTRACT_ID = H.AP_CONTRACT_ID) AP_CONTRACT_NAME,
+  (SELECT DEPT_NAME FROM `xip_pub_depts` D WHERE D.DEPT_ID=H.DEPT_ID ) DEPT_NAME,
+  (SELECT PROJECT_NAME FROM `xc_pm_projects` P WHERE P.PROJECT_ID=H.PROJECT_ID ) PROJECT_NAME,
+  H.`INV_AMOUNT` INV_AMOUNT,
+  0 PAY_AMT,
+  0 NO_PAY_AMT
+FROM
+  `xc_ap_inv_gl_h` H  
+  ${IF(len(ledgerId) == 0, " where 1=2 ", " where  h.`LEDGER_ID` ='"+ledgerId+"'")}
+  AND H.`AP_INV_GL_H_CODE` IS NOT NULL 
+  ${IF(len(vendorId) == 0, " AND 1=2 ", " AND    (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = h.`VENDOR_ID`) ='"+vendorId+"'")}
+  ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  h.`GL_DATE` >= '"+periodCodeStart+"'")}
+  ${IF(len(periodCodeEnd) == 0, " AND 1=2 ", " AND  h.`GL_DATE` <= DATE_ADD('"+periodCodeEnd+"-01', INTERVAL 1 MONTH)")}
+  UNION
+  SELECT 
+  H.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = H.LEDGER_ID) LEDGER_NAME,
+  H.`VENDOR_ID`,
+  (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_CODE,
+  (SELECT 
+    VENDOR_NAME 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_NAME,
+  H.`GL_DATE`,
+  H.`V_HEAD_ID`,
+  (SELECT 
+    V_SERIAL_NUM 
+  FROM
+    xc_gl_v_heads vh 
+  WHERE vh.V_HEAD_ID = H.V_HEAD_ID) V_SERIAL_NUM,
+  h.DESCRIPTION,
+  H.`AP_DOC_CAT_CODE`,
+  (SELECT 
+    AP_CAT_NAME 
+  FROM
+    xc_ap_doc_cats c 
+  WHERE c.AP_CAT_CODE = H.AP_DOC_CAT_CODE) AP_CAT_NAME,
+  H.`AP_PAY_H_CODE`,
+  H.`AP_CONTRACT_ID`,
+  (SELECT 
+    AP_CONTRACT_NAME 
+  FROM
+    xc_ap_contract con 
+  WHERE con.AP_CONTRACT_ID = H.AP_CONTRACT_ID) AP_CONTRACT_NAME,
+  (SELECT DEPT_NAME FROM `xip_pub_depts` D WHERE D.DEPT_ID=H.DEPT_ID ) DEPT_NAME,
+  (SELECT PROJECT_NAME FROM `xc_pm_projects` P WHERE P.PROJECT_ID=H.PROJECT_ID ) PROJECT_NAME,
+  0 INV_AMOUNT,
+  H.`AMOUNT` PAY_AMT,
+  0 NO_PAY_AMT 
+FROM
+  `xc_ap_pay_h` H 
+  ${IF(len(ledgerId) == 0, " where 1=2 ", " where  h.`LEDGER_ID` ='"+ledgerId+"'")}
+  AND H.`AP_PAY_H_CODE` IS NOT NULL AND AP_DOC_CAT_CODE NOT LIKE 'FKD_QTFK%'
+  ${IF(len(vendorId) == 0, " AND 1=2 ", " AND    (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = h.`VENDOR_ID`) ='"+vendorId+"'")}
+  ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  h.`GL_DATE` >= '"+periodCodeStart+"'")}
+  ${IF(len(periodCodeEnd) == 0, " AND 1=2 ", " AND  h.`GL_DATE` <= DATE_ADD('"+periodCodeEnd+"-01', INTERVAL 1 MONTH)")}
+  UNION
+  SELECT 
+  H.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = H.LEDGER_ID) LEDGER_NAME,
+  H.`VENDOR_ID`,
+  (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_CODE,
+  (SELECT 
+    VENDOR_NAME 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = H.`VENDOR_ID`) VENDOR_NAME,
+  H.`GL_DATE`,
+  H.`V_HEAD_ID`,
+  (SELECT 
+    V_SERIAL_NUM 
+  FROM
+    xc_gl_v_heads vh 
+  WHERE vh.V_HEAD_ID = H.V_HEAD_ID) V_SERIAL_NUM,
+  h.DESCRIPTION,
+  (SELECT gl.AP_DOC_CAT_CODE FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID) `AP_DOC_CAT_CODE`,
+  (SELECT 
+    AP_CAT_NAME 
+  FROM
+    xc_ap_doc_cats c 
+  WHERE c.AP_CAT_CODE = (SELECT gl.AP_DOC_CAT_CODE FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID)) AP_CAT_NAME,
+  H.`GL_ADJ_CODE`,
+  (SELECT gl.AP_CONTRACT_ID FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID) AP_CONTRACT_ID,
+  (SELECT 
+    AP_CONTRACT_NAME 
+  FROM
+    xc_ap_contract con 
+  WHERE con.AP_CONTRACT_ID = (SELECT gl.AP_CONTRACT_ID FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID)) AP_CONTRACT_NAME,
+  (SELECT DEPT_NAME FROM `xip_pub_depts` D WHERE D.DEPT_ID=(SELECT gl.DEPT_ID FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID) ) DEPT_NAME,
+  (SELECT PROJECT_NAME FROM `xc_pm_projects` P WHERE P.PROJECT_ID=(SELECT gl.PROJECT_ID FROM `xc_ap_inv_gl_h` gl WHERE gl.AP_INV_GL_H_ID = h.AP_INV_GL_H_ID)  ) PROJECT_NAME,  
+  0 INV_AMOUNT,
+  H.`ADJ_AMT` PAY_AMT,
+  0 NO_PAY_AMT 
+FROM
+  `xc_ap_INV_GL_ADJ` H 
+  ${IF(len(ledgerId) == 0, " where 1=2 ", " where  h.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(vendorId) == 0, " AND 1=2 ", " AND    (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = h.`VENDOR_ID`) ='"+vendorId+"'")}
+  ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  h.`GL_DATE` >= '"+periodCodeStart+"'")}
+  ${IF(len(periodCodeEnd) == 0, " AND 1=2 ", " AND  h.`GL_DATE` <= DATE_ADD('"+periodCodeEnd+"-01', INTERVAL 1 MONTH)")}
+  UNION
+  SELECT 
+  H.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = H.LEDGER_ID) LEDGER_NAME,
+  (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID) `VENDOR_ID`,
+  (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID)) VENDOR_CODE,
+  (SELECT 
+    VENDOR_NAME 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID)) VENDOR_NAME,
+  H.`GL_DATE`,
+  H.`V_HEAD_ID`,
+  (SELECT 
+    V_SERIAL_NUM 
+  FROM
+    xc_gl_v_heads vh 
+  WHERE vh.V_HEAD_ID = H.V_HEAD_ID) V_SERIAL_NUM,
+  h.DESCRIPTION,
+  H.`AP_CANCEL_TYPE`,
+  (SELECT 
+    AP_CAT_NAME 
+  FROM
+    xc_ap_doc_cats c 
+  WHERE c.AP_CAT_CODE = H.AP_CANCEL_TYPE) AP_CAT_NAME,
+  H.`AP_CANCEL_H_CODE`,
+  (SELECT 
+            c.AP_CONTRACT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID) `AP_CONTRACT_ID`,
+  (SELECT 
+    AP_CONTRACT_NAME 
+  FROM
+    xc_ap_contract con 
+  WHERE con.AP_CONTRACT_ID =   (SELECT 
+            c.AP_CONTRACT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID)) AP_CONTRACT_NAME,
+  (SELECT DEPT_NAME FROM `xip_pub_depts` D WHERE D.DEPT_ID=(SELECT 
+            c.DEPT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID) ) DEPT_NAME,
+  (SELECT PROJECT_NAME FROM `xc_pm_projects` P WHERE P.PROJECT_ID=(SELECT 
+            c.PROJECT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID) ) PROJECT_NAME,
+  0 INV_AMOUNT,
+  H.SRC_AMT PAY_AMT,
+  0 NO_PAY_AMT 
+FROM
+  `xc_ap_cancel_h` H   
+    ${IF(len(ledgerId) == 0, " where 1=2 ", " where  h.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(vendorId) == 0, " AND 1=2 ", " AND    (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = h.SRC_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = h.SRC_ID)) ='"+vendorId+"'")}
+  ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  h.`GL_DATE` >= '"+periodCodeStart+"'")}
+  ${IF(len(periodCodeEnd) == 0, " AND 1=2 ", " AND  h.`GL_DATE` <= DATE_ADD('"+periodCodeEnd+"-01', INTERVAL 1 MONTH)")}
+  AND AP_CANCEL_TYPE='YFHYS'
+  UNION
+  SELECT 
+  H.`LEDGER_ID`,
+  (SELECT 
+    l.LEDGER_NAME 
+  FROM
+    xc_gl_ledgers l 
+  WHERE l.LEDGER_ID = H.LEDGER_ID) LEDGER_NAME,
+  (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID) `VENDOR_ID`,
+  (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID )) VENDOR_CODE,
+  (SELECT 
+    VENDOR_NAME 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID )) VENDOR_NAME,
+  H.`GL_DATE`,
+  H.`V_HEAD_ID`,
+  (SELECT 
+    V_SERIAL_NUM 
+  FROM
+    xc_gl_v_heads vh 
+  WHERE vh.V_HEAD_ID = H.V_HEAD_ID) V_SERIAL_NUM,
+  h.DESCRIPTION,
+  H.`AR_CANCEL_TYPE`,
+  (SELECT 
+    AR_CAT_NAME 
+  FROM
+    xc_ar_doc_cats c 
+  WHERE c.Ar_CAT_CODE = H.AR_CANCEL_TYPE) AP_CAT_NAME,
+  H.`AR_CANCEL_H_CODE`,
+  (SELECT 
+            c.AP_CONTRACT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID  ) `AP_CONTRACT_ID`,
+  (SELECT 
+    AP_CONTRACT_NAME 
+  FROM
+    xc_ap_contract con 
+  WHERE con.AP_CONTRACT_ID =   (SELECT 
+            c.AP_CONTRACT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID )) AP_CONTRACT_NAME,
+  (SELECT DEPT_NAME FROM `xip_pub_depts` D WHERE D.DEPT_ID=(SELECT 
+            c.DEPT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID  ) ) DEPT_NAME,
+  (SELECT PROJECT_NAME FROM `xc_pm_projects` P WHERE P.PROJECT_ID=(SELECT 
+            c.PROJECT_ID 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID  ) ) PROJECT_NAME,
+  0 INV_AMOUNT,
+  L.TARGET_AMT PAY_AMT,
+  0 NO_PAY_AMT 
+FROM
+  `xc_ar_cancel_h` H   ,xc_ar_cancel_l L WHERE H.`AR_CANCEL_H_ID`=l.`AR_CANCEL_H_ID`
+    ${IF(len(ledgerId) == 0, " AND 1=2 ", " AND  h.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(vendorId) == 0, " AND 1=2 ", " AND    (SELECT 
+    VENDOR_CODE 
+  FROM
+    xc_ap_vendors v 
+  WHERE v.vendor_id = (SELECT 
+            c.vendor_id 
+          FROM
+            xc_ap_inv_gl_h c 
+          WHERE c.AP_INV_GL_H_ID = L.TARGET_ID 
+          UNION
+          SELECT 
+            d.vendor_id 
+          FROM
+            xc_ap_pay_h d 
+          WHERE d.AP_PAY_H_ID = L.TARGET_ID)) ='"+vendorId+"'")}
+  ${IF(len(periodCodeStart) == 0, " AND 1=2 ", " AND  h.`GL_DATE` >= '"+periodCodeStart+"'")}
+  ${IF(len(periodCodeEnd) == 0, " AND 1=2 ", " AND  h.`GL_DATE` <= DATE_ADD('"+periodCodeEnd+"-01', INTERVAL 1 MONTH)")}
+  AND h.AR_CANCEL_TYPE='YSHYF'
+  ) all_DATE ORDER BY GL_DATE]]></Query>
+</TableData>
+</TableDataMap>
+<ReportWebAttr>
+<ServerPrinter/>
+<WebPageContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.page.First">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("ReportServerP-First")}]]></Text>
+<IconName>
+<![CDATA[first]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Previous">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("ReportServerP-Previous")}]]></Text>
+<IconName>
+<![CDATA[previous]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.PageNavi">
+<WidgetAttr/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Next">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("ReportServerP-Next")}]]></Text>
+<IconName>
+<![CDATA[next]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Last">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("ReportServerP-Last")}]]></Text>
+<IconName>
+<![CDATA[last]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("Utils-Print[Client]A")}]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("Print")}]]></Text>
+<IconName>
+<![CDATA[print]]></IconName>
+<PrintButtons/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("Export")}]]></Text>
+<IconName>
+<![CDATA[export]]></IconName>
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true"/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Email">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n("Email")}]]></Text>
+<IconName>
+<![CDATA[email]]></IconName>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<WebPage isPage="true" isShowAsImage="false" isAutoScale="false"/>
+</WebPageContent>
+<WebViewContent>
+<ToolBars/>
+</WebViewContent>
+<WebWriteContent>
+<ToolBars/>
+<SelectedColor color="-10033153"/>
+</WebWriteContent>
+<Background name="NullBackground"/>
+<CacheValidateTime>
+<![CDATA[0]]></CacheValidateTime>
+</ReportWebAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<ElementCase class="com.fr.report.SingleBlock">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1181100,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[3124200,3086100,2971800,3238500,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[供应商编码]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Supplier code]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="1" r="0" s="0">
+<O>
+<![CDATA[供应商名称]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Supplier name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="2" r="0" s="0">
+<O>
+<![CDATA[日期]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Date]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="3" r="0" s="0">
+<O>
+<![CDATA[凭证号]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[voucher no]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="4" r="0" s="0">
+<O>
+<![CDATA[摘要]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[abstract]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="5" r="0" s="0">
+<O>
+<![CDATA[单据类型]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Document type]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="6" r="0" s="0">
+<O>
+<![CDATA[单据号]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Document no]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="7" r="0" s="0">
+<O>
+<![CDATA[应付(贷)]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Payable]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="8" r="0" s="0">
+<O>
+<![CDATA[付款(借)]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Payment]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="9" r="0" s="0">
+<O>
+<![CDATA[余额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[balance]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="10" r="0" s="0">
+<O>
+<![CDATA[合同号]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Contract name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="11" r="0" s="0">
+<O>
+<![CDATA[部门]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[department]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="12" r="0" s="0">
+<O>
+<![CDATA[项目]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Project name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="13" r="0">
+<Expand/>
+</C>
+<C c="0" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="VENDOR_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="VENDOR_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="GL_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="V_SERIAL_NUM"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="DESCRIPTION"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AP_CAT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AP_INV_GL_H_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="INV_AMOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PAY_AMT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="1" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=J2[A2:-1]A+H2-I2]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="10" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AP_CONTRACT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="DEPT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PROJECT_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+</ElementCase>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="ColorBackground" color="-4144960"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

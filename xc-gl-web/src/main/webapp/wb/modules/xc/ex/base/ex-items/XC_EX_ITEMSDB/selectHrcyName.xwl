@@ -1,0 +1,1 @@
+{"title":"","inframe":false,"hidden":false,"roles":{"default":1},"pageLink":"","children":[{"configs":{"loginRequired":"false","itemId":"module"},"children":[{"configs":{"sql":"select EX_HRCY_ID,EX_HRCY_NAME from xc_ex_hrcy","itemId":"dataprovider1"},"children":[],"type":"dataprovider","expanded":false}],"type":"module","expanded":true}],"iconCls":""}

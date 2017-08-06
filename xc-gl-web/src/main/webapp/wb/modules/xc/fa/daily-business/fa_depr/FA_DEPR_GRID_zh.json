@@ -1,0 +1,19 @@
+{
+  ledgerCombox:'账簿',
+  periodCombox:'期间',
+  catCombox:'分类',
+  cbzx:'成本中心',
+  faPropertyCombox:'资产属性',
+  queryBtn:'查询',
+  resetBtn:'重置',
+  selectLedgerMsgTips:'请先选择账簿',
+  selectFaPropertyMsgTips:'请选择资产属性',
+  
+  zcbmCol:'资产编码',
+  zcmcCol:'资产名称',
+  yzCol:'原值',
+  zjCol:'本期折旧',
+  ljzjljtxCol:'累计折旧',
+  jzzbCol:'减值准备',
+  jzCol:'净值'
+}

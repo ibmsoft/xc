@@ -1,0 +1,7 @@
+{
+	po_pur_po_com_lov_order_code:'Purchase order number',
+  	po_pur_po_com_lov_order_name:'Purchase order name',
+  	po_pur_po_com_lov_order_code_name:'Purchase order number/name',
+  	po_pur_po_com_lov_order_org_null:'Please select the organization',
+  	po_pur_po_com_lov_order_vendor_name:'vendor'
+}

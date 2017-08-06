@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStUseApplyMapper">
+	<!-- 领用申请单主表列 -->
+	<sql id="xcStUseApplyHColumn">
+		USE_APPLY_H_ID,
+		ORG_ID,
+		LEDGER_ID,
+		USE_APPLY_H_CODE,
+		USE_APPLY_H_NAME,
+		BUSINESS_TYPE_ID,
+		DOC_CAT_CODE,
+		WAREHOUSE_ID,
+		DEPT_ID,
+		PROJECT_ID,
+		APPLY_PERSON_ID,
+		STATUS,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		INS_CODE,
+		AUDIT_DATE,
+		AUDIT_STATUS,
+		AUDIT_STATUS_DESC,
+		SYS_AUDIT_STATUS,
+		SYS_AUDIT_STATUS_DESC,
+		AMOUNT,
+		BIZ_DATE
+	</sql>
+	<!-- 领用申请单明细列 -->
+	<sql id="xcStUseApplyLColumn">
+		USE_APPLY_L_ID,
+		USE_APPLY_H_ID,
+		USE_APPLY_L_CODE,
+		ORG_ID,
+		LEDGER_ID,
+		MATERIAL_ID,
+		QTY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		DIM_ID,
+		DESCRIPTION
+	</sql>
+	<!-- 根据领用申请单主键ID得到相应数据信息 -->
+	<select id="selectXcStUseApplyH" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStUseApplyHColumn"/>
+		FROM xc_st_use_apply_h
+		WHERE USE_APPLY_H_ID = #{USE_APPLY_H_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据领用申请单行ID得到相应数据信息 -->
+	<select id="selectXcStUseApplyL" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStUseApplyLColumn"/>
+		FROM xc_st_use_apply_l
+		WHERE USE_APPLY_L_ID = #{USE_APPLY_L_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据领用申请单主ID得到行相应数据信息 -->
+	<select id="selectXcStUseApplyLByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.st.modal.BaseDto">
+		SELECT
+			<include refid="xcStUseApplyLColumn"/>
+		FROM xc_st_use_apply_l
+		WHERE USE_APPLY_H_ID = #{USE_APPLY_H_ID,jdbcType=VARCHAR}
+		ORDER BY USE_APPLY_L_CODE DESC
+	</select>
+    <!-- 插入领用申请主表 -->
+    <insert id="insertXcStUseApplyH" parameterType="java.util.Map">
+    	INSERT INTO xc_st_use_apply_h (
+			<include refid="xcStUseApplyHColumn"/>
+    	)
+		VALUES (
+			#{USE_APPLY_H_ID,jdbcType=VARCHAR},
+			#{ORG_ID,jdbcType=VARCHAR},
+			#{LEDGER_ID,jdbcType=VARCHAR},
+			#{USE_APPLY_H_CODE,jdbcType=VARCHAR},
+			#{USE_APPLY_H_NAME,jdbcType=VARCHAR},
+			#{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+			#{DOC_CAT_CODE,jdbcType=VARCHAR},
+			#{WAREHOUSE_ID,jdbcType=VARCHAR},
+			#{DEPT_ID,jdbcType=VARCHAR},
+			#{PROJECT_ID,jdbcType=VARCHAR},
+			#{APPLY_PERSON_ID,jdbcType=VARCHAR},
+			'N',
+			#{CREATION_DATE,jdbcType=TIMESTAMP},
+			#{CREATED_BY,jdbcType=VARCHAR},
+			#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			#{LAST_UPDATED_BY,jdbcType=VARCHAR},
+			#{INS_CODE,jdbcType=VARCHAR},
+			#{AUDIT_DATE,jdbcType=VARCHAR},
+			'A',
+			'起草',
+			'A',
+			'草稿',
+			#{AMOUNT,jdbcType=NUMERIC},
+		   #{BIZ_DATE,jdbcType=TIMESTAMP}
+		)
+    </insert>
+    <!-- 更新领用申请主表 -->
+    <update id="updateXcStUseApplyH" parameterType="java.util.Map">
+    	UPDATE xc_st_use_apply_h SET
+			USE_APPLY_H_NAME	= #{USE_APPLY_H_NAME,jdbcType=VARCHAR},
+			BUSINESS_TYPE_ID	= #{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+			DOC_CAT_CODE		= #{DOC_CAT_CODE,jdbcType=VARCHAR},
+			WAREHOUSE_ID		= #{WAREHOUSE_ID,jdbcType=VARCHAR},
+			DEPT_ID				= #{DEPT_ID,jdbcType=VARCHAR},
+			PROJECT_ID			= #{PROJECT_ID,jdbcType=VARCHAR},
+			APPLY_PERSON_ID		= #{APPLY_PERSON_ID,jdbcType=VARCHAR},
+			AMOUNT				= #{AMOUNT,jdbcType=NUMERIC},
+			LAST_UPDATE_DATE	= #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY		= #{LAST_UPDATED_BY,jdbcType=VARCHAR},
+			BIZ_DATE			= #{BIZ_DATE,jdbcType=TIMESTAMP}
+		WHERE
+			USE_APPLY_H_ID 		= #{USE_APPLY_H_ID,jdbcType=VARCHAR}
+    </update>
+	
+	<!-- 保存领用申请明细 -->
+	<insert id="insertXcStUseApplyL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_use_apply_l (
+						<include refid="xcStUseApplyLColumn"/>
+					)
+					VALUES (
+						#{item.USE_APPLY_L_ID,jdbcType=VARCHAR},
+						#{item.USE_APPLY_H_ID,jdbcType=VARCHAR},
+						#{item.USE_APPLY_L_CODE,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_use_apply_l (
+						<include refid="xcStUseApplyLColumn"/>
+					)
+					VALUES (
+						#{item.USE_APPLY_L_ID,jdbcType=VARCHAR},
+						#{item.USE_APPLY_H_ID,jdbcType=VARCHAR},
+						#{item.USE_APPLY_L_CODE,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						#{item.DIM_ID,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+
+	<!-- 更新领用申请明细  -->
+	<update id="updateXcStUseApplyL" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_use_apply_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						DESCRIPTION			= #{item.DESCRIPTION,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						USE_APPLY_L_ID		= #{item.USE_APPLY_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_use_apply_l SET
+						MATERIAL_ID			= #{item.MATERIAL_ID,jdbcType=VARCHAR},
+						QTY					= #{item.QTY,jdbcType=NUMERIC},
+						DESCRIPTION			= #{item.DESCRIPTION,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE
+						USE_APPLY_L_ID		= #{item.USE_APPLY_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 批量删除领用申请主表  -->
+	<delete id="deleteXcStUseApplyH" parameterType="java.util.List">
+		DELETE FROM xc_st_use_apply_h WHERE USE_APPLY_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据领用申请主表ID批量删除领用申请行表信息 -->
+	<delete id="deleteXcStUseApplyLByHId" parameterType="java.util.List">
+		DELETE FROM xc_st_use_apply_l WHERE USE_APPLY_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据领用申请行表ID批量删除领用申请行表信息 -->
+	<delete id="deleteXcStUseApplyLByLId" parameterType="java.util.Map">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE FROM xc_st_use_apply_l WHERE USE_APPLY_L_ID = #{item.USE_APPLY_L_ID}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE FROM xc_st_use_apply_l WHERE USE_APPLY_L_ID = #{item.USE_APPLY_L_ID}
+				</foreach>
+			</when>			
+		</choose>
+	</delete>
+	
+	<!-- 更新领用申请主表是否关闭状态  -->
+	<update id="updateXcStUseApplyHCloseStatus" parameterType="java.util.List">
+		UPDATE xc_st_use_apply_h SET
+			STATUS					= 'Y',
+			SYS_AUDIT_STATUS		= 'G',
+			SYS_AUDIT_STATUS_DESC	= '关闭'
+		WHERE
+			USE_APPLY_H_ID		IN
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</update>
+</mapper>

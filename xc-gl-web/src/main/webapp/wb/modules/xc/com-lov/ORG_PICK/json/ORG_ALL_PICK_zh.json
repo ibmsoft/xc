@@ -1,0 +1,8 @@
+{
+    ORG_NAME : "组织",
+    ORG_CODE : "组织编码",
+    ORG_NAME_COL : "组织名称",
+    ORG_SHORT_NAME : "组织简称",
+    LEDGER_NAME : "账簿名称",
+    QUERY_CODE_NAME : "组织编码/名称"
+}

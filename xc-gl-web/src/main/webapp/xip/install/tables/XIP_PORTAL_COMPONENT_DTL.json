@@ -1,0 +1,2 @@
+{"UNIT_ID":"1dec1d20-50bc-46e1-bbeb-19ea84fd0055","COMPONENT_ID":"a1","UNIT_TITLE":"个人待办","UNIT_HEIGHT":"450","UNIT_TYPE":"Ext.panel.Panel","UNIT_PROPERTY":null,"UNIT_CONFIG":null,"HOME_ID":"1","UNIT_URL":"/m?xwl=xip/pub/wftask/wfTaskList","UNIT_FUNC_ID":null,"UNIT_ORDER":0}
+{"UNIT_ID":"637bd602-a895-4c61-81ec-4ee0d431d118","COMPONENT_ID":"a1","UNIT_TITLE":"收藏夹","UNIT_HEIGHT":"150","UNIT_TYPE":"Ext.panel.Panel","UNIT_PROPERTY":null,"UNIT_CONFIG":null,"HOME_ID":"1","UNIT_URL":"/m?xwl=xip/pub/favorite/favorite","UNIT_FUNC_ID":null,"UNIT_ORDER":3}

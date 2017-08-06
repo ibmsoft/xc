@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20110221">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="QUERY_AR_ACC_ID_DEBT_START"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="V_CUSTOMER_ID_START"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="QUERY_AR_ACC_ID_DEBT_END"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="ledgerId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="periodCode"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="V_CUSTOMER_ID_END"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT   CUSTOMER_ID,CUSTOMER_CODE,CUSTOMER_NAME,LEDGER_ID,PROJECT_CODE,PROJECT_NAME,GL_DATE,AR_ACC_ID_DEBT,AR_ACC_CODE_DEBT,AR_ACC_NAME_DEBT,NO_PAY_AMT,SUM(NO_PAY_AMT)
+ FROM (
+SELECT 
+  h.`CUSTOMER_ID`,
+  h.LEDGER_ID,
+  (SELECT 
+    PROJECT_CODE 
+  FROM
+    xc_pm_projects p 
+  WHERE p.project_id = h.`PROJECT_ID`) PROJECT_CODE,
+  (SELECT 
+    PROJECT_NAME 
+  FROM
+    xc_pm_projects p 
+  WHERE p.project_id = h.`PROJECT_ID`) PROJECT_NAME,
+  (SELECT 
+    CUSTOMER_CODE 
+  FROM
+    xc_ar_customers v 
+  WHERE v.CUSTOMER_ID = h.`CUSTOMER_ID`) CUSTOMER_CODE,
+  (SELECT 
+    CUSTOMER_NAME 
+  FROM
+    xc_ar_customers v 
+  WHERE v.CUSTOMER_ID = h.`CUSTOMER_ID`) CUSTOMER_NAME,
+  h.`GL_DATE`,
+  l.`ACC_ID` AR_ACC_ID_DEBT,
+  (SELECT ACC_CODE FROM  xc_gl_ld_accounts A,xc_gl_accounts B WHERE a.LEDGER_ID=H.LEDGER_ID AND b.ACC_ID=L.ACC_ID AND a.ACC_ID=b.ACC_ID) AR_ACC_CODE_DEBT,
+  (SELECT ACC_NAME FROM  xc_gl_ld_accounts A,xc_gl_accounts B WHERE a.LEDGER_ID=H.LEDGER_ID AND b.ACC_ID=L.ACC_ID AND a.ACC_ID=b.ACC_ID) AR_ACC_NAME_DEBT,
+  IFNULL(l.NO_CANCEL_AMT,0) NO_PAY_AMT
+FROM
+  xc_ar_pay_h h,xc_ar_pay_l l WHERE h.`AR_PAY_H_ID`=l.`AR_PAY_H_ID` AND h.ar_doc_cat_code='SKD_YUSK') t
+${IF(len(ledgerId) == 0, " where 1=2 ", " where t.`LEDGER_ID` ='"+ledgerId+"'")}
+  ${IF(len(V_CUSTOMER_ID_START) == 0||V_CUSTOMER_ID_START=='null', "  ", " AND t.`CUSTOMER_CODE` >= '"+V_CUSTOMER_ID_START+"'")}
+  ${IF(len(V_CUSTOMER_ID_END) == 0||V_CUSTOMER_ID_END=='null', "  ", " AND t.`CUSTOMER_CODE` <= '"+V_CUSTOMER_ID_END+"'")}
+  ${IF(len(QUERY_AR_ACC_ID_DEBT_START) == 0||QUERY_AR_ACC_ID_DEBT_START=='null', "  ", " AND (SELECT ACC_CODE FROM  xc_gl_ld_accounts A,xc_gl_accounts B WHERE a.LEDGER_ID=t.LEDGER_ID AND b.ACC_ID=t.AR_ACC_ID_DEBT AND a.ACC_ID=b.ACC_ID) >= '"+QUERY_AR_ACC_ID_DEBT_START+"'")}
+  ${IF(len(QUERY_AR_ACC_ID_DEBT_END) == 0||QUERY_AR_ACC_ID_DEBT_END=='null', "  ", " AND (SELECT ACC_CODE FROM  xc_gl_ld_accounts A,xc_gl_accounts B WHERE a.LEDGER_ID=t.LEDGER_ID AND b.ACC_ID=t.AR_ACC_ID_DEBT AND a.ACC_ID=b.ACC_ID) <= '"+QUERY_AR_ACC_ID_DEBT_END+"'")}
+  ${IF(len(periodCode) == 0, "  ", " AND t.`gl_date` <= '"+periodCode+"'")}  GROUP BY CUSTOMER_CODE,AR_ACC_ID_DEBT]]></Query>
+</TableData>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="v_AGING_TYPE"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT INTERVAL_NAME,INTERVAL_DAYS,INTERVAL_START,INTERVAL_END FROM xc_ar_aging_interval ${IF(len(v_AGING_TYPE) == 0, " where 1=2 ", " where `AGING_TYPE_CODE` ='"+v_AGING_TYPE+"'")} 
+GROUP BY INTERVAL_START]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<ElementCase class="com.fr.report.SingleBlock">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[0,0,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="2" r="0" cs="2" s="0">
+<O>
+<![CDATA[客户]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Customer]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="4" r="0" cs="2" s="0">
+<O>
+<![CDATA[科目]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Accounting Period]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="6" r="0" rs="2" s="0">
+<O>
+<![CDATA[余额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Balance]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="7" r="0" cs="2" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="INTERVAL_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="1"/>
+</C>
+<C c="2" r="1" s="0">
+<O>
+<![CDATA[编码]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Code]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="3" r="1" s="0">
+<O>
+<![CDATA[名称]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="4" r="1" s="0">
+<O>
+<![CDATA[编码]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Code]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="5" r="1" s="0">
+<O>
+<![CDATA[名称]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Name]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="7" r="1" s="0">
+<O>
+<![CDATA[金额]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[Amount]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="8" r="1" s="0">
+<O>
+<![CDATA[比例]]></O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$pLanguage=='en']]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ValueHighlightAction">
+<O>
+<![CDATA[proportion]]></O>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="0" r="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="CUSTOMER_ID"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AR_ACC_ID_DEBT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="CUSTOMER_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="CUSTOMER_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AR_ACC_CODE_DEBT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AR_ACC_NAME_DEBT"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="SUM(NO_PAY_AMT)"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="INTERVAL_NAME"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[SQL("dd",CONCATENATE(" SELECT IFNULL(SUM(l.NO_CANCEL_AMT),0) FROM xc_ar_pay_h h,xc_ar_pay_l l where h.`AR_PAY_H_ID`=l.`AR_PAY_H_ID` and h.ar_doc_cat_code='SKD_YUSK' and h.CUSTOMER_ID = '"+A3+"'  AND l.ACC_ID='"+B3+"' AND gl_date <= DATE_SUB('"+$periodCode+"-01',INTERVAL "+INTERVAL_START+" DAY) ", IF(len(INTERVAL_END) == 0, "  ", " AND h.gl_date >= DATE_SUB('"+$periodCode+"-01', INTERVAL "+INTERVAL_END+" DAY) ") ),1,1)]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="INTERVAL_DAYS"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Result>
+<![CDATA[if(G3>0,ROUND(H3/G3*100,2),0)]]></Result>
+<Parameters/>
+</O>
+<HighlightList>
+<Highlight class="com.fr.report.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[IF($blxs=='Y',false,true)]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.highlight.ColWidthHighlightAction"/>
+</Highlight>
+</HighlightList>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+</ElementCase>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

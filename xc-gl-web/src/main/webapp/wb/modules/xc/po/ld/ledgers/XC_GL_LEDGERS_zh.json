@@ -1,0 +1,12 @@
+{
+  po_ld_ledger_y:'是',
+  po_ld_ledger_n:'否',
+  po_ld_ledger_is_cgsq:'采购申请单是否必须',
+  po_ld_ledger_is_dhd:'到货单是否必须',
+  po_ld_ledger_is_wdh:'是否允许未到货的结算',
+  po_ld_ledger_save:'保存',
+  po_ld_ledger_dif_acc:'发票价格差异科目',
+  po_ld_ledger_est_acc:'到货暂估科目',
+  po_ld_ledger_mat_acc:'在途物资科目',
+  po_ld_ledger_save_success:'保存成功！'
+}

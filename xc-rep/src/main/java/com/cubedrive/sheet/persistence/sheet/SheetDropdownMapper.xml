@@ -1,0 +1,64 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetDropdownMapper">
+
+	<resultMap id="sheetDropdownMap" type="com.cubedrive.sheet.domain.sheet.SheetDropdown">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<association property="documentFile" column="document_file_id" select="com.cubedrive.base.persistence.document.DocumentFileMapper.getById" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		sheet_dropdown.id, sheet_dropdown.name, sheet_dropdown.content, sheet_dropdown.document_file_id
+	</sql>
+
+	<select id="getById" parameterType="java.lang.Integer" resultMap="sheetDropdownMap">
+		select <include refid="base_column_list" />
+		 from sheet_dropdown 
+		where id = #{id}
+	</select>
+	
+	<select id="getByNameAndFileId" resultMap="sheetDropdownMap">
+		select <include refid="base_column_list" />
+		 from sheet_dropdown 
+		where name = #{name} 
+		  and document_file_id = #{fileId} limit 1
+	</select>
+
+	<insert id="insert" parameterType="com.cubedrive.sheet.domain.sheet.SheetDropdown">
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into 
+		       sheet_dropdown(document_file_id,name,content)
+		values(#{sheetDropdown.documentFile.id,jdbcType=INTEGER},
+		       #{sheetDropdown.name,jdbcType=VARCHAR},
+		       #{sheetDropdown.content,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="findByDocId" resultMap="sheetDropdownMap">
+	   select <include refid="base_column_list" />
+	     from sheet_dropdown
+	    where document_file_id = #{documentId}
+	</select>
+	
+	<update id="update"
+		parameterType="com.cubedrive.sheet.domain.sheet.SheetDropdown">
+		update sheet_dropdown
+		   set content = #{sheetDropdown.content}
+		where id = #{sheetDropdown.id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from sheet_dropdown where id=#{id}
+	</delete>
+	
+	<delete id="deleteByDocumentId">
+		delete from sheet_dropdown where document_file_id=#{documentId}
+	</delete>
+
+
+
+</mapper>

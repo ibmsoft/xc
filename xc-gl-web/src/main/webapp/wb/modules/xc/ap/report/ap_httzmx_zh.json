@@ -1,0 +1,9 @@
+{
+  LEDGER			: "账簿",
+  VENDOR_NAME		: "供应商",
+  PERIOD 			: "会计期",
+  TO 			    : "至",
+  AP_CONTRACT_NAME  : "合同",
+  queryBtn			: "查询",
+  clearBtn			: "重置"
+}

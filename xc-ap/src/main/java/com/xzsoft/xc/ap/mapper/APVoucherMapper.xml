@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ap.mapper.APVoucherMapper">
+
+	<!-- 凭证保存更新应付应付模块单据的凭证信息 -->
+	<update id="saveNewApVoucher" parameterType="com.xzsoft.xc.ap.modal.ApVoucherHandlerBean">
+		UPDATE ${tableName}
+		SET V_HEAD_ID = #{headId,jdbcType=VARCHAR},
+			V_STATUS = '1',
+			LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR}
+		WHERE
+			${priKey} = #{apId}
+	</update>
+	
+	<!-- 凭证（审核：起草状态->提交状态->审核通过状态，取消审核：审核通过->提交->起草）时更新应付模块单据的凭证信息 -->
+	<update id="saveCheckApVoucher" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE ${item.tableName}
+					SET VERIFIER_ID				= #{item.verifierId,jdbcType=VARCHAR},
+						VERFY_DATE				= #{item.verifyDate,jdbcType=TIMESTAMP},
+						V_STATUS				= #{item.vStatus,jdbcType=TIMESTAMP},
+						LAST_UPDATE_DATE		= #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY			= #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					WHERE
+						${item.priKey}			= #{item.apId}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE ${item.tableName}
+					SET VERIFIER_ID				= #{item.verifierId,jdbcType=VARCHAR},
+						VERFY_DATE				= #{item.verifyDate,jdbcType=TIMESTAMP},
+						V_STATUS				= #{item.vStatus,jdbcType=TIMESTAMP},
+						LAST_UPDATE_DATE		= #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY			= #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					WHERE
+						${item.priKey}			= #{item.apId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 凭证签字（取消签字）时更新应付模块单据的凭证信息 -->
+	<update id="saveSignApVoucher" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ap_pay_h
+					SET SIGN_USER_ID			= #{item.signUserId,jdbcType=VARCHAR},
+						SIGN_DATE				= #{item.signDate,jdbcType=TIMESTAMP},
+						SIGN_STATUS				= #{item.signStatus,jdbcType=TIMESTAMP},
+						V_STATUS				= #{item.vStatus,jdbcType=TIMESTAMP},
+						LAST_UPDATE_DATE		= #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY			= #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					WHERE
+						AP_PAY_H_ID				= #{item.apId}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ap_pay_h
+					SET SIGN_USER_ID			= #{item.signUserId,jdbcType=VARCHAR},
+						SIGN_DATE				= #{item.signDate,jdbcType=TIMESTAMP},
+						SIGN_STATUS				= #{item.signStatus,jdbcType=TIMESTAMP},
+						V_STATUS				= #{item.vStatus,jdbcType=TIMESTAMP},
+						LAST_UPDATE_DATE		= #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY			= #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					WHERE
+						AP_PAY_H_ID				= #{item.apId}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+</mapper>

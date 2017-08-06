@@ -1,0 +1,11 @@
+{
+  empty_text_ledger		: "请选择账薄进行查询",
+  query_ledger_combo	: "账薄",
+  queryBtn				: "查询",
+  cancelBtn				: "重置",
+  row_num_col			: "序号",
+  emp_code_col			: "员工编号",
+  emp_name_col			: "员工姓名",
+  dept_name_col			: "成本中心",
+  ia_bal_col			: "备用金余额"
+}

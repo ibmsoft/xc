@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.st.mapper.XcStLocationTransMapper">
+
+	<sql id="xcStLocationTrans_Column_List">
+		LO_TRANS_ID ,
+		ORG_ID ,
+		LEDGER_ID ,
+		DOC_CAT_CODE ,
+		BUSINESS_TYPE_ID,
+		COEFFICIENT ,
+		BUSINESS_H_ID ,
+		BUSINESS_L_ID ,
+		MATERIAL_ID ,
+		LOCATION_ID ,
+		QTY ,
+		CREATION_DATE ,
+		CREATED_BY ,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+
+	<select id="xc_st_location_trans_select_by_key" parameterType="java.util.Map"
+		resultType="com.xzsoft.xc.st.modal.BaseDto">
+		select
+		<include refid="xcStLocationTrans_Column_List" />
+		from xc_st_location_trans A where LO_TRANS_ID =
+		#{LO_TRANS_ID,jdbcType=VARCHAR}
+		order by CREATION_DATE
+	</select>
+
+	<insert id="xc_st_location_trans_insert" parameterType="java.util.Map">
+		insert
+		into
+		xc_st_location_trans (
+		LO_TRANS_ID ,
+		ORG_ID ,
+		LEDGER_ID ,
+		DOC_CAT_CODE ,
+		BUSINESS_TYPE_ID,
+		COEFFICIENT ,
+		BUSINESS_H_ID ,
+		BUSINESS_L_ID ,
+		MATERIAL_ID ,
+		LOCATION_ID ,
+		QTY ,
+		CREATION_DATE ,
+		CREATED_BY ,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+		)values(
+		#{LO_TRANS_ID,jdbcType=VARCHAR},
+		#{ORG_ID,jdbcType=VARCHAR},
+		#{LEDGER_ID,jdbcType=VARCHAR},
+		#{DOC_CAT_CODE,jdbcType=VARCHAR},
+		#{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+		#{COEFFICIENT,jdbcType=VARCHAR},
+		#{BUSINESS_H_ID,jdbcType=VARCHAR},
+		#{BUSINESS_L_ID,jdbcType=VARCHAR},
+		#{MATERIAL_ID,jdbcType=VARCHAR},
+		#{LOCATION_ID,jdbcType=VARCHAR},
+		#{QTY,jdbcType=NUMERIC},
+		#{CREATION_DATE,jdbcType=TIMESTAMP},
+		#{CREATED_BY,jdbcType=VARCHAR},
+		#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="xc_st_location_trans_update" parameterType="java.util.Map">
+		update
+		xc_st_location_trans
+		set
+
+		ORG_ID=#{ORG_ID,jdbcType=VARCHAR},
+		LEDGER_ID=#{LEDGER_ID,jdbcType=VARCHAR},
+		DOC_CAT_CODE=#{DOC_CAT_CODE,jdbcType=VARCHAR},
+		BUSINESS_TYPE_ID=#{BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+		COEFFICIENT=#{COEFFICIENT,jdbcType=VARCHAR},
+		BUSINESS_H_ID=#{BUSINESS_H_ID,jdbcType=VARCHAR},
+		BUSINESS_L_ID=#{BUSINESS_L_ID,jdbcType=VARCHAR},
+		MATERIAL_ID=#{MATERIAL_ID,jdbcType=VARCHAR},
+		LOCATION_ID=#{LOCATION_ID,jdbcType=VARCHAR},
+		QTY=#{QTY,jdbcType=NUMERIC},
+		CREATION_DATE=#{CREATION_DATE,jdbcType=TIMESTAMP},
+		CREATED_BY=#{CREATED_BY,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE=#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+		LAST_UPDATED_BY=#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		where LO_TRANS_ID=#{LO_TRANS_ID,jdbcType=VARCHAR}
+	</update>
+
+
+	<delete id="xc_st_location_trans_deleteByKey" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			delete from xc_st_location_trans where LO_TRANS_ID
+			=
+			#{item.LO_TRANS_ID,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
+
+	<delete id="xc_st_location_trans_delete_by_business_h_id"
+		parameterType="java.util.Map">
+		delete from xc_st_location_trans where BUSINESS_H_ID =
+		#{BUSINESS_H_ID,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="xc_st_location_trans_delete_by_business_l_id"
+		parameterType="java.util.Map">
+		delete from xc_st_location_trans where BUSINESS_L_ID =
+		#{BUSINESS_L_ID,jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

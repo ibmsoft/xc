@@ -1,0 +1,1 @@
+{"inframe":false,"title":"","hidden":false,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":" \nselect *, 'edite' OPTYPE from XIP_PUB_VAL_SET_DTL where VAL_SET_CODE =\"XC_AP_AGING_TYPE\" ","itemId":"dataprovider1"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

@@ -1,0 +1,322 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.XCRepFormulaMapper">
+<!-- 获取期间 -->
+	<select id="getPeriodByCode" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		SELECT tmp.* FROM
+		(
+			SELECT
+				t.VAL_CODE AS CODE,
+				t.VAL_NAME AS NAME
+			FROM
+				xip_pub_val_set_dtl t
+			WHERE
+				t.VAL_SET_CODE = 'XC_REP_PERIOD_DIM'
+			UNION
+				SELECT
+					a.PERIOD_CODE AS CODE,
+					a.PERIOD_CODE AS NAME
+				FROM
+					xc_gl_period a
+		) tmp
+	WHERE
+		tmp.CODE = #{code,jdbcType=VARCHAR}
+	</select>
+	<!-- 通过行列指标查公式ID -->
+	<select id="checkFormulaIsExist" parameterType="String" resultType="String">
+		select FORMULA_ID from xc_rep_formulas
+		 where ROWITEM_ID = #{rowitemId,jdbcType=VARCHAR}
+		   and COLITEM_ID = #{colitemId,jdbcType=VARCHAR} 
+		   and LEDGER_ID = #{ledgerId,jdbcType=VARCHAR} 
+		   and ACC_HRCY_ID = #{accHrcyId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取实体信息-->
+	<select id="getEntityByCode" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		SELECT o.ORG_CODE CODE, o.ORG_NAME NAME
+		FROM  xip_pub_orgs o
+		WHERE o.ORG_CODE=#{entityCode,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取账簿信息 -->
+	<select id="getLedgerByCode" parameterType="java.lang.String" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		SELECT t.LEDGER_CODE CODE, t.LEDGER_NAME NAME
+		FROM  xc_gl_ledgers t
+		WHERE t.ORG_CODE=#{ledgerCode,jdbcType=VARCHAR}	
+	</select>
+	
+	<!-- 获取行指标 -->
+	<select id="getRowByCode" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		select t.ROWITEM_CODE code,t.ROWITEM_NAME name
+		from xc_rep_rowitems t
+		where t.ACC_HRCY_ID = #{accHrcyId,jdbcType=VARCHAR}
+		  and t.ROWITEM_CODE =#{code,jdbcType=VARCHAR}
+	</select>
+	<!-- 获取列指标 -->
+	<select id="getColByCode" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		SELECT t.COLITEM_CODE CODE,t.COLITEM_NAME NAME
+		FROM xc_rep_colitems t
+		WHERE t.ACC_HRCY_ID = #{accHrcyId,jdbcType=VARCHAR}
+		  and t.COLITEM_CODE =#{code,jdbcType=VARCHAR}
+	</select>
+	<!-- 插入公式 -->
+	<insert id="insertCellFormula" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'.toString()">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_rep_formulas (
+							FORMULA_ID,
+							ACC_HRCY_ID,
+							ROWITEM_ID,
+							COLITEM_ID,
+							FORMULA,
+							FORMULA_DESC,
+							FORMULA_TYPE,
+							LEDGER_ID,
+							FORMULA_LEVEL,
+							ORDERBY,
+							LAST_UPDATE_DATE,
+							LAST_UPDATED_BY,
+							CREATION_DATE,
+							CREATED_BY
+						)VALUES(
+						    #{item.formulaId,jdbcType=VARCHAR},
+						    #{item.accHrcyId,jdbcType=VARCHAR},
+						    #{item.rowitemId,jdbcType=VARCHAR},
+						    #{item.colitemId,jdbcType=VARCHAR},
+						    #{item.formula,jdbcType=VARCHAR},
+						    #{item.formulaDesc,jdbcType=VARCHAR},
+						    #{item.formulaType,jdbcType=VARCHAR},
+						    #{item.ledgerId,jdbcType=VARCHAR},
+						    #{item.formulaLevel,jdbcType=VARCHAR},
+						    #{item.orderBy,jdbcType=INTEGER},
+						    #{item.lastUpdateDate,jdbcType=DATE},
+						    #{item.lastUpdatedBy,jdbcType=VARCHAR},
+						    #{item.creationDate,jdbcType=DATE},
+						    #{item.createdBy,jdbcType=VARCHAR}
+						)
+			</foreach>
+		</when>
+		<otherwise>
+		  	 <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_rep_formulas (
+							FORMULA_ID,
+							ACC_HRCY_ID,
+							ROWITEM_ID,
+							COLITEM_ID,
+							FORMULA,
+							FORMULA_DESC,
+							FORMULA_TYPE,
+							LEDGER_ID,
+							FORMULA_LEVEL,
+							ORDERBY,
+							LAST_UPDATE_DATE,
+							LAST_UPDATED_BY,
+							CREATION_DATE,
+							CREATED_BY
+						)VALUES(
+						    #{item.formulaId,jdbcType=VARCHAR},
+						    #{item.accHrcyId,jdbcType=VARCHAR},
+						    #{item.rowitemId,jdbcType=VARCHAR},
+						    #{item.colitemId,jdbcType=VARCHAR},
+						    #{item.formula,jdbcType=VARCHAR},
+						    #{item.formulaDesc,jdbcType=VARCHAR},
+						    #{item.formulaType,jdbcType=VARCHAR},
+						    #{item.ledgerId,jdbcType=VARCHAR},
+						    #{item.formulaLevel,jdbcType=VARCHAR},
+						    #{item.orderBy,jdbcType=INTEGER},
+						    #{item.lastUpdateDate,jdbcType=DATE},
+						    #{item.lastUpdatedBy,jdbcType=VARCHAR},
+						    #{item.creationDate,jdbcType=DATE},
+						    #{item.createdBy,jdbcType=VARCHAR}
+						)
+			</foreach>
+		</otherwise>
+	</choose>
+	</insert>
+	<!-- 修改单元格的公式 -->
+	<update id="updateCellFormula" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'.toString()">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_rep_formulas
+						SET FORMULA =  #{item.formula,jdbcType=VARCHAR},
+							FORMULA_DESC = #{item.formulaDesc,jdbcType=VARCHAR},
+							FORMULA_TYPE =   #{item.formulaType,jdbcType=VARCHAR},
+							LAST_UPDATE_DATE = #{item.lastUpdateDate,jdbcType=DATE},
+							LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+						WHERE
+							FORMULA_ID =  #{item.formulaId,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<otherwise>
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_rep_formulas
+						SET FORMULA =  #{item.formula,jdbcType=VARCHAR},
+							FORMULA_DESC = #{item.formulaDesc,jdbcType=VARCHAR},
+							FORMULA_TYPE  =   #{item.formulaType,jdbcType=VARCHAR},
+							LAST_UPDATE_DATE = #{item.lastUpdateDate,jdbcType=DATE},
+							LAST_UPDATED_BY = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+						WHERE
+							FORMULA_ID =  #{item.formulaId,jdbcType=VARCHAR}
+				</foreach>
+			</otherwise>
+		</choose>
+	</update>
+	<!-- 删除单元格公式 -->
+	<delete id="deleteCellFormula" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'.toString()">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_rep_formulas 
+					       where ROWITEM_ID = #{item.rowitemId,jdbcType=VARCHAR} 
+					         and COLITEM_ID = #{item.colitemId,jdbcType=VARCHAR} 
+					         and ACC_HRCY_ID = #{item.accHrcyId,jdbcType=VARCHAR} 
+					         and LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR} 
+				 </foreach>
+			</when>
+			<otherwise>
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_rep_formulas 
+					       where ROWITEM_ID = #{item.rowitemId,jdbcType=VARCHAR} 
+					         and COLITEM_ID = #{item.colitemId,jdbcType=VARCHAR} 
+					         and ACC_HRCY_ID = #{item.accHrcyId,jdbcType=VARCHAR} 
+					         and LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR} 
+				 </foreach>
+			</otherwise>
+		</choose>
+	</delete>
+	<!-- 预处理公式插入 -->
+	<insert id="insertPreFormula" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'.toString()">
+					<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+						INSERT INTO xc_rep_pre_formulas (
+								PRE_FORMULA_ID,  
+								FORMULA_CAT,     
+								FORMULA_ID,      
+								FORMULA_STR,     
+								FORMULA_JSON,    
+								FORMULA_TYPE,    
+								ORDERBY,         
+								LAST_UPDATE_DATE,
+								LAST_UPDATED_BY,
+								CREATION_DATE,
+								CREATED_BY
+							)VALUES(
+							    #{item.preFormulaId,jdbcType=VARCHAR},
+							    #{item.formulaCat,jdbcType=VARCHAR},
+							    #{item.formulaId,jdbcType=VARCHAR},
+							    #{item.formulaStr,jdbcType=VARCHAR},
+							    #{item.formulaJson,jdbcType=VARCHAR},
+							    #{item.formulaType,jdbcType=VARCHAR},
+							    #{item.orderBy,jdbcType=VARCHAR},
+							    #{item.lastUpdateDate,jdbcType=DATE},
+							    #{item.lastUpdatedBy,jdbcType=VARCHAR},
+							    #{item.creationDate,jdbcType=DATE},
+							    #{item.createdBy,jdbcType=VARCHAR}
+							)
+				</foreach>
+			</when>
+			<otherwise>
+			  	 <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+						INSERT INTO xc_rep_pre_formulas (
+								PRE_FORMULA_ID,  
+								FORMULA_CAT,     
+								FORMULA_ID,      
+								FORMULA_STR,     
+								FORMULA_JSON,    
+								FORMULA_TYPE,    
+								ORDERBY,         
+								LAST_UPDATE_DATE,
+								LAST_UPDATED_BY,
+								CREATION_DATE,
+								CREATED_BY
+							)VALUES(
+							    #{item.preFormulaId,jdbcType=VARCHAR},
+							    #{item.formulaCat,jdbcType=VARCHAR},
+							    #{item.formulaId,jdbcType=VARCHAR},
+							    #{item.formulaStr,jdbcType=VARCHAR},
+							    #{item.formulaJson,jdbcType=VARCHAR},
+							    #{item.formulaType,jdbcType=VARCHAR},
+							    #{item.orderBy,jdbcType=VARCHAR},
+							    #{item.lastUpdateDate,jdbcType=DATE},
+							    #{item.lastUpdatedBy,jdbcType=VARCHAR},
+							    #{item.creationDate,jdbcType=DATE},
+							    #{item.createdBy,jdbcType=VARCHAR}
+							)
+				</foreach>
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<!-- 删除预处理公式 -->
+	<delete id="delPreFormulaByBean" parameterType="java.util.HashMap">
+   		<choose>
+			<when test="dbType == 'mysql'.toString()">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_rep_pre_formulas 
+					       where FORMULA_ID = #{item.formulaId,jdbcType=VARCHAR} 
+				 </foreach>
+			</when>
+			<otherwise>
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_rep_pre_formulas 
+					       where FORMULA_ID = #{item.formulaId,jdbcType=VARCHAR} 
+				 </foreach>
+			</otherwise>
+		</choose>
+	</delete>
+	
+	<!-- 删除预处理公式 -->
+	<delete id="delPreFormulaByMap" parameterType="java.util.HashMap">
+   		<choose>
+			<when test="dbType == 'mysql'.toString()">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete pf.* from xc_rep_pre_formulas pf
+					       where exists (select 1 from xc_rep_formulas rf where pf.FORMULA_ID = rf.FORMULA_ID
+			                              and rf.ROWITEM_ID = #{item.rowitemId,jdbcType=VARCHAR} 
+										  and rf.COLITEM_ID = #{item.colitemId,jdbcType=VARCHAR} 
+										  and rf.ACC_HRCY_ID = #{item.accHrcyId,jdbcType=VARCHAR} 
+										  and rf.LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}  )
+				 </foreach>
+			</when>
+			<otherwise>
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete pf.* from xc_rep_pre_formulas pf
+					       where exists (select 1 from xc_rep_formulas rf where pf.FORMULA_ID = rf.FORMULA_ID
+			                              and rf.ROWITEM_ID = #{item.rowitemId,jdbcType=VARCHAR} 
+										  and rf.COLITEM_ID = #{item.colitemId,jdbcType=VARCHAR} 
+										  and rf.ACC_HRCY_ID = #{item.accHrcyId,jdbcType=VARCHAR} 
+										  and rf.LEDGER_ID = #{item.ledgerId,jdbcType=VARCHAR}  )
+				 </foreach>
+			</otherwise>
+		</choose>
+	</delete>
+	
+	<!-- 获取币种 -->
+	<select id="getCnyByCode" resultType="com.xzsoft.xc.rep.modal.DataDTO">
+		select t.CURRENCY_CODE code,t.CURRENCY_NAME name 
+		from xc_gl_currencies t 
+		where t.CURRENCY_CODE= #{code,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取公式类型 -->
+	<select id="judgetFormulaType" parameterType="java.lang.String" resultType="java.lang.Integer">
+	  <choose>
+	    <when test="judgeType == 'ORDER'.toString()">
+	       SELECT count(1) FROM xc_rep_formulas
+	     </when>
+	     <otherwise>
+	       SELECT count(1) FROM xc_rep_func a 
+	       	WHERE
+	         	a.FUNC_CODE IN (${params})
+	       	AND 
+	         	a.FUNC_CALTYPE = #{judgeType,jdbcType=VARCHAR}
+	      </otherwise>
+	  </choose>
+	</select>
+	<!--公式翻译  名称获取-->
+	<select id="queryTranslateName" parameterType="java.lang.String" resultType="java.util.HashMap">
+	   ${querySql}
+	</select>
+</mapper>

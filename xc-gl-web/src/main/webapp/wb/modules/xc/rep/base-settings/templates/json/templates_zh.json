@@ -1,0 +1,69 @@
+{
+  cbx_hrcy:'科目体系',
+  txt_tpl:'模板名称',
+  btnQuery:'查询',
+  
+  btnNew:'新增',
+  btnDel:'删除',
+  btnEdit:'修改',
+  btnEditFormat:'格式编制',
+  btnSave:'保存模板',
+  btnCopy:'复制',
+  btnExp:'导出',
+  btnUpload:'接收',
+  btnRecOrg:'标定公司',
+  btnRecPeriod:'标定期间',
+  btnRecRowNo:'标定行次',
+  btnRecItem:'标定项目',
+  btnRowItem:'行指标',
+  btnColItem:'列指标',
+  btnRecDataArea:'标定数据区',
+  btnClearComment:'清除批注',
+  
+  btnOK:'确定',
+  btnCancel:'取消',
+  
+  newTabWin:'新增模板',
+  tabCode:'模板编码',
+  tabName:'模板名称',
+  
+  createRowItemWin:'行指标',
+  createColItemWin:'列指标',
+    
+  selAccHrcy:'请选择科目体系',
+  
+  rownum : '序号',
+  TAB_ID : '模板ID',
+  ACC_HRCY_ID : '科目体系ID',
+  TAB_CODE : '模板编码',
+  TAB_NAME : '模板名称',
+  TAB_ORDER : '排序号',
+  IS_ACTIVE : '默认活动页签',
+  CELL_NUM : '单元格数',
+  
+  Actived : '活动',
+  Not_Actived : '非活动',
+  
+  editRepFormatWin : '报表格式编辑',
+  
+  
+  copTabWin : '模板复制',
+  cp_hrcy : '被复制的科目体系'
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

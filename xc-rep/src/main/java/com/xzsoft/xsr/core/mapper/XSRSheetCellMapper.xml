@@ -1,0 +1,173 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xzsoft.xsr.core.mapper.XSRSheetCellMapper">
+
+<!-- 	
+	<resultMap id="sheetCellMap" type="com.cubedrive.sheet.domain.sheet.SheetCell">
+		<id column="cell_id" property="id" jdbcType="INTEGER" />
+		<result column="x" property="x" jdbcType="INTEGER" />
+		<result column="y" property="y" jdbcType="INTEGER" />
+		<result column="tab_id" property="tabId" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="is_cal" property="cal" jdbcType="BOOLEAN" />
+		<result column="raw_data" property="rawData" jdbcType="VARCHAR" />
+	</resultMap>
+ -->
+	
+	<resultMap id="sheetCellMap" type="com.cubedrive.sheet.domain.sheet.SheetCell">
+		<result column="MSFORMAT_ID" property="tabId" jdbcType="INTEGER" />
+		<result column="x" property="x" jdbcType="INTEGER" />
+		<result column="y" property="y" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="is_cal" property="cal" jdbcType="BOOLEAN" />
+		<result column="raw_data" property="rawData" jdbcType="VARCHAR" />
+	</resultMap>
+
+<!-- 	
+	<select id="findCellsByTabOnExport" resultMap="sheetCellMap">
+		select <include refid="base_column_list2" /> from ${cellTable}
+		where tab_id = #{tabId}	order by x asc,y asc LIMIT #{limit} OFFSET #{offset}
+	</select>
+ -->
+	<!-- zhousr 2016-2-20  -->
+	<select id="findCellsByTabOnExport" resultMap="sheetCellMap">
+		select x,y,is_cal,content,raw_data from xsr_rep_modalsheet_format
+		 where MSFORMAT_ID = #{tabId} order by x asc,y asc LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+<!-- 	
+	<insert id="insertSheetCell" parameterType="com.cubedrive.sheet.domain.sheet.SheetCell">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"	order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal)
+		values(#{tabId,jdbcType=INTEGER},
+		#{cell.x,jdbcType=INTEGER},
+		#{cell.y,jdbcType=INTEGER},
+		#{cell.content,jdbcType=VARCHAR},
+		#{cell.rawData,jdbcType=VARCHAR},
+		#{cell.cal,jdbcType=BOOLEAN})
+	</insert> 
+-->
+	<!-- modified by zhousr 2016-2-19 ES的方法修改为报表3.0需要的 -->
+	<insert id="insertSheetCell" parameterType="com.cubedrive.sheet.domain.sheet.SheetCell">
+		insert into xsr_rep_modalsheet_format(FORMAT_ID, MSFORMAT_ID, X, Y, CONTENT, 
+		       RAW_DATA, IS_CAL, CREATION_DATE, CREATED_BY)
+		values(#{cell.FORMAT_ID},
+		#{tabId,jdbcType=INTEGER},
+		#{cell.x,jdbcType=INTEGER},
+		#{cell.y,jdbcType=INTEGER},
+		#{cell.content,jdbcType=VARCHAR},
+		#{cell.rawData,jdbcType=VARCHAR},
+		#{cell.cal,jdbcType=BOOLEAN},
+		#{cell.CREATION_DATE},
+		#{cell.CREATED_BY})
+	</insert>
+
+<!-- 	
+	<insert id="batchInsertSheetCell">
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{tabId,jdbcType=INTEGER},#{cell.x,jdbcType=INTEGER},#{cell.y,jdbcType=INTEGER},#{cell.content,jdbcType=VARCHAR},#{cell.rawData,jdbcType=VARCHAR},#{cell.cal,jdbcType=BOOLEAN})
+		</foreach>
+	</insert>
+ -->
+	<!-- modified by zhousr 2016-2-19 ES的方法修改为报表3.0需要的 -->
+	<insert id="batchInsertSheetCell">
+		insert into xsr_rep_modalsheet_format(FORMAT_ID, MSFORMAT_ID, X, Y, CONTENT, 
+		       RAW_DATA, IS_CAL, CREATION_DATE, CREATED_BY) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{cell.FORMAT_ID},
+			#{tabId,jdbcType=INTEGER},
+			#{cell.x,jdbcType=INTEGER},
+			#{cell.y,jdbcType=INTEGER},
+			#{cell.content,jdbcType=VARCHAR},
+			#{cell.rawData,jdbcType=VARCHAR},
+			#{cell.cal,jdbcType=BOOLEAN},
+			#{cell.CREATION_DATE},
+			#{cell.CREATED_BY})
+		</foreach>
+	</insert>
+
+<!-- 	
+	<insert id="batchInsertSheetCell2">
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{cell.tabId,jdbcType=INTEGER},#{cell.x,jdbcType=INTEGER},#{cell.y,jdbcType=INTEGER},#{cell.content,jdbcType=VARCHAR},#{cell.rawData,jdbcType=VARCHAR},#{cell.cal,jdbcType=BOOLEAN})
+		</foreach>
+	</insert>
+ -->
+	
+	<insert id="batchInsertSheetCell2">
+		insert into xsr_rep_modalsheet_format(FORMAT_ID, MSFORMAT_ID, X, Y, CONTENT, 
+		       RAW_DATA, IS_CAL, CREATION_DATE, CREATED_BY) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{cell.FORMAT_ID},
+			#{cell.tabId,jdbcType=INTEGER},
+			#{cell.x,jdbcType=INTEGER},
+			#{cell.y,jdbcType=INTEGER},
+			#{cell.content,jdbcType=VARCHAR},
+			#{cell.rawData,jdbcType=VARCHAR},
+			#{cell.cal,jdbcType=BOOLEAN},
+			#{cell.CREATION_DATE},
+			#{cell.CREATED_BY})
+		</foreach>
+	</insert>
+	
+	<select id="getModalsheetFormatCellList" resultMap="sheetCellMap">
+		select t.MSFORMAT_ID, t.X, t.Y, t.IS_CAL, t.CONTENT, t.CELL_COMMENT, t.CELL_COMMENT_TYPE 
+		  from xsr_rep_modalsheet_format t 
+		 where t.MSFORMAT_ID = #{msFormatId} ORDER BY t.X,t.Y
+	</select>
+	
+	<resultMap id="cellDataResultMap" type="com.xzsoft.xsr.core.modal.CellData">
+		<result column="X" property="row" />
+		<result column="Y" property="col" />
+		<result column="CELLV" property="json" />
+	</resultMap>
+
+	<!-- 根据MSFORMAT_ID加载数据单元格 -->
+	<select id="loadDataValue" resultMap="cellDataResultMap">
+		select f.X,f.Y,
+		 <choose>
+                <when test="dbType == 'mysql'"> 
+                   if(c.DATATYPE!=3,t.CELLTEXTV,t.CELLV) CELLV
+                </when>
+                <when test="dbType == 'oracle'">
+                    decode(c.DATATYPE,3,t.CELLV,t.CELLTEXTV) CELLV
+                </when>
+         </choose> 
+		from
+		xsr_rep_cellvalue t,xsr_rep_modalsheet_format f,xsr_rep_colitem c
+		where
+		f.MSFORMAT_ID=#{msformatId}		
+		and t.SUIT_ID= #{suitId}
+		and t.ENTITY_ID= #{entityId}
+		and t.LEDGER_ID = #{ledgerId}
+		and t.PERIOD_ID= #{periodId}
+		and t.CURRENCY_ID=#{cnyId}
+		and t.COLITEM_ID=c.COLITEM_ID
+		and f.CELL_COMMENT_TYPE='DATA'
+		and	f.CELL_COMMENT=
+		<choose>
+                <when test="dbType == 'mysql'">
+                    concat(t.ROWITEM_ID,',',t.COLITEM_ID)
+                </when>
+                <when test="dbType == 'oracle'">
+                    t.ROWITEM_ID||','||t.COLITEM_ID
+                </when>
+         </choose>
+	</select>
+	
+	<select id="getFjRowitemInfo" parameterType="String" resultType="java.util.Map">
+		SELECT r.ROWITEM_ID,r.ROWITEM_CODE,rr.ROW FROM  xsr_rep_rowmodalref rr,xsr_rep_rowitem r 
+		WHERE rr.SUIT_ID=#{0} AND rr.MODALTYPE_ID=#{1} AND rr.MODALSHEET_ID=#{2} 
+		AND r.ISFJITEM=1 AND rr.REF_FLAG='Y' AND rr.ROWITEM_ID=r.ROWITEM_ID ORDER BY ROWNO
+	</select>
+
+</mapper>

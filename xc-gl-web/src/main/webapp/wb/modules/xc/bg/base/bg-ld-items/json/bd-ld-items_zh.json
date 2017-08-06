@@ -1,0 +1,95 @@
+{
+    LEDGER_NAME : "账簿",
+    BG_ITEM_NAME : "预算项目",
+  
+    BG_ITEM_NAME_EMPTY : "请输入编码或名称",
+    BG_ITEM_NAME_EMPTY1 : "请输入预算编码或名称查询",
+	
+	selBtn : "查询",
+	resetBtn : "重置",
+    cancelsBtn : "清空",
+  
+	addBtn : "新增",
+	editBtn : "编辑",
+	delBtn : "删除",
+	blockBtn : "停用",
+	openBtn : "启用",
+	syncBtn : "同步",
+	importBtn : "批量导入修改",
+	exportBtn : "导出",
+	batchModify : "批量修改",
+	saveBtn : "保存",
+	cancelBtn : "取消",
+    okBtn : "确定",
+	
+    number : "序号",
+	BG_ITEM_CODE_COL : "预算项目编码",
+	BG_ITEM_NAME_COL : "预算项目名称",
+	BG_ITEM_DESC_COL : "预算项目描述",
+	BG_ITEM_UP_NAME_COL : "上级预算项目",
+	BG_CTRL_DIM_COL : "控制维度",
+	BG_CTRL_MODE_COL : "控制方式",
+	BG_ITEM_ID_COL : "预算项目ID",
+	BG_LD_ITEM_ID_COL : "账簿预算项目ID",
+	IS_ENABLED_COL : "是否启用",
+	EX_ITEM_NAME_COL : "费用项目",
+	EX_ITEM_CODE_COL : "费用项目编码",
+	ACC_CODE_COL : "会计科目编码",
+	ACC_NAME_COL : "会计科目",
+	ACC_HRCY_NAME_COL : "会计科目体系",
+	BG_HRCY_NAME_COL : "预算项目体系",
+  
+  
+    addRec1 : "请选择账簿！",
+    addRec2 : "添加",
+    addRec3 : "请选择需要添加的预算项目！",
+    addRec4 : "条预算项目！",
+    addRec5 : "添加失败！",
+  
+    editRec1 : "请选择一行数据！",
+    editRec2 : "编辑",
+    editRec3 : "控制维度或控制方式不能为空！",
+    editRec4 : "保存成功！",
+  
+    deleteRec1 : "请选择要删除的记录！",
+    deleteRec2 : "确定删除",
+    deleteRec3 : "条记录？",
+  
+    blockRec1 : "请选择要停用的预算项目！",
+    blockRec2 : "停用失败！",
+  
+    openRec1 : "请选择要启用的预算项目！",
+    openRec2 : "启用失败！",
+  
+    syncRec1 : "该账簿下没有预算,无法进行同步！",
+    syncRec2 : "同步",
+    syncRec3 : "请选择需要同步的记录！",
+    syncRec4 : "同步成功：",
+    syncRec5 : "个账簿！",
+    syncRec6 : "同步失败！",
+  
+    batchModifyRec1 : "请选择要修改的记录！",
+    batchModifyRec2 : "批量修改",
+  
+    fieldset1Title : "基本信息",
+    fieldset2Title : "费用预算控制",
+    fieldset3Title : "所属费用项目及会计科目",
+  
+  	importDataWinTitle : "预算项目批量设置",
+  
+    selectFileRec1 : "请选择Excel文件",
+    selectFileRec2 : "选择文件",
+    importFileButton : "导入",
+    importFileRec1 : "请选择要上传的文件！",
+    importFileRec2 : "请选择以xls结尾的Office Excel文档！",
+    importFileRec3 : "提示",
+    importFileRec4 : "导入中，请稍后.....",
+    importFileRec5 : "导入数据不合法！",
+  
+    importLogGridTitle : "导入信息",
+    ROW_NUM : "错误行",
+    E_MSG : "错误信息",
+  
+    updateEnableLock : "     是否修改项",
+    updateContent : "修改内容"
+}

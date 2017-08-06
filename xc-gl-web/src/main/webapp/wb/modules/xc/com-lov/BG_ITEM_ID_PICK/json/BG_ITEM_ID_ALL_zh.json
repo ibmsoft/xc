@@ -1,0 +1,7 @@
+{
+    BG_ITEM_NAME : "预算项目",
+    BG_ITEM_CODE_COL : "预算项目编码",
+    BG_ITEM_NAME_COL : "预算项目名称",
+    BG_ITEM_CODE_NAME : "预算项目编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

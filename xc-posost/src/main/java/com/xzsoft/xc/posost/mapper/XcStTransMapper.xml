@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.posost.mapper.XcStTransMapper">
+	<!-- 库存事物表列 -->
+	<sql id="xcStTransColumn">
+		TRANS_ID,
+		MATERIAL_ID,
+		ENTRY_H_ID,
+		ENTRY_L_ID,
+		BUSINESS_H_ID,
+		BUSINESS_L_ID,
+		BUSINESS_TYPE_ID,
+		DOC_CAT_CODE,
+		QTY,
+		PRICE,
+		AMOUNT,
+		ORIGINAL_QTY,
+		ORIGINAL_PRICE,
+		ORIGINAL_AMOUNT,
+		NEWEST_QTY,
+		NEWEST_PRICE,
+		NEWEST_AMOUNT,
+		COEFFICIENT,
+		WAREHOUSE_ID,
+		PERIOD_CODE,
+		STATUS,
+		LOCATIONS,
+		SERIALS,
+		LEDGER_ID,
+		ORG_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY
+	</sql>
+	<!-- 批量新增库存交易明细 -->
+	<insert id="insertXcStTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType=='mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_st_trans(
+						<include refid="xcStTransColumn"/>
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_H_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_L_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						#{item.PRICE,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.ORIGINAL_QTY,jdbcType=NUMERIC},
+						#{item.ORIGINAL_PRICE,jdbcType=NUMERIC},
+						#{item.ORIGINAL_AMOUNT,jdbcType=NUMERIC},
+						#{item.NEWEST_QTY,jdbcType=NUMERIC},
+						#{item.NEWEST_PRICE,jdbcType=NUMERIC},
+						#{item.NEWEST_AMOUNT,jdbcType=NUMERIC},
+						#{item.COEFFICIENT,jdbcType=NUMERIC},
+						#{item.WAREHOUSE_ID,jdbcType=VARCHAR},
+						#{item.PERIOD_CODE,jdbcType=VARCHAR},
+						#{item.STATUS,jdbcType=VARCHAR},
+						#{item.LOCATIONS,jdbcType=VARCHAR},
+						#{item.SERIALS,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)	
+				</foreach>
+			</when>
+			<when test="dbType=='oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_st_trans(
+						<include refid="xcStTransColumn"/>
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.MATERIAL_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_H_ID,jdbcType=VARCHAR},
+						#{item.ENTRY_L_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_H_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_L_ID,jdbcType=VARCHAR},
+						#{item.BUSINESS_TYPE_ID,jdbcType=VARCHAR},
+						#{item.DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.QTY,jdbcType=NUMERIC},
+						#{item.PRICE,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.ORIGINAL_QTY,jdbcType=NUMERIC},
+						#{item.ORIGINAL_PRICE,jdbcType=NUMERIC},
+						#{item.ORIGINAL_AMOUNT,jdbcType=NUMERIC},
+						#{item.NEWEST_QTY,jdbcType=NUMERIC},
+						#{item.NEWEST_PRICE,jdbcType=NUMERIC},
+						#{item.NEWEST_AMOUNT,jdbcType=NUMERIC},
+						#{item.COEFFICIENT,jdbcType=NUMERIC},
+						#{item.WAREHOUSE_ID,jdbcType=VARCHAR},
+						#{item.PERIOD_CODE,jdbcType=VARCHAR},
+						#{item.STATUS,jdbcType=VARCHAR},
+						#{item.LOCATIONS,jdbcType=VARCHAR},
+						#{item.SERIALS,jdbcType=VARCHAR},
+						#{item.LEDGER_ID,jdbcType=VARCHAR},
+						#{item.ORG_ID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>		
+	</insert>
+    <!-- 批量修改库存交易明细 -->
+	<update id="updateXcStTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_st_trans SET
+						QTY				= #{item.QTY,jdbcType=NUMERIC},
+						PRICE			= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT			= #{item.AMOUNT,jdbcType=NUMERIC},
+						ORIGINAL_QTY	= #{item.ORIGINAL_QTY,jdbcType=NUMERIC},
+						ORIGINAL_PRICE	= #{item.ORIGINAL_PRICE,jdbcType=NUMERIC},
+						ORIGINAL_AMOUNT	= #{item.ORIGINAL_AMOUNT,jdbcType=NUMERIC},
+						NEWEST_QTY		= #{item.NEWEST_QTY,jdbcType=NUMERIC},
+						NEWEST_PRICE	= #{item.NEWEST_PRICE,jdbcType=NUMERIC},
+						NEWEST_AMOUNT	= #{item.NEWEST_AMOUNT,jdbcType=NUMERIC},
+						WAREHOUSE_ID	= #{item.WAREHOUSE_ID,jdbcType=VARCHAR},
+						PERIOD_CODE		= #{item.PERIOD_CODE,jdbcType=VARCHAR},
+						STATUS			= #{item.STATUS,jdbcType=VARCHAR},
+						LOCATIONS		= #{item.LOCATIONS,jdbcType=VARCHAR},
+						SERIALS			= #{item.SERIALS,jdbcType=VARCHAR},
+						LAST_UPDATED_BY	= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						BUSINESS_H_ID	= #{item.BUSINESS_H_ID,jdbcType=VARCHAR}
+					AND BUSINESS_L_ID	= #{item.BUSINESS_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_st_trans SET
+						QTY				= #{item.QTY,jdbcType=NUMERIC},
+						PRICE			= #{item.PRICE,jdbcType=NUMERIC},
+						AMOUNT			= #{item.AMOUNT,jdbcType=NUMERIC},
+						ORIGINAL_QTY	= #{item.ORIGINAL_QTY,jdbcType=NUMERIC},
+						ORIGINAL_PRICE	= #{item.ORIGINAL_PRICE,jdbcType=NUMERIC},
+						ORIGINAL_AMOUNT	= #{item.ORIGINAL_AMOUNT,jdbcType=NUMERIC},
+						NEWEST_QTY		= #{item.NEWEST_QTY,jdbcType=NUMERIC},
+						NEWEST_PRICE	= #{item.NEWEST_PRICE,jdbcType=NUMERIC},
+						NEWEST_AMOUNT	= #{item.NEWEST_AMOUNT,jdbcType=NUMERIC},
+						WAREHOUSE_ID	= #{item.WAREHOUSE_ID,jdbcType=VARCHAR},
+						PERIOD_CODE		= #{item.PERIOD_CODE,jdbcType=VARCHAR},
+						STATUS			= #{item.STATUS,jdbcType=VARCHAR},
+						LOCATIONS		= #{item.LOCATIONS,jdbcType=VARCHAR},
+						SERIALS			= #{item.SERIALS,jdbcType=VARCHAR},
+						LAST_UPDATED_BY	= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP}
+					WHERE 
+						BUSINESS_H_ID	= #{item.BUSINESS_H_ID,jdbcType=VARCHAR}
+					AND BUSINESS_L_ID	= #{item.BUSINESS_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	<!-- 批量删除库存交易明细  -->
+	<delete id="deleteXcStTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					DELETE
+					FROM
+						xc_st_trans
+					WHERE
+						BUSINESS_H_ID = #{item.BUSINESS_H_ID,jdbcType=VARCHAR}
+					AND IF(#{item.BUSINESS_L_ID} IS NULL,1=1,BUSINESS_L_ID = #{item.BUSINESS_L_ID})
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					DELETE
+					FROM
+						xc_st_trans
+					WHERE
+						BUSINESS_H_ID = #{item.BUSINESS_H_ID,jdbcType=VARCHAR}
+					AND DECODE(#{item.BUSINESS_L_ID},NULL,1=1,BUSINESS_L_ID = #{item.BUSINESS_L_ID})
+				</foreach>
+			</when>
+		</choose>
+	</delete>
+</mapper>

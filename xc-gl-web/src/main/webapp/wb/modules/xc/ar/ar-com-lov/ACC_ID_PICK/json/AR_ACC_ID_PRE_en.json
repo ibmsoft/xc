@@ -1,0 +1,8 @@
+{
+    
+   AR_ACC_NAME_PRE : "deposit account",
+    ACC_CODE_COL : "deposit acc code",
+    ACC_NAME_COL : "deposit acc name",
+    ACC_CODE_NAME : "deposit acc code/name",
+    EMPTY_LEDGER_INFO : "Please select the books information!"
+}

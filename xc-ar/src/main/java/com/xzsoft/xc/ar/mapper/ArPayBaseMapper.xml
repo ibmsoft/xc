@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ar.mapper.ArPayBaseMapper">
+	<!-- 新增收款单主信息 -->
+	<insert id="insertArPayH" parameterType="com.xzsoft.xc.ar.modal.ArPayHBean">
+		INSERT INTO xc_ar_pay_h(
+			AR_PAY_H_ID,
+			AR_PAY_H_CODE,
+			AR_DOC_CAT_CODE,
+			LEDGER_ID,
+			GL_DATE,
+			CUSTOMER_ID,
+			PROJECT_ID,
+			DEPT_ID,
+			AR_CONTRACT_ID,
+			AMOUNT,
+			SOURCE,
+			DESCRIPTION,
+			PAY_TYPE,
+			PAY_NO,
+			PAY_DATE,
+			SALE_ACC_ID,
+			SALE_CCID,
+			CA_ID,
+			BANK_ACCOUNT,
+			V_HEAD_ID,
+			V_STATUS,
+			VERIFIER_ID,
+			VERFY_DATE,
+			SIGNATORY_ID,
+			SIGNATORY,
+			SIGN_DATE,
+			INIT,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		)VALUES(
+			#{AR_PAY_H_ID,jdbcType=VARCHAR},
+			#{AR_PAY_H_CODE,jdbcType=VARCHAR},
+			#{AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+			#{LEDGER_ID,jdbcType=VARCHAR},
+			#{GL_DATE,jdbcType=TIMESTAMP},
+			#{CUSTOMER_ID,jdbcType=VARCHAR},
+			#{PROJECT_ID,jdbcType=VARCHAR},
+			#{DEPT_ID,jdbcType=VARCHAR},
+			#{AR_CONTRACT_ID,jdbcType=VARCHAR},
+			#{AMOUNT,jdbcType=NUMERIC},
+			#{SOURCE,jdbcType=VARCHAR},
+			#{DESCRIPTION,jdbcType=VARCHAR},
+			#{PAY_TYPE,jdbcType=VARCHAR},
+			#{PAY_NO,jdbcType=VARCHAR},
+			#{PAY_DATE,jdbcType=VARCHAR},
+			#{SALE_ACC_ID,jdbcType=VARCHAR},
+			#{SALE_CCID,jdbcType=VARCHAR},
+			#{CA_ID,jdbcType=VARCHAR},
+			#{BANK_ACCOUNT,jdbcType=VARCHAR},
+			#{V_HEAD_ID,jdbcType=VARCHAR},
+			#{V_STATUS,jdbcType=VARCHAR},
+			#{VERIFIER_ID,jdbcType=VARCHAR},
+			#{VERFY_DATE,jdbcType=TIMESTAMP},
+			#{SIGNATORY_ID,jdbcType=VARCHAR},
+			#{SIGNATORY,jdbcType=VARCHAR},
+			#{SIGN_DATE,jdbcType=TIMESTAMP},
+			#{INIT,jdbcType=VARCHAR},
+			#{CREATION_DATE,jdbcType=TIMESTAMP},
+			#{CREATED_BY,jdbcType=VARCHAR},
+			#{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			#{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 修改收款单主信息 -->
+	<update id="updateArPayH" parameterType="com.xzsoft.xc.ar.modal.ArPayHBean">
+		UPDATE xc_ar_pay_h SET
+			LEDGER_ID = #{LEDGER_ID,jdbcType=VARCHAR},
+			GL_DATE = #{GL_DATE,jdbcType=TIMESTAMP},
+			CUSTOMER_ID = #{CUSTOMER_ID,jdbcType=VARCHAR},
+			PROJECT_ID = #{PROJECT_ID,jdbcType=VARCHAR},
+			DEPT_ID = #{DEPT_ID,jdbcType=VARCHAR},
+			AR_CONTRACT_ID = #{AR_CONTRACT_ID,jdbcType=VARCHAR},
+			AMOUNT = #{AMOUNT,jdbcType=NUMERIC},
+			SOURCE = #{SOURCE,jdbcType=VARCHAR},
+			DESCRIPTION = #{DESCRIPTION,jdbcType=VARCHAR},
+			PAY_TYPE = #{PAY_TYPE,jdbcType=VARCHAR},
+			PAY_NO = #{PAY_NO,jdbcType=VARCHAR},
+			PAY_DATE = #{PAY_DATE,jdbcType=VARCHAR},
+			SALE_ACC_ID = #{SALE_ACC_ID,jdbcType=VARCHAR},
+			CA_ID = #{CA_ID,jdbcType=VARCHAR},
+			BANK_ACCOUNT = #{BANK_ACCOUNT,jdbcType=VARCHAR},
+			LAST_UPDATE_DATE = #{LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+			LAST_UPDATED_BY = #{LAST_UPDATED_BY,jdbcType=VARCHAR}
+		WHERE AR_PAY_H_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+	</update>
+	<!-- 删除收款单主信息 -->
+	<delete id="deleteArPayH" parameterType="java.util.List">
+	 	DELETE FROM xc_ar_pay_h WHERE AR_PAY_H_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 新增收款单行信息 -->
+	<insert id="insertArPayL" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					INSERT INTO xc_ar_pay_l(
+						AR_PAY_L_ID,
+						AR_PAY_H_ID,
+						L_AR_PAY_H_ID,
+						L_AR_PAY_L_ID,
+						AR_INV_GL_H_ID,
+						AR_SALE_TYPE_ID,
+						PRODUCT_ID,
+						BG_ITEM_ID,
+						PROJECT_ID,
+						AR_CONTRACT_ID,
+						DEPT_ID,
+						AR_DOC_CAT_CODE,
+						AMOUNT,
+						CANCEL_AMT,
+						NO_CANCEL_AMT,
+						DESCRIPTION,
+						ACC_ID,
+						CCID,
+						AR_CREATED_BY_NAME,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.AR_PAY_L_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.L_AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.L_AR_PAY_L_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+						#{item.PRODUCT_ID,jdbcType=VARCHAR},
+						#{item.BG_ITEM_ID,jdbcType=VARCHAR},
+						#{item.PROJECT_ID,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.DEPT_ID,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.CANCEL_AMT,jdbcType=NUMERIC},
+						#{item.NO_CANCEL_AMT,jdbcType=NUMERIC},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.ACC_ID,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.AR_CREATED_BY_NAME,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					INSERT INTO xc_ar_pay_l(
+						AR_PAY_L_ID,
+						AR_PAY_H_ID,
+						L_AR_PAY_H_ID,
+						L_AR_PAY_L_ID,
+						AR_INV_GL_H_ID,
+						AR_SALE_TYPE_ID,
+						PRODUCT_ID,
+						BG_ITEM_ID,
+						PROJECT_ID,
+						AR_CONTRACT_ID,
+						DEPT_ID,
+						AR_DOC_CAT_CODE,
+						AMOUNT,
+						CANCEL_AMT,
+						NO_CANCEL_AMT,
+						DESCRIPTION,
+						ACC_ID,
+						CCID,
+						AR_CREATED_BY_NAME,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.AR_PAY_L_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.L_AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.L_AR_PAY_L_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+						#{item.PRODUCT_ID,jdbcType=VARCHAR},
+						#{item.BG_ITEM_ID,jdbcType=VARCHAR},
+						#{item.PROJECT_ID,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.DEPT_ID,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.CANCEL_AMT,jdbcType=NUMERIC},
+						#{item.NO_CANCEL_AMT,jdbcType=NUMERIC},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.ACC_ID,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.AR_CREATED_BY_NAME,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	<!-- 修改收款单行信息 -->
+	<update id="updateArPayL" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_pay_l SET 
+						  AR_PAY_L_ID =	#{item.AR_PAY_L_ID,jdbcType=VARCHAR},
+						  AR_PAY_H_ID =	#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						  L_AR_PAY_H_ID =	#{item.L_AR_PAY_H_ID,jdbcType=VARCHAR},
+						  L_AR_PAY_L_ID =	#{item.L_AR_PAY_L_ID,jdbcType=VARCHAR},
+						  AR_INV_GL_H_ID =	#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						  AR_SALE_TYPE_ID =	#{item.AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+						  PRODUCT_ID =	#{item.PRODUCT_ID,jdbcType=VARCHAR},
+						  BG_ITEM_ID =	#{item.BG_ITEM_ID,jdbcType=VARCHAR},
+						  PROJECT_ID =	#{item.PROJECT_ID,jdbcType=VARCHAR},
+						  AR_CONTRACT_ID =	#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						  DEPT_ID =	#{item.DEPT_ID,jdbcType=VARCHAR},
+						  AR_DOC_CAT_CODE =	#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						  AMOUNT =	#{item.AMOUNT,jdbcType=NUMERIC},
+						  CANCEL_AMT =	#{item.CANCEL_AMT,jdbcType=NUMERIC},
+						  NO_CANCEL_AMT =	#{item.NO_CANCEL_AMT,jdbcType=NUMERIC},
+						  DESCRIPTION =	#{item.DESCRIPTION,jdbcType=VARCHAR},
+						  ACC_ID =	#{item.ACC_ID,jdbcType=VARCHAR},
+						  CCID =	#{item.CCID,jdbcType=VARCHAR},
+						  AR_CREATED_BY_NAME =	#{item.AR_CREATED_BY_NAME,jdbcType=VARCHAR},
+						  LAST_UPDATE_DATE =	#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						  LAST_UPDATED_BY =	#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE AR_PAY_L_ID =	#{item.AR_PAY_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_pay_l SET 
+						  AR_PAY_L_ID =	#{item.AR_PAY_L_ID,jdbcType=VARCHAR},
+						  AR_PAY_H_ID =	#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						  L_AR_PAY_H_ID =	#{item.L_AR_PAY_H_ID,jdbcType=VARCHAR},
+						  L_AR_PAY_L_ID =	#{item.L_AR_PAY_L_ID,jdbcType=VARCHAR},
+						  AR_INV_GL_H_ID =	#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						  AR_SALE_TYPE_ID =	#{item.AR_SALE_TYPE_ID,jdbcType=VARCHAR},
+						  PRODUCT_ID =	#{item.PRODUCT_ID,jdbcType=VARCHAR},
+						  BG_ITEM_ID =	#{item.BG_ITEM_ID,jdbcType=VARCHAR},
+						  PROJECT_ID =	#{item.PROJECT_ID,jdbcType=VARCHAR},
+						  AR_CONTRACT_ID =	#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						  DEPT_ID =	#{item.DEPT_ID,jdbcType=VARCHAR},
+						  AR_DOC_CAT_CODE =	#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						  AMOUNT =	#{item.AMOUNT,jdbcType=NUMERIC},
+						  CANCEL_AMT =	#{item.CANCEL_AMT,jdbcType=NUMERIC},
+						  NO_CANCEL_AMT =	#{item.NO_CANCEL_AMT,jdbcType=NUMERIC},
+						  DESCRIPTION =	#{item.DESCRIPTION,jdbcType=VARCHAR},
+						  ACC_ID =	#{item.ACC_ID,jdbcType=VARCHAR},
+						  CCID =	#{item.CCID,jdbcType=VARCHAR},
+						  AR_CREATED_BY_NAME =	#{item.AR_CREATED_BY_NAME,jdbcType=VARCHAR},
+						  LAST_UPDATE_DATE = #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						  LAST_UPDATED_BY =	#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE AR_PAY_L_ID =	#{item.AR_PAY_L_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	<!-- 删除收款单行信息 -->
+	<delete id="deleteArPayLByLIds" parameterType="java.util.List">
+		DELETE FROM xc_ar_pay_l WHERE AR_PAY_L_ID IN 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteArPayLByHIds" parameterType="java.util.List">
+		DELETE FROM xc_ar_pay_l WHERE AR_PAY_H_ID IN
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 根据收款单id查询收款单明细 -->
+	<select id="getArPayLs" parameterType="java.util.List" resultType="com.xzsoft.xc.ar.modal.ArPayLBean">
+		SELECT 
+			AR_PAY_L_ID,
+			AR_PAY_H_ID,
+			L_AR_PAY_H_ID,
+			L_AR_PAY_L_ID,
+			AR_INV_GL_H_ID,
+			AR_SALE_TYPE_ID,
+			PRODUCT_ID,
+			BG_ITEM_ID,
+			PROJECT_ID,
+			AR_CONTRACT_ID,
+			DEPT_ID,
+			AR_DOC_CAT_CODE,
+			AMOUNT,
+			DESCRIPTION,
+			ACC_ID,
+			CCID,
+			AR_CREATED_BY_NAME,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM 
+			xc_ar_pay_l
+		WHERE 
+			AR_PAY_H_ID IN 
+			<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</select>
+	
+	<!-- 根据收款单id查询收款单明细 -->
+	<select id="getArPayLByHId" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArPayLBean">
+		SELECT 
+			AR_PAY_L_ID,
+			AR_PAY_H_ID,
+			L_AR_PAY_H_ID,
+			L_AR_PAY_L_ID,
+			AR_INV_GL_H_ID,
+			AR_SALE_TYPE_ID,
+			PRODUCT_ID,
+			BG_ITEM_ID,
+			PROJECT_ID,
+			AR_CONTRACT_ID,
+			DEPT_ID,
+			AR_DOC_CAT_CODE,
+			AMOUNT,
+			DESCRIPTION,
+			ACC_ID,
+			CCID,
+			AR_CREATED_BY_NAME,
+			CREATION_DATE,
+			CREATED_BY,
+			LAST_UPDATE_DATE,
+			LAST_UPDATED_BY
+		FROM 
+			xc_ar_pay_l
+		WHERE 
+			AR_PAY_H_ID = #{ar_pay_h_id}
+	</select>
+	
+	<!-- 修改应收单收款金额 -->
+	<update id="updateArInvGLPayAmt" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_inv_gl_h SET
+						PAID_AMT = PAID_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_PAY_AMT = NO_PAY_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_inv_gl_h SET
+						PAID_AMT = PAID_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_PAY_AMT = NO_PAY_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE AR_INV_GL_H_ID = #{item.AR_INV_GL_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 修改预收款的核销金额 -->
+	<update id="updateArPayLCancelAmt" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql'">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					UPDATE xc_ar_pay_l SET 
+						CANCEL_AMT = CANCEL_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_CANCEL_AMT = NO_CANCEL_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE AR_PAY_H_ID = #{item.L_AR_PAY_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle'">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_pay_l SET 
+						CANCEL_AMT = CANCEL_AMT + #{item.AMOUNT,jdbcType=NUMERIC},
+						NO_CANCEL_AMT = NO_CANCEL_AMT - #{item.AMOUNT,jdbcType=NUMERIC}
+					WHERE AR_PAY_H_ID = #{item.L_AR_PAY_H_ID,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 新增应收交易明细 -->
+	<insert id="insertArTrans" parameterType="java.util.HashMap">
+	    <choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					INSERT INTO xc_ar_inv_trans(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AR_INV_GL_H_ID,
+						AR_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AR_DOC_CAT_CODE,
+						AR_DOC_CODE,
+						DESCRIPTION,
+						AR_CONTRACT_ID,
+						CUSTOMER_ID,
+						DR_AMT,
+						CR_AMT,
+						AMOUNT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AR_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection=""  index="index" item="item" open="begin" close="end;" separator=";">
+					INSERT INTO xc_ar_inv_trans(
+						TRANS_ID,
+						SOURCE_ID,
+						SOURCE_DTL_ID,
+						AR_INV_GL_H_ID,
+						AR_PAY_H_ID,
+						GL_DATE,
+						SOURCE_TAB,
+						AR_DOC_CAT_CODE,
+						AR_DOC_CODE,
+						DESCRIPTION,
+						AR_CONTRACT_ID,
+						CUSTOMER_ID,
+						DR_AMT,
+						CR_AMT,
+						AMOUNT,
+						TRANS_STATUS,
+						CCID,
+						CREATION_DATE,
+						CREATED_BY,
+						LAST_UPDATE_DATE,
+						LAST_UPDATED_BY
+					)VALUES(
+						#{item.TRANS_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_ID,jdbcType=VARCHAR},
+						#{item.SOURCE_DTL_ID,jdbcType=VARCHAR},
+						#{item.AR_INV_GL_H_ID,jdbcType=VARCHAR},
+						#{item.AR_PAY_H_ID,jdbcType=VARCHAR},
+						#{item.GL_DATE,jdbcType=TIMESTAMP},
+						#{item.SOURCE_TAB,jdbcType=VARCHAR},
+						#{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR},
+						#{item.AR_DOC_CODE,jdbcType=VARCHAR},
+						#{item.DESCRIPTION,jdbcType=VARCHAR},
+						#{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						#{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						#{item.DR_AMT,jdbcType=NUMERIC},
+						#{item.CR_AMT,jdbcType=NUMERIC},
+						#{item.AMOUNT,jdbcType=NUMERIC},
+						#{item.TRANS_STATUS,jdbcType=VARCHAR},
+						#{item.CCID,jdbcType=VARCHAR},
+						#{item.CREATION_DATE,jdbcType=TIMESTAMP},
+						#{item.CREATED_BY,jdbcType=VARCHAR},
+						#{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						#{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+		</choose>
+	</insert>
+	
+	<!-- 修改交易明细 -->
+	<update id="updateArTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE 			= #{item.GL_DATE,jdbcType=TIMESTAMP},
+						AR_CONTRACT_ID		= #{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						DESCRIPTION			= #{item.DESCRIPTION,jdbcType=VARCHAR},
+						CUSTOMER_ID			= #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+						AND SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+						AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" index="index" item="item" open="begin" close="end;" separator=";">
+					UPDATE xc_ar_inv_trans SET
+						GL_DATE 			= #{item.GL_DATE,jdbcType=TIMESTAMP},
+						AR_CONTRACT_ID		= #{item.AR_CONTRACT_ID,jdbcType=VARCHAR},
+						DESCRIPTION			= #{item.DESCRIPTION,jdbcType=VARCHAR},
+						CUSTOMER_ID			= #{item.CUSTOMER_ID,jdbcType=VARCHAR},
+						LAST_UPDATE_DATE	= #{item.LAST_UPDATE_DATE,jdbcType=TIMESTAMP},
+						LAST_UPDATED_BY		= #{item.LAST_UPDATED_BY,jdbcType=VARCHAR}
+					WHERE SOURCE_ID = #{item.SOURCE_ID,jdbcType=VARCHAR}
+						AND SOURCE_DTL_ID = #{item.SOURCE_DTL_ID,jdbcType=VARCHAR}
+						AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>		
+		</choose>
+	</update>
+	<!-- 删除交易明细 -->
+	<delete id="deleteArTrans" parameterType="java.util.HashMap">
+		<choose>
+			<when test=" dbType == 'mysql' ">
+				<foreach collection="list" index="index" item="item" open="" close="" separator=";">
+					DELETE FROM xc_ar_inv_trans 
+					WHERE 
+						SOURCE_ID 		= #{item.AR_PAY_H_ID,jdbcType=VARCHAR}
+					AND SOURCE_DTL_ID 	= #{item.AR_PAY_L_ID,jdbcType=VARCHAR} 
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR} 
+				</foreach>
+			</when>
+			<when test=" dbType == 'oracle' ">
+				<foreach collection="list" index="index" item="item" open="begin" close="end;" separator=";">
+					DELETE FROM xc_ar_inv_trans 
+					WHERE 
+						SOURCE_ID 		= #{item.AR_PAY_H_ID,jdbcType=VARCHAR}
+					AND SOURCE_DTL_ID 	= #{item.AR_PAY_L_ID ,jdbcType=VARCHAR}
+					AND AR_DOC_CAT_CODE = #{item.AR_DOC_CAT_CODE,jdbcType=VARCHAR}
+				</foreach>
+			</when>		
+		</choose>
+	</delete>
+	
+	<!-- 从收款单行表中查询收款单  -->
+	<select id="selectArPayLFromPay" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArPayLBean">
+		SELECT
+			l.AR_PAY_H_ID,
+			l.AR_PAY_L_ID,
+			l.AR_DOC_CAT_CODE,
+			l.L_AR_PAY_H_ID,
+			l.L_AR_PAY_L_ID,
+			l.AMOUNT
+		FROM
+			xc_ar_pay_l l
+		WHERE 
+  			l.L_AR_PAY_H_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+			AND l.L_AR_PAY_H_ID IS NOT NULL
+			AND l.L_AR_PAY_H_ID != ''
+	</select>
+	<!-- 从核销单主表中查询收款单  -->
+	<select id="selectArCancelHFromCancel" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArCancelHBean">
+		SELECT
+			h.AR_CANCEL_H_ID,
+			h.AR_CANCEL_H_CODE,
+			h.AR_CANCEL_TYPE,
+			h.SRC_ID,
+			h.SRC_AMT
+		FROM
+			xc_ar_cancel_h h
+		WHERE 
+			h.SRC_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+		AND h.AR_CANCEL_TYPE = 'YUSHLDC'
+	</select>
+	<!-- 从核销单行表中查询收款单  -->
+	<select id="selectArCancelLFromCancel" parameterType="java.lang.String" resultType="com.xzsoft.xc.ar.modal.ArCancelLBean">
+		SELECT
+			l.AR_CANCEL_H_ID,
+			l.AR_CANCEL_L_ID,
+			l.AR_CANCEL_TYPE,
+			l.TARGET_ID,
+			l.TARGET_AMT
+		FROM
+			xc_ar_cancel_l l
+		WHERE 
+ 			l.TARGET_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+			AND l.AR_CANCEL_TYPE IN ('YSHYUS','YUSHLDC')
+	</select>
+	<!-- 根据id查询收款单单据类型 -->
+	<select id="selectArDocCatCodeByArPayHId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			AR_DOC_CAT_CODE
+		FROM
+			xc_ar_pay_h
+		WHERE
+			AR_PAY_H_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+	</select>
+	<!-- 计算收款单核销金额 -->
+	<update id="calculateArPayAmt" parameterType="java.util.HashMap">
+	  	UPDATE 
+	  		xc_ar_pay_l 
+	  	SET
+			CANCEL_AMT = #{CANCEL_AMT,jdbcType=NUMERIC},
+			NO_CANCEL_AMT = AMOUNT - #{CANCEL_AMT,jdbcType=NUMERIC}
+		WHERE 
+			AR_PAY_H_ID = #{AR_PAY_H_ID,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

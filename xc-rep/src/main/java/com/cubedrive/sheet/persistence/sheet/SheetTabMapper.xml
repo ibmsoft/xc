@@ -1,0 +1,261 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetTabMapper">
+
+	<resultMap id="sheetTabMap"	type="com.cubedrive.sheet.domain.sheet.SheetTab">
+		<id column="tab_id" property="id" jdbcType="INTEGER" />
+		<result column="tab_name" property="name" jdbcType="VARCHAR" />
+		<result column="tab_order" property="tabOrder" jdbcType="INTEGER" />
+		<result column="extra_info" property="extraInfo" jdbcType="VARCHAR" />
+		<result column="color" property="color" jdbcType="VARCHAR" />        
+		<result column="is_active" property="active" jdbcType="BOOLEAN" />
+		<result column="cell_table_name" property="cellTable" jdbcType="VARCHAR" />
+		<association property="documentFile" column="document_file_id" select="com.cubedrive.base.persistence.document.DocumentFileMapper.getById" />
+	</resultMap>
+
+	<resultMap id="SheetTabWithRowSizeMap" extends="sheetTabMap" type="com.cubedrive.sheet.persistence.resultmap.SheetTabWithRowSize">
+		<result column="row_size" property="rowSize" jdbcType="INTEGER" javaType="INTEGER" />
+	</resultMap>
+
+    
+    <resultMap id="tabSpanMap" type="com.cubedrive.sheet.domain.sheet.SheetTabSpan">
+    	<id column="tab_id" property="tabId"  jdbcType="INTEGER" />
+        <result column="max_row" property="maxRow" jdbcType="INTEGER" />
+        <result column="max_col" property="maxCol" jdbcType="INTEGER"  />
+        <result column="total_num" property="totalCellNum" jdbcType="INTEGER" />
+    </resultMap>
+
+	<resultMap id="sheetTabIdOrderInfoMap" type="com.cubedrive.sheet.domain.sheet.SheetTabIdOrderInfo">
+		<id column="tab_id" property="tabId" jdbcType="INTEGER" />
+		<result column="tab_order" property="tabOrder" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		sheet_tab.tab_id,
+		sheet_tab.document_file_id,
+		sheet_tab.extra_info,
+		sheet_tab.is_active,
+		sheet_tab.tab_name,
+		sheet_tab.tab_order,
+        sheet_tab.color,
+		sheet_tab.cell_table_name
+	</sql>
+
+	<select id="getById" parameterType="java.lang.Integer" 	resultMap="sheetTabMap">
+		select
+		<include refid="base_column_list" />
+        from sheet_tab where tab_id = #{tabId}
+	</select>
+
+    <select id="getTabSpans" resultMap="tabSpanMap">
+        select tab_id, count(cell_id) AS total_num, max(x) AS max_row, max(y) AS max_col 
+        from ${cellTable} where tab_id in
+        <foreach item="tabId" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{tabId}
+		</foreach>
+		group by tab_id
+    </select>
+    
+    <select id="getTabSpan" resultMap="tabSpanMap">
+        select tab_id, count(cell_id) AS total_num, max(x) AS max_row, max(y) AS max_col 
+        from ${cellTable} where tab_id = #{tabId}		
+    </select>
+
+	<select id="getActiveTab" parameterType="java.lang.Integer"  resultMap="sheetTabMap">
+		select	<include refid="base_column_list" /> from sheet_tab 
+		where document_file_id=#{documentId} and is_active = true limit 1
+	</select>
+
+	<!-- with max row size, why need this method TODO: seems not necessary Something 
+		wrong in this method ... Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) 
+		with no GROUP columns is illegal if there is no GROUP BY clause Zhong comments: 
+		因为在加载sheetTab 对应的cellTable时是使用一个Map,如果在数据量较大时,如果没有指定map 的capacity, HashMap的初始默认容量是16，默认加载因子是0.75，也就是说， 
+		如果采用HashMap的默认构造函数，当增加数据时，数据实际容量超过10*0.75=12时 ，HashMap就扩容，扩容带来一系列的运算，新建一个是原来容量2倍的数组， 
+		对原有元素全部重新哈希，如果你的数据有几千几万个，而用默认的HashMap构造函数， 那结果是非常悲剧的，因为HashMap不断扩容,不断哈希, 
+		在使用HashMap的场景里,由此产生的内存开销和cpu开销在某些情况下可能是致命的。 你可以看一下hashMap 的source code -->
+	<select id="getSheetTabWithRowSizeById" resultMap="SheetTabWithRowSizeMap">
+		SELECT
+		<include refid="base_column_list" />
+		, MAX(sheet_cell.x) as row_size from sheet_tab INNER JOIN
+		${cellTable} AS sheet_cell ON
+		sheet_tab.tab_id=sheet_cell.tab_id
+		WHERE
+		sheet_tab.tab_id=#{tabId} group by sheet_tab.tab_id
+	</select>
+
+	<select id="findTabsByDocumentFile" parameterType="java.lang.Integer" resultMap="sheetTabMap">
+		select <include refid="base_column_list" /> from sheet_tab 
+		where document_file_id = #{documentId} 
+		order by tab_order
+	</select>
+
+	<!-- Fenqiang Comments: this is something I do not understand Why we need 
+		check row size. Any reason to do this ??? zhong Comments:同上 -->
+	<select id="findTabsWithRowSizeByDocumentFile" resultMap="SheetTabWithRowSizeMap">
+		SELECT <include refid="base_column_list" />, ifnull(MAX(sheet_cell.x),0) as row_size from sheet_tab
+		LEFT JOIN ${cellTable} AS sheet_cell ON	sheet_tab.tab_id=sheet_cell.tab_id
+		WHERE sheet_tab.document_file_id=#{documentId}
+		GROUP BY sheet_cell.tab_id
+		ORDER BY sheet_tab.tab_order
+	</select>
+
+	<insert id="insertSheetTab"
+		parameterType="com.cubedrive.sheet.domain.sheet.SheetTab">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		sheet_tab(tab_name,tab_order,document_file_id,color,extra_info,is_active,cell_table_name)
+		values
+		(#{name,jdbcType=VARCHAR},#{tabOrder,jdbcType=INTEGER},#{documentFile.id,jdbcType=INTEGER},
+		#{color,jdbcType=VARCHAR},#{extraInfo,jdbcType=VARCHAR},#{active,jdbcType=BOOLEAN},#{cellTable,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateSheetTab"
+		parameterType="com.cubedrive.sheet.domain.sheet.SheetTab">
+		update sheet_tab
+		set tab_name = #{name,jdbcType=VARCHAR},
+			tab_order = #{tabOrder,jdbcType=INTEGER},
+			extra_info = #{extraInfo,jdbcType=VARCHAR},
+			color = #{color,jdbcType=VARCHAR},
+			is_active = #{active,jdbcType=BOOLEAN}
+		where tab_id = #{id}
+	</update>
+
+	<update id="updateTabOrder">
+		update sheet_tab
+		set tab_order =
+		#{tabOrder,jdbcType=INTEGER}
+		where tab_id = #{tabId}
+	</update>
+
+	<delete id="deleteById">
+		delete sheet_tab,${cellTable} 
+		from
+		    sheet_tab left join ${cellTable} on
+		    sheet_tab.tab_id=${cellTable}.tab_id 
+		where sheet_tab.tab_id=#{tabId}
+	</delete>
+
+	<delete id="deleteTabsByDocumentFile">
+		delete sheet_tab,${cellTable} 
+		from sheet_tab left join ${cellTable} on
+		     sheet_tab.tab_id=${cellTable}.tab_id 
+		where document_file_id = #{documentId}
+	</delete>
+
+	<select id="activeSheetTab" statementType="CALLABLE">
+    	<![CDATA[
+    {call proc_active_spread_sheet_tab (#{documentId,mode=IN,jdbcType=INTEGER},#{tabId,mode=IN,jdbcType=INTEGER})}
+		]]>
+
+	</select>
+
+	<select id="getFirstSheetTabByDocumentFile" parameterType="java.lang.Integer"
+		resultMap="sheetTabMap">
+		select
+		tab_id,document_file_id,is_active,tab_name,tab_order,cell_table_name,color
+		from sheet_tab
+		where document_file_id = #{documentId} order by
+		tab_order ASC limit 1
+	</select>
+
+	<insert id="copySheetTabFromDocumentId">
+		insert into
+		sheet_tab(tab_name,tab_order,document_file_id,extra_info,is_active,cell_table_name)
+		select
+		tab_name,tab_order,${destDocumentId},extra_info,is_active,cell_table_name
+		from sheet_tab
+		where document_file_id=#{sourceDocumentId} order
+		by tab_id
+	</insert>
+
+	<select id="findSheetTabIdByDocument" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select tab_id from sheet_tab where
+		document_file=#{documentId} order by tab_id
+	</select>
+
+	<select id="getLastSheetTabByDocumentFile" parameterType="java.lang.Integer"
+		resultMap="sheetTabMap">
+		select
+		<include refid="base_column_list" />
+		from sheet_tab
+		where
+		document_file_id=#{documentId,jdbcType=INTEGER} order by tab_order
+		DESC limit 1
+	</select>
+
+	<select id="findSheetTabIdOrderInfoByDocument" resultMap="sheetTabIdOrderInfoMap">
+		select tab_id, tab_order
+		from sheet_tab
+		where document_file_id=#{documentId,jdbcType=INTEGER} order by tab_order
+		ASC
+	</select>
+
+	<update id="shiftSheetTab">
+		update sheet_tab
+		set tab_order=tab_order+1
+		where document_file_id=#{documentId,jdbcType=INTEGER} and
+		tab_id in
+		<foreach item="_tab" index="index" collection="shiftTabs"
+			open="(" separator="," close=")">
+			#{_tab.tabId}
+		</foreach>
+	</update>
+
+	<update id="addTabExtraInfo">
+		update sheet_tab
+		set extra_info=#{extraInfo,jdbcType=VARCHAR}
+		where tab_id=#{tabId,jdbcType=INTEGER}
+	</update>
+
+	<select id="countTabByDocument" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer">
+		select count(tab_id)
+		from sheet_tab
+		where document_file_id=#{documentId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getSize" resultType="java.lang.Integer">
+		select sum(length(content))
+		from ${cellTable}
+		where tab_id in
+		<foreach item="_tab" index="index" collection="allTabs" open="("
+			separator="," close=")">
+			#{_tab.id}
+		</foreach>
+	</select>
+	
+	<update id="updatePosAfter">
+	    update sheet_tab
+		   set tab_order=tab_order-1
+		 where document_file_id = #{documentId,jdbcType=INTEGER}
+		   and tab_order &gt; #{prePos,jdbcType=INTEGER}
+		   and (tab_order &lt; #{curPos,jdbcType=INTEGER} OR tab_order = #{curPos,jdbcType=INTEGER})
+	</update>
+	
+	<update id="updatePosBefore">
+	    update sheet_tab
+		   set tab_order=tab_order+1
+		 where document_file_id=#{documentId,jdbcType=INTEGER}
+		   AND (tab_order &gt; #{curPos,jdbcType=INTEGER} OR tab_order = #{curPos,jdbcType=INTEGER}) 
+		   AND tab_order &lt; #{prePos,jdbcType=INTEGER}
+	</update>
+	
+	<select id="getTabByDocumentAndIndex" resultMap="sheetTabMap">
+		select <include refid="base_column_list" /> from sheet_tab
+		where document_file_id=#{documentId} and tab_order=#{index}
+	</select>
+	
+	<select id="getAllTabIdsByDocument" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select tab_id from sheet_tab where document_file_id=#{documentId} order by tab_order asc
+	</select>
+	
+	<select id="getOtherTabIdsByDocument" resultType="java.lang.Integer">
+		select tab_id from sheet_tab where document_file_id=#{documentId} and tab_id!=#{excludeTabId} order by tab_order asc
+	</select>
+
+</mapper>

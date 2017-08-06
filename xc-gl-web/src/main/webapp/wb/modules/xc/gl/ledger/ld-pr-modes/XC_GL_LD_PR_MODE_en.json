@@ -1,0 +1,17 @@
+{
+  ledger : 'Ledger Name',
+  addBtn : 'Sync',
+  deleteBtn : 'Delete',
+  saveBtn : 'Save',
+  rownum : 'Order',
+  LD_MODE_ID : 'Ledger Mode ID',
+  LEDGER_ID : 'Ledger ID',
+  MODE_ID : 'Mode ID',
+  MODE_TYPE : 'Mode Type',
+  MODE_NAME : 'Mode Name',
+  MODE_DESC : 'Mode Desc',
+  PAY_ACC_ID : 'Payment Account ID',
+  PAY_ACC_NAME : 'Payment Account',
+  REC_ACC_ID : 'Receive Account ID',
+  REC_ACC_NAME : 'Receive Account'
+}

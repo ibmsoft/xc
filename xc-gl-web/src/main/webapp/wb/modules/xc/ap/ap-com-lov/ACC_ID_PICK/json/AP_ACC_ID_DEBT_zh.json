@@ -1,0 +1,7 @@
+{
+    AP_ACC_NAME_DEBT : "应付科目",
+    ACC_CODE_COL : "应付科目编码",
+    ACC_NAME_COL : "应付科目名称",
+    ACC_CODE_NAME : "应付科目编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

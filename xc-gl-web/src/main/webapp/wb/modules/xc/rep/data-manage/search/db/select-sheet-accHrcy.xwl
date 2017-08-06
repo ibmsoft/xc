@@ -1,0 +1,1 @@
+{"inframe":false,"title":"报表模板科目体系","hidden":true,"roles":{"default":1},"children":[{"configs":{"itemId":"module"},"children":[{"configs":{"sql":"select t.ACC_HRCY_ID,t.ACC_HRCY_NAME from xc_gl_acc_hrcy t where t.IS_PREPARED = 'N' ","itemId":"selectSheetAccHrcy"},"children":[],"expanded":false,"type":"dataprovider"}],"expanded":true,"type":"module"}],"pageLink":"","iconCls":""}

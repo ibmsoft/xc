@@ -1,0 +1,72 @@
+{
+
+  XH:'num',
+
+
+  addBtn:'new',
+  saveBtn:'save',
+  delBtn:'delete',
+
+  syncBtn:'synchronous',
+
+  selBtn:'query',
+  clearBtn:'clear',
+
+  emptyText:'Purchasing type or purchasing object query input',
+  LEDGER_ID_COL:'book ID',
+
+  AP_PUR_TYPE_ID_COL:'procurement type ID',
+  AP_PUR_TYPE_NAME_COL:'procurement type',
+
+  BG_ITEM_CODE_COL:'budget coding',
+  BG_ITEM_NAME_COL:'budget name',
+  PUR_OBJECT_COL:'procurement objects',
+  ACC_CODE_COL:'subject code',
+  ACC_NAME_COL:'subject name',
+  
+  BG_ITEM_ID_COL:'budget items',
+  AP_ACC_ID_INV_COL:'Inventory/cost of course',
+
+  QUERY_CODE_NAME:'code/name',
+
+
+  DESCRIPTION_COL:'description',
+
+  AP_ACC_ID_DEBT_COL:'deal with subjects',
+
+  AP_ACC_ID_EST_COL:'short course',
+  AP_ACC_ID_PRE_COL:'subjects in advance',
+
+
+  TIP:'tip',
+
+  DELTIP:'Please choose to delete records!',
+  DELOKTIP:'Are you sure you want to delete?',
+  DELTIP1:'Delete success!',
+  EDITETIP:'Modify  success！',
+
+  MSG1:' Has been associated cannot be deleted!',
+  MSG2:' existing',
+  MSG3:'Please select one record!',
+  MSG4:'synchronous ',
+  MSG5:' records!',
+  message:'saving...',
+  SAVETIP:'save success！',
+  bywyybksc:'A business reference can not be deleted'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+

@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.XCBAReceiveMapper">
+	<!-- 查询所有公司账簿 -->
+	<select id="getEntityBooks" resultType="java.util.HashMap">
+		SELECT
+		ORG_ID,HS_BOOKS
+		from
+		XSR_REP_ORG_PROPERTY
+		WHERE SUIT_ID=#{0}
+		AND
+		IFNULL(HS_BOOKS,'')&lt;&gt;''
+	</select>
+	<!-- 查询一个公司的账簿 -->
+	<select id="getEntityBook" resultType="String">
+		SELECT
+		HS_BOOKS
+		from
+		XSR_REP_ORG_PROPERTY
+		WHERE SUIT_ID=#{0}
+		AND ORG_ID =#{1}
+		AND
+		IFNULL(HS_BOOKS,'')&lt;&gt;''
+	</select>
+	<!-- 查询时间戳表中该公司最新跟新时间点 -->
+	<select id="getDateValue" resultType="java.util.HashMap">
+		SELECT
+		t.ETL_KEY_ID,t.DATE_VALUE
+		FROM XSR_DC_ETL_KEY_VALUE t
+		WHERE
+		t.DC_ID=#{dcId}
+		AND t.ENTITY_ID=#{orgId}
+		AND t.ETL_KEY_MOD=#{mod}
+	</select>
+	<!-- 没有记录插入最新跟新时间点 -->
+	<insert id="insertDateValue">
+		INSERT INTO XSR_DC_ETL_KEY_VALUE(
+		ETL_KEY_ID,
+		DC_ID,
+		ENTITY_ID,
+		ETL_KEY_TYPE,
+		ETL_KEY_MOD,
+		DATE_VALUE,
+		LAST_UPDATE_DATE,
+		CREATION_DATE
+		)VALUES
+		(
+		UUID(),
+		#{0},
+		#{1},
+		'DATA',
+		#{2},
+		#{3},
+		SYSDATE(),
+		SYSDATE()
+		)
+	</insert>
+	<!-- 已有记录更新最新跟新时间点 -->
+	<update id="updateDateValue">
+		UPDATE XSR_DC_ETL_KEY_VALUE
+		SET DATE_VALUE =
+		#{0},LAST_UPDATE_DATE=SYSDATE()
+		WHERE ETL_KEY_ID = #{1}
+	</update>
+	<!-- 删除ba中已用总账数据 -->
+	<delete id="delete_XCGL">
+		DELETE FROM XSR_DC_ETL_BA
+		WHERE DC_ID=#{0}
+		AND
+		ENTITY_ID =#{1}
+		<if test="mod=='GL_BA'">
+			AND ACC_CLASS='BA'
+		</if>
+		<if test="mod=='GL_CASH'">
+			AND ACC_CLASS='CA'
+		</if>
+		AND LAST_UPDATE_DATE &gt;#{3}
+		AND
+		LEDGER_ID =#{4}
+	</delete>
+	<!-- 向ba中插入数据 -->
+	<insert id="insert_XCGL">
+		INSERT INTO XSR_DC_ETL_BA(
+		ETL_BA_ID,
+		DC_ID,
+		LEDGER_ID,
+		ACC_CLASS,
+		ENTITY_SRC,
+		TRANSLATED_FLAG,
+		ENTITY_ID,
+		PERIOD_NAME,
+		ACCOUNT_ID,
+		CURRENCY_ID,
+		ENTITY_CODE,
+		ACCOUNT_CODE,
+		CURRENCY_CODE,
+		DIM_CUS1_ID,
+		DIM_CUS2_ID,
+		DIM_CUS3_ID,
+		DIM_CUS4_ID,
+		DIM_CUS5_ID,
+		DIM_CUS6_ID,
+		DIM_CUS7_ID,
+		DIM_CUS8_ID,
+		DIM_CUS9_ID,
+		DIM_CUS10_ID,
+		DIM_CUS11_ID,
+		DIM_CUS1_CODE,
+		DIM_CUS2_CODE,
+		DIM_CUS3_CODE,
+		DIM_CUS4_CODE,
+		DIM_CUS5_CODE,
+		DIM_CUS6_CODE,
+		DIM_CUS7_CODE,
+		DIM_CUS8_CODE,
+		DIM_CUS9_CODE,
+		DIM_CUS10_CODE,
+		DIM_CUS11_CODE,
+		B_DR,
+		B_CR,
+		B_JE,
+		Y_DR,
+		Y_CR,
+		Y_JE,
+		PTD_DR,
+		PTD_CR,
+		PTD_JE,
+		YTD_DR,
+		YTD_CR,
+		YTD_JE,
+		PJTD_DR,
+		PJTD_CR,
+		PJTD_JE,
+		T_B_DR,
+		T_B_CR,
+		T_B_JE,
+		T_Y_DR,
+		T_Y_CR,
+		T_Y_JE,
+		T_PTD_DR,
+		T_PTD_CR,
+		T_PTD_JE,
+		T_YTD_DR,
+		T_YTD_CR,
+		T_YTD_JE,
+		T_PJTD_DR,
+		T_PJTD_CR,
+		T_PJTD_JE,
+		AMT_B_DR,
+		AMT_B_CR,
+		AMT_B_JE,
+		AMT_Y_DR,
+		AMT_Y_CR,
+		AMT_Y_JE,
+		AMT_PTD_DR,
+		AMT_PTD_CR,
+		AMT_PTD_JE,
+		AMT_YTD_DR,
+		AMT_YTD_CR,
+		AMT_YTD_JE,
+		AMT_PJTD_DR,
+		AMT_PJTD_CR,
+		AMT_PJTD_JE,
+		AMT_T_B_DR,
+		AMT_T_B_CR,
+		AMT_T_B_JE,
+		AMT_T_Y_DR,
+		AMT_T_Y_CR,
+		AMT_T_Y_JE,
+		AMT_T_PTD_DR,
+		AMT_T_PTD_CR,
+		AMT_T_PTD_JE,
+		AMT_T_YTD_DR,
+		AMT_T_YTD_CR,
+		AMT_T_YTD_JE,
+		AMT_T_PJTD_DR,
+		AMT_T_PJTD_CR,
+		AMT_T_PJTD_JE,
+		ATTR1,
+		LAST_UPDATE_DATE)
+		<if test="mod=='GL_BA'">
+			<foreach collection="list" item="item" index="index"
+				separator="UNION ALL">
+				SELECT
+				UUID(),
+				#{dcId},
+				#{item.LEDGER_CODE,
+				jdbcType=VARCHAR},
+				'BA',
+				'',
+				null,
+				#{orgId},
+				#{item.PERIOD_CODE,
+				jdbcType=VARCHAR},
+				(select
+				ACC_ID from xsr_dc_account where
+				DC_ID=#{dcId} and
+				ACC_CODE=#{item.XC_GL_ACCOUNTS}
+				and ATTR1=(SELECT
+				T.HS_TX FROM
+				xsr_rep_org_property T
+				WHERE ORG_ID=#{orgId} AND
+				SUIT_ID=#{suitId})),
+				(select
+				CURRENCY_ID from
+				xsr_rep_currency where
+				CURRENCY_CODE=#{item.CURRENCY_CODE,
+				jdbcType=VARCHAR}),
+				(select
+				ORG_CODE from xip_pub_orgs where
+				ORG_ID=#{orgId}),
+				#{item.XC_GL_ACCOUNTS},
+				#{item.CURRENCY_CODE},
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus1 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_AP_VENDORS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus2 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_AR_CUSTOMERS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus3 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XIP_PUB_EMPS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus4 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XIP_PUB_ORGS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus5 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_GL_PRODUCTS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus6 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XIP_PUB_DEPTS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus7 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_PM_PROJECTS}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus8 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_GL_CUSTOM1}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus9 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_GL_CUSTOM2}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus10 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_GL_CUSTOM3}),
+				(select DIM_CUS_ID from
+				xsr_dc_dim_cus11 where DC_ID=#{dcId} and
+				DIM_CUS_CODE=#{item.XC_GL_CUSTOM4}),
+				#{item.XC_AP_VENDORS},
+				#{item.XC_AR_CUSTOMERS},
+				#{item.XIP_PUB_EMPS},
+				#{item.XIP_PUB_ORGS},
+				#{item.XC_GL_PRODUCTS},
+				#{item.XIP_PUB_DEPTS},
+				#{item.XC_PM_PROJECTS},
+				#{item.XC_GL_CUSTOM1},
+				#{item.XC_GL_CUSTOM2},
+				#{item.XC_GL_CUSTOM3},
+				#{item.XC_GL_CUSTOM4},
+				#{item.b_DR},
+				#{item.b_CR},
+				#{item.b_DR}-#{item.b_CR},
+				#{item.y_DR},
+				#{item.y_CR},
+				#{item.y_DR}-#{item.y_CR},
+				#{item.PTD_DR},
+				#{item.PTD_CR},
+				#{item.PTD_DR}-#{item.PTD_CR},
+				#{item.YTD_DR},
+				#{item.YTD_CR},
+				#{item.YTD_DR}-#{item.YTD_CR},
+				#{item.PJTD_DR},
+				#{item.PJTD_CR},
+				#{item.PJTD_DR}-#{item.PJTD_CR},
+				#{item.t_B_DR},
+				#{item.t_B_CR},
+				#{item.t_B_DR}-#{item.t_B_CR},
+				#{item.t_Y_DR},
+				#{item.t_Y_CR},
+				#{item.t_Y_DR}-#{item.t_Y_CR},
+				#{item.t_PTD_DR},
+				#{item.t_PTD_CR},
+				#{item.t_PTD_DR}-#{item.t_PTD_CR},
+				#{item.t_YTD_DR},
+				#{item.t_YTD_CR},
+				#{item.t_YTD_DR}-#{item.t_YTD_CR},
+				#{item.t_PJTD_DR},
+				#{item.t_PJTD_CR},
+				#{item.t_PJTD_DR}-#{item.t_PJTD_CR},
+				#{item.AMT_B_DR},
+				#{item.AMT_B_CR},
+				#{item.AMT_B_DR}-#{item.AMT_B_CR},
+				#{item.AMT_Y_DR},
+				#{item.AMT_Y_CR},
+				#{item.AMT_Y_DR}-#{item.AMT_T_Y_CR},
+				#{item.AMT_PTD_DR},
+				#{item.AMT_PTD_CR},
+				#{item.AMT_PTD_DR}-#{item.AMT_PTD_CR},
+				#{item.AMT_YTD_DR},
+				#{item.AMT_YTD_CR},
+				#{item.AMT_YTD_DR}-#{item.AMT_YTD_CR},
+				#{item.AMT_PJTD_DR},
+				#{item.AMT_PJTD_CR},
+				#{item.AMT_PJTD_DR}-#{item.AMT_PJTD_CR},
+				#{item.AMT_T_B_DR},
+				#{item.AMT_T_B_CR},
+				#{item.AMT_T_B_DR}-#{item.AMT_T_B_CR},
+				#{item.AMT_T_Y_DR},
+				#{item.AMT_T_Y_CR},
+				#{item.AMT_T_Y_DR}-#{item.AMT_T_Y_CR},
+				#{item.AMT_T_PTD_DR},
+				#{item.AMT_T_PTD_CR},
+				#{item.AMT_T_PTD_DR}-#{item.AMT_T_PTD_CR},
+				#{item.AMT_T_YTD_DR},
+				#{item.AMT_T_YTD_CR},
+				#{item.AMT_T_YTD_DR}-#{item.AMT_T_YTD_CR},
+				#{item.AMT_T_PJTD_DR},
+				#{item.AMT_T_PJTD_CR},
+				#{item.AMT_T_PJTD_DR}-#{item.AMT_T_PJTD_CR},
+				'',
+				#{synchronizedDate}
+				from dual
+			</foreach>
+		</if>
+		<if test="mod=='GL_CASH'">
+			<foreach collection="list" item="item" index="index"
+				separator="UNION ALL">
+				SELECT
+				UUID(),
+				#{dcId},
+				#{item.ledgerCode,
+				jdbcType=VARCHAR},
+				'CA',
+				null,
+				null,
+				#{orgId},
+				#{item.periodCode,
+				jdbcType=VARCHAR},
+				(select
+				ACC_ID from xsr_dc_account where
+				DC_ID=#{dcId} and
+				ACC_CODE=#{item.accCode}
+				and ATTR1=(SELECT T.HS_TX FROM
+				xsr_rep_org_property T
+				WHERE ORG_ID=#{orgId} AND SUIT_ID=#{suitId})),
+				(select
+				CURRENCY_ID from
+				xsr_rep_currency where
+				CURRENCY_CODE=#{item.currencyCode,
+				jdbcType=VARCHAR}),
+				(select
+				ORG_CODE from xip_pub_orgs where
+				ORG_ID=#{orgId}),
+				#{item.accCode},
+				#{item.currencyCode},
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				#{item.caSum},
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				#{item.tCaSum},
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				#{item.caCode},
+				SYSDATE()
+				from dual
+			</foreach>
+		</if>
+	</insert>
+</mapper>

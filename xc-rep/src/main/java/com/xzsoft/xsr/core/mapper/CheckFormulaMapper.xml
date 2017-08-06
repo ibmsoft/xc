@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.CheckFormulaMapper">
+
+	<sql id="oneModalCheckFormula">
+		select x.CHK_FORMULA_ID from xsr_rep_chk_formula x 
+		 where EXISTS (select 1 from xsr_rep_rowmodalref rf 
+		                where rf.modalsheet_id = #{modalsheetId}
+		                  and rf.rowitem_id = x.ROWITEM_ID)
+		   and EXISTS (select 1 from xsr_rep_colmodalref cf
+		                where cf.modalsheet_id = #{modalsheetId}
+		                  and cf.colitem_id = x.COLITEM_ID)
+		   and x.SUIT_ID = #{suitId}
+		UNION
+		select x.CHK_FORMULA_ID from xsr_rep_chk_formula x 
+		 where EXISTS (select 1 from xsr_rep_rowmodalref rf 
+		                where rf.modalsheet_id = #{modalsheetId}
+		                  and rf.rowitem_id = x.ROWITEM_ID)
+		   and x.COLITEM_ID = '-1'
+		   and x.SUIT_ID = #{suitId}
+		UNION
+		select x.CHK_FORMULA_ID from xsr_rep_chk_formula x 
+		 where x.ROWITEM_ID = '-1'
+		   and EXISTS (select 1 from xsr_rep_colmodalref cf
+		                where cf.modalsheet_id = #{modalsheetId}
+		                  and cf.colitem_id = x.COLITEM_ID) 
+	       and x.SUIT_ID = #{suitId}
+	</sql>
+	
+    <!-- 通过模板id和表套id，获取模板对应的稽核公式 -->
+    <select id="getCheckFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormula">
+	    select t.SUIT_ID, t.ROWITEM_ID, t.ROWITEM_CODE, t.COLITEM_ID, t.COLITEM_CODE, 
+	           t.F_LEFT, t.F_RIGHT, t.F_EXP, t.F_DESC, t.ERR_SCOPE, t.DESCRIPTION, t.F_SETTYPE,
+	           t.LOGIC_FLAG, t.LOGIC_NAME, t.ZL_FLAG, t.CHK_TYPE, t.CHK_LEVEL
+		  from xsr_rep_checkformula_v t
+		 where t.CHK_FORMULA_ID in (
+		 <include refid="oneModalCheckFormula" />
+		 )
+    </select>
+    
+    <delete id="deleteChkSchemeDtl">
+	    delete t from xsr_rep_chk_scheme_dtl t
+		 where t.CHK_FORMULA_ID in (
+		 <include refid="oneModalCheckFormula" />
+		 )
+    </delete>
+    
+    <delete id="deleteCheckFormula">
+	    delete t from xsr_rep_chk_formula t
+		 where t.CHK_FORMULA_ID in (select CHK_FORMULA_ID from (
+		 <include refid="oneModalCheckFormula" />) t1
+		 )
+    </delete>
+    
+    <insert id="insertBatchCheckFormat">
+    	INSERT into xsr_rep_chk_formula(CHK_FORMULA_ID, SUIT_ID, ROWITEM_ID, COLITEM_ID, 
+    	F_LEFT, F_RIGHT, F_EXP, F_DESC, ERR_SCOPE, DESCRIPTION, F_SETTYPE, LOGIC_FLAG, LOGIC_NAME, 
+    	ZL_FLAG, CHK_TYPE, CHK_LEVEL, CREATION_DATE,CREATED_BY,LAST_UPDATE_DATE,LAST_UPDATED_BY) VALUES
+		<foreach collection="formulas" item="formula" index="index" separator=",">
+			(#{formula.CHK_FORMULA_ID},
+			 #{formula.SUIT_ID},
+			 #{formula.ROWITEM_ID},
+			 #{formula.COLITEM_ID},
+			 #{formula.F_LEFT},
+			 #{formula.F_RIGHT},
+			 #{formula.F_EXP},
+			 #{formula.F_DESC},
+			 #{formula.ERR_SCOPE},
+			 #{formula.DESCRIPTION},
+			 #{formula.F_SETTYPE},
+			 #{formula.LOGIC_FLAG},
+			 #{formula.LOGIC_NAME},
+			 #{formula.ZL_FLAG},
+			 #{formula.CHK_TYPE},
+			 #{formula.CHK_LEVEL},
+			 #{formula.CREATION_DATE},
+			 #{formula.CREATED_BY},
+			 #{formula.LAST_UPDATE_DATE},
+			 #{formula.LAST_UPDATED_BY})
+		</foreach>
+    </insert>
+    
+<!--     <select id="getCheckFormulaList" parameterType="java.util.HashMap" resultType="com.xzsoft.xsr.core.modal.CheckFormula">
+	    select t.SUIT_ID, t.ROWITEM_ID, rf.ROWITEM_CODE, t.COLITEM_ID, cf.COLITEM_CODE, 
+	           t.F_LEFT, t.F_RIGHT, t.F_EXP, t.F_DESC, t.ERR_SCOPE, t.DESCRIPTION, t.F_SETTYPE,
+	           t.LOGIC_FLAG, t.LOGIC_NAME, t.ZL_FLAG, t.CHK_TYPE, t.CHK_LEVEL
+		  from xsr_rep_chk_formula t,
+		       xsr_rep_rowmodalref rf,
+		       xsr_rep_colmodalref cf
+		 where t.ROWITEM_ID = rf.ROWITEM_ID
+		   and t.COLITEM_ID = cf.COLITEM_ID
+		   and rf.MODALSHEET_ID = cf.MODALSHEET_ID
+		   and rf.LANNO = cf.LANNO
+		   and rf.MODALSHEET_ID = #{modalsheetId}
+		   and t.SUIT_ID = #{suitId}
+    </select> -->
+	<!-- 根据稽核方案id查询稽核方案 -->
+	<select id="selectChkSchemeById" parameterType="String"
+		resultType="com.xzsoft.xsr.core.modal.Chk_Scheme">
+		SELECT CHK_SCHEME_CODE,
+		CHK_SCHEME_NAME
+		from
+		xsr_rep_chk_scheme t
+		where t.CHK_SCHEME_ID=#{chk_scheme_id}
+	</select>
+	<!--根据稽核方案id查询稽核公式 -->
+	<select id="selectChkFormulaByScheme" parameterType="String"
+		resultType="com.xzsoft.xsr.core.modal.CheckFormula">
+		SELECT
+		ROWITEM_ID,
+		COLITEM_ID,
+		F_LEFT,
+		F_RIGHT,
+		F_EXP,
+		F_DESC,
+		ERR_SCOPE,
+		DESCRIPTION,
+		ENABL_FLAG,
+		F_SETTYPE,
+		LOGIC_FLAG,
+		LOGIC_NAME,
+		ZL_FLAG,
+		PERIOD_FLAG,
+		CHK_TYPE,
+		CHK_LEVEL
+		FROM
+		xsr_rep_chk_formula t
+		WHERE
+		t.CHK_FORMULA_ID IN (
+		SELECT
+		d.CHK_FORMULA_ID
+		FROM
+		xsr_rep_chk_scheme_dtl
+		d,
+		xsr_rep_chk_scheme s
+		WHERE d.chk_scheme_id=s.chk_scheme_id
+		and
+		s.chk_scheme_id=#{chk_scheme_id}
+		)
+	</select>
+	<!-- 根据行指标id查询行指标code -->
+	<select id="selectRowitem_Code" resultType="String">
+		SELECT ROWITEM_CODE
+		FROM
+		xsr_rep_rowitem
+		WHERE ROWITEM_ID=#{0}
+	</select>
+	<!-- 根据列指标id查询列指标code -->
+	<select id="selectColitem_Code" resultType="String">
+		SELECT COLITEM_CODE
+		FROM
+		xsr_rep_colitem
+		WHERE COLITEM_ID=#{0}
+	</select>
+	<!-- 根据行指标code查询行指标id -->
+	<select id="selectRowitem_Id" resultType="String">
+		SELECT ROWITEM_ID
+		FROM
+		xsr_rep_rowitem
+		WHERE ROWITEM_CODE=#{0}
+		AND SUIT_ID=#{1}
+	</select>
+	<!-- 根据列指标code查询列指标id -->
+	<select id="selectColitem_Id" resultType="String">
+		SELECT COLITEM_ID
+		FROM
+		xsr_rep_colitem
+		WHERE COLITEM_CODE=#{0}
+		AND SUIT_ID=#{1}
+	</select>
+	<!-- 判断稽核方案是否存在 -->
+	<select id="isChkSchemeExist" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		XSR_REP_CHK_SCHEME
+		WHERE CHK_SCHEME_CODE=#{0}
+		AND SUIT_ID=#{1}
+	</select>
+	<!-- 判断稽核公式的行指标在系统中是否存在 -->
+	<select id="isRowItemExit" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		xsr_rep_rowitem
+		WHERE ROWITEM_CODE=#{0}
+		AND SUIT_ID=#{1}
+	</select>
+	<!-- 判断稽核公式的列指标在系统中是否存在 -->
+	<select id="isColItemExit" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		xsr_rep_colitem
+		WHERE COLITEM_CODE=#{0}
+		AND SUIT_ID=#{1}
+	</select>
+	<!--动态sql查询稽核公式id -->
+	<select id="selectFormulaId" parameterType="hashmap" resultType="String">
+		SELECT CHK_FORMULA_ID
+		FROM
+		xsr_rep_chk_formula t
+		<where>
+			<if test="ROWITEM_CODE!='&lt;$$&gt;' and COLITEM_CODE!='&lt;$$&gt;'">
+				AND t.ROWITEM_ID=#{ROWITEM_ID}
+				AND t.COLITEM_ID
+				=#{COLITEM_ID}
+				AND t.F_RIGHT =#{F_RIGHT}
+			</if>
+			<if test="ROWITEM_CODE=='&lt;$$&gt;'">
+				AND t.ROWITEM_ID='-1'
+				AND t.COLITEM_ID =#{COLITEM_ID}
+				AND
+				t.F_RIGHT =#{F_RIGHT}
+			</if>
+			<if test="COLITEM_CODE=='&lt;$$&gt;'">
+				AND t.SUIT_ID =#{SUIT_ID}
+				AND t.ROWITEM_ID=#{ROWITEM_ID}
+				AND t.COLITEM_ID ='-1'
+				AND t.F_RIGHT =#{F_RIGHT}
+			</if>
+			<if test="LOGIC_NAME!=null">
+				AND t.LOGIC_NAME =#{LOGIC_NAME}
+			</if>
+			<if test="LOGIC_FLAG!=null">
+				AND t.LOGIC_FLAG =#{LOGIC_FLAG}
+			</if>
+		</where>
+	</select>
+	<!-- 导入稽核方案 -->
+	<insert id="insertChkScheme" parameterType="com.xzsoft.xsr.core.modal.Chk_Scheme">
+		insert into
+		xsr_rep_chk_scheme(
+		CHK_SCHEME_ID,
+		SUIT_ID,
+		CHK_SCHEME_CODE,
+		CHK_SCHEME_NAME)
+		VALUES
+		(
+		#{chk_scheme.CHK_SCHEME_ID},
+		#{chk_scheme.SUIT_ID},
+		#{chk_scheme.CHK_SCHEME_CODE},
+		#{chk_scheme.CHK_SCHEME_NAME}
+		)
+	</insert>
+	<!-- 导入稽核公式 -->
+	<insert id="insertChkFormula" parameterType="hashmap">
+		insert into
+		xsr_rep_chk_formula(
+		CHK_FORMULA_ID,
+		SUIT_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		F_LEFT,
+		F_RIGHT,
+		F_EXP,
+		F_DESC,
+		ERR_SCOPE,
+		DESCRIPTION,
+		ENABL_FLAG,
+		F_SETTYPE,
+		LOGIC_FLAG,
+		LOGIC_NAME,
+		ZL_FLAG,
+		PERIOD_FLAG,
+		CHK_TYPE,
+		CHK_LEVEL
+		)
+		VALUES
+		(
+		#{CHK_FORMULA_ID},
+		#{SUIT_ID},
+		#{ROWITEM_ID},
+		#{COLITEM_ID},
+		#{F_LEFT},
+		#{F_RIGHT},
+		#{F_EXP},
+		#{F_DESC},
+		#{ERR_SCOPE},
+		#{DESCRIPTION},
+		#{ENABL_FLAG},
+		#{F_SETTYPE},
+		#{LOGIC_FLAG},
+		#{LOGIC_NAME},
+		#{ZL_FLAG},
+		#{PERIOD_FLAG},
+		#{CHK_TYPE},
+		#{CHK_LEVEL}
+		)
+	</insert>
+	<!-- 导入方案引用公式 -->
+	<insert id="insertChkSchemeDtl" parameterType="String">
+		insert into
+		xsr_rep_chk_scheme_dtl(
+		CHK_SCHEME_ID,
+		CHK_FORMULA_ID
+		)
+		VALUES
+		(
+		#{0},
+		#{1}
+		)
+	</insert>
+	
+	<select id="getChkFormulaId" resultType="String">
+		select t.CHK_FORMULA_ID 
+		  from xsr_rep_chk_formula t
+		 where t.COLITEM_ID = #{colitemId}
+		   and t.ROWITEM_ID = #{rowitemId}
+		   and t.F_RIGHT = #{fRight}
+		   and t.SUIT_ID = #{suitId}
+    </select>
+    
+    <update id="updateBatchChkFormula">
+		<foreach collection="formulas" item="formula" index="index" separator=";">
+			UPDATE xsr_rep_chk_formula
+			<set>
+    			F_LEFT = #{formula.F_LEFT},  
+    			F_EXP = #{formula.F_EXP} , 
+    			F_DESC = #{formula.F_DESC}, 
+    			ERR_SCOPE = #{formula.ERR_SCOPE}, 
+    			DESCRIPTION = #{formula.DESCRIPTION}, 
+    			F_SETTYPE = #{formula.F_SETTYPE}, 
+    			LOGIC_FLAG = #{formula.LOGIC_FLAG}, 
+    			LOGIC_NAME = #{formula.LOGIC_NAME}, 
+    			ZL_FLAG = #{formula.ZL_FLAG}, 
+    			CHK_TYPE = #{formula.CHK_TYPE}, 
+    			CHK_LEVEL = #{formula.CHK_LEVEL}, 
+    			LAST_UPDATE_DATE = #{formula.LAST_UPDATE_DATE},
+    			LAST_UPDATED_BY = #{formula.LAST_UPDATED_BY}
+			</set>
+			where CHK_FORMULA_ID = #{formula.CHK_FORMULA_ID}
+		</foreach>
+	</update>
+</mapper>

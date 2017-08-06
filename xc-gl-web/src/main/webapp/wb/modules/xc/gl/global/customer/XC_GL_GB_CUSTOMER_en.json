@@ -1,0 +1,30 @@
+{
+  moduleTitle:"Customer Management",
+  codeName:"Customer Name/Code",
+  enterTip:"Press Enter Key For Seeking",
+  rownum:"NO",
+  customerCode:"Customer Code",
+  customerName:"Customer Name",
+  startDate:"Start Date",
+  endDate:"End Date",
+
+  confirmBtn:"Confirm",
+  cancelBtn :"Cancel",
+  addBtn  	: "Add",
+  editBtn   : "Edit",
+  delBtn    : "Delete",
+  saveBtn   : "Save",
+  batchEdit : "Batch Edit",
+  importBtn:"Import",
+  exprotBtn:"Export",
+  
+  importTitle:"Importing The Data Of Customer",
+  fileTip:"Please Select Microsoft Office Excel Document",
+  fileName:"<font color='red'>*</font>File",
+  importLogs:"Importing Logs",
+  incorrectColumn:"Incorrect No",
+  errorInformation:"Error Information",
+  address:"Address",
+  labelWidth:130
+  
+}

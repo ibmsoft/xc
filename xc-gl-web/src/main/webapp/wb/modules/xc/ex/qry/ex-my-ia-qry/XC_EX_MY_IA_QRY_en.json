@@ -1,0 +1,13 @@
+{
+  empty_text_ledger		: "Please select the account book to query",
+  query_ledger_combo	: "Ledger",
+  queryBtn				: "Query",
+  row_num_col			: "No",
+  creation_date_col		: "Date",
+  ex_doc_code_col		: "Document Code",
+  ex_reason_col			: "Document Description",
+  ex_ia_type_col		: "Type",
+  ex_ia_fact_amt_col	: "Amount",
+  ia_bal_col			: "Loan balance"
+  
+}

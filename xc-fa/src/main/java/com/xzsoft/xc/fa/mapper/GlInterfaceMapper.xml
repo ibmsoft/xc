@@ -1,0 +1,42 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.fa.mapper.GlInterfaceMapper">
+	
+	<insert id="insertGlInterfaceHead"  parameterType="java.util.HashMap">
+		insert into xc_gl_v_interface_heads(
+			I_HEAD_ID, LEDGER_ID, PERIOD_CODE, DR_AMT, CR_AMT, SUMMARY, V_HEAD_ID, CREATION_DATE, CREATED_BY
+		) values (
+		  #{I_HEAD_ID, jdbcType=VARCHAR},
+		  #{LEDGER_ID, jdbcType=VARCHAR},
+		  #{PERIOD_CODE, jdbcType=VARCHAR},
+		  #{DR_AMT, jdbcType=DECIMAL},
+		  #{CR_AMT, jdbcType=DECIMAL},
+		  #{SUMMARY, jdbcType=VARCHAR},
+		  #{V_HEAD_ID, jdbcType=VARCHAR},
+		  #{CREATION_DATE, jdbcType=TIMESTAMP},
+		  #{CREATED_BY, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 更新会计平台 -->
+	<update id="updateGlInterface">
+		update xc_gl_v_interface 
+	       set I_HEAD_ID = #{iHeadId, jdbcType=VARCHAR},
+	           LAST_UPDATED_BY = #{lastUpdateBy, jdbcType=VARCHAR},
+	           LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP}
+         where V_INTERFACE_ID in (${glInterfaceIds})
+	</update>
+	
+	<!-- 更新会计平台 -->
+	<update id="updateGlInterfaceByIhead">
+		update xc_gl_v_interface 
+	       set I_HEAD_ID = null,
+	           LAST_UPDATED_BY = #{lastUpdateBy, jdbcType=VARCHAR},
+	           LAST_UPDATE_DATE = #{lastUpdateDate, jdbcType=TIMESTAMP}
+         where I_HEAD_ID = #{iHeadId, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="deleteGlInterfaceHead"  parameterType="java.lang.String">
+		delete from xc_gl_v_interface_heads where I_HEAD_ID = #{iHeadId, jdbcType=VARCHAR}
+	</delete>
+	
+</mapper>

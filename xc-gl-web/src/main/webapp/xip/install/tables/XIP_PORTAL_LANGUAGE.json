@@ -1,0 +1,20 @@
+{"PORTAL_ID":"1","LANG_CODE":"en","LANG_VAL":"Default Home Page","PORTAL_TYPE":"HOME","LANG_DESC":"Default Home Page"}
+{"PORTAL_ID":"1","LANG_CODE":"zh","LANG_VAL":"默认主页","PORTAL_TYPE":"HOME","LANG_DESC":"默认主页"}
+{"PORTAL_ID":"637bd602-a895-4c61-81ec-4ee0d431d118","LANG_CODE":"en","LANG_VAL":"Favorites","PORTAL_TYPE":"DTL","LANG_DESC":"Favorites"}
+{"PORTAL_ID":"637bd602-a895-4c61-81ec-4ee0d431d118","LANG_CODE":"zh","LANG_VAL":"收藏夹","PORTAL_TYPE":"DTL","LANG_DESC":"收藏夹"}
+{"PORTAL_ID":"1dec1d20-50bc-46e1-bbeb-19ea84fd0055","LANG_CODE":"en","LANG_VAL":"Personal To-do","PORTAL_TYPE":"DTL","LANG_DESC":"Personal To-do"}
+{"PORTAL_ID":"1dec1d20-50bc-46e1-bbeb-19ea84fd0055","LANG_CODE":"zh","LANG_VAL":"个人待办","PORTAL_TYPE":"DTL","LANG_DESC":"个人待办"}
+{"PORTAL_ID":"a1","LANG_CODE":"en","LANG_VAL":"Default Component","PORTAL_TYPE":"COMP","LANG_DESC":"Default Component"}
+{"PORTAL_ID":"a1","LANG_CODE":"zh","LANG_VAL":"默认组件","PORTAL_TYPE":"COMP","LANG_DESC":"默认组件"}
+{"PORTAL_ID":"1","LANG_CODE":"en","LANG_VAL":"Chat Example","PORTAL_TYPE":"UNIT","LANG_DESC":"Chat Example"}
+{"PORTAL_ID":"1","LANG_CODE":"zh","LANG_VAL":"图表示例","PORTAL_TYPE":"UNIT","LANG_DESC":"图表示例"}
+{"PORTAL_ID":"2","LANG_CODE":"en","LANG_VAL":"System Function","PORTAL_TYPE":"UNIT","LANG_DESC":"System Function"}
+{"PORTAL_ID":"2","LANG_CODE":"zh","LANG_VAL":"系统功能","PORTAL_TYPE":"UNIT","LANG_DESC":"系统功能"}
+{"PORTAL_ID":"3","LANG_CODE":"en","LANG_VAL":"Table Example","PORTAL_TYPE":"UNIT","LANG_DESC":"Table Example"}
+{"PORTAL_ID":"3","LANG_CODE":"zh","LANG_VAL":"表格示例","PORTAL_TYPE":"UNIT","LANG_DESC":"表格示例"}
+{"PORTAL_ID":"4","LANG_CODE":"en","LANG_VAL":"Favorites","PORTAL_TYPE":"UNIT","LANG_DESC":"Favorites"}
+{"PORTAL_ID":"4","LANG_CODE":"zh","LANG_VAL":"收藏夹","PORTAL_TYPE":"UNIT","LANG_DESC":"收藏夹"}
+{"PORTAL_ID":"5","LANG_CODE":"en","LANG_VAL":"Personal To-do","PORTAL_TYPE":"UNIT","LANG_DESC":"Personal To-do"}
+{"PORTAL_ID":"5","LANG_CODE":"zh","LANG_VAL":"个人待办","PORTAL_TYPE":"UNIT","LANG_DESC":"个人待办"}
+{"PORTAL_ID":"6","LANG_CODE":"en","LANG_VAL":"Customize Page","PORTAL_TYPE":"UNIT","LANG_DESC":"Customize Page(Please fill out the full page url)"}
+{"PORTAL_ID":"6","LANG_CODE":"zh","LANG_VAL":"自定义页面","PORTAL_TYPE":"UNIT","LANG_DESC":"自定义页面(请填写完整的页面url)"}

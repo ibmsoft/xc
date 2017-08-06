@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws 
+						http://cxf.apache.org/schemas/jaxws.xsd 
+						http://www.springframework.org/schema/beans
+				        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> 
+	
+    <!-- 总账对外的WebService服务 -->
+	<jaxws:endpoint id="XCGLWebService" implementor="com.xzsoft.xc.gl.api.impl.XCGLWebServiceImpl" address="/glws"/>     
+    
+    <!-- 费用报销对外的WebService服务  -->
+	<jaxws:endpoint id="XCEXWebService" implementor="com.xzsoft.xc.ex.api.impl.XCEXWebServiceImpl" address="/exws"/> 
+	
+    <!-- 费用预算对外的WebService服务  -->
+	<jaxws:endpoint id="XCBGWebService" implementor="com.xzsoft.xc.bg.api.impl.BudgetWebServiceImpl" address="/bgws"/> 
+    
+    <!-- 应付模块对外的WebService服务  -->
+	<jaxws:endpoint id="XCAPWebService" implementor="com.xzsoft.xc.ap.api.impl.ApWebServiceImpl" address="/apws"/> 
+	
+	<!-- 应收模块对外的WebService服务  -->
+	<jaxws:endpoint id="XCARWebService" implementor="com.xzsoft.xc.ar.api.impl.ArWebServiceImpl" address="/arws"/> 
+	
+	 <!-- 云ERP单据审批流程订制WebService服务  -->
+	<jaxws:endpoint id="XCWFWebService" implementor="com.xzsoft.xc.gl.api.impl.XCWFWebServiceImpl" address="/wfws"/> 
+	
+	 <!-- 库存模块对外的WebService服务  -->
+	<jaxws:endpoint id="XCSTWebService" implementor="com.xzsoft.xc.st.api.impl.XcStWebServiceImpl" address="/stws"/> 
+</beans>

@@ -1,0 +1,628 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetCellMapper">
+
+	<resultMap id="sheetCellMap" type="com.cubedrive.sheet.domain.sheet.SheetCell">
+		<id column="cell_id" property="id" jdbcType="INTEGER" />
+		<result column="x" property="x" jdbcType="INTEGER" />
+		<result column="y" property="y" jdbcType="INTEGER" />
+		<result column="tab_id" property="tabId" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="is_cal" property="cal" jdbcType="BOOLEAN" />
+		<result column="raw_data" property="rawData" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		tab_id,cell_id,x,y,is_cal,content
+	</sql>
+
+	<sql id="base_column_list2">
+		tab_id,cell_id,x,y,is_cal,content,raw_data
+	</sql>
+
+	<sql id="id_content_list">cell_id, content</sql>
+	<sql id="id_list">cell_id</sql>
+
+	<select id="getCellById" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where cell_id = #{cellId}
+	</select>
+
+	<select id="getCellByTabAndXY" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} and x = #{x} and y = #{y}
+	</select>
+
+	<select id="getCellByColRange" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} and y &gt;= #{startCol} and y &lt;= #{endCol}
+	</select>
+
+
+	<select id="getCellByRowRange" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} and x &gt;= #{startRow} and x &lt;= #{endRow}
+	</select>
+
+	<select id="getCellByRange" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId}
+		and x &gt;= #{startRow} and x &lt;= #{endRow}
+		and y &gt;= #{startCol} and y &lt;= #{endCol}
+	</select>
+
+	<select id="getCellByRanges" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		WHERE cell_id &gt; #{cellId}
+		<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(ranges)" >
+			and (
+			<foreach collection="ranges" index="index" item="range" separator=" or ">
+				<choose>
+					<when test="range.endRow == 0  and range.endCol == 0">
+						(tab_id=#{range.tabId})
+					</when>
+					<when test="range.endRow == 0">
+						(tab_id=#{range.tabId} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol})
+					</when>
+					<when test="range.endCol ==0">
+						(tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow})
+					</when>
+					<otherwise>
+						(tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol})
+					</otherwise>
+				</choose>
+			</foreach>
+			)
+		</if>
+		order by cell_id ASC LIMIT #{limit}
+	</select>
+
+	<select id="getCellOfRawDataByRanges" resultMap="sheetCellMap">
+		select cell_id, tab_id, x, y, is_cal,raw_data from ${cellTable}
+		WHERE (raw_data is not null and raw_data != '') AND cell_id &gt; #{cellId}
+		<if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(ranges)" >
+			and (
+			<foreach collection="ranges" index="index" item="range" separator=" or ">
+				<choose>
+					<when test="range.endRow == 0  and range.endCol == 0">
+						(tab_id=#{range.tabId})
+					</when>
+					<when test="range.endRow == 0">
+						(tab_id=#{range.tabId} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol})
+					</when>
+					<when test="range.endCol ==0">
+						(tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow})
+					</when>
+					<otherwise>
+						(tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol})
+					</otherwise>
+				</choose>
+			</foreach>
+			)
+		</if>
+		order by cell_id ASC LIMIT #{limit}
+	</select>
+
+
+	<select id="getCellOfStyleByRange" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable} where cell_id &gt; #{cellId}
+		<choose>
+			<when test="range.endRow == 0  and range.endCol == 0">
+				and (tab_id=#{range.tabId} and x != 0 and y != 0)
+			</when>
+			<when test="range.endRow == 0">
+				and (tab_id=#{range.tabId} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol} and x != 0)
+			</when>
+			<when test="range.endCol ==0">
+				and (tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow} and y != 0)
+			</when>
+			<otherwise>
+				and (tab_id = #{range.tabId} and x &gt;= #{range.startRow} and x &lt;= #{range.endRow} and y &gt;= #{range.startCol} and y &lt;= #{range.endCol})
+			</otherwise>
+		</choose>
+		order by cell_id asc  LIMIT #{limit}
+
+	</select>
+
+
+	<select id="findCellsByTab" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} order by cell_id
+	</select>
+
+	<select id="findCalCellsByTab" resultMap="sheetCellMap">
+		select <include refid="id_content_list" /> from ${cellTable}
+		where tab_id = #{tabId} and is_cal = true
+	</select>
+
+	<select id="getCellsBySearch" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND raw_data like #{query}
+	</select>
+
+	<select id="getCellsBySearch2" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND raw_data like #{query} order by x asc,y asc LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="getCellsByRow" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} AND x = #{x} order by y
+	</select>
+
+	<select id="getCellsByCol" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} AND y = #{y} order by x
+	</select>
+
+	<select id="findCellsByTabOnExport" resultMap="sheetCellMap">
+		select <include refid="base_column_list2" /> from ${cellTable}
+		where tab_id = #{tabId}	order by x asc,y asc LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<!-- During export for CSV, we need find all rows item, for example. row
+		8, we need get all cells in the row 8 -->
+	<select id="findCellsByRowsOnExport" resultMap="sheetCellMap">
+		select x,y,content from ${cellTable}
+		where tab_id = #{tabId} and x between #{startRow, jdbcType=INTEGER} and #{endRow, jdbcType=INTEGER}
+		order by x asc,y asc
+	</select>
+
+	<select id="findCellsByTabOrderXY" resultMap="sheetCellMap">
+		select <include refid="base_column_list" />
+		from ${cellTable} where tab_id = #{tabId} order by x ASC, y ASC
+	</select>
+
+	<!-- not sure whether this is right ... -->
+	<select id="countCell" resultType="int">
+		select count(cell_id) from ${cellTable}
+		where tab_id = #{tabId} and x = #{x} and y = #{y}
+	</select>
+
+	<insert id="insertSheetCell" parameterType="com.cubedrive.sheet.domain.sheet.SheetCell">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"	order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal)
+		values(#{tabId,jdbcType=INTEGER},
+		#{cell.x,jdbcType=INTEGER},
+		#{cell.y,jdbcType=INTEGER},
+		#{cell.content,jdbcType=VARCHAR},
+		#{cell.rawData,jdbcType=VARCHAR},
+		#{cell.cal,jdbcType=BOOLEAN})
+	</insert>
+
+	<insert id="batchInsertSheetCell">
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{tabId,jdbcType=INTEGER},#{cell.x,jdbcType=INTEGER},#{cell.y,jdbcType=INTEGER},#{cell.content,jdbcType=VARCHAR},#{cell.rawData,jdbcType=VARCHAR},#{cell.cal,jdbcType=BOOLEAN})
+		</foreach>
+	</insert>
+
+	<insert id="batchInsertSheetCell2">
+		insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal) values
+		<foreach collection="cells" item="cell" index="index"
+				 separator=",">
+			(#{cell.tabId,jdbcType=INTEGER},#{cell.x,jdbcType=INTEGER},#{cell.y,jdbcType=INTEGER},#{cell.content,jdbcType=VARCHAR},#{cell.rawData,jdbcType=VARCHAR},#{cell.cal,jdbcType=BOOLEAN})
+		</foreach>
+	</insert>
+
+	<insert id="batchInsertSheetCell3">
+		<foreach collection="cells" item="cell" index="index" separator=";">
+			insert into ${cellTable}(tab_id,x,y,content,raw_data,is_cal) values(#{cell.tabId,jdbcType=INTEGER},#{cell.x,jdbcType=INTEGER},#{cell.y,jdbcType=INTEGER},#{cell.content,jdbcType=VARCHAR},#{cell.rawData,jdbcType=VARCHAR},#{cell.cal,jdbcType=BOOLEAN})
+			ON DUPLICATE KEY UPDATE content=#{cell.content,jdbcType=VARCHAR}, raw_data=#{cell.rawData,jdbcType=VARCHAR}, is_cal=#{cell.cal,jdbcType=BOOLEAN}
+		</foreach>
+	</insert>
+
+	<!-- TODO: this is not batch update, need improve this We can replace this
+		with replace, however, replace did delete / insert which can be slow. So
+		temporary, I keep this way and we maybe find other way to process this. -->
+	<update id="batchUpdateSheetCell">
+		<foreach collection="cells" item="cell" index="index" separator=";">
+			update ${cellTable} set content = #{cell.content,jdbcType=VARCHAR} where
+			cell_id = #{cell.id,jdbcType=INTEGER}
+		</foreach>
+	</update>
+
+	<delete id="batchDeleteSheetCell">
+		delete from ${cellTable} where cell_id in
+		<foreach item="cell" index="index" collection="cells" open="("
+				 separator="," close=")">
+			#{cell.id}
+		</foreach>
+	</delete>
+
+	<update id="updateSheetCell">
+		update ${cellTable}
+		set content = #{cell.content,jdbcType=VARCHAR}
+		where cell_id = #{cell.id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateCellContent">
+		update ${cellTable}
+		set content = #{content,jdbcType=VARCHAR},
+		raw_data = #{data,jdbcType=VARCHAR},
+		is_cal = #{cal,jdbcType=BOOLEAN}
+		where cell_id = #{cellId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateContentOnly">
+		update ${cellTable}
+		set content = #{content,jdbcType=VARCHAR}
+		where cell_id = #{cellId,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteById">
+		delete from ${cellTable}
+		where cell_id = #{cellId,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteByXY">
+		delete from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER} and x = #{x,jdbcType=INTEGER} and
+		y = #{y,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteCellsBySheetTab">
+		delete from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+	</delete>
+
+	<update id="insertRows">
+		update ${cellTable}
+		set x = x + #{rowSpan, jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER} and x &gt;= #{rowNum,jdbcType=INTEGER}
+		order by x desc
+	</update>
+
+	<update id="insertColumns">
+		update ${cellTable} set y = y + #{colSpan, jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER} and y &gt;= #{columnNum,jdbcType=INTEGER}
+		order by y desc
+	</update>
+
+	<delete id="deleteCellsXXYY">
+		delete from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x between #{startX, jdbcType=INTEGER} and #{endX, jdbcType=INTEGER}
+		and y between #{startY, jdbcType=INTEGER} and #{endY, jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteRowStart2End">
+		delete from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x between #{startX, jdbcType=INTEGER} and #{endX, jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateRowsWithSpan">
+		update ${cellTable}
+		set x=x-${totalSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x>#{endX,jdbcType=INTEGER}
+		order by x asc
+	</update>
+
+	<delete id="deleteColStart2End">
+		delete from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and y between #{startY, jdbcType=INTEGER} and #{endY, jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateColsWithSpan">
+		update ${cellTable}
+		set y=y-${totalSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and y &gt; #{endY,jdbcType=INTEGER}
+		order by y asc
+	</update>
+
+	<update id="updateRowsWithSpanYY">
+		update ${cellTable}
+		set x=x-${rowSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x>#{maxrow,jdbcType=INTEGER}
+		and y between #{mincol, jdbcType=INTEGER} and #{maxcol, jdbcType=INTEGER}
+		order by x asc
+	</update>
+
+	<update id="updateColsWithSpanXX">
+		update ${cellTable}
+		set y=y-${colSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and y>#{maxcol,jdbcType=INTEGER}
+		and x between #{minrow, jdbcType=INTEGER} and #{maxrow, jdbcType=INTEGER}
+		order by y asc
+	</update>
+
+	<update id="updateRowsAddSpanYY">
+		update ${cellTable}
+		set x=x+${rowSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x>=#{minrow,jdbcType=INTEGER}
+		and y between #{mincol, jdbcType=INTEGER} and #{maxcol, jdbcType=INTEGER}
+		order by x desc
+	</update>
+
+	<update id="updateColsAddSpanXX">
+		update ${cellTable}
+		set y=y+${colSpan}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and y>=#{mincol,jdbcType=INTEGER}
+		and x between #{minrow, jdbcType=INTEGER} and #{maxrow, jdbcType=INTEGER}
+		order by y desc
+	</update>
+
+	<insert id="copySheetCellFromSheet">
+		insert into ${destCellTable}(tab_id,x,y,content,is_cal,raw_data)
+		select ${destSpreadTabId},x,y,content,is_cal,raw_data
+		from ${sourceCellTable}
+		where ${sourceCellTable}.tab_id=#{sourceSpreadTabId}
+	</insert>
+
+	<insert id="copySheetCellFromSheetInDiffTable">
+		insert into ${destCellTable}(tab_id,x,y,content,is_cal,raw_data)
+		(select ${destSpreadTabId},x,y,content,is_cal,raw_data
+		from ${sourceCellTable}
+		where tab_id=#{sourceSpreadTabId}
+		)
+	</insert>
+
+	<update id="updateCellRows">
+		update ${cellTable}
+		set x= #{newX,jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER} and y>0 and
+		x=#{orgX,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateCellRowsMore">
+		update ${cellTable}
+		set x= #{newX,jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and y BETWEEN #{mincol,jdbcType=INTEGER} and #{maxcol,jdbcType=INTEGER}
+		and x=#{orgX,jdbcType=INTEGER}
+	</update>
+
+	<select id="findFirstRowByTab" resultMap="sheetCellMap">
+		select x,y,content from ${cellTable} where tab_id=#{tabId} and x=0 and y
+		&gt;0 order by y asc
+	</select>
+
+	<select id="findCellIdsByTab" resultMap="sheetCellMap">
+		select
+		<include refid="id_list" />
+		from ${cellTable} where tab_id = #{tabId,jdbcType=INTEGER} and y &gt;
+		0 and x=#{orgX,jdbcType=INTEGER}
+	</select>
+
+	<select id="findCellIdsByTabMore" resultMap="sheetCellMap">
+		select <include refid="id_list" />
+		from ${cellTable}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x=#{orgX,jdbcType=INTEGER}
+		and y BETWEEN #{mincol,jdbcType=INTEGER} and #{maxcol,jdbcType=INTEGER}
+	</select>
+
+	<update id="batchUpdateXByIds">
+		update ${cellTable}
+		set x = #{updatedX,jdbcType=VARCHAR}
+		where cell_id in
+		<foreach item="cell" index="index" collection="cellIds" open="("
+				 separator="," close=")">
+			#{cell.id}
+		</foreach>
+	</update>
+
+	<select id="countOnExport" resultType="java.lang.Integer">
+		select count(cell_id) from ${cellTable} where
+		tab_id=#{tabId,jdbcType=INTEGER} and x &gt; 0
+	</select>
+
+	<select id="getMaxY" resultType="java.lang.Integer">
+		select max(y) from ${cellTable} where tab_id=#{tabId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getMaxX" resultType="java.lang.Integer">
+		select max(x) from ${cellTable} where tab_id=#{tabId,jdbcType=INTEGER}
+	</select>
+
+	<select id="countByTabId" resultType="java.lang.Long">
+		select count(cell_id) from ${cellTable} where tab_id=#{tabId}
+	</select>
+
+	<select id="loadCellsOnDemand" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId}
+		AND (
+		tab_id=#{tabId}
+		OR (
+		is_cal=true
+		AND
+		tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)
+		)
+		order by cell_id asc limit #{size}
+	</select>
+	
+	<select id="loadDocCellsOnDemand" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId} AND 
+		tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="loadCornerCalCellsOnDemand" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId}
+		AND (
+		(tab_id=#{tabId} AND (x=0 OR y=0))
+		OR (
+		is_cal=true
+		AND
+		tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)
+		)
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="loadCornerCellsOnDemand" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId}
+		AND tab_id=#{tabId} AND (x=0 OR y=0)
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="loadCellsOfRawDataOnDemand" resultMap="sheetCellMap">
+		SELECT tab_id,cell_id,x,y,is_cal,raw_data FROM ${cellTable}
+		WHERE (raw_data is not null and raw_data != '') AND cell_id &gt; #{startCellId}
+		AND (
+		tab_id=#{tabId}
+		OR (
+		is_cal=true
+		AND
+		tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)
+		)
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="loadNotCalCellsOnDemand" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId} and tab_id=#{tabId}
+		AND (is_cal=false OR is_cal is null)
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="loadNotCalCellsOfRawDataOnDemand" resultMap="sheetCellMap">
+		SELECT tab_id,cell_id,x,y,is_cal,raw_data FROM ${cellTable}
+		WHERE (raw_data is not null and raw_data != '') AND cell_id &gt; #{startCellId} and tab_id=#{tabId}
+		AND (is_cal=false OR is_cal is null)
+		order by cell_id asc limit #{size}
+	</select>
+
+	<select id="findDeactiveCalCells" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where is_cal = true AND tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="getLeftTopCells" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE (x = 0 OR y = 0) AND tab_id = #{tabId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getLeftTopCellsOfRawData" resultMap="sheetCellMap">
+		SELECT tab_id,cell_id,x,y,is_cal,raw_data FROM ${cellTable}
+		WHERE (raw_data is not null and raw_data != '') AND (x = 0 OR y = 0) AND tab_id = #{tabId,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="getCalCells" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId}
+		AND is_cal=true
+		AND tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		ORDER BY cell_id ASC LIMIT #{size}
+	</select>
+
+	<select id="getCalCellsOfRawData" resultMap="sheetCellMap">
+		SELECT tab_id,cell_id,x,y,is_cal,raw_data FROM ${cellTable}
+		WHERE (raw_data is not null and raw_data != '') AND cell_id &gt; #{startCellId}
+		AND is_cal=true
+		AND tab_id IN
+		<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		ORDER BY cell_id ASC LIMIT #{size}
+	</select>
+
+	<update id="updateRowDiff">
+		update ${cellTable}
+		set x= -#{key,jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x = #{val,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateCellsDiff">
+		update ${cellTable}
+		set x= -#{key,jdbcType=INTEGER}
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and x = #{val,jdbcType=INTEGER}
+		and y BETWEEN #{mincol,jdbcType=INTEGER} and #{maxcol,jdbcType=INTEGER}
+	</update>
+
+	<update id="upDownCell">
+		update ${cellTable}
+		set x = -x
+		where tab_id = #{tabId,jdbcType=INTEGER}
+		and 0 &gt; x
+	</update>
+
+	<select id="getTabCellCount" resultType="java.lang.Integer">
+		select COUNT(cell_id) as cellCount from ${cellTable}
+		where tab_id = #{tabId}
+	</select>
+
+	<select id="loadNonDataCellOfStyle" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		where tab_id=#{tabId} and (x=0 or y=0)
+	</select>
+	
+	<select id="loadAllCellsByDocument" resultMap="sheetCellMap">
+		SELECT <include refid="base_column_list" /> FROM ${cellTable}
+		WHERE cell_id &gt; #{startCellId} and tab_id IN
+		<foreach item="tabId" index="index" collection="tabIds"  open="(" separator="," close=")">
+			#{tabId}
+		</foreach>
+		order by cell_id asc limit #{size}
+	</select>
+	
+	<select id="loadAllCellsByTab" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where tab_id = #{tabId} and cell_id &gt; #{startCellId}
+		order by cell_id asc limit #{size}
+	</select>
+	
+	<select id="loadAllCellsByTabAndCalCells" resultMap="sheetCellMap">
+		select <include refid="base_column_list" /> from ${cellTable}
+		where (
+			tab_id = #{tabId} 
+			    <if test="@com.cubedrive.base.utils.MyBatisOgnlUtil@isNotEmpty(tabIds)" >
+					or (
+						is_cal = true AND tab_id IN
+						<foreach item="item" index="index" collection="tabIds"  open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					)
+				</if>
+		) and cell_id &gt; #{startCellId}
+		order by cell_id asc limit #{size}
+	</select>
+	
+</mapper>

@@ -1,0 +1,13 @@
+{
+  Ledger:'账簿',
+  syncBtn:'同步',
+  delBtn:'删除',
+  saveBtn:'保存',
+  defendBtn:'段值维护',
+  rownum:'序号',
+  SEG_NAME_COL:'段名称',
+  SEG_TYPE_COL:'段类型',
+  LD_SEG_ALIAS_COL:'段别名',
+  IS_ENABLED_COL:'是否启用',
+  LD_SEG_DESC_COL:'描述信息'
+}

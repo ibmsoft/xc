@@ -1,0 +1,31 @@
+{
+  
+  
+
+  saveBtn:'save',
+
+ fieldset1label:'query condition',
+   ap_acc_id_dept:'deal  account',
+
+  ap_period_code:'enable the accounting period',
+  ap_interval_id:'aging interval',
+
+
+  ap_acc_id_tax:'output tax subject',
+  
+   MSG1:'To enable the accounting period can not be empty!',
+  MSG2:'Enable accounting period exceed the current biggest accounting period',
+  MSG3:'Please input item will lose to complete!',
+fieldset2name:'Accounting book parameter',
+
+ message:'saving...',
+
+  SAVETIP:'save success！'
+  
+
+  
+
+  
+  
+
+}

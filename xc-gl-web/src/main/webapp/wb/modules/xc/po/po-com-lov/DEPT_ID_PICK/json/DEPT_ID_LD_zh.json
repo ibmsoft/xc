@@ -1,0 +1,7 @@
+{
+    DEPT_NAME : "部门",
+    DEPT_CODE_COL : "部门编码",
+    DEPT_NAME_COL : "部门名称",
+    DEPT_CODE_NAME : "部门编码/名称",
+    EMPTY_LEDGER_INFO : "请先选择账簿信息！"
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DatasourceManager xmlVersion="20110221">
+	<ConnectionMap>
+		<Connection name="FRDemo" class="com.fr.data.impl.JDBCDatabaseConnection">
+			<DatabaseAttr />
+			<JDBCDatabaseAttr
+				url="jdbc:odbc:Driver={Microsoft Access Driver (*.mdb)};DBQ=${ENV_HOME}\..\FRDemo.mdb"
+				driver="sun.jdbc.odbc.JdbcOdbcDriver" user="" password="___"
+				encryptPassword="true">
+				<DBCPAttr />
+			</JDBCDatabaseAttr>
+		</Connection>
+		<Connection name="dd" class="com.fr.data.impl.JDBCDatabaseConnection">
+			<DatabaseAttr originalCharsetName="UTF-8" newCharsetName="UTF-8"/>
+			<JDBCDatabaseAttr url="jdbc:mysql://123.56.112.119:3306/xc" driver="com.mysql.jdbc.Driver" user="prod" password="___004b003400790060000200a10019002700220078006a" encryptPassword="true">
+			<DBCPAttr/>
+			</JDBCDatabaseAttr>
+		</Connection>				
+	</ConnectionMap>
+	<TableDataMap>
+		<TableData name="server" class="com.fr.data.impl.DBTableData">
+			<Parameters />
+			<Attributes maxMemRowCount="-1" />
+			<Connection class="com.fr.data.impl.NameDatabaseConnection">
+				<DatabaseName>
+					<![CDATA[FRDemo]]>
+				</DatabaseName>
+			</Connection>
+			<Query>
+				<![CDATA[SELECT * FROM STSCORE]]>
+			</Query>
+		</TableData>
+	</TableDataMap>
+</DatasourceManager>

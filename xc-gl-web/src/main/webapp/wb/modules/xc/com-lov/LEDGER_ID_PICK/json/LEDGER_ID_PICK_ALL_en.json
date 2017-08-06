@@ -1,0 +1,6 @@
+{
+    LEDGER_NAME : "Ledger",
+    LEDGER_CODE_COL : "Ledger Code",
+    LEDGER_NAME_COL : "Ledger Name",
+    LEDGER_CODE_NAME : "Ledger Code/Name"
+}

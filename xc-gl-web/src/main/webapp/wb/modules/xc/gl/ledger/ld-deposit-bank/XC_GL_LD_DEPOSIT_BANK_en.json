@@ -1,0 +1,22 @@
+{
+  queryCombo:'Ledger Name',
+  rownumber:'Order',
+  show_ACCOUNT_NAME:'Account Name',
+  show_BANK_NAME:'The Bank Of Name',
+  show_DEPOSIT_BANK_NAME:'Deposit Bank',
+  show_BANK_ACCOUNT:'The Account of Bank',
+  show_CORRESPONDENT:'Correspondent',
+  show_CURRENCY_NAME:'Currency',
+  show_ACC_NAME:'Account',
+  show_START_DATE:'Start Date',
+  show_END_DATE:'End Date',
+  show_DEPOSIT_BANK_DESC:'Description',
+  add_btn:'Add',
+  edit_btn:'Update',
+  del_btn:'Delete',
+  rownum : 'Order',
+  MODE_TYPE : 'Mode Type',
+  MODE_NAME : 'Mode Name',
+  MODE_DESC : 'Mode Description'
+
+}

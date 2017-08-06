@@ -1,0 +1,96 @@
+{
+  /* queryPanel */
+     queryLedger:'Ledger',
+     queryDocNum:'Adjustment Code',
+     queryBtn:'Query',
+     resetBtn:'Reset',
+     selectLedgerMsgTips:'Please select ledger first',
+  
+  /* grid */
+    /* tbar */
+      addBtn:'Add',
+      editBtn:'Edit',
+        editCheckMsg:'Please select the edit record',
+      submitBtn:'Submit',
+        submitCheckMsg:'Please select the submit record',
+        hasSubmitMsg:'The record has been submited',
+        submitWaitingMsg:'Submitting, please wait...',
+        submitSuccessMsg:'Submit success',
+        submitFailureMsg:'Submit failure',
+      delBtn:'Revoke',
+        delCheckMsg:'Please select the revoke record',
+        canDelCheckMsg:'The record is Drafting',
+        delWaitingMsg:'Revoking, please wait...',
+        delSuccessMsg:'Revoke success',
+        delFailureMsg:'Revoke failure',
+      deleteBtn:'Delete',
+        deleteCheckMsg:'Please select the delete record',
+        canDeleteMsg:'has been submited that can not deleted',
+        deleteConfirmMsg:'Confirm that you want to delete the selected record',
+        deleteWaitMsg:'Deleting, please wait...',
+        deleteSuccessMsg:'Delete Success',
+        deleteFailureMsg:'Delete Failure',
+    /* columns */
+      adjDateCol:'Adjustment Date',
+      docNumCol:'Adjustment Code',
+      bzsmCol:'Adjustment Reason',
+      auditStatusCol:'Status',
+      statusC:'Draft',
+      statucS:'Submit',
+  
+  /* faAdjWin */
+    /* mainForm */
+      LEDGER:'Ledger',
+      ADJ_DATE:'Adjustment Date',
+      BZSM:'Reason',
+      CREATED_BY:'Input Person',
+      DOC_NUM:'Adjustment Code',
+    /* subGrid */
+      /* tbar */
+        addSubBtn:'Add Line',
+        delSubBtn:'Delete Line',
+      /* columns */
+        zcbmCol:'Asset Code',
+        zcmcCol:'Asset Name',
+        adjTypeCol:'Adjustment Type',
+        oldValueCol:'Before Adjustment',
+          loadWaitMsg:'Loading,please wait...',
+        newValueCol:'After Adjustment',
+          kmSeekCondition:'Account Code Name',
+          selectAdjTypeFirst:'Please select the adjustment type first',
+        dfkmCol:'Other Account',
+    /* buttons */
+      saveBtn:'Save',
+        selectAdjTypeFirst:'Please select the adjustment type first',,
+        selectNewValueFirst:'Set the adjusted value',
+        checkRequired:'Adjustment information is incomplete',
+        dfkmIsNotNull:'The other account of Adjustment Type in 【Impairment provision、Original value、Accumulated account】 can not be null',
+        checkSameRecord:'The records can not be in the same asset and in the same adjustment type',
+        checkPeriodCode:'Checking the period, please wait...',
+        periodNotOpened:'Period is not opend',
+        periodIsClosed:'Period has been closed',
+        checkPeriodFailureMsg:'Checking the period failure',
+        checkCanSave:'Provision period must be the same as current period that can be modified',
+  		saveWaitMsg:'Saving, please wait...',
+        saveSuccessMsg:'Save success',
+        saveFailureMsg:'Save failure',
+      cancelBtn:'Close',
+  
+  /* faAdditionWin */
+    /* queryPanel */
+      queryFaCodeName:'Asset Code/Name',
+      ADJ_TYPE:'Adjustment Type',
+      AFTER_ADJ:'After Adjustment',
+      DFKM:'Other Account',
+    /* grid */
+       /* columns */
+         ledgerNameCol:'Ledger',
+         periodsCodeCol:'Period',
+         catCodeCol:'Asset Classification',
+         faPropertyCol:'Asset Property',
+    /* buttons */
+      ensureBtn:'Ensure',
+        ensureCheckMsg:'Please select the operate record',
+         
+  
+}

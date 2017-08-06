@@ -1,0 +1,18 @@
+{
+  addBtn: 'Add',
+  delBtn: 'Delete',
+  saveBtn: 'Save',
+  impBtn: 'Import',
+  expBtn: 'Export',
+  queryBtn:'Query',
+  resetBtn:'Reset',
+  reasonCodeName:'Reason Code/Name',
+  reasonCodeCol: 'Reason Code',
+  reasonNameCol: 'Reason Name',
+  reasonDescCol: 'Reason Description',
+  reasonIdCol: 'Reason Id',
+  codeExistBeforeMsg: 'Reason Code【',
+  codeExistAfterMsg: '】 has Exist',
+  saveWaitMsg: 'Please wait ...',
+  successMsg: 'Success'
+}

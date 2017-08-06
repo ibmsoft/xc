@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20110221">
+<TableDataMap>
+<TableData name="doc" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="exDocId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select xed.ex_doc_id,
+       xed.ex_doc_code,
+       xed.ex_cat_code,
+       cat.ex_cat_name,
+       xed.ledger_id,
+       xed.org_id,
+       xpo.org_code,
+       xpo.org_name,
+       xed.biz_date,
+       xed.dept_id,
+       xpd.dept_code,
+       xpd.dept_name,
+       xed.project_id,
+       xpp.project_code,
+       xpp.project_name,
+       xed.ex_reason,
+       xed.attach_num,
+       xed.ex_item_id,
+       xed.bg_item_id,
+       xed.amount,
+       xed.apply_ex_doc_id,
+       xed.cancel_amt,
+       xed.v_head_id,
+       xh.v_serial_num,
+       xed.v_status,
+       xed.fin_user_id,
+       xed.fin_date,
+       xed.created_by,
+       xe.emp_name 
+  from xc_ex_docs xed 
+   left join xc_pm_projects xpp on xed.project_id = xpp.project_id
+   left join xc_gl_v_heads xh on xed.v_head_id = xh.v_head_id ,
+   xip_pub_depts xpd,
+   xip_pub_orgs xpo,
+   xip_pub_users xu,
+   xip_pub_emps xe,
+   xc_ex_cat cat 
+where xed.dept_id = xpd.dept_id
+  and xed.org_id = xpo.org_id
+  and xed.created_by = xu.user_id
+  and xu.emp_id = xe.emp_id
+  and xed.ex_cat_code = cat.ex_cat_code
+  and xed.ex_doc_id = '${exDocId}'
+  
+  ]]></Query>
+</TableData>
+<TableData name="tsk" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="exDocId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="tab"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[dd]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select @r:=@r+1 as row_num,
+       t.task_id,
+       t.instance_code,
+       t.act_name,
+       t.execute_user,
+       xe.emp_name,
+       t.end_date,
+       t.approve_comment,
+       t.result
+  from ${tab} t, 
+       xc_ex_docs xd,
+       xip_pub_users xu,
+       xip_pub_emps xe,
+       (select @r:=0) b
+where t.instance_code = xd.ins_code
+  and t.execute_user = xu.user_id
+  and xu.emp_id = xe.emp_id
+  and xd.ex_doc_id = '${exDocId}'
+order by t.BEGIN_DATE,t.END_DATE
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportSettings isHorizontalCenterOnPage="true" headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<ElementCase class="com.fr.report.SingleBlock">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1440000,2160000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,1152000,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[720000,3600000,5040000,3600000,4320000,5040000,3600000,5040000,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="0" s="0">
+<Expand/>
+</C>
+<C c="1" r="1" cs="7" s="1">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="ex_cat_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="2" s="0">
+<O>
+<![CDATA[所属组织:]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" cs="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="org_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="6" r="2" s="0">
+<O>
+<![CDATA[付款申请号:]]></O>
+<Expand/>
+</C>
+<C c="7" r="2">
+<Expand/>
+</C>
+<C c="1" r="3" s="2">
+<O>
+<![CDATA[报销人]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="emp_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="3" cs="2" s="2">
+<O>
+<![CDATA[成本中心]]></O>
+<Expand/>
+</C>
+<C c="5" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="dept_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="3" s="2">
+<O>
+<![CDATA[单据编号]]></O>
+<Expand/>
+</C>
+<C c="7" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="EX_DOC_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="4" s="2">
+<O>
+<![CDATA[项目编号]]></O>
+<Expand/>
+</C>
+<C c="2" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="project_code"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" cs="2" s="2">
+<O>
+<![CDATA[项目名称]]></O>
+<Expand/>
+</C>
+<C c="5" r="4" cs="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="project_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="5" s="2">
+<O>
+<![CDATA[摘要]]></O>
+<Expand/>
+</C>
+<C c="2" r="5" cs="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="ex_reason"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="6" s="2">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="2" r="6" cs="3" s="2">
+<O>
+<![CDATA[费用类型]]></O>
+<Expand/>
+</C>
+<C c="5" r="6" cs="3" s="2">
+<O>
+<![CDATA[金额]]></O>
+<Expand/>
+</C>
+<C c="1" r="7" s="2">
+<O t="I">
+<![CDATA[1]]></O>
+<Expand/>
+</C>
+<C c="2" r="7" cs="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="ex_reason"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="7" cs="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="amount"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="8" cs="4" s="5">
+<O>
+<![CDATA[合计金额：]]></O>
+<Expand/>
+</C>
+<C c="5" r="8" cs="3" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=F8]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="9" s="2">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="2" r="9" s="2">
+<O>
+<![CDATA[岗位]]></O>
+<Expand/>
+</C>
+<C c="3" r="9" s="2">
+<O>
+<![CDATA[审批人]]></O>
+<Expand/>
+</C>
+<C c="4" r="9" s="2">
+<O>
+<![CDATA[审批日期]]></O>
+<Expand/>
+</C>
+<C c="5" r="9" cs="2" s="2">
+<O>
+<![CDATA[审批意见]]></O>
+<Expand/>
+</C>
+<C c="7" r="9" s="2">
+<O>
+<![CDATA[审批结果]]></O>
+<Expand/>
+</C>
+<C c="1" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="row_num"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="act_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="emp_name"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="10" s="6">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="end_date"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="10" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="approve_comment"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="tsk" columnName="result"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="11" cs="7" s="2">
+<O>
+<![CDATA[以下内容由财务人员负责填写]]></O>
+<Expand/>
+</C>
+<C c="1" r="12" s="2">
+<O>
+<![CDATA[付款银行：]]></O>
+<Expand/>
+</C>
+<C c="2" r="12" s="3">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="3" r="12" cs="2" s="2">
+<O>
+<![CDATA[网银编号：]]></O>
+<Expand/>
+</C>
+<C c="5" r="12" s="3">
+<Expand/>
+</C>
+<C c="6" r="12" s="3">
+<Expand/>
+</C>
+<C c="7" r="12" s="3">
+<Expand/>
+</C>
+<C c="1" r="13" s="2">
+<O>
+<![CDATA[操作人：]]></O>
+<Expand/>
+</C>
+<C c="2" r="13" s="3">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="3" r="13" cs="2" s="2">
+<O>
+<![CDATA[授权人：]]></O>
+<Expand/>
+</C>
+<C c="5" r="13" s="3">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="6" r="13" s="2">
+<O>
+<![CDATA[系统编号：]]></O>
+<Expand/>
+</C>
+<C c="7" r="13" s="3">
+<Expand/>
+</C>
+<C c="1" r="14" s="2">
+<O>
+<![CDATA[凭证打印人：]]></O>
+<Expand/>
+</C>
+<C c="2" r="14" s="3">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="3" r="14" cs="2" s="2">
+<O>
+<![CDATA[复核人：]]></O>
+<Expand/>
+</C>
+<C c="5" r="14" s="3">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="6" r="14" s="2">
+<O>
+<![CDATA[会计凭证号：]]></O>
+<Expand/>
+</C>
+<C c="7" r="14" s="3">
+<O t="DSColumn">
+<Attributes dsName="doc" columnName="v_serial_num"/>
+<Complex/>
+<RG class="com.fr.report.cellElement.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="15" s="2">
+<O>
+<![CDATA[备注]]></O>
+<Expand/>
+</C>
+<C c="2" r="15" cs="6" s="3">
+<Expand/>
+</C>
+<C c="2" r="17">
+<Expand/>
+</C>
+</CellElementList>
+</ElementCase>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="1" size="128"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="4">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#,##0.00]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="4">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0">
+<Format class="java.text.SimpleDateFormat">
+<![CDATA[yyyy-MM-dd]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

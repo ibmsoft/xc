@@ -1,0 +1,5 @@
+{
+	po_pur_po_com_lov_dim_name:'名称',
+  	po_pur_po_com_lov_dim_code:'编码',
+  	po_pur_po_com_lov_dim_name_code:'输入编码或名称'
+}

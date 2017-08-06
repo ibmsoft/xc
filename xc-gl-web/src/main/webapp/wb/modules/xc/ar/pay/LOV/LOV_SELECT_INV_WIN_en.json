@@ -1,0 +1,36 @@
+{
+  CONTRACT				: "Contract",
+  CONTRACT_EMPTY_TEXT	: "Code/Name",
+  DEPT					: "Department",
+  PROJECT				: "Project",
+  GL_DATE				: "Business Date",
+  DESCRIPTION			: "Description",
+  
+  queryBtn				: "Query",
+  resetBtn				: "Reset",
+  okBtn					: "OK",
+  cancelBtn				: "Cancel",
+  
+  rownum				: "No.",
+  GL_DATE_COL			: "Business Date",
+  AR_INV_GL_H_CODE_COL	: "Accounts Receivable Code",	
+  DESCRIPTION_COL		: "Description",
+  INV_AMOUNT_COL		: "Total Tax",
+  NO_PAY_AMT_COL		: "Receivable Balance",
+  JS_AMOUNT_COL			: "Balance Of Settlement",
+  AR_CONTRACT_NAME_COL	: "Contract",
+  DEPT_NAME_COL			: "Department",
+  PROJECT_NAME_COL		: "Project",
+  AR_ACC_NAME_DEBT_COL	: "Subject",
+  AR_CCID_NAME_DEBT_COL	: "Subject Composition",
+  FIELDSET1_TITLE		: "Query Conditions",
+  
+  qzsxzytjl				: "Please select at least 1 records!",
+  jsjebyxwk				: "Settlement amount is not allowed to be empty!",
+  jsjebyxwl				: "Settlement amount is not allowed to 0!",
+  qdyxzd				: "Are you sure you want to choose",
+  tjlm					: "records?",
+  jsjebkxyl				: "Settlement amount is not less than 0!",
+  jsjebkcgysye			: "The amount of the balance is not more than the balance of the accounts receivable!",
+  jsjebkdyl				: "Settlement amount is not greater than 0!"
+}

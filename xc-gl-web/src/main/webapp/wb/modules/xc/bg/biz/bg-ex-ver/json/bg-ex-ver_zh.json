@@ -1,0 +1,61 @@
+{
+    LEDGER_NAME : "账簿",
+    org_com : "组织",
+    bg_ver_period_com : "会计年度",
+  
+    LEDGER_NAME_EMPYT : "请选择账簿进行查询",
+	
+	selBtn : "查询",
+	resetBtn : "重置",
+    cancelsBtn : "清空",
+  
+	addBtn : "新增",
+	editBtn : "修改",
+	delBtn : "删除",
+	effectButton : "生效",
+	budgetButton : "查看预算",
+	saveBtn : "保存",
+	cancelBtn : "取消",
+	
+    number : "序号",
+	BG_VER_CODE : "版本编码",
+	BG_VER_NAME : "版本名称",
+	BG_VER_DESC : "版本描述",
+	START_DATE : "开始日期",
+	END_DATE : "结束日期",
+	IS_VALID : "是否生效",
+  
+    addRec1 : "增加费用预算版本",
+  
+    editRec1 : "请选择账簿进行查询！",
+    editRec2 : "请选择一条需要修改的记录！",
+    editRec3 : "修改费用预算版本",
+  
+    deleteRec1 : "请选择一条需要修改的记录！",
+    deleteRec2 : "确定要删除选择的",
+    deleteRec3 : "吗？",
+    deleteRec4 : "费用预算版本",
+    deleteRec5 : "删除成功！",
+  
+    effectRec1 : "请选择一条需要生效的记录！",
+    effectRec2 : "费用预算版本",
+    effectRec3 : "已经生效！",
+  
+    seekRec1 : "请选择一条需要查看预算的记录！",
+    seekRec2 : "费用预算汇总",
+  
+    saveInfo1 : "账簿不能为空！请重新输入！",
+    saveInfo2 : "会计年度不能为空！请重新输入！",
+    saveInfo3 : "版本编码不能为空！请重新输入！",
+    saveInfo4 : "版本名称不能为空！请重新输入！",
+    saveInfo5 : "结束日期不能小于开始日期，请重新输入！",
+    saveInfo6 : "数据新增成功！",
+    saveInfo7 : "数据修改成功！",
+  
+    BG_ITEM_NAME_COL : "预算项目",
+    DEPT_NAME_COL : "成本中心",
+    BG_YEAR_COL : "年度",
+    PERIOD_CODE_COL : "月度",
+    BG_AMT_COL : "金额",
+    BG_DTL_DESC_COL : "说明"
+}

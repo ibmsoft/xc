@@ -1,0 +1,11 @@
+{
+	seek:'查看',
+  	seekMsg1:'请选择 1 条记录',
+  	seekMsg2:'未知单据',
+  	date:'日期',
+  	description:'摘要',
+  	code:'单据号',
+  	type:'单据类型',
+  	applyAmt:'申请金额',
+  	payAmt:'付款金额'
+}

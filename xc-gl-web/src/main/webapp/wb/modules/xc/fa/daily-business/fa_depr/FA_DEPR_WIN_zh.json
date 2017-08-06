@@ -1,0 +1,10 @@
+{
+  LEDGER_NAME:'账簿',
+  PERIOD_CODE:'期间',
+  ZJFF:'折旧方法',
+  YZ:'原值',
+  JZZB:'减值准备',
+  CZ:'残值',
+  LJZJ_LJTX:'累计折旧、分摊',
+  BQZJ:'本期折旧'
+}

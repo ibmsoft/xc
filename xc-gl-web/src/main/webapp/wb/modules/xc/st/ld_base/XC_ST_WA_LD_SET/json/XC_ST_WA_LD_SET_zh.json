@@ -1,0 +1,19 @@
+{
+    XC_ST_WA_LD_SET_searchButton			: '查询',
+    XC_ST_WA_LD_SET_resetButton				: '重置',
+    XC_ST_WA_LD_SET_NUMBER_COL				: '序号',
+    XC_ST_WA_LD_SET_AP_PUR_TYPE_NAME		: '采购分类',
+    XC_ST_WA_LD_SET_AP_ACC_ID_INV_NAME		: '存货/费用科目',
+    XC_ST_WA_LD_SET_saveBtn					: '保存',
+    XC_ST_WA_LD_SET_AP_PUR_TYPE_NAME_1		: '财务分类',
+    XC_ST_WA_LD_SET_ACC_CODE				: '科目编码',
+    XC_ST_WA_LD_SET_ACC_NAME				: '科目名称',
+    XC_ST_WA_LD_SET_ACC_CODE_NAME			: '科目编码/名称',
+    XC_ST_WA_LD_SET_qxzck					: '请选择仓库！',
+    XC_ST_WA_LD_SET_qxzxytbdsj				: '请选择需要同步的数据！',
+    XC_ST_WA_LD_SET_tbcg					: '同步成功！',
+    XC_ST_WA_LD_SET_qxzxyscdsj				: '请选择需要删除的数据！',
+    XC_ST_WA_LD_SET_sccg					: '删除成功！',
+    XC_ST_WA_LD_SET_mysjxybc				: '没有数据需要保存！',
+    XC_ST_WA_LD_SET_sjbccg					: '数据保存成功！'
+}

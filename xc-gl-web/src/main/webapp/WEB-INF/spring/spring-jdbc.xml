@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+				        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<bean id="xipDefaultDS" class="com.alibaba.druid.pool.DruidDataSource">
+
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- ERP测试库 -->
+		<!-- <property name="url" value="jdbc:mysql://10.170.219.245:3306/xsr_uat?allowMultiQueries=true" />
+		<property name="username" value="xsr" />
+		<property name="password" value="YLb3LTYiVVQ7iq1z1DWy6FMv70O4FqGZK/8AxixGVIGMue04HbLXI2CstV7rbm4PogBC1GXVje9ORpCctAVPmg==" />
+		 -->
+		<property name="url" value="jdbc:mysql://xzsoft.cc:3306/xsr_uat?allowMultiQueries=true" />
+		<property name="username" value="xsr" />
+		<property name="password" value="YLb3LTYiVVQ7iq1z1DWy6FMv70O4FqGZK/8AxixGVIGMue04HbLXI2CstV7rbm4PogBC1GXVje9ORpCctAVPmg==" />
+		
+		<!-- 本地 -->
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/xsr_uat?allowMultiQueries=true" />
+		<property name="username" value="root" />
+		<property name="password" value="gMBursD7fz9huNSXZ/HcIuntyk8jBBc3WRFIjvxXFLswz5QaAhXBHTAOjZQdh/zcZIHQPVMuxLTOiIWIf1MINA==" />
+		 -->
+		<!-- 产品库 -->
+		<!-- <property name="url" value="jdbc:mysql://xzsoft.cc:3308/xz?allowMultiQueries=true" />
+		<property name="username" value="xc" />
+		<property name="password" value="klhBw03x0oacBnyozrTiUE8zaVO3065Pu9v221rWtVh4JcPM1nwqYDqrwPdiyxOr9qD6fxS8QxTvKcPIAQdF3g==" />
+		 -->
+		<!-- X-Cloud云ERP系统  -->
+		<!-- <property name="url" value="jdbc:mysql://192.168.100.9:13306/erp?allowMultiQueries=true"/>  
+	    <property name="username" value="erp"/>  
+	    <property name="password" value="P5xguuKhApoj22p9ml9tWYUyHQYCh6gbhJABK6CQF58Jo+Jf7Ri2UCSPBJxF5HWC+B6wAaZlnxEl5hhncVfg/A=="/>
+	     -->
+		<property name="connectionProperties" value="config.decrypt=true" />
+		<property name="filters" value="config" />
+		<property name="maxActive" value="10" />
+		<property name="initialSize" value="5" />
+		<property name="poolPreparedStatements" value="false"></property>
+		<property name="maxOpenPreparedStatements" value="200" />
+		<property name="validationQuery" value="select 1 from wb_dual" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+	</bean>
+
+</beans>

@@ -1,0 +1,38 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cubedrive.sheet.persistence.sheet.SheetStyleMapper">
+
+	<resultMap id="sheetStyleMap" type="com.cubedrive.sheet.domain.sheet.SheetStyle">
+		<id column="sheet_styles_document_id" property="documentId" jdbcType="INTEGER" />
+		<id column="sheet_styles_hash_id" property="hashId" jdbcType="INTEGER" />
+		<result column="sheet_styles_style" property="style" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="sheet_style_column_list">
+		sheet_styles.document_id as sheet_styles_document_id,
+		sheet_styles.hash_id as sheet_styles_hash_id,
+		sheet_styles.style as sheet_styles_style
+	</sql>
+	
+	<insert id="insert" parameterType="com.cubedrive.sheet.domain.sheet.SheetStyle">
+		insert into sheet_styles(document_id, hash_id, style) 
+		values(#{documentId,jdbcType=INTEGER}, #{hashId, jdbcType=INTEGER}, #{style,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="batchInsert">
+		insert into sheet_styles(document_id, hash_id, style) values
+		<foreach collection="sheetStyles" item="sheetStyle" index="index" separator=",">
+			(#{sheetStyle.documentId,jdbcType=INTEGER}, #{sheetStyle.hashId, jdbcType=INTEGER}, #{sheetStyle.style,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+
+	<select id="findByDocumentId" parameterType="java.lang.Integer" resultMap="sheetStyleMap">
+		select <include refid="sheet_style_column_list" /> from sheet_styles where document_id=#{documentId}
+	</select>
+	
+	<delete id="deleteByDocumentId" parameterType="java.lang.Integer">
+		delete from sheet_styles where document_id=#{documentId}
+	</delete>
+	
+</mapper>

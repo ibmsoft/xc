@@ -1,0 +1,32 @@
+{
+  queryBtn				: "查询",
+  clearBtn				: "重置",
+  commitBtn				: "确认",
+  closeBtn				: "取消",
+  
+  AP_CONTRACT_NAME		: "合同编号/名称",
+  AP_PAY_REQ_H_CODE		: "单据编号/名称",
+  CREATED_BY_NAME		: "制单人",
+  
+  BIZ_DATE_COL			: "业务日期",
+  AP_PAY_REQ_H_CODE_COL	: "申请单编号",
+  DESCRIPTION_COL		: "申请单摘要",
+  AMOUNT_COL			: "金额",
+  PAID_AMT_COL			: "已支付金额",
+  NO_PAY_AMT_COL		: "可支付金额",
+  PAY_AMT_COL			: "支付金额",
+  AP_INV_GL_H_CODE_COL	: "应付单号",
+  GL_DESCRIPTION_COL	: "应付单摘要",
+  AP_CONTRACT_NAME_COL	: "合同",
+  DEPT_NAME_COL			: "成本中心",
+  PROJECT_NAME_COL		: "项目",
+  AP_ACC_NAME_DEBT_COL	: "应付科目",
+  
+  qzsxzytjl				: "请选择至少一条记录！",
+  zfjebnwk				: "支付金额不能为空！",
+  zfjebnwl				: "支付金额不能为 0 ！",
+  qdyxzd				: "确定要选择的",
+  tjlm					: "条记录吗？",
+  zfjebkcgkzfje			: "支付金额不可超过可支付金额！",
+  zfjeydyl				: "支付金额应大于 0 ！"
+}

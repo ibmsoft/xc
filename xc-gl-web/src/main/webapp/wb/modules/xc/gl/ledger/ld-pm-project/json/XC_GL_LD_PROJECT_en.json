@@ -1,0 +1,31 @@
+{
+  LEDGER_NAMES : 'Ledger Name',
+  LedgerNameLW : 120,
+  controlTree:'Content',
+  importBtn:'Import',
+  exportBtn:'Export',
+  propertyBtn:'Budget Setting',
+  seekBudgetBtn:'View Budget',
+  rownum:'Order',
+  PROJECT_CODE_COL:'Project Code',
+  PROJECT_NAME_COL:'Project Name',
+  START_DATE_COL:'Start Date',
+  END_DATE_COL:'End Date',
+  addBtn:'New Line',
+  delBtn:'Del Line',
+  saveBtn:'Save',
+  DEPT_NAME_COL:'Department',
+  Project Manager:'Project Manager',
+  
+  BG_ITEM_NAME_COL:'Budget Item',
+  BG_AMT_COL:'Amount',
+  BG_ITEM_DESC_COL:'Description',
+  
+  importDataWin:'Import Projects',
+  selectFile:'Select File',
+  importFile:'Import',
+  IS_BG_CTRL:'Enable Budget Ctrl',
+  E_MSG:'Error Message',
+  importLogGrid:'Logging Information',
+  project:'project'
+}

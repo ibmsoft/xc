@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsoft.xsr.core.mapper.ReceiveNBDataMapper">
+	<!-- 判断临时表是否有数据 -->
+	<select id="getRepCodeById" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		(select modaltype_code from xsr_rep_modaltype where
+		modaltype_id=#{modalTypeId}) MODALTYPE_CODE,
+		(select modalsheet_code
+		from xsr_rep_modalsheet where
+		modalsheet_id=#{modalSheetId})
+		MODALSHEET_CODE,
+		(select org_code from xip_pub_orgs where
+		org_id=#{entityId}) ENTITY_CODE,
+		(select period_code from
+		xsr_rep_period where period_id=#{periodId})
+		PERIOD_CODE,
+		(select
+		CURRENCY_CODE from xsr_rep_currency where
+		CURRENCY_ID=#{cnyId})
+		CURRENCY_CODE
+		from dual
+	</select>
+	<!-- 判断临时表是否有数据 -->
+	<select id="IsHaveTempDate" parameterType="java.util.HashMap"
+		resultType="int">
+		SELECT (SELECT
+		count(1)
+		FROM
+		xsr_rep_inner_data_temp T
+		WHERE
+		T.SUIT_ID =#{suitId}
+		AND T.ENTITY_ID = #{entityId}
+		AND T.PERIOD_ID =
+		#{periodId}
+		AND T.CURRENCY_ID = #{cnyId}
+		AND T.MODALTYPE_ID =
+		#{modalTypeId}
+		AND T.MODALSHEET_ID = #{modalSheetId}
+		AND T.ERROR_FLAG =
+		'0')+(SELECT
+		count(1)
+		FROM
+		xsr_rep_inner_data__fj_temp T
+		WHERE
+		T.SUIT_ID
+		=#{suitId}
+		AND T.ENTITY_ID =#{entityId}
+		AND T.PERIOD_ID =#{periodId}
+		AND
+		T.CURRENCY_ID =#{cnyId}
+		AND T.MODALTYPE_ID =#{modalTypeId}
+		AND
+		T.MODALSHEET_ID =#{modalSheetId}
+		AND T.ERROR_FLAG = '0') from dual
+	</select>
+	<!-- 查询报表状态 -->
+	<select id="getSheetStatus" parameterType="java.util.HashMap"
+		resultType="string">
+		SELECT T.APP_STATUS
+		FROM XSR_REP_SHEETS T
+		WHERE
+		T.SUIT_ID=#{suitId}
+		AND T.ENTITY_ID =#{entityId}
+		AND T.PERIOD_ID
+		=#{periodId}
+		AND T.CURRENCY_ID =#{cnyId}
+		AND T.MODALTYPE_ID
+		=#{modalTypeId}
+		AND T.MODALSHEET_ID =#{modalSheetId}
+	</select>
+	<!-- 插入报表状态表 -->
+	<insert id="insertSheets" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_SHEETS (
+		SHEET_ID,
+		SUIT_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		MODALTYPE_CODE,
+		MODALSHEET_CODE,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		CURRENCY_CODE,
+		APP_STATUS,
+		COMMIT_STATUS,
+		IMPTYPE,
+		INER_IMPTIMES,
+		INER_IMPLASTDATE,
+		INER_IMPER,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		)
+		SELECT
+		UUID(),
+		#{suitId},
+		#{modalTypeId},
+		#{modalSheetId},
+		#{entityId},
+		#{periodId},
+		#{cnyId},
+		#{modalTypeCode},
+		#{modalSheetCode},
+		#{entityCode},
+		#{periodCode},
+		#{cnyCode},
+		'E',
+		'N',
+		'1',
+		'1',
+		SYSDATE(),
+		#{userId},
+		SYSDATE(),
+		#{userId},
+		SYSDATE(),
+		#{userId},
+		SYSDATE()
+		FROM
+		DUAL;
+	</insert>
+	<!-- 修改报表状态表 -->
+	<update id="updateSheets" parameterType="java.util.HashMap">
+		UPDATE XSR_REP_SHEETS T
+		SET T.LAST_UPDATE_DATE =SYSDATE(),
+		t.LAST_UPDATED_BY =#{userId},
+		T.APP_STATUS = 'E',
+		T.COMMIT_STATUS = 'N',
+		T.INER_IMPTIMES =
+		IFNULL(T.INER_IMPTIMES, 0) + 1,
+		T.INER_IMPLASTDATE = SYSDATE(),
+		T.INER_IMPER= #{userId},
+		T.IMPTYPE = '1'
+		WHERE
+		T.SUIT_ID=#{suitId}
+		AND
+		T.ENTITY_ID=#{entityId}
+		AND T.PERIOD_ID =#{periodId}
+		AND
+		T.CURRENCY_ID=#{cnyId}
+		AND T.MODALTYPE_ID =#{modalTypeId}
+		AND
+		T.MODALSHEET_ID=#{modalSheetId}
+	</update>
+	<!-- 删除固定行数据 -->
+	<delete id="deleteCellValue" parameterType="java.util.HashMap">
+		DELETE T FROM
+		XSR_REP_CELLVALUE T
+		WHERE T.SUIT_ID=#{suitId}
+		AND
+		T.ENTITY_ID=#{entityId}
+		AND T.PERIOD_ID =#{periodId}
+		AND
+		T.CURRENCY_ID=#{cnyId}
+		AND EXISTS (SELECT 1
+		FROM
+		XSR_REP_ROWMODALREF R
+		WHERE R.SUIT_ID = T.SUIT_ID
+		AND R.ROWITEM_ID =
+		T.ROWITEM_ID
+		AND R.SUIT_ID = #{suitId}
+		AND R.MODALTYPE_ID =
+		#{modalTypeId}
+		AND R.MODALSHEET_ID = #{modalSheetId})
+		AND EXISTS (SELECT
+		1
+		FROM XSR_REP_COLMODALREF C
+		WHERE C.SUIT_ID = T.SUIT_ID
+		AND C.COLITEM_ID
+		= T.COLITEM_ID
+		AND C.SUIT_ID = #{suitId}
+		AND C.MODALTYPE_ID =
+		#{modalTypeId}
+		AND C.MODALSHEET_ID = #{modalSheetId})
+	</delete>
+	<!-- 删除浮动行数据 -->
+	<delete id="deleteFJCellValue" parameterType="java.util.HashMap">
+		DELETE T FROM
+		XSR_REP_FJ_CELLVALUE T
+		WHERE T.SUIT_ID=#{suitId}
+		AND
+		T.ENTITY_ID=#{entityId}
+		AND T.PERIOD_ID =#{periodId}
+		AND
+		T.CURRENCY_ID=#{cnyId}
+		AND T.MODALSHEET_ID=#{modalSheetId}
+		AND
+		EXISTS (SELECT 1
+		FROM XSR_REP_ROWMODALREF R
+		WHERE R.SUIT_ID = T.SUIT_ID
+		AND R.ROWITEM_ID = T.ROWITEM_ID
+		AND R.SUIT_ID = #{suitId}
+		AND
+		R.MODALTYPE_ID = #{modalTypeId}
+		AND R.MODALSHEET_ID = #{modalSheetId})
+	</delete>
+	<!-- 插入固定行数据 -->
+	<insert id="insertCellValue" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_CELLVALUE
+		(CELLV_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		ROWITEM_ID,
+		COLITEM_ID,
+		CURRENCY_ID,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		ROWITEM_CODE,
+		COLITEM_CODE,
+		CURRENCY_CODE,
+		CELLV,
+		CELLTEXTV,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		)
+		SELECT
+		UUID(),
+		T.SUIT_ID,
+		T.ENTITY_ID,
+		T.PERIOD_ID,
+		T.ROWITEM_ID,
+		T.COLITEM_ID,
+		T.CURRENCY_ID,
+		T.ENTITY_CODE,
+		T.PERIOD_CODE,
+		T.ROWITEM_CODE,
+		T.COLITEM_CODE,
+		T.CURRENCY_CODE,
+		if(T.DATA_TYPE='3',T.CELLVALUE,NULL),
+		if(T.DATA_TYPE='3',NULL,T.CELLVALUE),
+		SYSDATE(),
+		#{userId},
+		SYSDATE(),
+		#{userId},
+		SYSDATE()
+		FROM
+		xsr_rep_inner_data_temp T
+		WHERE  T.SUIT_ID=#{suitId}
+		AND T.ENTITY_ID =#{entityId}
+		AND T.PERIOD_ID
+		=#{periodId}
+		AND T.CURRENCY_ID =#{cnyId}
+		AND T.MODALTYPE_ID
+		=#{modalTypeId}
+		AND T.MODALSHEET_ID =#{modalSheetId}
+		AND T.ERROR_FLAG =
+		'0'
+	</insert>
+	<!-- 插入浮动行数据 -->
+	<insert id="insertFJCellValue" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_FJ_CELLVALUE
+		(FJ_CELLV_ID,
+		SUIT_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		ROWITEM_ID,
+		MODALSHEET_ID,
+		ENTITY_CODE,
+		PERIOD_CODE,
+		CURRENCY_CODE,
+		ROWITEM_CODE,
+		ROWNUMDTL,
+		SAVEFLAG,
+		DATA1,
+		DATA2,
+		DATA3,
+		DATA4,
+		DATA5,
+		DATA6,
+		DATA7,
+		DATA8,
+		DATA9,
+		DATA10,
+		DATA11,
+		DATA12,
+		DATA13,
+		DATA14,
+		DATA15,
+		DATA16,
+		DATA17,
+		DATA18,
+		DATA19,
+		DATA20,
+		DATA21,
+		DATA22,
+		DATA23,
+		DATA24,
+		DATA25,
+		DATA26,
+		DATA27,
+		DATA28,
+		DATA29,
+		DATA30,
+		DATA31,
+		DATA32,
+		DATA33,
+		DATA34,
+		DATA35,
+		DATA36,
+		DATA37,
+		DATA38,
+		DATA39,
+		DATA40,
+		DATA41,
+		DATA42,
+		DATA43,
+		DATA44,
+		DATA45,
+		DATA47,
+		DATA48,
+		DATA49,
+		DATA50,
+		DATA51,
+		DATA52,
+		DATA53,
+		DATA54,
+		DATA55,
+		DATA56,
+		DATA58,
+		DATA59,
+		DATA60,
+		DATA61,
+		DATA62,
+		DATA63,
+		DATA65,
+		DATA66,
+		DATA67,
+		DATA68,
+		DATA69,
+		DATA70,
+		DATA71,
+		DATA73,
+		DATA74,
+		DATA75,
+		DATA76,
+		DATA77,
+		DATA78,
+		DATA79,
+		DATA80,
+		DATA82,
+		DATA83,
+		DATA84,
+		DATA85,
+		DATA86,
+		DATA87,
+		DATA88,
+		DATA89,
+		DATA90,
+		DATA91,
+		DATA92,
+		DATA93,
+		DATA94,
+		DATA95,
+		DATA96,
+		DATA97,
+		DATA98,
+		DATA99,
+		DATA100,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_LOGIN
+		)
+		SELECT UUID(),
+		T.SUIT_ID,
+		T.ENTITY_ID,
+		T.PERIOD_ID,
+		T.CURRENCY_ID,
+		T.ROWITEM_ID,
+		T.MODALSHEET_ID,
+		T.ENTITY_CODE,
+		T.PERIOD_CODE,
+		T.CURRENCY_CODE,
+		T.ROWITEM_CODE,
+		T.ROWNUMDTL,
+		1,
+		T.DATA1,
+		T.DATA2,
+		T.DATA3,
+		T.DATA4,
+		T.DATA5,
+		T.DATA6,
+		T.DATA7,
+		T.DATA8,
+		T.DATA9,
+		T.DATA10,
+		T.DATA11,
+		T.DATA12,
+		T.DATA13,
+		T.DATA14,
+		T.DATA15,
+		T.DATA16,
+		T.DATA17,
+		T.DATA18,
+		T.DATA19,
+		T.DATA20,
+		T.DATA21,
+		T.DATA22,
+		T.DATA23,
+		T.DATA24,
+		T.DATA25,
+		T.DATA26,
+		T.DATA27,
+		T.DATA28,
+		T.DATA29,
+		T.DATA30,
+		T.DATA31,
+		T.DATA32,
+		T.DATA33,
+		T.DATA34,
+		T.DATA35,
+		T.DATA36,
+		T.DATA37,
+		T.DATA38,
+		T.DATA39,
+		T.DATA40,
+		T.DATA41,
+		T.DATA42,
+		T.DATA43,
+		T.DATA44,
+		T.DATA45,
+		T.DATA47,
+		T.DATA48,
+		T.DATA49,
+		T.DATA50,
+		T.DATA51,
+		T.DATA52,
+		T.DATA53,
+		T.DATA54,
+		T.DATA55,
+		T.DATA56,
+		T.DATA58,
+		T.DATA59,
+		T.DATA60,
+		T.DATA61,
+		T.DATA62,
+		T.DATA63,
+		T.DATA65,
+		T.DATA66,
+		T.DATA67,
+		T.DATA68,
+		T.DATA69,
+		T.DATA70,
+		T.DATA71,
+		T.DATA73,
+		T.DATA74,
+		T.DATA75,
+		T.DATA76,
+		T.DATA77,
+		T.DATA78,
+		T.DATA79,
+		T.DATA80,
+		T.DATA82,
+		T.DATA83,
+		T.DATA84,
+		T.DATA85,
+		T.DATA86,
+		T.DATA87,
+		T.DATA88,
+		T.DATA89,
+		T.DATA90,
+		T.DATA91,
+		T.DATA92,
+		T.DATA93,
+		T.DATA94,
+		T.DATA95,
+		T.DATA96,
+		T.DATA97,
+		T.DATA98,
+		T.DATA99,
+		T.DATA100,
+		SYSDATE(),
+		#{userId},
+		SYSDATE(),
+		#{userId},
+		SYSDATE()
+		FROM
+		xsr_rep_inner_data__fj_temp T
+		WHERE T.SUIT_ID=#{suitId}
+		AND T.ENTITY_ID
+		=#{entityId}
+		AND T.PERIOD_ID
+		=#{periodId}
+		AND T.CURRENCY_ID =#{cnyId}
+		AND
+		T.MODALTYPE_ID
+		=#{modalTypeId}
+		AND T.MODALSHEET_ID =#{modalSheetId}
+		AND
+		T.ERROR_FLAG =
+		'0'
+	</insert>
+	<!-- 删除已经接收的临时表数据 -->
+	<delete id="deleteTempDate" parameterType="java.util.HashMap">
+		DELETE T FROM
+		xsr_rep_inner_data_temp T
+		WHERE
+		T.SUIT_ID=#{suitId}
+		AND T.ENTITY_ID =#{entityId}
+		AND T.PERIOD_ID
+		=#{periodId}
+		AND
+		T.CURRENCY_ID =#{cnyId}
+		AND T.MODALTYPE_ID
+		=#{modalTypeId}
+		AND
+		T.MODALSHEET_ID =#{modalSheetId}
+	</delete>
+	<!-- 删除已经接收的临时表数据 -->
+	<delete id="deleteFJTempDate" parameterType="java.util.HashMap">
+		DELETE T FROM
+		xsr_rep_inner_data__fj_temp T
+		WHERE
+		T.SUIT_ID=#{suitId}
+		AND T.ENTITY_ID =#{entityId}
+		AND T.PERIOD_ID
+		=#{periodId}
+		AND
+		T.CURRENCY_ID =#{cnyId}
+		AND T.MODALTYPE_ID
+		=#{modalTypeId}
+		AND
+		T.MODALSHEET_ID =#{modalSheetId}
+	</delete>
+	<!-- 插入错误日志 -->
+	<insert id="insertImpLog" parameterType="java.util.HashMap">
+		INSERT INTO
+		XSR_REP_JK_SYNDATA_LOG
+		(JKLOG_ID,
+		ENTITY_ID,
+		PERIOD_ID,
+		CURRENCY_ID,
+		LOG_TYPE,
+		SUIT_ID,
+		MODALTYPE_ID,
+		MODALSHEET_ID,
+		MESSAGE,
+		BAT_ID,
+		CREATION_DATE,
+		CREATED_BY,
+		LAST_UPDATE_DATE,
+		LAST_UPDATED_BY,
+		LAST_UPDATE_LOGIN
+		)
+		VALUES
+		(UUID(),
+		#{entityId},
+		#{periodId},
+		#{cnyId},
+		'2',
+		#{suitId},
+		#{modalTypeId},
+		#{modalSheetId},
+		#{msg},
+		'',
+		SYSDATE(),
+		#{userId},
+		SYSDATE(),
+		#{userId},
+		SYSDATE())
+	</insert>
+</mapper>

@@ -1,0 +1,22 @@
+{
+  moduleTitle:"Account Group",
+  codeName:"Acount Code/Name",
+  enterTip:"Press Enter Key For Seeking",
+  addBtn:"Add",
+  delBtn:"Delete",
+  saveBtn:"Save",
+  importBtn:"Import",
+  exprotBtn:"Export",
+  rownum:"NO",
+  accCode:"Account Code",
+  accGroupName:"Account Name",
+  accGroupDesc:"Description",
+  
+  importTitle:"Importing The Data Of Account Group",
+  fileTip:"Please Select Microsoft Office Excel Document",
+  fileName:"<font color='red'>*</font>File",
+  importLogs:"Importing Logs",
+  incorrectColumn:"Incorrect No",
+  errorInformation:"Error Information",
+  labelWidth:130
+}

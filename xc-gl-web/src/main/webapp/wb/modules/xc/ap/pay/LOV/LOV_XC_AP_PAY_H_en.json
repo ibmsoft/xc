@@ -1,0 +1,33 @@
+{
+  queryBtn				: "Search",
+  clearBtn				: "Reset",
+  commitBtn				: "Sure",
+  closeBtn				: "Cancel",
+  
+  AP_CONTRACT_NAME		: "Contract Code/Name",
+  AP_PAY_H_CODE			: "Document Code/Name",
+  CREATED_BY_NAME		: "DocumentMaker",
+  AP_DOC_CAT_CODE		: "",
+  LEDGER_ID				: "",
+  
+  GL_DATE_COL			: "Business Date",
+  AP_PAY_H_CODE_COL		: "Payment Order Code",
+  AP_INV_GL_H_CODE_COL	: "Need Pay Document Code",
+  DESCRIPTION_COL		: "Description",
+  AP_CONTRACT_NAME_COL	: "Contract",
+  DEPT_NAME_COL			: "Cost Center",
+  PROJECT_NAME_COL		: "Project",
+  ACC_NAME_COL			: "Subjects auxiliary items",
+  AMOUNT_COL			: "Amount",
+  NO_CANCEL_AMT_COL		: "Refundable Amount",
+  PAY_AMT_COL			: "Refund Amount",
+  
+  qzsxzytjl				: "Please select at least one record!",
+  tkjebnwk				: "Refund amount can not be empty!",
+  tkjebnwl				: "Refund amount can not be 0!",
+  qdyxzd				: "Are you sure you want to choose",
+  tjlm					: "records?",
+  yfkmxznyyt			: "Advance payment details can only choose one!",
+  tkjeyxyktkje			: "Refund amount should be less than the amount of money that can be refunded!",
+  tkjeydyl				: "Refund amount should be greater than 0!"
+}

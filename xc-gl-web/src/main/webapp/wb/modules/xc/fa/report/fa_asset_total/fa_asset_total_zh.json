@@ -1,0 +1,15 @@
+{
+	ledger:'账簿',
+  	period:'会计期',
+  	to:'至',
+  	dept:'成本中心',
+  	type:'分类',
+  	typeTotal:'分类汇总级次',
+  	query:'查询',
+  	reset:'重置',
+  	msg1:'请先选择账簿！',
+  	property:'属性',
+  	msg2:'请先选择会计期',
+  	msg3:'请选择成本中心！',
+  	msg4:'请先选择属性!'
+}

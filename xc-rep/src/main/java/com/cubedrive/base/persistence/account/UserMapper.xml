@@ -1,0 +1,45 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cubedrive.base.persistence.account.UserMapper">
+
+	<resultMap id="userMap" type="com.cubedrive.base.domain.account.User">
+		<id column="user_id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="username" jdbcType="VARCHAR" />
+		<result column="first_name" property="firstname" jdbcType="VARCHAR" />
+		<result column="last_name" property="lastname" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<association property="setting" column="user_id" select="com.cubedrive.base.persistence.account.UserSettingMapper.load" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		user.user_id,user.user_name,user.first_name,user.last_name,user.email
+	</sql>
+
+	<insert id="insertUser">
+		<selectKey resultType="java.lang.Integer" keyProperty="user.id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		user(user_name,first_name,last_name,email)
+		values(#{user.username,jdbcType=VARCHAR},#{user.passwd,jdbcType=VARCHAR},
+		#{user.firstname,jdbcType=VARCHAR},#{user.lastname,jdbcType=VARCHAR},#{user.email,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="getById" parameterType="java.lang.Integer"
+		resultMap="userMap">
+		select
+		<include refid="base_column_list" />
+		from user
+		where user.user_id=#{userId}
+	</select>
+
+	<select id="getByUsername" resultMap="userMap" 	parameterType="java.lang.String">
+		select
+		<include refid="base_column_list" />
+		from user
+		where user.user_name=#{username}
+	</select>
+	
+
+</mapper>

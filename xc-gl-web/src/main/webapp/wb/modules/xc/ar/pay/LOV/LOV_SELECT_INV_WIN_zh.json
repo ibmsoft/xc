@@ -1,0 +1,38 @@
+{
+  CONTRACT				: "合同",
+  CONTRACT_EMPTY_TEXT	: "编码/名称",
+  DEPT					: "部门",
+  PROJECT				: "项目",
+  GL_DATE				: "业务日期",
+  DESCRIPTION			: "摘要",
+  
+  queryBtn				: "查询",
+  resetBtn				: "重置",
+  okBtn					: "确认",
+  cancelBtn				: "取消",
+  
+  rownum				: "序号",
+  GL_DATE_COL			: "业务日期",
+  AR_INV_GL_H_CODE_COL	: "应收单编码",	
+  DESCRIPTION_COL		: "摘要",
+  INV_AMOUNT_COL		: "价税合计",
+  NO_PAY_AMT_COL		: "应收余额",
+  JS_AMOUNT_COL			: "结算金额",
+  AR_CONTRACT_NAME_COL	: "合同",
+  DEPT_NAME_COL			: "部门",
+  PROJECT_NAME_COL		: "项目",
+  AR_ACC_NAME_DEBT_COL	: "科目",
+  AR_CCID_NAME_DEBT_COL	: "科目组合",
+  FIELDSET1_TITLE		: "查询条件",
+  
+  qzsxzytjl				: "请至少选择 1 条记录！",
+  jsjebyxwk				: "结算金额不允许为空！",
+  jsjebyxwl				: "结算金额不允许为 0 ！",
+  qdyxzd				: "确定要选择的",
+  tjlm					: "条记录吗？",
+  jsjebkxyl				: "结算金额不可小于0！",
+  jsjebkcgysye			: "结算金额不可超过应收余额！",
+  jsjebkdyl				: "结算金额不可大于0！"
+  
+  
+}

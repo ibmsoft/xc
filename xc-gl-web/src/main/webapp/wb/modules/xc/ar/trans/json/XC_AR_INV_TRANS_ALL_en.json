@@ -1,0 +1,13 @@
+{
+    order : "NO",
+    seekBtn : "seek",
+    DESCRIPTION : "Summary",
+    GL_DATE : "Gl Date",
+    SOURCE_CODE : "Doc Num",
+    AR_DOC_CAT_NAME : "Doc Type",
+    JFJE : "Debit Amount",
+    DFJE : "Credit Amount",
+    AMOUNT : "Receivable Balance",
+    total : "Total",
+  	selectRec : "Please select a data that needs to be viewed!"
+}

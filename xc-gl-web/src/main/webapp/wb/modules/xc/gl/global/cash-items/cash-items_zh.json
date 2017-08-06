@@ -1,0 +1,31 @@
+{
+  moduleTitle:"现金流项目管理",
+  la_projectTree:"项目树",
+  la_code:"编码",
+  la_name:"名称",
+  la_direction:"方向",
+  la_startDate:"开始日期",
+  la_endDate:"结束日期",
+  la_upcode:"上级编码",
+  la_isLeaf:"是否为末级",
+  la_necessaryName:"<font color='red'>*</font>现金流量项名称",
+  la_cashItemDirect:"现金流量项方向",
+  la_necessaryCode:"<font color='red'>*</font>现金流量项编码",
+  la_description:"描述",
+  la_level:"级别",
+  
+  cancelBtn:"取消",
+  delBtn:"删除",
+  saveBtn:"保存",
+  importBtn:"导入",
+  exportBtn:"导出",
+  
+  rownum:"序号",
+  la_importTitle:"现金流数据导入",
+  la_fileTip:"请选择Excel文件",
+  la_fileName:"<font color='red'>*</font>选择文件",
+  la_importLogs:"导入日志信息",
+  la_incorrectColumn:"错误行",
+  la_errorInformation:"错误信息",
+  la_labelWidth:100
+}

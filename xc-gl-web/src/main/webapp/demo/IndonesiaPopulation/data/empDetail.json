@@ -1,0 +1,77 @@
+{
+  "Aceh":{
+     "job":[
+            {"value":500000, "name":"1-3 month"},
+            {"value":500000, "name":"3-6 month"},
+            {"value":1500000, "name":"6 month-1 year"},
+            {"value":1200000, "name":"1-2 years"},
+            {"value":50000, "name":"2-3 years"},
+            {"value":300000, "name":">3 years"}
+            ],
+   	 "age":[
+   	        {"value":567000, "name":"<20 years"},
+            {"value":134000, "name":"20-30 years"},
+            {"value":678000, "name":"30-40 years"},
+            {"value":1110000, "name":"40-50 years"},
+            {"value":54500, "name":">50 years"}
+   	        ],
+ "content":[
+            {"value":5339067, "name":"High ranking officers"},
+            {"value":890989, "name":"Mid ranking officers"},
+            {"value":34597980, "name":"First ranking officers"},
+            {"value":8909890, "name":"Warrant officers"},
+            {"value":34556776, "name":"Non-Commissioned officers"}
+            ],
+   "theme":["shine","macarons","vintage"]
+  },
+  "Central Java":{
+     "job":[
+            {"value":5100000, "name":"1-3 month"},
+            {"value":4600000, "name":"3-6 month"},
+            {"value":9500000, "name":"6 month-1 year"},
+            {"value":10200000, "name":"1-2 years"},
+            {"value":150000, "name":"2-3 years"},
+            {"value":3700000, "name":">3 years"}
+            ],
+   	 "age":[
+   	        {"value":5627000, "name":"<20 years"},
+            {"value":1324000, "name":"20-30 years"},
+            {"value":6718000, "name":"30-40 years"},
+            {"value":11410000, "name":"40-50 years"},
+            {"value":548500, "name":">50 years"}
+   	        ],
+ "content":[
+            {"value":349067, "name":"High ranking officers"},
+            {"value":8909989, "name":"Mid ranking officers"},
+            {"value":345974980, "name":"First ranking officers"},
+            {"value":89098960, "name":"Warrant officers"},
+            {"value":345567746, "name":"Non-Commissioned officers"}
+            ],
+   "theme":["shine","macarons","vintage"]
+  },
+ "West Kalimantan":{
+     "job":[
+            {"value":34567, "name":"1-3 month"},
+            {"value":1234, "name":"3-6 month"},
+            {"value":556789, "name":"6 month-1 year"},
+            {"value":2332234, "name":"1-2 years"},
+            {"value":123908, "name":"2-3 years"},
+            {"value":889754, "name":">3 years"}
+            ],
+   	 "age":[
+   	        {"value":1234567, "name":"<20 years"},
+            {"value":67876543, "name":"20-30 years"},
+            {"value":34567788, "name":"30-40 years"},
+            {"value":23345434, "name":"40-50 years"},
+            {"value":3456565, "name":">50 years"}
+   	        ],
+ "content":[
+            {"value":1267890, "name":"High ranking officers"},
+            {"value":99998887, "name":"Mid ranking officers"},
+            {"value":1000000, "name":"First ranking officers"},
+            {"value":40000, "name":"Warrant officers"},
+            {"value":2000, "name":"Non-Commissioned officers"}
+            ],
+   "theme":["shine","macarons","vintage"]
+  }
+}

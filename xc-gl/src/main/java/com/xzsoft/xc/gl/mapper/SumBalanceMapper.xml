@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.SumBalanceMapper">
+
+	<!-- 获取当前期间向下的期间  -->
+	<select id="getAfterPeriods" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select a.PERIOD_CODE      periodCode,
+		       a.year,
+		       a.quarter          quarter,
+		       a.START_DATE       startDate,
+		       a.END_DATE         endDate,
+		       a.IS_ADJ_PERIOD    isAdjPeriod,
+		       a.IS_ENABLED       isEnabled,
+		       b.LEDGER_ID        ledgerId,
+		       b.LD_PERIOD_STATUS periodStatus
+		  from xc_gl_period a, xc_gl_ld_period b
+		 where a.PERIOD_CODE = b.PERIOD_CODE
+		   and b.LEDGER_ID = #{ledgerId}
+		   <choose>
+		   		<when test="dbType == 'mysql'">
+		   			and a.START_DATE > DATE_FORMAT((select start_date from xc_gl_period c where period_code = #{periodCode}),'%Y-%m-%d %H:%i:%s') 
+		   		</when>
+		   		<when test="dbType == 'oracle'">
+		   			and a.START_DATE > to_date((select start_date from xc_gl_period c where period_code = #{periodCode}),'yyyy-mm-dd hh24:mi:ss') 
+		   		</when>
+		   </choose>
+		order by a.START_DATE
+	</select>
+	
+	<!-- 建账时获取当前期间向下的期间  -->
+	<select id="getAfterPeriods4CreateAccount" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.gl.modal.Period">
+		select a.PERIOD_CODE      periodCode,
+		       a.year,
+		       a.quarter          quarter,
+		       a.START_DATE       startDate,
+		       a.END_DATE         endDate,
+		       a.IS_ADJ_PERIOD    isAdjPeriod,
+		       a.IS_ENABLED       isEnabled,
+		       b.LEDGER_ID        ledgerId,
+		       b.LD_PERIOD_STATUS periodStatus
+		  from xc_gl_period a, xc_gl_ld_period b
+		 where a.PERIOD_CODE = b.PERIOD_CODE
+		   and b.LEDGER_ID = #{ledgerId}
+		   <choose>
+		   		<when test="dbType == 'mysql'">
+		   			and a.START_DATE >= DATE_FORMAT((select start_date from xc_gl_period c where period_code = #{periodCode}),'%Y-%m-%d %H:%i:%s') 
+		   		</when>
+		   		<when test="dbType == 'oracle'">
+		   			and a.START_DATE >= to_date((select start_date from xc_gl_period c where period_code = #{periodCode}),'yyyy-mm-dd hh24:mi:ss') 
+		   		</when>
+		   </choose>
+		order by a.START_DATE	
+	</select>
+	
+	<!-- 获取账簿的本位币 -->
+	<select id="getCurrency4Ledger" parameterType="java.lang.String" resultType="java.lang.String">
+		select b.CURRENCY_CODE
+		  from xc_gl_v_heads a, xc_gl_ledgers b
+		 where a.LEDGER_ID = b.LEDGER_ID
+		   and a.V_HEAD_ID = #{headId}
+	</select>
+	
+	<!-- 获取科目的默认币种  -->
+	<select id="getCurrency4Acc" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select t.DEFAULT_CURRENCY cnyCode
+		  from xc_gl_ld_accounts t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.ACC_ID = #{accId}
+	</select>
+	
+	<!-- 根据凭证头ID查询科目体系ID -->
+	<select id="getHrcyIdByHeadId" parameterType="java.lang.String" resultType="java.lang.String">
+		select b.ACC_HRCY_ID hrcyId
+		  from xc_gl_v_heads a, xc_gl_ledgers b
+		 where a.ledger_id = b.ledger_id
+		   and a.v_head_id = #{headId}
+	</select>
+	
+	<!-- 是否启用了第四季度调整期 -->
+	<select id="isEnabeQ4Adj" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select 1
+		  from xc_gl_ld_period t
+		 where t.PERIOD_CODE = #{periodCode}
+		   and t.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 获取账簿的开启期间 -->
+	<select id="getStartPeriod" parameterType="java.lang.String" resultType="java.lang.String">
+		select t.START_PERIOD_CODE  from xc_gl_ledgers t where t.LEDGER_ID = #{ledgerId}
+	</select>
+	
+	<!-- 获取当前会计期的结束日期  -->
+	<select id="getPeriodEndDate" parameterType="java.lang.String" resultType="java.lang.String">
+		select substr(t.END_DATE,1,10) end_date from xc_gl_period t where t.PERIOD_CODE = #{periodCode}
+	</select>
+	
+	<!--  获取凭证中待汇总的科目信息 -->
+	<select id="getAllSumAccounts" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select distinct a.ccid, a.acc_id accId,a.acc_code accCode, c.period_code periodCode, c.LEDGER_ID ledgerId, 
+				c.V_TEMPLATE_TYPE templateType, c.V_STATUS vStatus, c.V_CATEGORY_ID categoryId,c.V_SERIAL_NUM serialNo
+		  from xc_gl_ccid a, xc_gl_v_lines b, xc_gl_v_heads c
+		 where a.ccid = b.ccid
+		   and b.v_head_id = c.v_head_id
+		   <if test="isContainForeign=='Y'.toString()">
+			   <![CDATA[
+			   and EXISTS (select 1 from xc_gl_ledgers t where t.LEDGER_ID = c.LEDGER_ID and t.CURRENCY_CODE <> b.CURRENCY_CODE)
+			   ]]>			   
+		   </if>
+		   and c.v_head_id = #{headId}
+		   <choose>
+		   		<!-- 过账汇总 -->
+		   		<when test="isAccount == 'Y'.toString() ">
+		  			and c.SUM_FLAG = 'Y'		   		
+		   		</when>
+		   		<!-- 未过账汇总 -->
+		   		<otherwise>
+		   			and c.SUM_FLAG = 'N'		   			
+		   		</otherwise>
+		   </choose>
+		 order by a.acc_code
+	</select>
+	
+	<!-- 获取现金流量项  -->
+	<select id="getAllCashItems" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select distinct c.LEDGER_ID   ledgerId,
+		                c.period_code periodCode,
+		                a.acc_id      accId,
+		                b.CA_ID       caId,
+		                c.V_STATUS    vStatus
+		  from xc_gl_ccid a, xc_gl_v_lines b, xc_gl_v_heads c
+		 where a.ccid = b.ccid
+		   and b.v_head_id = c.v_head_id
+		   and b.CA_ID is not null
+		   and b.CA_ID != ''
+		   and a.ACC_ID = #{accId}
+		   and c.v_head_id = #{headId}
+		   <choose>
+		   		<when test="isAccount == 'Y'.toString() ">
+		   			and c.SUM_FLAG = 'Y'
+		   		</when>
+		   		<otherwise>
+		   			and c.SUM_FLAG = 'N'
+		   		</otherwise>
+		   </choose>
+	</select>
+	
+	<!-- 删除科目余额数据 -->
+	<delete id="delAccBalance" parameterType="java.util.HashMap">
+		delete from xc_gl_balance
+		 where LEDGER_ID = #{ledgerId}
+		   and PERIOD_CODE = #{periodCode}
+		   and CURRENCY_CODE = #{cnyCode}
+		   and CCID = #{ccid}	
+		   and 	  b_dr = 0
+		   and    b_cr = 0
+		   and    y_dr = 0
+		   and    y_cr = 0
+		   and    ptd_dr = 0
+		   and    ptd_cr = 0
+		   and    ytd_dr = 0
+		   and    ytd_cr = 0
+		   and    pjtd_dr = 0
+		   and    pjtd_cr = 0
+		   and    t_b_dr = 0
+		   and    t_b_cr = 0
+		   and    t_y_dr = 0
+		   and    t_y_cr = 0
+		   and    t_ptd_dr = 0
+		   and    t_ptd_cr = 0
+		   and    t_ytd_dr = 0
+		   and    t_ytd_cr = 0
+		   and    t_pjtd_dr = 0
+		   and    t_pjtd_cr = 0
+		   and    amt_b_dr = 0
+		   and    amt_b_cr = 0
+		   and    amt_y_dr = 0
+		   and    amt_y_cr = 0
+		   and    amt_ptd_dr = 0
+		   and    amt_ptd_cr = 0
+		   and    amt_ytd_dr = 0
+		   and    amt_ytd_cr = 0
+		   and    amt_pjtd_dr = 0
+		   and    amt_pjtd_cr = 0
+		   and    amt_t_b_dr = 0
+		   and    amt_t_b_cr = 0
+		   and    amt_t_y_dr = 0
+		   and    amt_t_y_cr = 0
+		   and    amt_t_ptd_dr = 0
+		   and    amt_t_ptd_cr = 0		   
+	</delete>
+	
+	<!-- 计算期初借方和贷方余额  -->
+	<select id="calB" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select xb.ledger_id,
+		       xb.period_code,
+		       xb.currency_code,
+			   <choose>
+			  		<!-- 不含未过账数据-->
+			   		<when test="isAccount == 'Y'.toString() ">
+				       <choose>
+					      	<when test="dbType == 'mysql' ">
+				       			sum(if(xb.pjtd_dr = 0, 0, xb.amt_pjtd_dr)) AMT_B_DR,
+				       			sum(if(xb.pjtd_cr = 0, 0, xb.amt_pjtd_cr)) AMT_B_CR,      	
+					      	</when>
+					      	<when test="dbType == 'oracle' ">
+			       				sum(decode(xb.pjtd_dr,0,0,xl.amt_pjtd_dr)) AMT_B_DR,
+			       				sum(decode(xb.pjtd_cr,0,0,xl.amt_pjtd_cr)) AMT_B_CR,		      	
+					      	</when>
+				       </choose>
+				       sum(xb.pjtd_dr) B_DR,
+				       sum(xb.pjtd_cr) B_CR					   		
+			   		</when>
+			   		<!-- 含未过账数据 -->
+			   		<otherwise>
+				       <choose>
+					      	<when test="dbType == 'mysql' ">
+				       			sum(if(xb.T_PJTD_DR = 0, 0, xb.amt_t_pjtd_dr)) AMT_T_B_DR,
+				       			sum(if(xb.T_PJTD_CR = 0, 0, xb.amt_t_pjtd_cr)) AMT_T_B_CR,      	
+					      	</when>
+					      	<when test="dbType == 'oracle' ">
+			       				sum(decode(xb.T_PJTD_DR,0,0,xl.amt_t_pjtd_dr)) AMT_T_B_DR,
+			       				sum(decode(xb.T_PJTD_CR,0,0,xl.amt_t_pjtd_cr)) AMT_T_B_CR,		      	
+					      	</when>
+				       </choose>
+				       sum(xb.T_PJTD_DR) T_B_DR,
+				       sum(xb.T_PJTD_CR) T_B_CR							   		
+			   		</otherwise>
+			   </choose>
+		  from xc_gl_balance xb, xc_gl_ccid xc
+		 where xb.ccid = xc.ccid
+		   and xb.ledger_id = #{ledgerId}
+		   and xb.period_code = #{prePeriodCode}
+		   <choose>
+		   		<!-- 末级科目 -->
+	   			<when test="isLeaf == 'Y'.toString() ">
+	   				and xc.ccid = #{ccid}
+	   			</when>
+	   			<!-- 汇总科目 -->
+	   			<when test="isLeaf == 'N'.toString() ">
+	   			    and xc.CCID_CODE like '%${fullCode}'
+	   			    <!-- 直接下级科目 -->
+	   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE = #{accCode})
+	   			</when>
+		   </choose>
+		   
+		   and xb.CURRENCY_CODE = #{cnyCode}
+		   group by xb.ledger_id, xb.period_code,xb.currency_code	   
+	</select>
+	
+	<!-- 计算本期借方和贷方发生额  -->
+	<select id="calPTD" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<choose>
+			<!-- 外币凭证  -->
+			<when test="isForeign == 'Y'.toString() ">
+				select xh.ledger_id,
+				       xh.period_code,
+				       xl.currency_code,
+				       <choose>
+					      	<when test="dbType == 'mysql' ">
+						   		sum(if(xl.enter_dr=0,0,xl.AMOUNT)) AMT_PTD_DR,
+						   		sum(if(xl.enter_cr=0,0,xl.AMOUNT)) AMT_PTD_CR,		      	
+					      	</when>
+					      	<when test="dbType == 'oracle' ">
+			       				sum(decode(xl.enter_dr,0,0,xl.AMOUNT)) AMT_PTD_DR,
+			       				sum(decode(xl.enter_cr,0,0,xl.AMOUNT)) AMT_PTD_CR,		      	
+					      	</when>
+				       </choose>		
+				       sum(xl.enter_dr) PTD_DR,
+				       sum(xl.enter_cr) PTD_CR	
+				  from xc_gl_ccid xc, xc_gl_v_lines xl, xc_gl_v_heads xh
+				 where xc.ccid = xl.ccid
+				   and xl.v_head_id = xh.v_head_id
+				   and xh.ledger_id = #{ledgerId}
+				   and xh.period_code = #{periodCode}
+				   and xl.CURRENCY_CODE = #{cnyCode}
+				   and xh.V_STATUS = '2'
+				   <choose>
+				   		<!-- 末级科目 -->
+			   			<when test="isLeaf == 'Y'.toString() ">
+			   				and xc.ccid = #{ccid}
+			   			</when>
+			   			<!-- 汇总科目 -->
+			   			<when test="isLeaf == 'N'.toString() ">
+			   			    and xc.CCID_CODE like '%${fullCode}'
+			   			    <!-- 所有末级科目 -->
+			   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id 
+			   									and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE like '${accCode}%' and a.IS_LEAF = 'Y')
+			   			</when>
+				   </choose>
+				   <!-- 不含未过账 -->
+				   <if test="isAccount == 'Y'.toString() ">
+				   		and xh.bookkeeper_id is not null
+				   </if>
+				 group by xh.ledger_id, xh.period_code, xl.currency_code	
+			</when>
+			<!-- 本币凭证 -->
+			<otherwise>
+				select xh.ledger_id,
+				       xh.period_code,
+				      <choose>
+				      	<when test="dbType == 'mysql' ">
+					   		sum(if(xl.account_dr=0,0,xl.AMOUNT)) AMT_PTD_DR,
+					   		sum(if(xl.account_cr=0,0,xl.AMOUNT)) AMT_PTD_CR,		      	
+				      	</when>
+				      	<when test="dbType == 'oracle' ">
+		       				sum(decode(xl.account_cr,0,0,xl.AMOUNT)) AMT_PTD_DR,
+		       				sum(decode(xl.account_dr,0,0,xl.AMOUNT)) AMT_PTD_CR,	      	
+				      	</when>
+				      </choose>		
+				       sum(xl.account_dr) PTD_DR,
+				       sum(xl.account_cr) PTD_CR	
+				  from xc_gl_ccid xc, xc_gl_v_lines xl, xc_gl_v_heads xh
+				 where xc.ccid = xl.ccid
+				   and xl.v_head_id = xh.v_head_id
+				   and xh.ledger_id = #{ledgerId}
+				   and xh.period_code = #{periodCode}
+				   and xh.V_STATUS = '2'
+				   
+				   <choose>
+				   		<!-- 末级科目 -->
+			   			<when test="isLeaf == 'Y'.toString() ">
+			   				and xc.ccid = #{ccid}
+			   			</when>
+			   			<!-- 汇总科目 -->
+			   			<when test="isLeaf == 'N'.toString() ">
+			   				and xc.CCID_CODE like '%${fullCode}'
+			   				<!-- 所有末级科目 -->
+			   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id 
+			   									and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE like '${accCode}%' and a.IS_LEAF = 'Y')
+			   			</when>
+				   </choose>
+				   
+				   <!-- 不含未过账 -->
+				   <if test="isAccount == 'Y'.toString() ">
+				   		and xh.bookkeeper_id is not null
+				   </if>
+				 group by xh.ledger_id, xh.period_code			
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 计算年初借方和贷方余额   -->
+	<select id="calY" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select xb.ledger_id,
+		       xb.period_code,
+		       xb.currency_code,
+		       <choose>
+		       		<!-- 跨年(取上年期末的借方和贷方余额) -->
+		       		<when test="isDiffYear == 'Y'.toString() ">
+					   <choose>
+					  		<!-- 不含未过账数据-->
+					   		<when test="isAccount == 'Y'.toString() ">
+						       <choose>
+							      	<when test="dbType == 'mysql' ">
+						       			sum(if(xb.pjtd_dr = 0, 0, xb.amt_pjtd_dr)) AMT_Y_DR,
+						       			sum(if(xb.pjtd_cr = 0, 0, xb.amt_pjtd_cr)) AMT_Y_CR,      	
+							      	</when>
+							      	<when test="dbType == 'oracle' ">
+					       				sum(decode(xb.pjtd_dr,0,0,xl.amt_pjtd_dr)) AMT_Y_DR,
+					       				sum(decode(xb.pjtd_cr,0,0,xl.amt_pjtd_cr)) AMT_Y_CR,		      	
+							      	</when>
+						       </choose>
+						       sum(xb.pjtd_dr) Y_DR,
+						       sum(xb.pjtd_cr) Y_CR					   		
+					   		</when>
+					   		<!-- 含未过账数据 -->
+					   		<otherwise>
+						       <choose>
+							      	<when test="dbType == 'mysql' ">
+						       			sum(if(xb.t_pjtd_dr = 0, 0, xb.amt_t_pjtd_dr)) AMT_T_Y_DR,
+						       			sum(if(xb.t_pjtd_cr = 0, 0, xb.amt_t_pjtd_cr)) AMT_T_Y_CR,      	
+							      	</when>
+							      	<when test="dbType == 'oracle' ">
+					       				sum(decode(xb.t_pjtd_dr,0,0,xl.amt_t_pjtd_dr)) AMT_T_Y_DR,
+					       				sum(decode(xb.t_pjtd_cr,0,0,xl.amt_t_pjtd_cr)) AMT_T_Y_CR,		      	
+							      	</when>
+						       </choose>
+						       sum(xb.t_pjtd_dr) T_Y_DR,
+						       sum(xb.t_pjtd_cr) T_Y_CR							   		
+					   		</otherwise>
+					   </choose>		       		
+		       		</when>
+		       		<!-- 不跨年(取上期的年初借方和贷方余额) -->
+		       		<otherwise>
+					   <choose>
+					  		<!-- 不含未过账数据-->
+					   		<when test="isAccount == 'Y'.toString() ">
+						       <choose>
+							      	<when test="dbType == 'mysql' ">
+						       			sum(if(xb.y_dr = 0, 0, xb.amt_y_dr)) AMT_Y_DR,
+						       			sum(if(xb.y_cr = 0, 0, xb.amt_y_cr)) AMT_Y_CR,      	
+							      	</when>
+							      	<when test="dbType == 'oracle' ">
+					       				sum(decode(xb.y_dr,0,0,xl.amt_y_dr)) AMT_Y_DR,
+					       				sum(decode(xb.y_cr,0,0,xl.amt_y_cr)) AMT_Y_CR,		      	
+							      	</when>
+						       </choose>
+						       sum(xb.y_dr) Y_DR,
+						       sum(xb.y_cr) Y_CR					   		
+					   		</when>
+					   		<!-- 含未过账数据 -->
+					   		<otherwise>
+						       <choose>
+							      	<when test="dbType == 'mysql' ">
+						       			sum(if(xb.t_y_dr = 0, 0, xb.amt_t_y_dr)) AMT_T_Y_DR,
+						       			sum(if(xb.t_y_cr = 0, 0, xb.amt_t_y_cr)) AMT_T_Y_CR,      	
+							      	</when>
+							      	<when test="dbType == 'oracle' ">
+					       				sum(decode(xb.t_y_dr,0,0,xl.amt_t_y_dr)) AMT_T_Y_DR,
+					       				sum(decode(xb.t_y_cr,0,0,xl.amt_t_y_cr)) AMT_T_Y_CR,		      	
+							      	</when>
+						       </choose>
+						       sum(xb.t_y_dr) T_Y_DR,
+						       sum(xb.t_y_cr) T_Y_CR							   		
+					   		</otherwise>
+					   </choose>		       		
+		       		</otherwise>
+		       </choose>
+		  from xc_gl_balance xb, xc_gl_ccid xc
+		 where xb.ccid = xc.ccid
+		   and xb.ledger_id = #{ledgerId}
+		   and xb.period_code = #{preYearCode}
+		   <choose>
+		   		<!-- 末级科目 -->
+	   			<when test="isLeaf == 'Y'.toString() ">
+	   				and xc.ccid = #{ccid}
+	   			</when>
+	   			<!-- 汇总科目 -->
+	   			<when test="isLeaf == 'N'.toString() ">
+	   				and xc.CCID_CODE like '%${fullCode}'
+	   				<!-- 直接下级科目 -->
+	   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE = #{accCode})
+	   			</when>
+		   </choose>
+		   
+		   and xb.CURRENCY_CODE = #{cnyCode}
+		   group by xb.ledger_id, xb.period_code,xb.currency_code
+	</select>
+	
+	<!-- 计算本年借方和贷方发生额  -->
+	<select id="calYTD" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<choose>
+			<!-- 外币凭证  -->
+			<when test="isForeign == 'Y'.toString() ">
+				select xh.ledger_id,
+				       xl.currency_code,
+				       <choose>
+					      	<when test="dbType == 'mysql' ">
+						   		sum(if(xl.enter_dr=0,0,xl.AMOUNT)) AMT_YTD_DR,
+						   		sum(if(xl.enter_cr=0,0,xl.AMOUNT)) AMT_YTD_CR,		      	
+					      	</when>
+					      	<when test="dbType == 'oracle' ">
+			       				sum(decode(xl.enter_dr,0,0,xl.AMOUNT)) AMT_YTD_DR,
+			       				sum(decode(xl.enter_cr,0,0,xl.AMOUNT)) AMT_YTD_CR,		      	
+					      	</when>
+				       </choose>		
+				       sum(xl.enter_dr) YTD_DR,
+				       sum(xl.enter_cr) YTD_CR	
+				  from xc_gl_ccid xc, xc_gl_v_lines xl, xc_gl_v_heads xh
+				 where xc.ccid = xl.ccid
+				   and xl.v_head_id = xh.v_head_id
+				   <![CDATA[
+				   	and substr(xh.CREATION_DATE,1,10) >= #{yearStartDate}
+				   	and substr(xh.CREATION_DATE,1,10) <= #{yearEndDate}
+				   ]]>
+				   and xh.ledger_id = #{ledgerId}
+				   and xh.V_STATUS = '2'
+				   and xl.CURRENCY_CODE = #{cnyCode}
+				   
+				   <choose>
+				   		<!-- 末级科目 -->
+			   			<when test="isLeaf == 'Y'.toString() ">
+			   				and xc.ccid = #{ccid}
+			   			</when>
+			   			<!-- 汇总科目 -->
+			   			<when test="isLeaf == 'N'.toString() ">
+			   				and xc.CCID_CODE like '%${fullCode}'
+			   				<!-- 所有末级科目 -->
+			   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id 
+			   									and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE like '${accCode}%' and a.IS_LEAF = 'Y')
+			   			</when>
+				   </choose>
+				   
+				   <!-- 不含未过账 -->
+				   <if test="isAccount == 'Y'.toString() ">
+				   		and xh.bookkeeper_id is not null
+				   </if>
+				 group by xh.ledger_id, xl.currency_code	
+			</when>
+			<!-- 本币凭证 -->
+			<otherwise>
+				select xh.ledger_id,
+				      <choose>
+				      	<when test="dbType == 'mysql' ">
+					   		sum(if(xl.account_dr=0,0,xl.AMOUNT)) AMT_YTD_DR,
+					   		sum(if(xl.account_cr=0,0,xl.AMOUNT)) AMT_YTD_CR,		      	
+				      	</when>
+				      	<when test="dbType == 'oracle' ">
+		       				sum(decode(xl.account_cr,0,0,xl.AMOUNT)) AMT_YTD_DR,
+		       				sum(decode(xl.account_dr,0,0,xl.AMOUNT)) AMT_YTD_CR,	      	
+				      	</when>
+				      </choose>		
+				       sum(xl.account_dr) YTD_DR,
+				       sum(xl.account_cr) YTD_CR	
+				  from xc_gl_ccid xc, xc_gl_v_lines xl, xc_gl_v_heads xh
+				 where xc.ccid = xl.ccid
+				   and xl.v_head_id = xh.v_head_id
+				   <![CDATA[
+				   	and substr(xh.CREATION_DATE,1,10) >= #{yearStartDate}
+				   	and substr(xh.CREATION_DATE,1,10) <= #{yearEndDate}
+				   ]]>	   
+				   and xh.ledger_id = #{ledgerId}
+				   and xh.V_STATUS = '2'
+				   <choose>
+				   		<!-- 末级科目 -->
+			   			<when test="isLeaf == 'Y'.toString() ">
+			   				and xc.ccid = #{ccid}
+			   			</when>
+			   			<!-- 汇总科目 -->
+			   			<when test="isLeaf == 'N'.toString() ">
+			   				and xc.CCID_CODE like '%${fullCode}'
+			   				<!-- 所有末级科目 -->
+			   				and exists (select 1 from xc_gl_accounts a where xc.ACC_ID = a.acc_id 
+			   									and a.ACC_HRCY_ID = #{hrcyId} and a.UP_ACC_CODE like '${accCode}%' and a.IS_LEAF = 'Y')
+			   			</when>
+				   </choose>
+				   
+				   <!-- 不含未过账 -->
+				   <if test="isAccount == 'Y'.toString() ">
+				   		and xh.bookkeeper_id is not null
+				   </if>
+				 group by xh.ledger_id
+			</otherwise>
+		</choose>	
+	</select>
+	
+	<!-- 保存总账余额  -->
+	<insert id="insBalances" parameterType="java.util.HashMap">
+		<choose>
+			<!-- 反记账处理 -->
+			<when test="isAccount == 'Y'.toString() ">
+				insert into xc_gl_balance
+				  (ledger_id,
+				   ccid,
+				   period_code,
+				   currency_code,
+				   b_dr, b_cr, y_dr, y_cr, ptd_dr, ptd_cr, ytd_dr, ytd_cr, pjtd_dr, pjtd_cr,
+				   amt_b_dr, amt_b_cr, amt_y_dr, amt_y_cr, amt_ptd_dr, amt_ptd_cr, amt_ytd_dr, amt_ytd_cr, amt_pjtd_dr, amt_pjtd_cr, 
+				   creation_date,
+				   created_by,
+		       	   last_update_date,
+		       	   last_updated_by
+		       )values(
+				   #{ledger_id,jdbcType=VARCHAR},
+				   #{ccid,jdbcType=VARCHAR},
+				   #{period_code,jdbcType=VARCHAR},
+				   #{currency_code,jdbcType=VARCHAR},
+				   #{B_DR,jdbcType=NUMERIC},
+				   #{B_CR,jdbcType=NUMERIC},
+				   #{Y_DR,jdbcType=NUMERIC},
+				   #{Y_CR,jdbcType=NUMERIC},
+				   #{PTD_DR,jdbcType=NUMERIC},
+				   #{PTD_CR,jdbcType=NUMERIC},
+				   #{YTD_DR,jdbcType=NUMERIC},
+				   #{YTD_CR,jdbcType=NUMERIC},
+				   #{PJTD_DR,jdbcType=NUMERIC},
+				   #{PJTD_CR,jdbcType=NUMERIC},
+				   #{AMT_B_DR,jdbcType=NUMERIC},
+				   #{AMT_B_CR,jdbcType=NUMERIC},
+				   #{AMT_Y_DR,jdbcType=NUMERIC},
+				   #{AMT_Y_CR,jdbcType=NUMERIC},
+				   #{AMT_PTD_DR,jdbcType=NUMERIC},
+				   #{AMT_PTD_CR,jdbcType=NUMERIC},
+				   #{AMT_YTD_DR,jdbcType=NUMERIC},
+				   #{AMT_YTD_CR,jdbcType=NUMERIC},
+				   #{AMT_PJTD_DR,jdbcType=NUMERIC},
+				   #{AMT_PJTD_CR,jdbcType=NUMERIC},	
+				   #{cdate,jdbcType=TIMESTAMP},
+				   #{userId,jdbcType=VARCHAR},
+				   #{cdate,jdbcType=TIMESTAMP},
+				   #{userId,jdbcType=VARCHAR}
+				 )			
+			</when>
+			<!-- 新增未过账的汇总余额 -->
+			<when test="isAccount == 'N'.toString() ">
+				insert into xc_gl_balance
+				  (ledger_id,
+				   ccid,
+				   period_code,
+				   currency_code,
+				   t_b_dr, t_b_cr, t_y_dr, t_y_cr, t_ptd_dr, t_ptd_cr, t_ytd_dr, t_ytd_cr, t_pjtd_dr, t_pjtd_cr,
+				   amt_t_b_dr, amt_t_b_cr, amt_t_y_dr, amt_t_y_cr, amt_t_ptd_dr, amt_t_ptd_cr, amt_t_ytd_dr, amt_t_ytd_cr, amt_t_pjtd_dr, amt_t_pjtd_cr,
+				   creation_date,
+				   created_by,
+		       	   last_update_date,
+		       	   last_updated_by
+		       )values(
+				   #{ledger_id,jdbcType=VARCHAR},
+				   #{ccid,jdbcType=VARCHAR},
+				   #{period_code,jdbcType=VARCHAR},
+				   #{currency_code,jdbcType=VARCHAR},
+				   #{T_B_DR,jdbcType=NUMERIC},
+				   #{T_B_CR,jdbcType=NUMERIC},
+				   #{T_Y_DR,jdbcType=NUMERIC},
+				   #{T_Y_CR,jdbcType=NUMERIC},
+				   #{T_PTD_DR,jdbcType=NUMERIC},
+				   #{T_PTD_CR,jdbcType=NUMERIC},
+				   #{T_YTD_DR,jdbcType=NUMERIC},
+				   #{T_YTD_CR,jdbcType=NUMERIC},
+				   #{T_PJTD_DR,jdbcType=NUMERIC},
+				   #{T_PJTD_CR,jdbcType=NUMERIC},
+				   #{AMT_T_B_DR,jdbcType=NUMERIC},
+				   #{AMT_T_B_CR,jdbcType=NUMERIC},
+				   #{AMT_T_Y_DR,jdbcType=NUMERIC},
+				   #{AMT_T_Y_CR,jdbcType=NUMERIC},
+				   #{AMT_T_PTD_DR,jdbcType=NUMERIC},
+				   #{AMT_T_PTD_CR,jdbcType=NUMERIC},
+				   #{AMT_T_YTD_DR,jdbcType=NUMERIC},
+				   #{AMT_T_YTD_CR,jdbcType=NUMERIC},
+				   #{AMT_T_PJTD_DR,jdbcType=NUMERIC},
+				   #{AMT_T_PJTD_CR,jdbcType=NUMERIC},
+				   #{cdate,jdbcType=TIMESTAMP},
+				   #{userId,jdbcType=VARCHAR},
+				   #{cdate,jdbcType=TIMESTAMP},
+				   #{userId,jdbcType=VARCHAR}
+				 )			
+			</when>
+		</choose>
+	</insert>
+	
+	<!-- 修改总账余额  -->
+	<update id="updBalances" parameterType="java.util.HashMap">
+		<choose>
+			<!-- 修改过账余额数 -->
+			<when test="isAccount == 'Y'.toString() ">
+				update xc_gl_balance set 
+				   	   b_dr             = #{B_DR,jdbcType=NUMERIC},
+				       b_cr             = #{B_CR,jdbcType=NUMERIC},
+				       y_dr             = #{Y_DR,jdbcType=NUMERIC},
+				       y_cr             = #{Y_CR,jdbcType=NUMERIC},
+				       ptd_dr           = #{PTD_DR,jdbcType=NUMERIC},
+				       ptd_cr           = #{PTD_CR,jdbcType=NUMERIC},
+				       ytd_dr           = #{YTD_DR,jdbcType=NUMERIC},
+				       ytd_cr           = #{YTD_CR,jdbcType=NUMERIC},
+				       pjtd_dr          = #{PJTD_DR,jdbcType=NUMERIC},
+				       pjtd_cr          = #{PJTD_CR,jdbcType=NUMERIC},
+				       amt_b_dr         = #{AMT_B_DR,jdbcType=NUMERIC},
+				       amt_b_cr         = #{AMT_B_CR,jdbcType=NUMERIC},
+				       amt_y_dr         = #{AMT_Y_DR,jdbcType=NUMERIC},
+				       amt_y_cr         = #{AMT_Y_CR,jdbcType=NUMERIC},
+				       amt_ptd_dr       = #{AMT_PTD_DR,jdbcType=NUMERIC},
+				       amt_ptd_cr       = #{AMT_PTD_CR,jdbcType=NUMERIC},
+				       amt_ytd_dr       = #{AMT_YTD_DR,jdbcType=NUMERIC},
+				       amt_ytd_cr       = #{AMT_YTD_CR,jdbcType=NUMERIC},
+				       amt_pjtd_dr      = #{AMT_PJTD_DR,jdbcType=NUMERIC},
+				       amt_pjtd_cr      = #{AMT_PJTD_CR,jdbcType=NUMERIC},		
+				       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+		       		   last_updated_by = #{userId,jdbcType=VARCHAR}
+				 where ledger_id = #{ledger_id,jdbcType=VARCHAR}
+				   and ccid = #{ccid,jdbcType=VARCHAR}
+				   and period_code = #{period_code,jdbcType=VARCHAR}
+				   and currency_code = #{currency_code,jdbcType=VARCHAR}	
+			</when>
+			<when test="isAccount == 'N'.toString() ">
+				update xc_gl_balance set 				
+				       t_b_dr           = #{T_B_DR,jdbcType=NUMERIC},
+				       t_b_cr           = #{T_B_CR,jdbcType=NUMERIC},
+				       t_y_dr           = #{T_Y_DR,jdbcType=NUMERIC},
+				       t_y_cr           = #{T_Y_CR,jdbcType=NUMERIC},
+				       t_ptd_dr         = #{T_PTD_DR,jdbcType=NUMERIC},
+				       t_ptd_cr         = #{T_PTD_CR,jdbcType=NUMERIC},
+				       t_ytd_dr         = #{T_YTD_DR,jdbcType=NUMERIC},
+				       t_ytd_cr         = #{T_YTD_CR,jdbcType=NUMERIC},
+				       t_pjtd_dr        = #{T_PJTD_DR,jdbcType=NUMERIC},
+				       t_pjtd_cr        = #{T_PJTD_CR,jdbcType=NUMERIC},		       
+				       amt_t_b_dr       = #{AMT_T_B_DR,jdbcType=NUMERIC},
+				       amt_t_b_cr       = #{AMT_T_B_CR,jdbcType=NUMERIC},
+				       amt_t_y_dr       = #{AMT_T_Y_DR,jdbcType=NUMERIC},
+				       amt_t_y_cr       = #{AMT_T_Y_CR,jdbcType=NUMERIC},
+				       amt_t_ptd_dr     = #{AMT_T_PTD_DR,jdbcType=NUMERIC},
+				       amt_t_ptd_cr     = #{AMT_T_PTD_CR,jdbcType=NUMERIC},
+				       amt_t_ytd_dr     = #{AMT_T_YTD_DR,jdbcType=NUMERIC},
+				       amt_t_ytd_cr     = #{AMT_T_YTD_CR,jdbcType=NUMERIC},
+				       amt_t_pjtd_dr    = #{AMT_T_PJTD_DR,jdbcType=NUMERIC},
+				       amt_t_pjtd_cr    = #{AMT_T_PJTD_CR,jdbcType=NUMERIC},	
+				       last_update_date = #{cdate,jdbcType=TIMESTAMP},
+		       		   last_updated_by = #{userId,jdbcType=VARCHAR}
+				 where ledger_id = #{ledger_id,jdbcType=VARCHAR}
+				   and ccid = #{ccid,jdbcType=VARCHAR}
+				   and period_code = #{period_code,jdbcType=VARCHAR}
+				   and currency_code = #{currency_code,jdbcType=VARCHAR}			       				
+			</when>
+		</choose>
+	</update>
+	
+	<!-- 计算现金流量项目本期发生数  -->
+	<select id="calPTD4Cash" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	    select xh.ledger_id ledgerId,
+	           xh.period_code periodCode,
+	           xgc.ACC_ID accId,
+	           #{caId} as caId,
+	           (case xc.CA_DIRECTION 
+	            when 1 THEN
+	             sum(xl.ACCOUNT_DR)*1+sum(xl.ACCOUNT_CR)*-1
+				when -1 THEN
+	             sum(xl.ACCOUNT_DR)*-1+sum(xl.ACCOUNT_CR)*1
+	           end ) ptd  
+	      from xc_gl_ccid xgc, xc_gl_v_lines xl, xc_gl_v_heads xh,xc_gl_cash_items xc
+	     where xc.ca_id = xl.ca_id
+	       and xl.v_head_id = xh.v_head_id
+	       and xl.CCID = xgc.CCID
+	       and xh.ledger_id = #{ledgerId}
+		   and xh.period_code = #{periodCode}
+		   and xgc.ACC_ID = #{accId}
+	       and xh.V_STATUS = '2'
+	       <choose>
+	           <!-- 末级科目 -->
+	           <when test="isLeaf == 'Y'.toString() ">
+	             and xc.ca_id = #{caId}
+	           </when>
+	           <!-- 汇总科目 -->
+	           <otherwise>
+	             and xc.ca_id in (select t.CA_ID from xc_gl_cash_items t where t.UP_ID = #{caId})
+	           </otherwise>
+	       </choose>
+	       <!-- 不含未过账 -->
+	       <if test="isAccount == 'Y'.toString() ">
+	         and xh.bookkeeper_id is not null
+	       </if>
+	     group by xh.ledger_id,
+	          xh.period_code,  
+	          xgc.ACC_ID,
+	          #{caId}
+	</select>
+	
+	<!-- 保存现金流量项统计余额 -->
+	<insert id="insCashBalances" parameterType="java.util.HashMap">
+		insert into xc_gl_cash_sum(
+		   sum_id,
+		   ledger_id,
+		   period_code,
+		   acc_id,
+		   ca_id,
+		   ca_sum,
+		   t_ca_sum,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+        )values(
+           #{sumId,jdbcType=VARCHAR},
+           #{ledgerId,jdbcType=VARCHAR},
+           #{periodCode,jdbcType=VARCHAR},
+           #{accId,jdbcType=VARCHAR},
+           #{caId,jdbcType=VARCHAR},
+         	0,
+           #{ptd,jdbcType=NUMERIC},   
+           #{cdate,jdbcType=TIMESTAMP},
+           #{userId,jdbcType=VARCHAR},
+           #{cdate,jdbcType=TIMESTAMP},
+           #{userId,jdbcType=VARCHAR}
+        )	
+	</insert>
+	
+	<!-- 保存现金流量项统计余额 -->
+	<insert id="insInitCashBalances" parameterType="java.util.HashMap">
+		insert into xc_gl_cash_sum(
+		   sum_id,
+		   ledger_id,
+		   period_code,
+		   acc_id,
+		   ca_id,
+		   ca_sum,
+		   t_ca_sum,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+        )values(
+           #{sumId,jdbcType=VARCHAR},
+           #{ledgerId,jdbcType=VARCHAR},
+           #{periodCode,jdbcType=VARCHAR},
+           #{accId,jdbcType=VARCHAR},
+           #{caId,jdbcType=VARCHAR},
+           #{ptd,jdbcType=NUMERIC}, 
+           #{ptd,jdbcType=NUMERIC}, 
+           #{cdate,jdbcType=TIMESTAMP},
+           #{userId,jdbcType=VARCHAR},
+           #{cdate,jdbcType=TIMESTAMP},
+           #{userId,jdbcType=VARCHAR}
+        )	
+	</insert>	
+	
+	<!-- 修改现金流量项统计余额  -->
+	<update id="updCashBalances" parameterType="java.util.HashMap">
+		update xc_gl_cash_sum t set 
+			<choose>
+				<!-- 已过账 -->
+				<when test="isAccount == 'Y'.toString() ">
+					t.CA_SUM = #{ptd,jdbcType=NUMERIC},
+				</when>
+				<!-- 含未过账 -->
+				<otherwise>
+					t.T_CA_SUM = #{ptd,jdbcType=NUMERIC},
+				</otherwise>
+			</choose>
+		       t.LAST_UPDATED_BY  = #{userId,jdbcType=VARCHAR},
+		       t.LAST_UPDATE_DATE = #{cdate,jdbcType=TIMESTAMP}
+		 where t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+		   and t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+		   and t.ACC_ID = #{accId,jdbcType=VARCHAR}
+		   and t.CA_ID = #{caId,jdbcType=VARCHAR}	
+	</update>
+	
+	<!-- 更新期初现金流量统计余额 -->
+	<update id="updInitCashBalances" parameterType="java.util.HashMap">
+		update xc_gl_cash_sum t set 
+				t.CA_SUM = #{ptd,jdbcType=NUMERIC},
+				t.T_CA_SUM = #{ptd,jdbcType=NUMERIC},
+		       	t.LAST_UPDATED_BY  = #{userId,jdbcType=VARCHAR},
+		       	t.LAST_UPDATE_DATE = #{cdate,jdbcType=TIMESTAMP}
+		 where t.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+		   and t.PERIOD_CODE = #{periodCode,jdbcType=VARCHAR}
+		   and t.ACC_ID = #{accId,jdbcType=VARCHAR}
+		   and t.CA_ID = #{caId,jdbcType=VARCHAR}	
+	</update>
+	
+	<!-- 删除科目余额数据 -->
+	<delete id="delCashBalances" parameterType="java.util.HashMap">
+		delete from xc_gl_cash_sum
+		 where ledger_id = #{ledgerId}
+		   and period_code = #{periodCode}
+		   and acc_id = #{accId}
+		   and ca_id = #{caId}
+		   and ca_sum = 0
+		   and t_ca_sum = 0
+	</delete>
+	
+	<!-- 删除账簿期初现金流量统计数据 -->
+	<delete id="delInitCash" parameterType="java.util.HashMap">
+		delete from xc_gl_cash_sum
+		 where LEDGER_ID = #{ledgerId}
+		   and PERIOD_CODE = #{periodCode}
+	</delete>
+	
+	<!-- 拷贝临时表中的期初现金流量数据  -->
+	<insert id="copyTmpInitCash" parameterType="java.util.HashMap">
+		insert into xc_gl_cash_sum
+		  (sum_id,
+		   ledger_id,
+		   period_code,
+		   acc_id,
+		   ca_id,
+		   ca_sum,
+		   t_ca_sum,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by)
+		select t.sum_id,
+		       t.ledger_id,
+		       t.period_code,
+		       t.acc_id,
+		       t.ca_id,
+		       t.ca_sum,
+		       t.T_CA_SUM,
+		       #{cdate,jdbcType=TIMESTAMP}, 
+		       #{userId,jdbcType=VARCHAR},
+		       #{cdate,jdbcType=TIMESTAMP}, 
+		       #{userId,jdbcType=VARCHAR}
+		  from xc_gl_cash_tmp t
+		where t.LEDGER_ID = #{ledgerId}
+		  and t.IS_VALID = 'N'	
+	</insert>
+	
+	<!-- 查询科目及现金流量项目  -->
+	<select id="getInitCash" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	    select t.LEDGER_ID ledgerId,t.PERIOD_CODE periodCode, 
+	           t.ACC_ID accId ,t.CA_ID caId, a.UP_ID upCaId
+	      from xc_gl_cash_sum t ,xc_gl_cash_items a
+	     where t.CA_ID = a.CA_ID
+	       and t.LEDGER_ID = #{ledgerId}
+	       and t.PERIOD_CODE = #{periodCode}
+	     order by  t.ACC_ID,a.UP_ID
+	</select>
+	
+	<!-- 按科目统计现金流项目 -->
+	<select id="getInitCashByAcc" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.LEDGER_ID ledgerId, t.PERIOD_CODE periodCode, t.ACC_ID accId, SUM(t.CA_SUM) ptd
+		  from xc_gl_cash_sum t
+		 where t.LEDGER_ID = #{ledgerId}
+		   and t.PERIOD_CODE = #{periodCode}
+		   and t.ACC_ID = #{accId}
+		   and t.CA_ID in (select a.CA_ID from xc_gl_cash_items a where a.UP_ID = #{caId})
+		 group by t.LEDGER_ID, t.PERIOD_CODE, t.ACC_ID
+	</select>
+	
+	<!-- 修改凭证汇总标志及凭证号  -->
+	<update id="handlerSumFlag" parameterType="java.util.HashMap">
+		update xc_gl_v_heads t set 
+		<choose>
+			<when test="isCanceled == 'Y'.toString() ">
+				t.SUM_FLAG = 'N',
+			</when>
+			<otherwise>
+				t.SUM_FLAG = 'Y',
+			</otherwise>
+		</choose>
+				t.LAST_UPDATED_BY = #{userId,jdbcType=VARCHAR},
+				t.LAST_UPDATE_DATE = #{cdate,jdbcType=TIMESTAMP} 
+		where t.V_HEAD_ID = #{headId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 更新临时表数据状态信息 -->
+	<update id="updateTmpCashBalStatus" parameterType="java.util.HashMap">
+		UPDATE xc_gl_cash_tmp t
+		   SET t.IS_VALID = #{isValid,jdbcType=VARCHAR}, 
+		       t.LAST_UPDATED_BY = #{userId,jdbcType=VARCHAR} , 
+		       t.LAST_UPDATE_DATE = #{cdate,jdbcType=TIMESTAMP}
+		 WHERE t.LEDGER_ID = #{ledgerId}
+	</update>
+	
+</mapper>

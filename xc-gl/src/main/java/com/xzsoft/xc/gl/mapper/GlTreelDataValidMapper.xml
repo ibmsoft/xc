@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.GlTreelDataValidMapper">
+<update id="checkUpProjectIsValid" parameterType="java.lang.String">
+UPDATE xc_pm_projects_tmp t
+SET t.FLAG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_pm_projects a
+				WHERE
+					a.PROJECT_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_pm_projects_tmp b
+							) p
+						WHERE
+							p.PROJECT_CODE = t.UP_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		) 
+END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_pm_projects a
+				WHERE
+					a.PROJECT_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_pm_projects_tmp b
+							) p
+						WHERE
+							p.PROJECT_CODE = t.UP_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'上级项目编码不存在！'
+					ELSE
+						''
+					END
+				)
+			ELSE
+				''
+			END
+		)
+END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<update id="checkUpAccountIsValid" parameterType="java.lang.String">
+UPDATE xc_gl_accounts_tmp t
+SET t.FLAG = (
+	CASE t.UP_ACC_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_gl_accounts a
+				WHERE
+					a.ACC_CODE = t.UP_ACC_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_accounts_tmp b
+							) p
+						WHERE
+							p.ACC_CODE = t.UP_ACC_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_ACC_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_gl_accounts a
+				WHERE
+					a.ACC_CODE = t.UP_ACC_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_accounts_tmp b
+							) p
+						WHERE
+							p.ACC_CODE = t.UP_ACC_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'上级科目编码不存在！'
+					ELSE
+						''
+					END
+				)
+			ELSE
+				''
+			END
+		)
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<update id="checkUpCashIsValid" parameterType="java.lang.String">
+UPDATE xc_gl_cash_items_tmp t
+SET t.FLAG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_gl_cash_items a
+				WHERE
+					a.CA_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							COUNT(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_cash_items_tmp b
+							) p
+						WHERE
+							p.CA_CODE = t.UP_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+				SELECT
+					COUNT(1)
+				FROM
+					xc_gl_cash_items a
+				WHERE
+					a.CA_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_cash_items_tmp b
+							) p
+						WHERE
+							p.CA_CODE = t.UP_CODE
+						AND
+                            p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'上级现金流项目编码不存在！'
+					ELSE
+						''
+					END
+				)
+			ELSE
+				''
+			END
+		)
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<update id="checkUpSegmentIsValid">
+UPDATE xc_gl_ld_cust_segvals_tmp t
+SET t.FLAG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+					count(1)
+				FROM
+					xc_gl_ld_cust_ass_segvals a
+				WHERE
+					a.SEG_CODE = #{segCode,jdbcType=VARCHAR}
+				AND a.LD_CUST_SEGVAL_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_ld_cust_segvals_tmp b
+							) p
+						WHERE
+							p.SEG_CODE = t.SEG_CODE
+						AND p.LD_CUST_SEGVAL_CODE = t.UP_CODE
+						AND p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		)
+	END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+				SELECT
+					count(1)
+				FROM
+					xc_gl_ld_cust_ass_segvals a
+				WHERE
+					a.SEG_CODE = #{segCode,jdbcType=VARCHAR}
+				AND a.LD_CUST_SEGVAL_CODE = t.UP_CODE
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_gl_ld_cust_segvals_tmp b
+							) p
+						WHERE
+							p.SEG_CODE = t.SEG_CODE
+						AND p.LD_CUST_SEGVAL_CODE = t.UP_CODE
+						AND p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'自定义段上级编码不存在！'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				''
+			END
+		)
+	END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 更新项目上级id -->
+<update id="updateUpProject">
+   UPDATE xc_pm_projects_tmp t,
+       xc_pm_projects p
+  SET t.UP_PROJECT_ID = p.PROJECT_ID,
+      t.IS_BG_CTRL = p.IS_BG_CTRL
+  WHERE
+	   t.UP_CODE = p.PROJECT_CODE
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.LEDGER_ID =  #{ledgerId,jdbcType = VARCHAR}
+</update>
+<!-- 更新项目上级id -->
+<update id="updateProjectItself">
+UPDATE xc_pm_projects_tmp t,
+       xc_pm_projects_tmp p
+  SET t.UP_PROJECT_ID = p.TMP_ID
+  WHERE
+	   t.UP_CODE = p.PROJECT_CODE
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.LEDGER_ID =  #{ledgerId,jdbcType = VARCHAR}
+  AND
+     t.UP_PROJECT_ID = '-1'
+</update>
+<!-- 更新上级科目id -->
+<update id="updateUpAccount" parameterType="java.lang.String">
+update xc_gl_accounts_tmp t,xc_gl_accounts a 
+   set t.ACC_LEVEL = a.ACC_LEVEL +1,
+       a.IS_LEAF = 'N',
+       t.IS_LEAF = 'Y'
+  where t.UP_ACC_CODE = a.ACC_CODE
+   and  t.ACC_HRCY_ID = a.ACC_HRCY_ID
+   and  t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 更新科目层级-->
+<update id="updateUpAccountItself" parameterType="java.lang.String">
+update xc_gl_accounts_tmp t,xc_gl_accounts_tmp a 
+   set  t.ACC_LEVEL = a.ACC_LEVEL +1,
+        a.IS_LEAF = 'N',
+        t.IS_LEAF = 'Y'
+  where t.UP_ACC_CODE = a.ACC_CODE
+    and t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+    and t.ACC_LEVEL =0
+    and a.ACC_LEVEL !=0
+    and t.ACC_HRCY_ID = a.ACC_HRCY_ID
+</update>
+<!-- 更新现金流项目的层级和是否为叶子节点属性 -->
+<update id="updateUpCashItem" parameterType="java.lang.String">
+update xc_gl_cash_items_tmp t,xc_gl_cash_items a 
+   set  t.UP_ID = a.CA_ID,
+        t.CA_LEVEL = a.CA_LEVEL+1,
+        t.IS_LEAF = 'Y',
+        a.IS_LEAF = 'N'
+  where t.UP_CODE = a.CA_CODE
+    and t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 更新现金流项目的层级和是否为叶子节点属性 -->
+<update id="updateUpCashItemItself" parameterType="java.lang.String">
+update xc_gl_cash_items_tmp t,xc_gl_cash_items_tmp a 
+   set  t.UP_ID = a.TMP_ID,
+        a.CA_LEVEL = (CASE a.UP_CODE WHEN '-1' THEN 1 ELSE a.CA_LEVEL END),
+        t.CA_LEVEL = (CASE a.UP_CODE WHEN '-1' THEN 2 ELSE a.CA_LEVEL+1 END),
+        t.IS_LEAF = 'Y',
+        a.IS_LEAF = 'N'
+  where t.UP_CODE = a.CA_CODE
+    and t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+    and t.CA_LEVEL =0
+    and a.CA_LEVEL !=0
+</update>
+<!-- 更新自定义辅助段的层级和是否为叶子节点属性 -->
+<update id="updateUpSegment">
+update xc_gl_ld_cust_segvals_tmp t,xc_gl_ld_cust_ass_segvals a 
+   set  t.UP_CUST_SEGVAL_ID = a.LD_CUST_SEGVAL_ID,
+        t.SEGVAL_LEVEL = a.SEGVAL_LEVEL+1,
+        t.IS_LEAF = 'Y',
+        a.IS_LEAF = 'N'
+  where t.UP_CODE = a.LD_CUST_SEGVAL_CODE
+    and t.LEDGER_ID = a.LEDGER_ID
+    and t.SEG_CODE = a.SEG_CODE
+    and t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+    and t.LEDGER_ID = #{ledgerId,jdbcType = VARCHAR}
+</update>
+<!-- 更新自定义辅助段的层级和是否为叶子节点属性 -->
+<update id="updateUpSegmentItself">
+update xc_gl_ld_cust_segvals_tmp t,xc_gl_ld_cust_segvals_tmp a 
+   set  t.UP_CUST_SEGVAL_ID = a.TMP_ID,
+        t.SEGVAL_LEVEL = a.SEGVAL_LEVEL+1,
+        t.IS_LEAF = 'Y',
+        a.IS_LEAF = 'N'
+  where t.UP_CODE = a.LD_CUST_SEGVAL_CODE
+    and t.LEDGER_ID = a.LEDGER_ID
+    and t.SEG_CODE = a.SEG_CODE
+    and t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+    and t.LEDGER_ID = #{ledgerId,jdbcType = VARCHAR}
+    and t.SEGVAL_LEVEL = 0
+    and a.SEGVAL_LEVEL !=0
+</update>
+<!-- 获得所有导入的记录，已经通过所有校验 -->
+<select id="getAllImportData"  resultType="java.util.HashMap">
+select * from ${tableName} where SESSION_ID=#{sessionId,jdbcType=VARCHAR}
+</select>
+<!-- 导入项目数据到正式表 -->
+<insert id="insertProjectData" parameterType="java.util.HashMap">
+insert into xc_pm_projects(
+ PROJECT_ID,      
+ LEDGER_ID,       
+ PROJECT_CODE,    
+ PROJECT_NAME,    
+ UP_PROJECT_ID,   
+ START_DATE,      
+ END_DATE,        
+ PRJ_CTRL_DIM,    
+ PRJ_CTRM_MODE,   
+ IS_BG_CTRL,      
+ CREATION_DATE,   
+ CREATED_BY,      
+ LAST_UPDATE_DATE,
+ LAST_UPDATED_BY 
+) 
+select 
+  t.TMP_ID,
+  t.LEDGER_ID,
+  t.PROJECT_CODE,
+  t.PROJECT_NAME,
+  t.UP_PROJECT_ID,
+  <choose>
+	  <when test="dbType == 'mysql'.toString()">
+	   IFNULL(t.START_DATE,NOW()),
+       IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	  </otherwise>
+	</choose>
+  t.PRJ_CTRL_DIM,
+  t.PRJ_CTRM_MODE,
+  case when t.PRJ_CTRL_DIM is not null and t.PRJ_CTRM_MODE is not null then 'Y' else 'N' end,
+  <choose>
+   <when test="dbType == 'mysql'.toString()">
+     NOW(),
+     #{userId,jdbcType=VARCHAR},
+     NOW(),
+     #{userId,jdbcType=VARCHAR}
+   </when>
+   <otherwise>
+     sysdate,
+     #{userId,jdbcType=VARCHAR},
+     sysdate,
+     #{userId,jdbcType=VARCHAR}
+   </otherwise>
+  </choose>
+from 
+ xc_pm_projects_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+  and  t.LEDGER_ID =  #{LEDGER_ID,jdbcType=VARCHAR}
+</insert>
+<!-- 导入科目数据到正式表 -->
+<insert id="insertAccountData" parameterType="java.util.HashMap">
+insert into xc_gl_accounts(
+ACC_ID,           
+ACC_CODE,          
+ACC_NAME,          
+UP_ACC_CODE,       
+ACC_CATEGORY_CODE, 
+ACC_GROUP_ID,      
+ACC_HRCY_ID,       
+BALANCE_DIRECTION, 
+IS_BANK_ACC,       
+IS_CASH_ACC,       
+IS_CASH_ITEM,      
+START_DATE,        
+END_DATE,          
+IS_LEAF,           
+ACC_LEVEL,         
+ASS_KEY,           
+CREATION_DATE,     
+CREATED_BY,        
+LAST_UPDATE_DATE,  
+LAST_UPDATED_BY   
+) 
+select 
+  t.TMP_ID,
+  t.ACC_CODE,
+  t.ACC_NAME,
+  t.UP_ACC_CODE,
+  t.ACC_CATEGORY_CODE,
+  t.ACC_GROUP_ID,
+  t.ACC_HRCY_ID,
+  t.BALANCE_DIRECTION,
+  t.IS_BANK_ACC,
+  t.IS_CASH_ACC,
+  t.IS_CASH_ITEM,
+ <choose>
+	  <when test="dbType == 'mysql'.toString()">
+	    IFNULL(t.START_DATE,NOW()),
+        IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	  </otherwise>
+	</choose>
+  t.IS_LEAF,
+  t.ACC_LEVEL,
+  t.ASS_KEY,
+ <choose>
+   <when test="dbType == 'mysql'.toString()">
+     NOW(),
+     #{userId,jdbcType=VARCHAR},
+     NOW(),
+     #{userId,jdbcType=VARCHAR}
+   </when>
+   <otherwise>
+     sysdate,
+     #{userId,jdbcType=VARCHAR},
+     sysdate,
+     #{userId,jdbcType=VARCHAR}
+   </otherwise>
+  </choose>
+from 
+ xc_gl_accounts_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</insert>
+<!-- 导入现金流数据到正式表 -->
+<insert id="insertCashItemData" parameterType="java.util.HashMap">
+insert into xc_gl_cash_items(
+CA_ID,           
+CA_CODE,         
+CA_NAME,         
+UP_ID,           
+CA_DIRECTION,    
+ASS_KEY,         
+CA_LEVEL,        
+IS_LEAF,         
+START_DATE,      
+END_DATE,        
+CA_DESC,         
+ORDERBY,         
+CREATION_DATE,   
+CREATED_BY,      
+LAST_UPDATE_DATE,
+LAST_UPDATED_BY
+) 
+select 
+  t.TMP_ID,
+  t.CA_CODE,
+  t.CA_NAME,
+  t.UP_ID,
+  t.CA_DIRECTION,
+  t.ASS_KEY,
+  t.CA_LEVEL,
+  t.IS_LEAF,
+<choose>
+	  <when test="dbType == 'mysql'.toString()">
+	  IFNULL(t.START_DATE,NOW()),
+      IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	  </otherwise>
+	</choose>
+  t.CA_DESC,
+  t.ORDERBY,
+<choose>
+   <when test="dbType == 'mysql'.toString()">
+     NOW(),
+     #{userId,jdbcType=VARCHAR},
+     NOW(),
+     #{userId,jdbcType=VARCHAR}
+   </when>
+   <otherwise>
+     sysdate,
+     #{userId,jdbcType=VARCHAR},
+     sysdate,
+     #{userId,jdbcType=VARCHAR}
+   </otherwise>
+  </choose>
+from 
+ xc_gl_cash_items_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+</insert>
+<!-- 导入辅助段数据到正式表 -->
+<insert id="insertSegmentData" parameterType="java.util.HashMap">
+insert into xc_gl_ld_cust_ass_segvals(
+LD_CUST_SEGVAL_ID,  
+LEDGER_ID,          
+SEG_CODE,           
+LD_CUST_SEGVAL_CODE,
+LD_CUST_SEGVAL_NAME,
+UP_CUST_SEGVAL_ID,  
+START_DATE,         
+END_DATE,           
+LD_CUST_SEGVAL_DESC,
+IS_LEAF,            
+SEGVAL_LEVEL,       
+CREATION_DATE,      
+CREATED_BY,         
+LAST_UPDATE_DATE,   
+LAST_UPDATED_BY   
+) 
+select 
+   t.TMP_ID,
+   t.LEDGER_ID,
+   t.SEG_CODE,
+   t.LD_CUST_SEGVAL_CODE,
+   t.LD_CUST_SEGVAL_NAME,
+   t.UP_CUST_SEGVAL_ID,
+<choose>
+	  <when test="dbType == 'mysql'.toString()">
+        IFNULL(t.START_DATE,NOW()),
+        IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	  </otherwise>
+	</choose>
+   t.LD_CUST_SEGVAL_DESC,
+   t.IS_LEAF,
+   t.SEGVAL_LEVEL,
+<choose>
+   <when test="dbType == 'mysql'.toString()">
+     NOW(),
+     #{userId,jdbcType=VARCHAR},
+     NOW(),
+     #{userId,jdbcType=VARCHAR}
+   </when>
+   <otherwise>
+     sysdate,
+     #{userId,jdbcType=VARCHAR},
+     sysdate,
+     #{userId,jdbcType=VARCHAR}
+   </otherwise>
+  </choose>  
+from 
+ xc_gl_ld_cust_segvals_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+  and  t.LEDGER_ID =  #{LEDGER_ID,jdbcType=VARCHAR}
+</insert>
+<!-- 获得现金流项目的序号 -->
+<select id="getMaxCashOrder" resultType="java.lang.Integer">
+  select count(1) from xc_gl_cash_items
+</select>
+<!-- 校验预算项目上级项目的有效性 -->
+<update id="checkUpBgItemIsValid" parameterType="java.lang.String">
+UPDATE xc_bg_items_tmp t
+SET t.FLAG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+				COUNT(1)
+			FROM
+				xc_bg_items a
+			WHERE
+        a.BG_HRCY_ID = t.BG_HRCY_ID
+      AND
+        a.BG_ITEM_CODE = t.UP_CODE 
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_bg_items_tmp b
+							) p
+						WHERE
+							p.BG_ITEM_CODE = t.UP_CODE
+            AND 
+              p.BG_HRCY_ID = t.BG_HRCY_ID
+            AND
+              p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		) 
+END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+		  SELECT
+				COUNT(1)
+			FROM
+				xc_bg_items a
+			WHERE
+        a.BG_HRCY_ID = t.BG_HRCY_ID
+      AND
+        a.BG_ITEM_CODE = t.UP_CODE 
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_bg_items_tmp b
+							) p
+						WHERE
+							p.BG_ITEM_CODE = t.UP_CODE
+            AND 
+              p.BG_HRCY_ID = t.BG_HRCY_ID
+            AND
+              p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'上级预算项目的编码不存在!'
+					ELSE
+						''
+					END
+				)
+			ELSE
+				''
+			END
+		) 
+END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 校验费用项目上级项目的有效性 -->
+<update id="checkUpExItemIsValid" parameterType="java.lang.String">
+UPDATE xc_ex_items_tmp t
+SET t.FLAG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		'Y'
+	ELSE
+		(
+			CASE (
+				SELECT
+				COUNT(1)
+			FROM
+				xc_ex_items a
+			WHERE
+        a.EX_HRCY_ID = t.EX_HRCY_ID
+      AND
+        a.EX_ITEM_CODE = t.UP_CODE 
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_ex_items_tmp b
+							) p
+						WHERE
+							p.EX_ITEM_CODE = t.UP_CODE
+            AND 
+              p.EX_HRCY_ID = t.EX_HRCY_ID
+            AND
+              p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'N'
+					ELSE
+						'Y'
+					END
+				)
+			ELSE
+				'Y'
+			END
+		) 
+END
+),
+ t.ERROR_MSG = (
+	CASE t.UP_CODE
+	WHEN '-1' THEN
+		''
+	ELSE
+		(
+			CASE (
+		  SELECT
+				COUNT(1)
+			FROM
+				xc_ex_items a
+			WHERE
+        a.EX_HRCY_ID = t.EX_HRCY_ID
+      AND
+        a.EX_ITEM_CODE = t.UP_CODE 
+			)
+			WHEN 0 THEN
+				(
+					CASE (
+						SELECT
+							count(*)
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									xc_ex_items_tmp b 
+							) p
+						WHERE
+							p.EX_ITEM_CODE = t.UP_CODE
+            AND 
+              p.EX_HRCY_ID = t.EX_HRCY_ID
+            AND
+              p.SESSION_ID = t.SESSION_ID
+					)
+					WHEN 0 THEN
+						'上级预算项目的编码不存在!'
+					ELSE
+						''
+					END
+				)
+			ELSE
+				''
+			END
+		) 
+END
+)
+WHERE
+	t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+</update>
+<!-- 更新预算项目上级id -->
+<update id="updateUpBgItem">
+   UPDATE xc_bg_items_tmp t,
+       xc_bg_items p
+  SET t.BG_ITEM_UP_ID = p.BG_ITEM_ID
+  WHERE
+	   t.UP_CODE = p.BG_ITEM_CODE
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.BG_HRCY_ID =  #{bgHrcyId,jdbcType = VARCHAR}
+</update>
+<!-- 更新预算项目上级id -->
+<update id="updateBgItemItself">
+UPDATE xc_bg_items_tmp t,
+       xc_bg_items_tmp p
+  SET t.BG_ITEM_UP_ID = p.TMP_ID
+  WHERE
+	   t.UP_CODE = p.BG_ITEM_CODE
+  AND
+       t.SESSION_ID = p.SESSION_ID
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.BG_HRCY_ID =  #{bgHrcyId,jdbcType = VARCHAR}
+  AND
+     t.BG_ITEM_UP_ID = '-1'
+</update>
+<!-- 更新费用项目上级id -->
+<update id="updateUpExItem">
+ UPDATE xc_ex_items_tmp t,
+        xc_ex_items p
+  SET   t.EX_ITEM_UP_ID = p.EX_ITEM_ID
+  WHERE
+	   t.UP_CODE = p.EX_ITEM_CODE
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.EX_HRCY_ID =  #{exHrcyId,jdbcType = VARCHAR}
+</update>
+<!-- 更新费用项目上级id -->
+<update id="updateExItemItself">
+UPDATE xc_ex_items_tmp t,
+       xc_ex_items_tmp p
+  SET t.EX_ITEM_UP_ID = p.TMP_ID
+  WHERE
+	   t.UP_CODE = p.EX_ITEM_CODE
+  AND
+       t.SESSION_ID = p.SESSION_ID
+  AND
+     t.SESSION_ID = #{sessionId,jdbcType = VARCHAR}
+  AND
+     t.EX_HRCY_ID =  #{exHrcyId,jdbcType = VARCHAR}
+  AND
+     t.EX_ITEM_UP_ID = '-1'
+</update>
+<!-- 导入预算项目数据到正式表 -->
+<insert id="insertBgItemData" parameterType="java.util.HashMap">
+insert into xc_bg_items(
+ BG_ITEM_ID,      
+ BG_HRCY_ID,      
+ BG_ITEM_CODE,    
+ BG_ITEM_NAME,    
+ BG_ITEM_DESC,    
+ BG_ITEM_UP_ID,   
+ BG_ITEM_PROP,    
+ BG_ITEM_TYPE,    
+ START_DATE,      
+ END_DATE,        
+ CREATION_DATE,        
+ LAST_UPDATE_DATE,
+ CREATED_BY, 
+ LAST_UPDATED_BY 
+) 
+select 
+  t.TMP_ID,
+  t.BG_HRCY_ID,
+  t.BG_ITEM_CODE,
+  t.BG_ITEM_NAME,
+  t.BG_ITEM_DESC,
+  t.BG_ITEM_UP_ID,
+  t.BG_ITEM_PROP,
+  t.BG_ITEM_TYPE,
+  <choose>
+	  <when test="dbType == 'mysql'.toString()">
+	   IFNULL(t.START_DATE,NOW()),
+       IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+       NOW(),
+       NOW(),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+	    sysdate,
+        sysdate,
+	  </otherwise>
+	</choose>
+  #{userId,jdbcType=VARCHAR},
+  #{userId,jdbcType=VARCHAR}
+from 
+ xc_bg_items_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+  and  t.BG_HRCY_ID = #{BG_HRCY_ID,jdbcType=VARCHAR}
+</insert>
+<!-- 导入费用项目数据到正式表 -->
+<insert id="insertExItemData" parameterType="java.util.HashMap">
+insert into xc_ex_items(
+ EX_ITEM_ID,      
+ EX_HRCY_ID,      
+ EX_ITEM_CODE,    
+ EX_ITEM_NAME,    
+ EX_ITEM_DESC,    
+ EX_ITEM_UP_ID,   
+ START_DATE,      
+ END_DATE,        
+ CREATION_DATE,       
+ LAST_UPDATE_DATE,
+ CREATED_BY,  
+ LAST_UPDATED_BY 
+) 
+select 
+  t.TMP_ID,
+  t.EX_HRCY_ID,
+  t.EX_ITEM_CODE,
+  t.EX_ITEM_NAME,
+  t.EX_ITEM_DESC,
+  t.EX_ITEM_UP_ID,
+  <choose>
+	  <when test="dbType == 'mysql'.toString()">
+	   IFNULL(t.START_DATE,NOW()),
+       IFNULL(t.END_DATE,DATE_FORMAT('9999-12-31 23:59:59','%Y-%m-%d-%T')),
+       NOW(),
+       NOW(),
+	  </when>
+	  <otherwise>
+	    CASE when t.START_DATE IS NULL OR t.START_DATE = '' THEN sysdate else  t.START_DATE end,
+        CASE when t.END_DATE IS NULL OR t.END_DATE = '' THEN  to_date('9999-12-31 23:59:59','yyyy-MM-dd HH24:mi:ss')  else  t.END_DATE end,
+        sysdate,
+        sysdate,
+	  </otherwise>
+	</choose>
+  #{userId,jdbcType=VARCHAR},
+  #{userId,jdbcType=VARCHAR}
+from 
+ xc_ex_items_tmp t
+where  t.SESSION_ID = #{sessionId,jdbcType=VARCHAR}
+  and  t.EX_HRCY_ID = #{EX_HRCY_ID,jdbcType=VARCHAR}
+</insert>
+</mapper>

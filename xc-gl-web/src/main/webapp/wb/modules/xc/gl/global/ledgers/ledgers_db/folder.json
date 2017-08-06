@@ -1,0 +1,1 @@
+{"title":"账薄管理数据库","index":["select_ledgers.xwl","select_acc_hrcy.xwl","select_currencies.xwl","select_accounts.xwl","select_orgs.xwl","update_check_ld_code.xwl","update_check_acc_hrcy.xwl","update_check_org.xwl","update_ledgers.xwl","insert_ledgers.xwl","delete_ledgers.xwl","insert_update_ledgers.xwl","select_ledger_by_id.xwl"],"hidden":false,"iconCls":""}

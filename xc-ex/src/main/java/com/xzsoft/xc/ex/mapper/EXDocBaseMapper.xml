@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.ex.mapper.EXDocBaseMapper">
+	
+	<!-- 获取账簿下已启用的单据类型信息  -->
+	<select id="getLdSecCatInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select LA.LEDGER_ID ,
+		       A.EX_CAT_CODE,
+		       A.EX_CAT_NAME ,
+		       A.PC_W_FORM_ID,
+		       C.FORM_URL PC_W_FORM_URL,
+		       A.M_W_FORM_ID,
+		       F.FORM_URL M_W_FORM_URL
+		  from xc_ex_ld_cat la, xc_ex_cat a
+		  left join xip_wf_process_forms c on a.pc_w_form_id = c.form_id and c.client_type = 'PC' and c.enable_flag = 'Y'
+		  left join xip_wf_process_forms f on a.m_w_form_id = f.form_id and f.client_type = 'Mobile' and f.enable_flag = 'Y'
+		 where la.ex_cat_code = a.ex_cat_code
+		   and la.ledger_id = #{ledgerId}	
+        order by a.ex_cat_code
+	</select>
+	
+	<!-- 获取账簿费用单据信息  -->
+	<select id="getLdCatInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT A.LEDGER_ID,
+		       A.EX_CAT_CODE,
+		       C.EX_CAT_NAME,
+		       A.PROCESS_ID,
+		       B.PROCESS_CODE,
+		       A.RULE_CODE,
+		       A.ATT_CAT_CODE
+		  FROM XC_EX_CAT C, XC_EX_LD_CAT A
+		  LEFT JOIN XIP_WF_PROCESSES B ON A.PROCESS_ID = B.PROCESS_ID
+		 WHERE C.EX_CAT_CODE = A.EX_CAT_CODE
+		   AND A.LEDGER_ID = #{ledgerId}
+		   AND A.EX_CAT_CODE = #{docCat}
+	</select>
+	
+	<!-- 获取全局费用单据类型信息  -->
+	<select id="getGbCatInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select A.EX_CAT_CODE,
+		       A.EX_CAT_NAME,
+		       A.IS_SIGN,
+		       A.IS_PAY,
+		       A.PROCESS_ID,
+		       B.PROCESS_CODE,
+		       A.ATT_CAT_CODE,
+		       A.PC_W_FORM_ID,
+		       C.FORM_URL PC_W_FORM_URL,
+		       A.PC_A_FORM_ID,
+		       D.FORM_URL PC_A_FORM_URL,
+		       A.PC_P_FORM_ID,
+		       E.FORM_URL PC_P_FORM_URL,
+		       A.M_W_FORM_ID,
+		       F.FORM_URL M_W_FORM_URL,
+		       A.M_A_FORM_ID,
+		       G.FORM_URL M_A_FORM_URL
+		  from xc_ex_cat a
+			  left join xip_wf_processes b on a.process_id = b.process_id and b.enable_flag = 'Y'
+			  left join xip_wf_process_forms c on a.pc_w_form_id = c.form_id and c.client_type = 'PC' and c.enable_flag = 'Y'
+			  left join xip_wf_process_forms d on a.pc_a_form_id = d.form_id and d.client_type = 'PC' and d.enable_flag = 'Y'
+			  left join xip_wf_process_forms e on a.pc_p_form_id = e.form_id and e.client_type = 'PC' and e.enable_flag = 'Y'
+			  left join xip_wf_process_forms f on a.m_w_form_id = f.form_id and f.client_type = 'Mobile' and f.enable_flag = 'Y'
+			  left join xip_wf_process_forms g on a.m_a_form_id = g.form_id and g.client_type = 'Mobile' and g.enable_flag = 'Y'
+		 where a.ex_cat_code = #{docCat}
+	</select>
+	
+	<!-- 获取报销单据打印表单地址   -->
+	<select id="getPrintFormUrlByCat" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT A.EX_CAT_CODE, A.EX_CAT_NAME, A.PC_P_FORM_ID FORM_ID, B.FORM_URL
+		  FROM XC_EX_CAT A
+		  left join XIP_WF_PROCESS_FORMS B on A.PC_P_FORM_ID = B.FORM_ID
+		 WHERE A.EX_CAT_CODE = #{docCat}
+	</select>
+	
+	<!-- 查询单据明细信息  -->
+	<select id="getDocDtls" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.EXDocDtlBean">
+		select t.ex_dtl_id dtlId,
+		       t.ex_doc_id docId,
+		       t.ex_item_id exItemId,
+		       xei.ex_item_name exItemName,
+		       t.bg_item_id bgItemId,
+		       xbi.bg_item_name bgItemName,
+		       t.ex_dtl_amt dtlAmt,
+		       t.ex_dtl_desc dtlDesc,
+		       t.doc_num docNum,
+		       t.start_date startDate,
+		       t.start_pos startPos,
+		       t.end_date endDate,
+		       t.end_pos endPos,
+		       t.creation_date creationDate,
+		       t.created_by createdBy,
+		       t.last_update_date lastUpdateDate,
+		       t.last_updated_by lastUpdatedBy
+		  from xc_ex_doc_dtl t
+		     left join xc_ex_items xei on t.ex_item_id = xei.ex_item_id
+		     left join xc_bg_items xbi on t.bg_item_id = xbi.bg_item_id
+		where t.ex_doc_id = #{docId}	
+	</select>
+	
+	<!-- 查询单据基础信息 -->
+	<select id="getEXDocBean" parameterType="java.lang.String" resultType="com.xzsoft.xc.ex.modal.EXDocBean">
+		select ex_doc_id docId,
+		       ex_doc_code docCode,
+		       ex_cat_code docCatCode,
+		       ledger_id ledgerId,
+		       org_id orgId,
+		       biz_date bizDate,
+		       dept_id deptId,
+		       project_id projectId,
+		       ex_reason exReason,
+		       attach_num attachNum,
+		       ex_item_id exItemId,
+		       bg_item_id bgItemId,
+		       amount,
+		       apply_ex_doc_id applyDocId,
+		       cancel_amt cancelAmt,
+		       ins_code insCode,
+		       audit_status auditStatus,
+		       audit_status_desc auditStatusDesc,
+		       audit_date auditStatusDate,
+		       aduit_users auditUsers,
+		       v_head_id headId,
+		       v_status vstatus,
+		       fin_user_id finUserId,
+		       fin_date finDate,
+		       verifier_id verifierId,
+		       verfy_date verifierDate,
+		       sign_status signStatus,
+		       sign_user_id signUserId,
+		       sign_date signDate,
+		       pay_method payMethod,
+		       ex_pay_id exPayId,
+		       created_by createdBy
+		  from xc_ex_docs
+	    where ex_doc_id = #{docId} 
+	</select>
+	
+	<!-- 按预算项目统计单据明细信息  -->
+	<select id="getDocDtlByBgItemId" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.ex.modal.EXDocDtlBean">
+		<choose>
+			<when test="dbType == 'mysql'">
+				select IF(IFNULL(t.BG_ITEM_ID,'')='','A',t.BG_ITEM_ID) bgItemId, 
+                       sum(t.EX_DTL_AMT) dtlAmt
+				  from xc_ex_doc_dtl t
+				 where t.EX_DOC_ID = #{docId}
+				   and IFNULL(t.BG_ITEM_ID,'') != ''
+				 group by t.BG_ITEM_ID			
+			</when>
+			<when test="dbType == 'oracle'">
+				select nvl(t.BG_ITEM_ID,'A') bgItemId, sum(t.EX_DTL_AMT) dtlAmt
+				  from xc_ex_doc_dtl t
+				 where t.EX_DOC_ID = #{docId} 
+				   and t.BG_ITEM_ID is not null 
+				 group by t.BG_ITEM_ID			
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 保存单据信息  -->
+	<insert id="saveDoc" parameterType="com.xzsoft.xc.ex.modal.EXDocBean">
+		insert into xc_ex_docs
+		  (ex_doc_id,
+		   ex_doc_code,
+		   ex_cat_code,
+		   ledger_id,
+		   org_id,
+		   biz_date,
+		   dept_id,
+		   project_id,
+		   ex_reason,
+		   attach_num,
+		   ex_item_id,
+		   bg_item_id,
+		   amount,
+		   apply_ex_doc_id,
+		   cancel_amt,
+		   SIGN_STATUS,
+		   AUDIT_STATUS,
+		   AUDIT_STATUS_DESC,
+		   creation_date,
+		   created_by,
+		   last_update_date,
+		   last_updated_by
+		)values(
+		   #{docId,jdbcType=VARCHAR},
+		   #{docCode,jdbcType=VARCHAR},
+		   #{docCatCode,jdbcType=VARCHAR},
+		   #{ledgerId,jdbcType=VARCHAR},
+		   #{orgId,jdbcType=VARCHAR},
+		   #{bizDate,jdbcType=TIMESTAMP},
+		   #{deptId,jdbcType=VARCHAR},
+		   #{projectId,jdbcType=VARCHAR},
+		   #{exReason,jdbcType=VARCHAR},
+		   #{attachNum,jdbcType=INTEGER},
+		   #{exItemId,jdbcType=VARCHAR},
+		   #{bgItemId,jdbcType=VARCHAR},
+		   #{amount,jdbcType=NUMERIC},
+		   #{applyDocId,jdbcType=VARCHAR},
+		   #{cancelAmt,jdbcType=NUMERIC},
+		   #{signStatus,jdbcType=VARCHAR},
+		   #{auditStatus,jdbcType=VARCHAR},
+		   #{auditStatusDesc,jdbcType=VARCHAR},
+		   #{creationDate,jdbcType=TIMESTAMP},
+		   #{createdBy,jdbcType=VARCHAR},
+		   #{lastUpdateDate,jdbcType=TIMESTAMP},
+		   #{lastUpdatedBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 保存单据明细  -->
+	<insert id="saveDocDtl" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					insert into xc_ex_doc_dtl
+					  (ex_dtl_id,
+					   ex_doc_id,
+					   ex_item_id,
+					   bg_item_id,
+					   ex_dtl_amt,
+					   ex_dtl_desc,
+					   doc_num,
+					   start_date,
+					   start_pos,
+					   end_date,
+					   end_pos,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+				  	)values(
+					   #{item.dtlId,jdbcType=VARCHAR},
+					   #{item.docId,jdbcType=VARCHAR},
+					   #{item.exItemId,jdbcType=VARCHAR},
+					   #{item.bgItemId,jdbcType=VARCHAR},
+					   #{item.dtlAmt,jdbcType=NUMERIC},
+					   #{item.dtlDesc,jdbcType=VARCHAR},
+					   #{item.docNum,jdbcType=INTEGER},
+					   #{item.startDate,jdbcType=TIMESTAMP},
+					   #{item.startPos,jdbcType=VARCHAR},
+					   #{item.endDate,jdbcType=TIMESTAMP},
+					   #{item.endPos,jdbcType=VARCHAR},
+					   #{item.creationDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR},
+					   #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					   #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					)
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					insert into xc_ex_doc_dtl
+					  (ex_dtl_id,
+					   ex_doc_id,
+					   ex_item_id,
+					   bg_item_id,
+					   ex_dtl_amt,
+					   ex_dtl_desc,
+					   doc_num,
+					   start_date,
+					   start_pos,
+					   end_date,
+					   end_pos,
+					   creation_date,
+					   created_by,
+					   last_update_date,
+					   last_updated_by
+				  	)values(
+					   #{item.dtlId,jdbcType=VARCHAR},
+					   #{item.docId,jdbcType=VARCHAR},
+					   #{item.exItemId,jdbcType=VARCHAR},
+					   #{item.bgItemId,jdbcType=VARCHAR},
+					   #{item.dtlAmt,jdbcType=NUMERIC},
+					   #{item.dtlDesc,jdbcType=VARCHAR},
+					   #{item.docNum,jdbcType=INTEGER},
+					   #{item.startDate,jdbcType=TIMESTAMP},
+					   #{item.startPos,jdbcType=VARCHAR},
+					   #{item.endDate,jdbcType=TIMESTAMP},
+					   #{item.endPos,jdbcType=VARCHAR},
+					   #{item.creationDate,jdbcType=TIMESTAMP},
+					   #{item.createdBy,jdbcType=VARCHAR},
+					   #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					   #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					)				
+				</foreach>
+			</when>
+		</choose>
+	</insert>	
+	
+	<!-- 更新单据信息  -->
+	<update id="updateDoc" parameterType="com.xzsoft.xc.ex.modal.EXDocBean">
+		update xc_ex_docs
+		   set ex_doc_code      = #{docCode,jdbcType=VARCHAR},
+		       ex_cat_code      = #{docCatCode,jdbcType=VARCHAR},
+		       ledger_id        =  #{ledgerId,jdbcType=VARCHAR},
+		       org_id           = #{orgId,jdbcType=VARCHAR},
+		       biz_date         = #{bizDate,jdbcType=TIMESTAMP},
+		       dept_id          = #{deptId,jdbcType=VARCHAR},
+		       project_id       = #{projectId,jdbcType=VARCHAR},
+		       ex_reason        = #{exReason,jdbcType=VARCHAR},
+		       attach_num       = #{attachNum,jdbcType=INTEGER},
+		       ex_item_id       = #{exItemId,jdbcType=VARCHAR},
+		       bg_item_id       = #{bgItemId,jdbcType=VARCHAR},
+		       amount           = #{amount,jdbcType=NUMERIC},
+		       apply_ex_doc_id  = #{applyDocId,jdbcType=VARCHAR},
+		       cancel_amt       = #{cancelAmt,jdbcType=NUMERIC},
+		       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+		       last_updated_by  = #{lastUpdatedBy,jdbcType=VARCHAR}
+		 where ex_doc_id = #{docId,jdbcType=VARCHAR}
+			 <if test="roleMode != 'FIN' ">
+			   and audit_status != 'C'
+			   and audit_status != 'E'		 
+			 </if>
+	</update>
+	
+	<!-- 更新单据明细  -->
+	<update id="updateDocDtl" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					update xc_ex_doc_dtl
+					   set ex_item_id       = #{item.exItemId,jdbcType=VARCHAR},
+					       bg_item_id       = #{item.bgItemId,jdbcType=VARCHAR},
+					       ex_dtl_amt       = #{item.dtlAmt,jdbcType=NUMERIC},
+					       ex_dtl_desc      = #{item.dtlDesc,jdbcType=VARCHAR},
+					       doc_num          = #{item.docNum,jdbcType=INTEGER},
+					       start_date       = #{item.startDate,jdbcType=TIMESTAMP},
+					       start_pos        = #{item.startPos,jdbcType=VARCHAR},
+					       end_date         = #{item.endDate,jdbcType=TIMESTAMP},
+					       end_pos          = #{item.endPos,jdbcType=VARCHAR},
+					       last_update_date = #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					       last_updated_by  = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					 where ex_dtl_id = #{item.dtlId,jdbcType=VARCHAR}				
+				</foreach>
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					update xc_ex_doc_dtl
+					   set ex_item_id       = #{item.exItemId,jdbcType=VARCHAR},
+					       bg_item_id       = #{item.bgItemId,jdbcType=VARCHAR},
+					       ex_dtl_amt       = #{item.dtlAmt,jdbcType=NUMERIC},
+					       ex_dtl_desc      = #{item.dtlDesc,jdbcType=VARCHAR},
+					       doc_num          = #{item.docNum,jdbcType=INTEGER},
+					       start_date       = #{item.startDate,jdbcType=TIMESTAMP},
+					       start_pos        = #{item.startPos,jdbcType=VARCHAR},
+					       end_date         = #{item.endDate,jdbcType=TIMESTAMP},
+					       end_pos          = #{item.endPos,jdbcType=VARCHAR},
+					       last_update_date = #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+					       last_updated_by  = #{item.lastUpdatedBy,jdbcType=VARCHAR}
+					 where ex_dtl_id = #{item.dtlId,jdbcType=VARCHAR}				
+				</foreach>
+			</when>			
+		</choose>
+	</update>
+	
+	<!-- 批量删除单据明细  -->
+	<delete id="deDocDtls" parameterType="java.util.List">
+		delete from xc_ex_doc_dtl where ex_dtl_id in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除单据主表   -->
+	<delete id="delDocById" parameterType="java.lang.String">
+  		delete from xc_ex_docs where ex_doc_id = #{docId} and audit_status != 'C' and audit_status != 'E'	
+	</delete>
+	
+	<!-- 删除单据明细表  -->
+	<delete id="delDocDtlById" parameterType="java.lang.String">
+		delete from xc_ex_doc_dtl where ex_doc_id = #{docId}
+	</delete>
+	
+	<!-- 批量删除单据   -->
+	<delete id="batchDelDoc" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_ex_docs where ex_doc_id = #{item} and audit_status != 'C' and audit_status != 'E'
+				</foreach>			
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_ex_docs where ex_doc_id = #{item} and audit_status != 'C' and audit_status != 'E'
+				</foreach>			
+			</when>
+		</choose>
+	</delete>
+	
+	<!-- 批量删除单据 明细 -->
+	<delete id="batchDelDocDtl" parameterType="java.util.HashMap">
+		<choose>
+			<when test="dbType == 'mysql' ">
+				<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+					delete from xc_ex_doc_dtl where ex_doc_id = #{item}
+				</foreach>			
+			</when>
+			<when test="dbType == 'oracle' ">
+				<foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+					delete from xc_ex_doc_dtl where ex_doc_id = #{item}
+				</foreach>			
+			</when>
+		</choose>
+	</delete>
+	<!-- 获取费用项目树 -->
+	<select id="getExItemTree" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select a.LEDGER_ID,
+	       a.EX_ITEM_ID,
+	       b.EX_ITEM_UP_ID,
+	       b.EX_ITEM_CODE,
+	       b.EX_ITEM_NAME,
+	       b.EX_ITEM_NAME AS "text",
+	       a.BG_ITEM_ID,
+	       c.BG_ITEM_NAME
+	  from xc_ex_items b, xc_ex_ld_cat_items d, xc_ex_ld_items a
+	  left join xc_bg_items c on a.bg_item_id = c.bg_item_id
+	 where a.ex_item_id = b.ex_item_id
+	   and b.EX_ITEM_ID = d.EX_ITEM_ID
+	   and d.LEDGER_ID = a.LEDGER_ID
+	   and d.ledger_id = #{ledgerId,jdbcType=VARCHAR}
+	   and a.ledger_id = #{ledgerId,jdbcType=VARCHAR}
+	   and d.EX_CAT_CODE = #{exDocCat,jdbcType=VARCHAR}
+	   <choose>
+	     <when test="dbType == 'mysql'.toString()">
+	     	   <![CDATA[and b.start_date <= CURRENT_TIMESTAMP()]]>
+	   		   and b.end_date >= CURRENT_TIMESTAMP()
+	   		   and (b.ex_item_code like CONCAT('%','${exCodeName}','%') or b.ex_item_name like CONCAT('%','${exCodeName}','%'))
+	     </when>
+	     <otherwise>
+	           <![CDATA[and b.start_date <= SYSDATE]]>
+	   		   and b.end_date >= SYSDATE
+	   		   and (b.ex_item_code like '%'||'${exCodeName}'||'%' or b.ex_item_name like '%'||'${exCodeName}'||'%')
+	     </otherwise>
+	   </choose>
+	   and a.is_enabled = 'Y'
+	   and not exists (select 1 from xc_ex_items d where b.EX_ITEM_ID = d.EX_ITEM_UP_ID)
+	  order by b.ex_item_code
+	</select>
+	<!-- 获取账簿对应的所有非末级费用项目 -->
+	<select id="getArchyExItemTree" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  SELECT
+	    '' AS LEDGER_ID,
+	    t.EX_ITEM_ID,
+	    t.EX_ITEM_UP_ID,
+        t.EX_ITEM_CODE,
+		t.EX_ITEM_NAME AS "text",
+		'' as BG_ITEM_ID,
+		'' as BG_ITEM_NAME
+	  FROM
+	    xc_ex_items t,
+		xc_gl_ledgers l
+	  WHERE
+		l.EX_HRCY_ID = t.EX_HRCY_ID
+	  AND 
+		l.LEDGER_ID = #{ledgerId,jdbcType=VARCHAR}
+	  AND
+		EXISTS (select 1 FROM xc_ex_items h WHERE h.EX_ITEM_UP_ID = t.EX_ITEM_ID)
+	</select>
+	
+	<!-- 根据费用申请单ID查询报销单信息 -->
+	<select id="getEXDocBeanByApplyDocId" parameterType="java.util.HashMap" resultType="com.xzsoft.xc.ex.modal.EXDocBean">
+		select ex_doc_id docId,
+		       ex_doc_code docCode,
+		       ex_cat_code docCatCode,
+		       ledger_id ledgerId,
+		       org_id orgId,
+		       biz_date bizDate,
+		       dept_id deptId,
+		       project_id projectId,
+		       ex_reason exReason,
+		       attach_num attachNum,
+		       ex_item_id exItemId,
+		       bg_item_id bgItemId,
+		       amount,
+		       apply_ex_doc_id applyDocId,
+		       cancel_amt cancelAmt,
+		       ins_code insCode,
+		       audit_status auditStatus,
+		       audit_status_desc auditStatusDesc,
+		       audit_date auditStatusDate,
+		       aduit_users auditUsers,
+		       v_head_id headId,
+		       v_status vstatus,
+		       fin_user_id finUserId,
+		       fin_date finDate,
+		       verifier_id verifierId,
+		       verfy_date verifierDate,
+		       sign_status signStatus,
+		       sign_user_id signUserId,
+		       sign_date signDate,
+		       pay_method payMethod,
+		       ex_pay_id exPayId,
+		       created_by createdBy
+		  from xc_ex_docs
+	    where ledger_id = #{ledgerId} 	
+	      and apply_ex_doc_id = #{applyDocId}
+	</select>
+	
+</mapper>

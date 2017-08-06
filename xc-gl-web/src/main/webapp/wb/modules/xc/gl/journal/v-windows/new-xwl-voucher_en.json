@@ -1,0 +1,36 @@
+{
+  VOUCHER : "Voucher",
+  saveBtn : "Save" ,
+  submitBtn : "Submit" ,
+  
+  ledger : "Ledger" ,
+  accountDate : "Account Date" ,
+  ldPeriod : "Period" ,
+  v_attchment_num : "Attchment" ,
+  v_serial_no : "Serial Num" ,
+  v_category : "Category" ,
+  v_summary : "Summary" ,
+  
+  addLine : 'Add Line' ,
+  delLine : 'Delete Line' ,
+  
+  rowNumber : "NO",
+  v_line_summary : "Summary",
+  v_line_account : "Account",
+  v_ca_name : "Cash Item",
+  v_line_amount : "Amount",
+  v_dim_name : "Dimension",
+  v_exchange_rate : " Exchange",
+  v_cny_name : "Currency",
+  v_enter_dr : "Enter DR",
+  v_enter_cr : "Enter CR",
+  v_account_dr : "Account DR",
+  v_account_cr : "Account CR",
+  total : "Total",
+  vouchers : "Voucher",
+  
+  v_created_name : "Creator",
+  v_verifier : "Verifier",
+  v_signatory : "Signatory",
+  v_bookkeeper : "Bookkeeper"
+}

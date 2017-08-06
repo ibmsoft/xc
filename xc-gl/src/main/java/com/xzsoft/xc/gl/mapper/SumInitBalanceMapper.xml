@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.gl.mapper.SumInitBalanceMapper">
+
+	<!-- 将本位币和原币数据导入正式表  -->
+	<insert id="impInitAccBalances" parameterType="java.lang.String">
+		insert into xc_gl_balance
+		  (ledger_id, ccid, period_code, currency_code, 
+		   b_dr, b_cr, y_dr, y_cr, ptd_dr, ptd_cr, ytd_dr, ytd_cr, pjtd_dr, pjtd_cr, t_b_dr, 
+		   t_b_cr, t_y_dr, t_y_cr, t_ptd_dr, t_ptd_cr, t_ytd_dr, t_ytd_cr, t_pjtd_dr, t_pjtd_cr, 
+		   amt_b_dr, amt_b_cr, amt_y_dr, amt_y_cr, amt_ptd_dr, amt_ptd_cr, amt_ytd_dr, amt_ytd_cr, amt_pjtd_dr, amt_pjtd_cr, 
+		   amt_t_b_dr, amt_t_b_cr, amt_t_y_dr, amt_t_y_cr, amt_t_ptd_dr, amt_t_ptd_cr, amt_t_ytd_dr, amt_t_ytd_cr, amt_t_pjtd_dr, amt_t_pjtd_cr, 
+		   creation_date, created_by,last_update_date,last_updated_by)
+		  <choose>
+		  	<when test="isForeign == 'N'.toString() ">
+				select ledger_id, ccid, period_code, currency_code, 
+				       b_dr, b_cr, y_dr, y_cr, ptd_dr, ptd_cr, ytd_dr, ytd_cr, pjtd_dr, pjtd_cr, 
+				       b_dr, b_cr, y_dr, y_cr, ptd_dr, ptd_cr, ytd_dr, ytd_cr, pjtd_dr, pjtd_cr, 
+				       amt_b_dr, amt_b_cr, amt_y_dr, amt_y_cr, amt_ptd_dr, amt_ptd_cr, amt_ytd_dr, amt_ytd_cr, amt_pjtd_dr, amt_pjtd_cr, 
+				       amt_b_dr, amt_b_cr, amt_y_dr, amt_y_cr, amt_ptd_dr, amt_ptd_cr, amt_ytd_dr, amt_ytd_cr, amt_pjtd_dr, amt_pjtd_cr, 
+				       #{cdate,jdbcType=TIMESTAMP}, 
+				       #{userId,jdbcType=VARCHAR},
+				       #{cdate,jdbcType=TIMESTAMP}, 
+				       #{userId,jdbcType=VARCHAR}
+				from xc_gl_balance_tmp t
+				where t.ledger_id = #{ledgerId}
+				  and t.is_valid = 'N'		  	
+		  	</when>
+		  	<otherwise>
+				select ledger_id, ccid, period_code, currency_code, 
+				       t_b_dr, t_b_cr, t_y_dr, t_y_cr, t_ptd_dr, t_ptd_cr, t_ytd_dr, t_ytd_cr, t_pjtd_dr, t_pjtd_cr, 
+				       t_b_dr, t_b_cr, t_y_dr, t_y_cr, t_ptd_dr, t_ptd_cr, t_ytd_dr, t_ytd_cr, t_pjtd_dr, t_pjtd_cr, 
+				       amt_t_b_dr, amt_t_b_cr, amt_t_y_dr, amt_t_y_cr, amt_t_ptd_dr, amt_t_ptd_cr, 
+				       amt_t_ytd_dr, amt_t_ytd_cr, amt_t_pjtd_dr, amt_t_pjtd_cr, 
+				       amt_t_b_dr, amt_t_b_cr, amt_t_y_dr, amt_t_y_cr, amt_t_ptd_dr, amt_t_ptd_cr, 
+				       amt_t_ytd_dr, amt_t_ytd_cr, amt_t_pjtd_dr, amt_t_pjtd_cr, 
+				       #{cdate,jdbcType=TIMESTAMP}, 
+				       #{userId,jdbcType=VARCHAR},
+				       #{cdate,jdbcType=TIMESTAMP}, 
+				       #{userId,jdbcType=VARCHAR}
+				from xc_gl_balance_tmp t
+				where t.ledger_id = #{ledgerId}
+				  and t.is_valid = 'N'
+		  		<![CDATA[
+		  			and t.ENTER_CNY_CODE <> t.currency_code
+		  		]]>
+		  	</otherwise>
+		  </choose>
+	</insert>
+	
+	<!-- 删除正式表中科目余额数据  -->
+	<delete id="delInitAccBalances" parameterType="java.util.HashMap">
+		delete from xc_gl_balance where xc_gl_balance.LEDGER_ID = #{ledgerId} and xc_gl_balance.PERIOD_CODE = #{prePeriodCode}
+	</delete>
+	
+	<!-- 查询待汇总的科目信息   -->
+	<select id="getSumAccounts" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select DISTINCT t.LEDGER_ID     ledgerId,
+		                t.CCID          ccid,
+		                xc.ACC_ID       accId,
+		                xc.ACC_CODE     accCode,
+		                t.PERIOD_CODE   periodCode,
+		                t.CURRENCY_CODE cnyCode
+		  from xc_gl_balance_tmp t,xc_gl_ccid xc
+		 where t.LEDGER_ID = xc.LEDGER_ID
+		   and t.CCID = xc.CCID
+		   and t.LEDGER_ID = #{ledgerId}
+		<if test="isForeign == 'N'.toString() ">
+			<![CDATA[
+			and exists (select 1 from xc_gl_ledgers xl where t.ENTER_CNY_CODE <> xl.CURRENCY_CODE AND T.LEDGER_ID = xl.LEDGER_ID)
+			]]>
+		</if>
+	</select>
+	
+	<!-- 计算期初借方和贷方余额  -->
+	<select id="sumB" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<choose>
+			<when test="isInitPeriod == 'Y'.toString() ">
+				select t.LEDGER_ID,
+				       t.PERIOD_CODE,
+				       t.CURRENCY_CODE,
+				       sum(t.B_DR) B_DR,
+				       sum(t.B_CR) B_CR,
+				       sum(t.T_B_DR) T_B_DR,
+				       sum(t.T_B_CR) T_B_CR,
+				       sum(t.AMT_B_DR) AMT_B_DR,
+				       sum(t.AMT_B_CR) AMT_B_CR,
+				       sum(t.AMT_T_B_DR) AMT_T_B_DR,
+				       sum(t.AMT_T_B_CR) AMT_T_B_CR
+				  from xc_gl_balance t,xc_gl_ccid xc
+				 where xc.ledger_id = t.ledger_id
+				   and xc.ccid = t.ccid
+				   and t.LEDGER_ID = #{ledgerId}
+				   and t.PERIOD_CODE = #{periodCode}
+				   and t.CURRENCY_CODE = #{cnyCode}
+			       <choose>
+			       		<when test="isLeaf == 'Y'.toString()">
+			       		   and xc.acc_id = #{accId}
+			       		</when>
+			       		<otherwise>
+					       and exists (select 1 from xc_gl_accounts xga where xc.acc_id = xga.acc_id 
+					       				  and xga.up_acc_code = #{accCode} and xga.acc_hrcy_id = #{hrcyId})	       			
+			       		</otherwise>
+			       </choose>
+			       and xc.CCID_CODE like '%${fullCode}'
+				 group by t.LEDGER_ID, t.PERIOD_CODE, t.CURRENCY_CODE     
+			</when>
+			<otherwise>
+				select t.LEDGER_ID,
+				       t.CCID,
+				       t.PERIOD_CODE,
+				       t.CURRENCY_CODE,
+				       sum(t.PJTD_DR) B_DR,
+				       sum(t.PJTD_CR) B_CR,
+				       sum(t.T_PJTD_DR) T_B_DR,
+				       sum(t.T_PJTD_CR) T_B_CR,
+				       sum(t.AMT_PJTD_DR) AMT_B_DR,
+				       sum(t.AMT_PJTD_CR) AMT_B_CR,
+				       sum(t.AMT_T_PJTD_DR) AMT_T_B_DR,
+				       sum(t.AMT_T_PJTD_CR) AMT_T_B_CR
+				  from xc_gl_balance t
+				 where t.LEDGER_ID = #{ledgerId}
+				   and t.CCID = #{ccid}
+				   and t.PERIOD_CODE = #{prePeriodCode}
+				   and t.CURRENCY_CODE = #{cnyCode}
+				 group by t.LEDGER_ID, t.CCID, t.PERIOD_CODE, t.CURRENCY_CODE				
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 计算本期借方和贷方发生额  -->
+	<select id="sumPTD" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.LEDGER_ID,
+		       t.PERIOD_CODE,
+		       t.CURRENCY_CODE,
+		       sum(t.ptd_dr) PTD_DR,
+		       sum(t.ptd_cr) PTD_CR,
+		       sum(t.t_ptd_dr) T_PTD_DR,
+		       sum(t.t_ptd_cr) T_PTD_CR,
+		       sum(t.amt_ptd_dr) AMT_PTD_DR,
+		       sum(t.amt_ptd_cr) AMT_PTD_CR,
+		       sum(t.amt_t_ptd_dr) AMT_T_PTD_DR,
+		       sum(t.amt_t_ptd_cr) AMT_T_PTD_CR
+		  from xc_gl_balance t ,xc_gl_ccid xc
+		 where xc.ledger_id = t.ledger_id
+	       and xc.ccid = t.ccid
+	       and t.LEDGER_ID = #{ledgerId}
+	       and t.PERIOD_CODE = #{periodCode}
+	       and t.CURRENCY_CODE = #{cnyCode}
+	       <choose>
+	       		<when test="isLeaf == 'Y'.toString()">
+	       		   and xc.acc_id = #{accId}
+	       		</when>
+	       		<otherwise>
+			       and exists (select 1 from xc_gl_accounts xga where xc.acc_id = xga.acc_id 
+			       				  and xga.up_acc_code = #{accCode} and xga.acc_hrcy_id = #{hrcyId})	       			
+	       		</otherwise>
+	       </choose>
+	       and xc.CCID_CODE like '%${fullCode}'
+	     group by t.LEDGER_ID,t.PERIOD_CODE, t.CURRENCY_CODE
+	</select>
+	
+	<!-- 计算年初借方和贷方余额  -->
+	<select id="sumY" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<choose>
+			<when test="isInitPeriod == 'Y'.toString() ">
+				select t.LEDGER_ID,
+				       t.PERIOD_CODE,
+				       t.CURRENCY_CODE,
+				       sum(t.Y_DR) Y_DR,
+				       sum(t.Y_CR) Y_CR,
+				       sum(t.T_Y_DR) T_Y_DR,
+				       sum(t.T_Y_CR) T_Y_CR,
+				       sum(t.AMT_Y_DR) AMT_Y_DR,
+			           sum(t.AMT_Y_CR) AMT_Y_CR,
+			           sum(t.AMT_T_Y_DR) AMT_T_Y_DR,
+			           sum(t.AMT_T_Y_CR) AMT_T_Y_CR		
+			      from xc_gl_balance t ,xc_gl_ccid xc
+			     where xc.ledger_id = t.ledger_id
+			       and xc.ccid = t.ccid 
+			       and t.LEDGER_ID = #{ledgerId}
+			       and t.PERIOD_CODE = #{periodCode}
+			       and t.CURRENCY_CODE = #{cnyCode}
+			       <choose>
+			       		<when test="isLeaf == 'Y'.toString()">
+			       		   and xc.acc_id = #{accId}
+			       		</when>
+			       		<otherwise>
+					       and exists (select 1 from xc_gl_accounts xga where xc.acc_id = xga.acc_id 
+					       				  and xga.up_acc_code = #{accCode} and xga.acc_hrcy_id = #{hrcyId})	       			
+			       		</otherwise>
+			       </choose>
+			       and xc.CCID_CODE like '%${fullCode}'
+			     group by t.LEDGER_ID, t.PERIOD_CODE, t.CURRENCY_CODE
+			</when>
+			<otherwise>
+				select t.LEDGER_ID,
+				       t.CCID,
+				       t.PERIOD_CODE,
+				       t.CURRENCY_CODE,
+				       <choose>
+				           <!-- 未跨年 -->
+					       <when test="isDiffYear == 'N'.toString() ">
+						       sum(t.Y_DR) Y_DR,
+						       sum(t.Y_CR) Y_CR,
+						       sum(t.T_Y_DR) T_Y_DR,
+						       sum(t.T_Y_CR) T_Y_CR,
+						       sum(t.AMT_Y_DR) AMT_Y_DR,
+					           sum(t.AMT_Y_CR) AMT_Y_CR,
+					           sum(t.AMT_T_Y_DR) AMT_T_Y_DR,
+					           sum(t.AMT_T_Y_CR) AMT_T_Y_CR				       
+					       </when>	
+					       <!-- 跨年 -->	       
+				       	   <otherwise>
+						       sum(t.PJTD_DR) Y_DR,
+						       sum(t.PJTD_CR) Y_CR,
+						       sum(t.T_PJTD_DR) T_Y_DR,
+						       sum(t.T_PJTD_CR) T_Y_CR,
+						       sum(t.AMT_PJTD_DR) AMT_Y_DR,
+					           sum(t.AMT_PJTD_CR) AMT_Y_CR,
+					           sum(t.AMT_T_PJTD_DR) AMT_T_Y_DR,
+					           sum(t.AMT_T_PJTD_CR) AMT_T_Y_CR		       	   
+				       	   </otherwise>
+				       </choose>
+			      from xc_gl_balance t
+			     where t.LEDGER_ID = #{ledgerId}
+			       and t.CCID = #{ccid}
+			       and t.PERIOD_CODE = #{preYearCode}
+			       and t.CURRENCY_CODE = #{cnyCode}
+			     group by t.LEDGER_ID, t.CCID, t.PERIOD_CODE, t.CURRENCY_CODE  					
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 计算本年借方和贷方发生额  -->
+	<select id="sumYTD" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.LEDGER_ID,
+		       t.CURRENCY_CODE,
+		       sum(t.ptd_dr) YTD_DR,
+		       sum(t.ptd_cr) YTD_CR,
+		       sum(t.t_ptd_dr) T_YTD_DR,
+		       sum(t.t_ptd_cr) T_YTD_CR,
+		       sum(t.amt_ptd_dr) AMT_YTD_DR,
+	           sum(t.amt_ptd_cr) AMT_YTD_CR,
+	           sum(t.amt_t_ptd_dr) AMT_T_YTD_DR,
+	           sum(t.amt_t_ptd_cr) AMT_T_YTD_CR
+	      from xc_gl_balance t, xc_gl_ccid xc
+	     where xc.ledger_id = t.ledger_id
+	       and xc.ccid = t.ccid
+	       and t.LEDGER_ID = #{ledgerId}
+	       <choose>
+	       		<when test="isLeaf == 'Y'.toString()">
+	       		   and xc.acc_id = #{accId}
+	       		</when>
+	       		<otherwise>
+		    	   and exists (select 1 from xc_gl_accounts xga where xc.acc_id = xga.acc_id 
+		    				      and xga.up_acc_code = #{accCode} and xga.acc_hrcy_id = #{hrcyId})    			
+	       		</otherwise>
+	       </choose>
+	       and xc.CCID_CODE like '%${fullCode}'
+	       <![CDATA[
+		       and t.PERIOD_CODE >= #{yearStartPeriodCode}
+		       and t.PERIOD_CODE <= #{periodCode}
+	       ]]>
+	       and t.CURRENCY_CODE = #{cnyCode}
+	     group by t.LEDGER_ID, t.CURRENCY_CODE
+	</select>
+	
+	<!-- 计算期末借方和贷方余额  -->
+	<select id="sumPJTD" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.LEDGER_ID,
+		       t.PERIOD_CODE,
+		       t.CURRENCY_CODE,
+		       sum(t.pjtd_dr) PJTD_DR,
+		       sum(t.pjtd_cr) PJTD_CR,
+		       sum(t.t_pjtd_dr) T_PJTD_DR,
+		       sum(t.t_pjtd_cr) T_PJTD_CR,
+		       sum(t.amt_pjtd_dr) AMT_PJTD_DR,
+		       sum(t.amt_pjtd_cr) AMT_PJTD_CR,
+		       sum(t.amt_t_pjtd_dr) AMT_T_PJTD_DR,
+		       sum(t.amt_t_pjtd_cr) AMT_T_PJTD_CR
+		  from xc_gl_balance t ,xc_gl_ccid xc
+		 where xc.ledger_id = t.ledger_id
+	       and xc.ccid = t.ccid
+	       and t.LEDGER_ID = #{ledgerId}
+	       and t.PERIOD_CODE = #{periodCode}
+	       and t.CURRENCY_CODE = #{cnyCode}
+	       <choose>
+	       		<when test="isLeaf == 'Y'.toString()">
+	       		   and xc.acc_id = #{accId}
+	       		</when>
+	       		<otherwise>
+			       and exists (select 1 from xc_gl_accounts xga where xc.acc_id = xga.acc_id 
+			       				  and xga.up_acc_code = #{accCode} and xga.acc_hrcy_id = #{hrcyId})	       			
+	       		</otherwise>
+	       </choose>
+	       and xc.CCID_CODE like '%${fullCode}'
+	     group by t.LEDGER_ID, t.PERIOD_CODE, t.CURRENCY_CODE
+	</select>
+	
+	<!-- 保存科目余额  -->
+	<insert id="insInitAccBalances" parameterType="java.util.HashMap">
+		insert into xc_gl_balance(
+		  ledger_id, ccid, period_code, currency_code, 
+		  b_dr, b_cr, y_dr, y_cr, ptd_dr, ptd_cr, ytd_dr, ytd_cr, pjtd_dr, pjtd_cr, 
+		  t_b_dr, t_b_cr, t_y_dr, t_y_cr, t_ptd_dr, t_ptd_cr, t_ytd_dr, t_ytd_cr, t_pjtd_dr, t_pjtd_cr, 
+		  amt_b_dr, amt_b_cr, amt_y_dr, amt_y_cr, amt_ptd_dr, amt_ptd_cr, amt_ytd_dr, amt_ytd_cr, amt_pjtd_dr, amt_pjtd_cr, 
+		  amt_t_b_dr, amt_t_b_cr, amt_t_y_dr, amt_t_y_cr, amt_t_ptd_dr, amt_t_ptd_cr, amt_t_ytd_dr, amt_t_ytd_cr, amt_t_pjtd_dr, amt_t_pjtd_cr, 
+		  creation_date, created_by,last_update_date,last_updated_by
+		  )values(
+		  	#{ledgerId,jdbcType=VARCHAR}, 
+		 	#{ccid,jdbcType=VARCHAR}, 
+		  	#{periodCode,jdbcType=VARCHAR}, 
+		  	#{cnyCode,jdbcType=VARCHAR}, 
+			#{B_DR,jdbcType=NUMERIC}, 
+			#{B_CR,jdbcType=NUMERIC}, 
+			#{Y_DR,jdbcType=NUMERIC}, 
+			#{Y_CR,jdbcType=NUMERIC}, 
+			#{PTD_DR,jdbcType=NUMERIC}, 
+			#{PTD_CR,jdbcType=NUMERIC}, 
+			#{YTD_DR,jdbcType=NUMERIC}, 
+			#{YTD_CR,jdbcType=NUMERIC}, 
+			#{PJTD_DR,jdbcType=NUMERIC}, 
+			#{PJTD_CR,jdbcType=NUMERIC}, 
+			#{T_B_DR,jdbcType=NUMERIC}, 
+			#{T_B_CR,jdbcType=NUMERIC}, 
+			#{T_Y_DR,jdbcType=NUMERIC}, 
+			#{T_Y_CR,jdbcType=NUMERIC}, 
+			#{T_PTD_DR,jdbcType=NUMERIC}, 
+			#{T_PTD_CR,jdbcType=NUMERIC}, 
+			#{T_YTD_DR,jdbcType=NUMERIC}, 
+			#{T_YTD_CR,jdbcType=NUMERIC}, 
+			#{T_PJTD_DR,jdbcType=NUMERIC}, 
+			#{T_PJTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_B_DR,jdbcType=NUMERIC}, 
+			#{AMT_B_CR,jdbcType=NUMERIC}, 
+			#{AMT_Y_DR,jdbcType=NUMERIC}, 
+			#{AMT_Y_CR,jdbcType=NUMERIC}, 
+			#{AMT_PTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_PTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_YTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_YTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_PJTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_PJTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_T_B_DR,jdbcType=NUMERIC}, 
+			#{AMT_T_B_CR,jdbcType=NUMERIC}, 
+			#{AMT_T_Y_DR,jdbcType=NUMERIC}, 
+			#{AMT_T_Y_CR,jdbcType=NUMERIC}, 
+			#{AMT_T_PTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_T_PTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_T_YTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_T_YTD_CR,jdbcType=NUMERIC}, 
+			#{AMT_T_PJTD_DR,jdbcType=NUMERIC}, 
+			#{AMT_T_PJTD_CR,jdbcType=NUMERIC}, 
+			#{cdate,jdbcType=TIMESTAMP}, 
+			#{userId,jdbcType=VARCHAR}, 
+			#{cdate,jdbcType=TIMESTAMP}, 
+			#{userId,jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<!-- 修改科目余额  -->
+	<update id="updInitAccBalances" parameterType="java.util.HashMap">
+		update xc_gl_balance
+		   set b_dr             = #{B_DR,jdbcType=NUMERIC},
+		       b_cr             = #{B_CR,jdbcType=NUMERIC},
+		       y_dr             = #{Y_DR,jdbcType=NUMERIC},
+		       y_cr             = #{Y_CR,jdbcType=NUMERIC},
+		       ptd_dr           = #{PTD_DR,jdbcType=NUMERIC},
+		       ptd_cr           = #{PTD_CR,jdbcType=NUMERIC},
+		       ytd_dr           = #{YTD_DR,jdbcType=NUMERIC},
+		       ytd_cr           = #{YTD_CR,jdbcType=NUMERIC},
+		       pjtd_dr          = #{PJTD_DR,jdbcType=NUMERIC},
+		       pjtd_cr          = #{PJTD_CR,jdbcType=NUMERIC},
+		       t_b_dr           = #{T_B_DR,jdbcType=NUMERIC},
+		       t_b_cr           = #{T_B_CR,jdbcType=NUMERIC},
+		       t_y_dr           = #{T_Y_DR,jdbcType=NUMERIC},
+		       t_y_cr           = #{T_Y_CR,jdbcType=NUMERIC},
+		       t_ptd_dr         = #{T_PTD_DR,jdbcType=NUMERIC},
+		       t_ptd_cr         = #{T_PTD_CR,jdbcType=NUMERIC},
+		       t_ytd_dr         = #{T_YTD_DR,jdbcType=NUMERIC},
+		       t_ytd_cr         = #{T_YTD_CR,jdbcType=NUMERIC},
+		       t_pjtd_dr        = #{T_PJTD_DR,jdbcType=NUMERIC},
+		       t_pjtd_cr        = #{T_PJTD_CR,jdbcType=NUMERIC},
+		       amt_b_dr         = #{AMT_B_DR,jdbcType=NUMERIC},
+		       amt_b_cr         = #{AMT_B_CR,jdbcType=NUMERIC},
+		       amt_y_dr         = #{AMT_Y_DR,jdbcType=NUMERIC},
+		       amt_y_cr         = #{AMT_Y_CR,jdbcType=NUMERIC},
+		       amt_ptd_dr       = #{AMT_PTD_DR,jdbcType=NUMERIC},
+		       amt_ptd_cr       = #{AMT_PTD_CR,jdbcType=NUMERIC},
+		       amt_ytd_dr       = #{AMT_YTD_DR,jdbcType=NUMERIC},
+		       amt_ytd_cr       = #{AMT_YTD_CR,jdbcType=NUMERIC},
+		       amt_pjtd_dr      = #{AMT_PJTD_DR,jdbcType=NUMERIC},
+		       amt_pjtd_cr      = #{AMT_PJTD_CR,jdbcType=NUMERIC},
+		       amt_t_b_dr       = #{AMT_T_B_DR,jdbcType=NUMERIC},
+		       amt_t_b_cr       = #{AMT_T_B_CR,jdbcType=NUMERIC},
+		       amt_t_y_dr       = #{AMT_T_Y_DR,jdbcType=NUMERIC},
+		       amt_t_y_cr       = #{AMT_T_Y_CR,jdbcType=NUMERIC},
+		       amt_t_ptd_dr     = #{AMT_T_PTD_DR,jdbcType=NUMERIC},
+		       amt_t_ptd_cr     = #{AMT_T_PTD_CR,jdbcType=NUMERIC},
+		       amt_t_ytd_dr     = #{AMT_T_YTD_DR,jdbcType=NUMERIC},
+		       amt_t_ytd_cr     = #{AMT_T_YTD_CR,jdbcType=NUMERIC},
+		       amt_t_pjtd_dr    = #{AMT_T_PJTD_DR,jdbcType=NUMERIC},
+		       amt_t_pjtd_cr    = #{AMT_T_PJTD_CR,jdbcType=NUMERIC},
+		       last_update_date = #{cdate,jdbcType=TIMESTAMP}, 
+		       last_updated_by  = #{userId,jdbcType=VARCHAR}
+		 where ledger_id = #{ledgerId,jdbcType=VARCHAR}
+		   and ccid = #{ccid,jdbcType=VARCHAR}
+		   and period_code = #{periodCode,jdbcType=VARCHAR}
+		   and currency_code = #{cnyCode,jdbcType=VARCHAR}	
+	</update>
+	
+	<!-- 删除余额为0的数据  -->
+	<delete id="delInitAccBalancesByZero" parameterType="java.util.HashMap">
+		delete from xc_gl_balance
+		 where LEDGER_ID = #{ledgerId}
+		   and PERIOD_CODE = #{periodCode}
+		   and CURRENCY_CODE = #{cnyCode}
+		   and CCID = #{ccid}	
+		   and 	  b_dr = 0
+		   and    b_cr = 0
+		   and    y_dr = 0
+		   and    y_cr = 0
+		   and    ptd_dr = 0
+		   and    ptd_cr = 0
+		   and    ytd_dr = 0
+		   and    ytd_cr = 0
+		   and    pjtd_dr = 0
+		   and    pjtd_cr = 0
+		   and    t_b_dr = 0
+		   and    t_b_cr = 0
+		   and    t_y_dr = 0
+		   and    t_y_cr = 0
+		   and    t_ptd_dr = 0
+		   and    t_ptd_cr = 0
+		   and    t_ytd_dr = 0
+		   and    t_ytd_cr = 0
+		   and    t_pjtd_dr = 0
+		   and    t_pjtd_cr = 0
+		   and    amt_b_dr = 0
+		   and    amt_b_cr = 0
+		   and    amt_y_dr = 0
+		   and    amt_y_cr = 0
+		   and    amt_ptd_dr = 0
+		   and    amt_ptd_cr = 0
+		   and    amt_ytd_dr = 0
+		   and    amt_ytd_cr = 0
+		   and    amt_pjtd_dr = 0
+		   and    amt_pjtd_cr = 0
+		   and    amt_t_b_dr = 0
+		   and    amt_t_b_cr = 0
+		   and    amt_t_y_dr = 0
+		   and    amt_t_y_cr = 0
+		   and    amt_t_ptd_dr = 0
+		   and    amt_t_ptd_cr = 0			
+	</delete>
+	
+	<!-- 更改科目余额数据状态  -->
+	<update id="updateTmpAccBalancesStatus" parameterType="java.lang.String">
+		update xc_gl_balance_tmp t set t.IS_VALID = #{isValid,jdbcType=VARCHAR} where t.LEDGER_ID = #{ledgerId}
+	</update>
+
+</mapper>

@@ -1,0 +1,50 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsoft.xc.rep.mapper.ESTabCellMapper">
+	
+	<!-- 模板单元格信息 -->
+	<resultMap type="com.xzsoft.xc.rep.modal.ESTabCellBean" id="tabCellResultMap">
+		<id property="cellId" column="cell_id" />
+		<result property="tabId" column="tab_id" />
+		<result property="x" column="x" />
+		<result property="y" column="y" />
+		<result property="content" column="content" />
+		<result property="isCal" column="is_cal" />
+		<result property="rawData" column="raw_data" />
+		<result property="cellType" column="cell_type" />
+		<result property="comment" column="comment" />
+		<result property="createdBy" column="created_by" />
+		<result property="creationDate" column="creation_date" />
+		<result property="lastUpdatedBy" column="last_updated_by" />
+		<result property="lastUpdateDate" column="last_update_date" />
+	</resultMap>
+	
+	<!-- 删除页签对应的单元格信息 -->
+	<delete id="delTabCells" parameterType="java.lang.String">
+		delete from xc_rep_tab_cell where tab_id = #{tabId}
+	</delete>
+	
+	<!-- 批量插入单元格信息 -->
+	<insert id="batchInsertTabCells" parameterType="java.util.List">
+	</insert>
+	
+	<!-- 查询模板单元格信息 -->
+	<select id="getTabCells" parameterType="java.lang.String" resultMap="tabCellResultMap">
+		SELECT cell_id,
+		       tab_id,
+		       x,
+		       y,
+		       content,
+		       is_cal,
+		       raw_data,
+		       cell_type,
+		       comment,
+		       creation_date,
+		       created_by,
+		       last_update_date,
+		       last_updated_by
+		  FROM xc_rep_tab_cell t
+		 WHERE t.tab_id = #{tabId}
+		 ORDER BY t.x, t.y
+	</select>
+	
+</mapper>
