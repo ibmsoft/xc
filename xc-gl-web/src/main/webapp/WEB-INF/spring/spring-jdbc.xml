@@ -12,12 +12,12 @@
 		<property name="username" value="xsr" />
 		<property name="password" value="YLb3LTYiVVQ7iq1z1DWy6FMv70O4FqGZK/8AxixGVIGMue04HbLXI2CstV7rbm4PogBC1GXVje9ORpCctAVPmg==" />
 		 -->
-		<property name="url" value="jdbc:mysql://xzsoft.cc:3306/xsr_uat?allowMultiQueries=true" />
+		<!-- <property name="url" value="jdbc:mysql://xzsoft.cc:3306/xsr_uat?allowMultiQueries=true" />
 		<property name="username" value="xsr" />
 		<property name="password" value="YLb3LTYiVVQ7iq1z1DWy6FMv70O4FqGZK/8AxixGVIGMue04HbLXI2CstV7rbm4PogBC1GXVje9ORpCctAVPmg==" />
-		
+		 -->
 		<!-- 本地 -->
-		<!-- <property name="url" value="jdbc:mysql://localhost:3306/xsr_uat?allowMultiQueries=true" />
+		<property name="url" value="jdbc:mysql://localhost:3306/xsr_uat?allowMultiQueries=true" />
 		<property name="username" value="root" />
 		<property name="password" value="gMBursD7fz9huNSXZ/HcIuntyk8jBBc3WRFIjvxXFLswz5QaAhXBHTAOjZQdh/zcZIHQPVMuxLTOiIWIf1MINA==" />
 		 -->
@@ -25,7 +25,7 @@
 		<!-- <property name="url" value="jdbc:mysql://xzsoft.cc:3308/xz?allowMultiQueries=true" />
 		<property name="username" value="xc" />
 		<property name="password" value="klhBw03x0oacBnyozrTiUE8zaVO3065Pu9v221rWtVh4JcPM1nwqYDqrwPdiyxOr9qD6fxS8QxTvKcPIAQdF3g==" />
-		 -->
+		
 		<!-- X-Cloud云ERP系统  -->
 		<!-- <property name="url" value="jdbc:mysql://192.168.100.9:13306/erp?allowMultiQueries=true"/>  
 	    <property name="username" value="erp"/>  
