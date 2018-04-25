@@ -24,7 +24,7 @@ public class XcStConstans {
 	public static final String CGRK = "CGRK";
 	public static final String CGTH = "CGTH";
 	/**
-	 * 出库单小类
+	 * 出库单小类 的单位
 	 */
 	public static final String QTCK = "QTCK";
 	public static final String QTCK_H = "QTCK-H";
