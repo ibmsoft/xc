@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="xc-gl-web:war">
+    <output-path>$PROJECT_DIR$/xc-gl-web/target</output-path>
+    <root id="archive" name="xc.war">
+      <element id="artifact" artifact-name="xc-gl-web:war exploded" />
+    </root>
+  </artifact>
+</component>

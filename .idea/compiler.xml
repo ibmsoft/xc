@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="xc-ap" />
+        <module name="xc-apar" />
+        <module name="xc-ar" />
+        <module name="xc-bg" />
+        <module name="xc-ex" />
+        <module name="xc-fa" />
+        <module name="xc-gl" />
+        <module name="xc-gl-web" />
+        <module name="xc-po" />
+        <module name="xc-posost" />
+        <module name="xc-rep" />
+        <module name="xc-so" />
+        <module name="xc-st" />
+        <module name="xc-util" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xc-ap" target="1.7" />
+      <module name="xc-apar" target="1.7" />
+      <module name="xc-ar" target="1.7" />
+      <module name="xc-bg" target="1.7" />
+      <module name="xc-ex" target="1.7" />
+      <module name="xc-fa" target="1.7" />
+      <module name="xc-gl" target="1.7" />
+      <module name="xc-gl-web" target="1.7" />
+      <module name="xc-parent" target="1.7" />
+      <module name="xc-po" target="1.7" />
+      <module name="xc-posost" target="1.7" />
+      <module name="xc-rep" target="1.7" />
+      <module name="xc-so" target="1.7" />
+      <module name="xc-st" target="1.7" />
+      <module name="xc-util" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

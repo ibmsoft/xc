@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/xc-ap" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-apar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-ar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-bg" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-ex" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-fa" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-gl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-gl-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-po" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-posost" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-rep" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-so" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-st" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-util" charset="UTF-8" />
+  </component>
+</project>
