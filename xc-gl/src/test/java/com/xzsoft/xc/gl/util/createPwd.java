@@ -8,7 +8,7 @@ public class createPwd {
 		try {
 			System.out.println(ConfigTools.encrypt("XC"));
 			System.out.println(ConfigTools.encrypt("root"));
-			
+			System.out.print(2344);
 //			System.out.println(ConfigTools.encrypt("K3C9KorAfUezxD") );
 			
 //			System.out.println(ConfigTools.encrypt("root") );
