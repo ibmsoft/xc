@@ -9,7 +9,6 @@ public class createPwd {
 			System.out.println(ConfigTools.encrypt("XC"));
 			System.out.println(ConfigTools.encrypt("root"));
 //			System.out.println(ConfigTools.encrypt("K3C9KorAfUezxD") );
-			
 //			System.out.println(ConfigTools.encrypt("root") );
 //			String s = ConfigTools.decrypt("XgcZ5QEOwJN6/XmcaEUyA/1w5dGQfueoJ3oT4wdLPIu3Bl6kjMmx6eEf65FKOEKQxNuUZNtZAIIFhiwiWbt8SA==") ;
 //			System.out.println(s);
