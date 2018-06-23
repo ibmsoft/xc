@@ -9,6 +9,8 @@ package com.xzsoft.xc.st.util;
 public class XcStConstans {
 	public static void test1(){
 	}
+	public static void test(){
+	}
 	/**
 	 * 单据大类
 	 */
