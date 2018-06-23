@@ -15,6 +15,7 @@ public class XcStConstans {
 	}
 	public static void test4(){
 	}
+	//09876
 	/**
 	 * 单据大类
 	 */
