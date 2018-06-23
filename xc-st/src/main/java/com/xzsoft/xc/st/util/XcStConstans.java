@@ -16,6 +16,7 @@ public class XcStConstans {
 	public static final String WZDBD = "WZDBD";
 	public static final String HWTZD = "HWTZD";
 	public static final String SQD = "SQD";
+	
 	/**
 	 * 入库单小类
 	 */
@@ -23,6 +24,7 @@ public class XcStConstans {
 	public static final String QTRK_H = "QTRK-H";
 	public static final String CGRK = "CGRK";
 	public static final String CGTH = "CGTH";
+	
 	/**
 	 * 出库单小类 的单位
 	 */
