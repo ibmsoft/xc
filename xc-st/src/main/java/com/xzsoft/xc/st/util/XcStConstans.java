@@ -7,11 +7,7 @@ package com.xzsoft.xc.st.util;
   * @date 2016年12月20日 下午4:06:55
  */
 public class XcStConstans {
-	public static void test3(){
-	public static void test5(){
-	}
 	public static void test2(){
-	}
 	}
 	public static void test4(){
 	}
