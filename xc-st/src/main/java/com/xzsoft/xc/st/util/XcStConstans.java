@@ -8,9 +8,11 @@ package com.xzsoft.xc.st.util;
  */
 public class XcStConstans {
 	public static void test3(){
+	}
 	public static void test5(){
 	}
 	public static void test2(){
+	}
 	public static void test4(){
 	}
 	/**
