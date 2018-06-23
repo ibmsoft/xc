@@ -13,6 +13,7 @@ public class XcStConstans {
 	}
 	
 	//**3456789
+	//**876543
 	/**
 	 * 单据大类
 	 */
