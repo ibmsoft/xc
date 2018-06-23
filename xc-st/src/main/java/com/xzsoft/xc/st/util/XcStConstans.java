@@ -7,6 +7,7 @@ package com.xzsoft.xc.st.util;
   * @date 2016年12月20日 下午4:06:55
  */
 public class XcStConstans {
+	//测试
 	/**
 	 * 单据大类
 	 */
