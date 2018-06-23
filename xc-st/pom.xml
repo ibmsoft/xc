@@ -9,6 +9,7 @@
 		<relativePath>../xc-parent/pom.xml</relativePath>
 	</parent>
 
+	
 	<artifactId>xc-st</artifactId>
 	<packaging>jar</packaging>
 
