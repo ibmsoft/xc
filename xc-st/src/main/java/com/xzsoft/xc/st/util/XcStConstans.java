@@ -11,7 +11,6 @@ public class XcStConstans {
 	/**
 	 * 单据大类
 	 */
-	//测试
 	public static final String RKD = "RKD";
 	public static final String CKD = "CKD";
 	public static final String CBTZD = "CBTZD";
